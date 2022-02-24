@@ -1,0 +1,9 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  backend:
+    build: backend
+    ports:
+      - "8000:5000"
+    volumes:
+      - ./backend/:/app
+
