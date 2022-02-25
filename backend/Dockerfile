@@ -21,12 +21,14 @@ COPY --from=builder /app /app
 ADD . /app
 
 RUN adduser app -h /app -u 1000 -g 1000 -DH
+RUN chown  app .
 USER 1000
 
 # change this to match your application
 #ENTRYPOINT ["/app/bin/docker-entrypoint-web"]
-ENTRYPOINT [ "/app/.venv/bin/python" ]
+
+CMD [ "sh", "/app/entrypoint.sh" ]
 EXPOSE 8000
 
 #CMD ["gunicorn", "-c", "python:config.gunicorn", "config.wsgi"]
-CMD /app/.venv/bin/python manage.py runserver 0.0.0.0:8000
+#CMD /app/.venv/bin/python manage.py runserver 0.0.0.0:8000
