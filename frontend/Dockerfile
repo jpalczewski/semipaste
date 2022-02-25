@@ -1,5 +1,5 @@
 FROM node:16.14.0-alpine AS appbuild
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
