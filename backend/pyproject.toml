@@ -11,6 +11,7 @@ graphene-django = "2.15.*"
 psycopg2 = "^2.9.3"
 djangorestframework = "^3.13.1"
 PyJWT = "^2.3.0"
+django-environ = "^0.8.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.1"
