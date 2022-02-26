@@ -7,7 +7,7 @@ ADD pyproject.toml poetry.lock /app/
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-RUN apk add build-base libffi-dev gcc musl-dev postgresql-dev 
+RUN apk update && apk add --no-cache build-base libffi-dev gcc musl-dev postgresql-dev 
 RUN pip install poetry
 RUN poetry config virtualenvs.in-project true
 RUN poetry install --no-ansi
@@ -19,7 +19,7 @@ WORKDIR /app
 
 COPY --from=builder /app /app
 ADD . /app
-
+RUN apk update &&  apk add --no-cache libpq
 RUN adduser app -h /app -u 1000 -g 1000 -DH
 RUN chown  app .
 USER 1000
