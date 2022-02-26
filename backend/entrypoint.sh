@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # https://github.com/cookiecutter/cookiecutter-django/blob/master/%7B%7Bcookiecutter.project_slug%7D%7D/compose/production/django/entrypoint
 
 
@@ -31,6 +31,8 @@ until postgres_ready; do
   sleep 1
 done
 >&2 echo 'PostgreSQL is available'
+
+export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
 
 exec "$@"
 
