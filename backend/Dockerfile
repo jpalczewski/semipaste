@@ -21,7 +21,15 @@ WORKDIR /app
 COPY --from=builder /app /app
 COPY  entrypoint.sh /entrypoint
 ADD . /app
-RUN apk update &&  apk add --no-cache libpq && adduser app -h /app -u 1000 -g 1000 -DH && chown  app . && chown app /entrypoint && chmod +x /entrypoint && sed -i 's/\r$//g' /entrypoint && sed -i 's/\r$//g' /app/start.sh
+RUN apk update && \
+ apk add --no-cache libpq && \
+    adduser app -h /app -u 1000 -g 1000 -DH && \
+    chown  app . && \ 
+    chown app /entrypoint &&  \
+    chmod +x /entrypoint && \
+    sed -i 's/\r$//g' /entrypoint && \
+    sed -i 's/\r$//g' /app/start.sh && \
+    mv /app/.venv/ /venv 
 USER 1000
 
 # change this to match your application

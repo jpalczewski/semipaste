@@ -5,7 +5,7 @@
 # set -o errexit
 # set -o pipefail
 # set -o nounset
-PATH=/app/.venv/bin/:$PATH
+PATH=/venv/bin/:$PATH
 
 postgres_ready() {
 python << END
