@@ -5,7 +5,7 @@
 # set -o errexit
 # set -o pipefail
 # set -o nounset
-PATH=/venv/bin/:$PATH
+export PATH=$(echo /venv/backend*/bin):$PATH
 
 postgres_ready() {
 python << END

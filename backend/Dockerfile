@@ -5,7 +5,12 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-RUN apk update && apk add --no-cache build-base libffi-dev gcc musl-dev postgresql-dev && pip install poetry && poetry config virtualenvs.in-project true
+RUN apk update && \
+    apk add --no-cache build-base libffi-dev gcc musl-dev postgresql-dev && \
+    pip install poetry &&  \
+    mkdir /venv && \
+    poetry config virtualenvs.path /venv
+#poetry config virtualenvs.in-project true
 
 
 
@@ -19,6 +24,7 @@ FROM python:3.10-alpine
 WORKDIR /app
 
 COPY --from=builder /app /app
+COPY --from=builder /venv /venv
 COPY  entrypoint.sh /entrypoint
 ADD . /app
 RUN apk update && \
@@ -28,8 +34,9 @@ RUN apk update && \
     chown app /entrypoint &&  \
     chmod +x /entrypoint && \
     sed -i 's/\r$//g' /entrypoint && \
-    sed -i 's/\r$//g' /app/start.sh && \
-    mv /app/.venv/ /venv 
+    sed -i 's/\r$//g' /app/start.sh # && \
+    # mv /app/.venv/ /venv
+
 USER 1000
 
 # change this to match your application

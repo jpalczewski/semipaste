@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+backend/.local
+backend/.ash_history
+backend/.python_history
