@@ -4,10 +4,14 @@ COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
 #COPY .babelrc ./
-RUN yarn install
+RUN  mkdir "/node" && \
+     yarn install  && \
+     adduser --disabled-password  app && \
+     chown -R app:app /app /node
 COPY src/ ./src/
 COPY public/ ./public/
-#RUN npm run build
+
+USER app
 
 CMD yarn start
 
