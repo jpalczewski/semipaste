@@ -34,8 +34,7 @@ RUN apk update && \
     chown app /entrypoint &&  \
     chmod +x /entrypoint && \
     sed -i 's/\r$//g' /entrypoint && \
-    sed -i 's/\r$//g' /app/start.sh # && \
-    # mv /app/.venv/ /venv
+    sed -i 's/\r$//g' /app/start.sh
 
 USER 1000
 

@@ -14,7 +14,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend/:/app:z
+      - ./frontend/src:/app/src:z
   db:
     image: postgres:14-alpine
     restart: always
