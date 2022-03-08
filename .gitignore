@@ -130,3 +130,6 @@ dmypy.json
 backend/.local
 backend/.ash_history
 backend/.python_history
+
+# User-specific stuff:
+.idea
