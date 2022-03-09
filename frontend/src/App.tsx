@@ -1,26 +1,29 @@
 import React from "react";
-import logo from "./logo.svg";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Navigation from "./navigation/navigation";
 import "./App.css";
 
-function App() {
+import ErroPage from "./components/ErrorScreen";
+import { Home } from "./components/HomeScreen";
+import { Create } from "./components/CreateScreen";
+import { Current } from "./components/CurrentScreen";
+import { Popular } from "./components/PopularScreen";
+import { About } from "./components/AboutScreen";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navigation />
+      <Routes>
+        <Route path="" element={<Home />} />
+        <Route path="/create" element={<Create />} />
+        <Route path="/current" element={<Current />} />
+        <Route path="/popular" element={<Popular />} />
+        <Route path="/about" element={<About />} />
+        <Route path="*" element={<ErroPage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
