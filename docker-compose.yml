@@ -15,6 +15,12 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend/src:/app/src:z
+      - ./frontend/package.json:/app/packge.json
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
   db:
     image: postgres:14-alpine
     restart: always

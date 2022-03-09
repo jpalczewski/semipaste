@@ -5,6 +5,7 @@ COPY yarn.lock ./
 COPY tsconfig.json ./
 #COPY .babelrc ./
 RUN  mkdir "/node" && \
+     yarn set version berry && \
      yarn install  && \
      adduser --disabled-password  app && \
      chown -R app:app /app /node
