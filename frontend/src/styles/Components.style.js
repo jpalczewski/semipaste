@@ -13,10 +13,3 @@ export const FormWrapper = styled.div`
   flex-direction: row;
   text-align: left;
 `;
-
-export const TableWrapper = styled.table`
-  margin: 50px;
-  background-color: lightgrey;
-  border-width: 10px;
-  border-color: black;
-`;

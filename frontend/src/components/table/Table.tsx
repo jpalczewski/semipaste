@@ -1,19 +1,37 @@
 import React from "react";
-import { TableWrapper } from "../../styles/Components.style";
+import {
+  TableWrapper,
+  THead,
+  TFoot,
+  TBody,
+  TR,
+  TH,
+  TD,
+} from "../../styles/Table.style";
+import "bootstrap/dist/css/bootstrap.css";
+import { tableData } from "../../dummy_data/dummyData";
 
-export const Table = (props: any) => {
+export const Table = () => {
   return (
     <TableWrapper>
-      <tr style={{ borderColor: "red", borderWidth: 20 }}>
-        <td>Tytuł</td>
-        <td>Autor</td>
-        <td>Język</td>
-      </tr>
-      <tr>
-        <td>{props.title}</td>
-        <td>{props.author}</td>
-        <td>{props.language}</td>
-      </tr>
+      <THead>
+        <TR>
+          <TH>Tytuł</TH>
+          <TH>Autor</TH>
+          <TH>Język</TH>
+          <TH>Dodano</TH>
+        </TR>
+      </THead>
+      <TBody>
+        {tableData.map((id) => (
+          <TR>
+            <TD>{id.title}</TD>
+            <TD>{id.author}</TD>
+            <TD>{id.lang}</TD>
+            <TD>{id.date}</TD>
+          </TR>
+        ))}
+      </TBody>
     </TableWrapper>
   );
 };
