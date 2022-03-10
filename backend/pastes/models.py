@@ -24,7 +24,7 @@ class PasteBin(models.Model):
         _('expire after'),
         max_length=5,
         choices=ExpireChoices.choices,
-        defualt=ExpireChoices.NEVER
+        default=ExpireChoices.NEVER
     )
 
     class Meta:
