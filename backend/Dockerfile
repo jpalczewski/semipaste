@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN apk update && \
-    apk add --no-cache build-base libffi-dev gcc musl-dev postgresql-dev && \
+    apk add --no-cache build-base libffi-dev gcc musl-dev postgresql-dev git && \
     pip install poetry &&  \
     mkdir /venv && \
     poetry config virtualenvs.path /venv

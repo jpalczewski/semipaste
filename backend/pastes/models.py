@@ -16,6 +16,7 @@ class PasteBin(models.Model):
         YEAR  = 'YEAR', _('1 year')
 
     # User, Language, Access_Key
+    ordering = ['id']
     title = models.CharField(_('title'), max_length=50)
     paste_text = models.TextField(_('paste text'))
     date_of_creation = models.DateTimeField(_('date of creation'), auto_now_add=True)
@@ -24,7 +25,7 @@ class PasteBin(models.Model):
         _('expire after'),
         max_length=5,
         choices=ExpireChoices.choices,
-        defualt=ExpireChoices.NEVER
+        default=ExpireChoices.NEVER
     )
 
     class Meta:

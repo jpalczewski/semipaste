@@ -8,7 +8,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ./backend/:/app:z
+      - ./backend/:/app
+
   frontend:
     build: frontend
     ports:
