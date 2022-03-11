@@ -2,6 +2,8 @@
 
 FROM python:3.10-alpine AS builder
 WORKDIR /app
+ARG PRODUCTION
+
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
@@ -16,7 +18,8 @@ RUN apk update && \
 
 ADD pyproject.toml poetry.lock /app/
 
-RUN poetry install --no-ansi
+RUN if [ --n "$PRODUCTION"]; then arg="--no-dev" ; fi && \
+    poetry install --no-ansi $arg
 
 # ---
 
