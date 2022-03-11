@@ -8,6 +8,8 @@ from graphene import relay
 from graphene_django.debug import DjangoDebug
 from graphene_django.forms.mutation import DjangoModelFormMutation
 
+from pastes.models import PasteBin
+from users.models import User
 
 class PasteBinNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
@@ -31,9 +33,17 @@ class Mutation(graphene.ObjectType):
     pass
 
 
+class UserNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+    class Meta:
+        model = User
+        filter_fields = ['id']
+        interfaces = (relay.Node,)
+
 class Query(graphene.ObjectType):
     AllPasteBin = DjangoFilterConnectionField(PasteBinNode)
-    node = graphene.relay.Node.Field(PasteBinNode)
+    AllUsers = DjangoFilterConnectionField(UserNode)
+    node = graphene.relay.Node.Field()
     debug = graphene.Field(DjangoDebug, name="_debug")
 
 
