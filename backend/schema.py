@@ -46,6 +46,7 @@ class UserNode(DjangoObjectType):
 
 #MUTAIONS------------------------------------
 
+
 class UserMutation(DjangoModelFormMutation):
     class Meta:
         form_class = AddUserForm
@@ -53,8 +54,18 @@ class UserMutation(DjangoModelFormMutation):
     ok = graphene.Boolean()
 
 
+class DeleteUser(graphene.Mutation):
+    ok = graphene.Boolean()
+    class Arguments:
+        id = graphene.ID()
+    def mutate(cls, root, **kwargs):
+        obj = User.objects.get(pk=kwargs["id"])
+        obj.delete()
+        return cls(ok=True)
+
 class Mutation(graphene.ObjectType):
     add_user = UserMutation.Field()
+    delete_user = DeleteUser.Field()
     pass
 
 #    def mutate(root, info, name):
