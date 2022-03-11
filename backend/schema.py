@@ -47,25 +47,45 @@ class UserNode(DjangoObjectType):
 #MUTAIONS------------------------------------
 
 
-class UserMutation(DjangoModelFormMutation):
+class AddUser(DjangoModelFormMutation):
+    ok = graphene.Boolean()
     class Meta:
         form_class = AddUserForm
         exclude = ('password',)
+
+class EditUser(graphene.Mutation):
     ok = graphene.Boolean()
+    class Arguments:
+        id = graphene.ID()
+        username = graphene.String()
+        first_name = graphene.String()
+        last_name = graphene.String()
+        email = graphene.String()
+
+    def mutate(cls, info, **kwargs):
+        user = User.objects.get(pk=kwargs["id"])
+        user.username = kwargs.get('username', user.username)
+        user.first_name = kwargs.get('first_name', user.first_name)
+        user.last_name = kwargs.get('last_name', user.last_name)
+        user.email = kwargs.get('email', user.email)
+        user.save()
+        return cls(ok=True)
 
 
 class DeleteUser(graphene.Mutation):
     ok = graphene.Boolean()
     class Arguments:
         id = graphene.ID()
-    def mutate(cls, root, **kwargs):
-        obj = User.objects.get(pk=kwargs["id"])
-        obj.delete()
+    def mutate(cls,info, **kwargs):
+        user = User.objects.get(pk=kwargs["id"])
+        user.delete()
         return cls(ok=True)
 
 class Mutation(graphene.ObjectType):
-    add_user = UserMutation.Field()
+    add_user = AddUser.Field()
+    edit_user = EditUser.Field()
     delete_user = DeleteUser.Field()
+
     pass
 
 #    def mutate(root, info, name):
