@@ -133,3 +133,5 @@ backend/.python_history
 
 # User-specific stuff:
 .idea
+
+staticfiles/
