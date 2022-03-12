@@ -1,10 +1,11 @@
+# syntax = docker/dockerfile:1
 FROM node:16.14.0-alpine AS appbuild
 WORKDIR /app
 COPY package.json ./
 COPY yarn.lock ./
 COPY tsconfig.json ./
 #COPY .babelrc ./
-RUN  mkdir "/node" && \
+RUN --mount=type=cache,id=yarn,target=/usr/local/share/.cache/yarn  mkdir "/node" && \
      yarn install  && \
      adduser --disabled-password  app && \
      chown -R app:app /app /node
