@@ -1,6 +1,7 @@
 version: "3.9"  # optional since v1.27.0
 services:
   backend:
+    image: jpalczewski/semipaste-backend:latest
     build: backend
     command:  sh /app/start.sh
     ports:
@@ -11,6 +12,7 @@ services:
       - ./backend/:/app
 
   frontend:
+    image: jpalczewski/semipaste-frontend:latest
     build: frontend
     ports:
       - "3000:3000"
