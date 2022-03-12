@@ -18,5 +18,5 @@ class Query(UserQuery, PasteBinQuery):
     debug = graphene.Field(DjangoDebug, name="_debug")
 
 
-schema = graphene.Schema(query=Query, mutation=Mutation)
+schema_v1 = graphene.Schema(query=Query, mutation=Mutation)
 

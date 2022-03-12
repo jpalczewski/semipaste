@@ -24,9 +24,7 @@ class AddPasteBin(DjangoModelFormMutation):
         exclude_fields = ('id',)
 
 class PasteBinMutation(graphene.ObjectType):
-    class Meta:
-        form_class = AddPasteBinForm
-        exclude_fields = ('id',)
+    add_paste_bin = AddPasteBin.Field()
 
 
 class PasteBinQuery(graphene.ObjectType):
