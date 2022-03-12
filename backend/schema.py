@@ -31,9 +31,7 @@ class PasteBinMutation(DjangoModelFormMutation):
         exclude_fields = ('id',)
 
 
-class Mutation(graphene.ObjectType):
-    add_paste_bin = PasteBinMutation.Field()
-    pass
+
 
 
 class UserNode(DjangoObjectType):
@@ -85,8 +83,7 @@ class Mutation(graphene.ObjectType):
     add_user = AddUser.Field()
     edit_user = EditUser.Field()
     delete_user = DeleteUser.Field()
-
-    pass
+    add_paste_bin = PasteBinMutation.Field()
 
 #    def mutate(root, info, name):
 #       user = UserNode(username=name)
