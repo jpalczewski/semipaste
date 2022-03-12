@@ -18,8 +18,12 @@ class PasteBinNode(DjangoObjectType):
     # rowid = graphene.String()
     # fields = "__all__"
 
+class AddPasteBin(DjangoModelFormMutation):
+    class Meta:
+        form_class = AddPasteBinForm
+        exclude_fields = ('id',)
 
-class PasteBinMutation(DjangoModelFormMutation):
+class PasteBinMutation(graphene.ObjectType):
     class Meta:
         form_class = AddPasteBinForm
         exclude_fields = ('id',)
