@@ -15,7 +15,7 @@ repos:
         entry: black
         args: [--config=backend/pyproject.toml, backend/]
         types: [python]
-        exclude: ^frontend/
+        exclude: (^frontend/|migrations)
 -   repo: https://github.com/pycqa/flake8
     rev: '4.0.1'  # pick a git hash / tag to point to
     hooks:
@@ -32,7 +32,7 @@ repos:
     -   id: mypy
         name: mypy
         entry: mypy
-        args: [--config-file=pyproject.toml, backend/]
+        args: [--config-file=backend/pyproject.toml, backend/]
         types: [python]
         exclude: ^frontend/
         additional_dependencies: [tokenize-rt==3.2.0]
@@ -42,6 +42,6 @@ repos:
   -   id: isort
       name: isort (python)
       entry: isort
-      args: [--config=pyproject.toml, backend/]
+      args: [--profile, black, --skip, migrations, --filter-files]
       types: [python]
-      exclude: ^frontend/
+      exclude: (^frontend/|migrations)
