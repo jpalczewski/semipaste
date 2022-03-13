@@ -25,3 +25,18 @@ docker-compose run backend pytest --cov
 ### How to add a new library in backend?
 You need to have a `poetry` tool installed on your system and run
 `poetry add <lib>` in backend directory. Then rebuild the container - `docker-compose build`
+
+## Troubleshooting
+
+### Starting a docker container fails on Windows due to `migrate\r`
+
+Wheter git thinks that automatic CRLF would be great on  Windows - it isn't our case
+because we are mounting the backend directory as a volume to the apprioprate container.
+One of solution is running following set of commands in this repo:
+```bash
+git config core.eol lf
+git config core.autocrlf input
+git rm -rf --cached .
+git reset --hard HEAD
+```
+This will force storing all files with LF file ending
