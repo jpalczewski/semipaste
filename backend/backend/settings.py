@@ -10,11 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-
-# Standard Library
 from pathlib import Path
-
-# 3rd-Party
 import environ
 
 env = environ.Env(
@@ -50,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "graphene_django",
     "pastes",
+
 ]
 
 MIDDLEWARE = [
@@ -87,7 +84,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 DATABASES = {
-    'default': env.db(),
+        'default': env.db(),
 }
 
 AUTH_USER_MODEL = 'users.User'
@@ -132,7 +129,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-GRAPHENE = {"SCHEMA": "schema.schema"}
+GRAPHENE = {
+    "SCHEMA": "schema.schema"
+}
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

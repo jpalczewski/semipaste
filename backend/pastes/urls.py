@@ -1,9 +1,10 @@
 """Pastes URLs."""
 
-
 # Django
+from django.contrib import admin
 
-# 3rd-Party
+# Local
+from views import *
 
 urlpatterns = [
     # path('', ),

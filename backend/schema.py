@@ -1,19 +1,18 @@
-# 3rd-Party
 import graphene
+from pastes.models import PasteBin
+from pastes.forms import AddPasteBinForm
+from graphene_django.types import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
+from graphene import Node
 from graphene import relay
 from graphene_django.debug import DjangoDebug
-from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.forms.mutation import DjangoModelFormMutation
-from graphene_django.types import DjangoObjectType
 
-# Project
-from pastes.forms import AddPasteBinForm
 from pastes.models import PasteBin
-from users.forms import AddUserForm
 from users.models import User
+from users.forms import AddUserForm
 
-# NODES------------------------------------
-
+#NODES------------------------------------
 
 class PasteBinNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
@@ -22,7 +21,6 @@ class PasteBinNode(DjangoObjectType):
         model = PasteBin
         filter_fields = ['title', 'id']
         interfaces = (relay.Node,)
-
     # rowid = graphene.String()
     # fields = "__all__"
 
@@ -33,30 +31,28 @@ class PasteBinMutation(DjangoModelFormMutation):
         exclude_fields = ('id',)
 
 
+
+
+
 class UserNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
-
     class Meta:
         model = User
         exclude = ('password',)
         filter_fields = ['id']
         interfaces = (relay.Node,)
 
-
-# MUTAIONS------------------------------------
+#MUTAIONS------------------------------------
 
 
 class AddUser(DjangoModelFormMutation):
     ok = graphene.Boolean()
-
     class Meta:
         form_class = AddUserForm
         exclude = ('password',)
 
-
 class EditUser(graphene.Mutation):
     ok = graphene.Boolean()
-
     class Arguments:
         id = graphene.ID()
         username = graphene.String()
@@ -76,15 +72,12 @@ class EditUser(graphene.Mutation):
 
 class DeleteUser(graphene.Mutation):
     ok = graphene.Boolean()
-
     class Arguments:
         id = graphene.ID()
-
-    def mutate(cls, info, **kwargs):
+    def mutate(cls,info, **kwargs):
         user = User.objects.get(pk=kwargs["id"])
         user.delete()
         return cls(ok=True)
-
 
 class Mutation(graphene.ObjectType):
     add_user = AddUser.Field()
@@ -92,17 +85,15 @@ class Mutation(graphene.ObjectType):
     delete_user = DeleteUser.Field()
     add_paste_bin = PasteBinMutation.Field()
 
-
 #    def mutate(root, info, name):
 #       user = UserNode(username=name)
 #       ok = True
 #       return CreateUser(user=user, ok=ok)
 
 
-# class Mutations(graphene.ObjectType):
+#class Mutations(graphene.ObjectType):
 #    create_user = CreateUser.Field()
-# QUERY------------------------------------
-
+#QUERY------------------------------------
 
 class Query(graphene.ObjectType):
     AllPasteBin = DjangoFilterConnectionField(PasteBinNode)
@@ -114,3 +105,4 @@ class Query(graphene.ObjectType):
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
+

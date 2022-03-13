@@ -10,10 +10,10 @@ class PasteBin(models.Model):
 
     class ExpireChoices(models.TextChoices):
         NEVER = 'NEVER', _('never')
-        HOUR = 'HOUR', _('1 hour')
-        DAY = 'DAY', _('1 day')
-        WEEK = 'WEEK', _('1 week')
-        YEAR = 'YEAR', _('1 year')
+        HOUR  = 'HOUR', _('1 hour')
+        DAY   = 'DAY', _('1 day')
+        WEEK  = 'WEEK', _('1 week')
+        YEAR  = 'YEAR', _('1 year')
 
     # User, Language, Access_Key
     ordering = ['id']
@@ -25,7 +25,7 @@ class PasteBin(models.Model):
         _('expire after'),
         max_length=5,
         choices=ExpireChoices.choices,
-        default=ExpireChoices.NEVER,
+        default=ExpireChoices.NEVER
     )
 
     class Meta:

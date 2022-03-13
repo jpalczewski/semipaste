@@ -4,7 +4,7 @@
 from django.contrib import admin
 
 # Local
-from .models import PasteBin
+from .models import *
 
 
 @admin.register(PasteBin)
