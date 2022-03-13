@@ -72,6 +72,7 @@ known_django = "django"
 # Order
 sections = ["FUTURE","STDLIB","DJANGO","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
 
+
 [tool.mypy]
 python_version = "3.10"
 # Import
