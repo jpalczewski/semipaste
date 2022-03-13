@@ -1,10 +1,10 @@
-def f():
+def f() -> int:
     return 3
 
 
-def g():
+def g() -> int:
     return 5
 
 
-def test_function():
+def test_function() -> None:
     assert f() == 4
