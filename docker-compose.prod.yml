@@ -11,7 +11,7 @@ services:
     image: jpalczewski/semipaste-proxy:latest
     build:
       context: frontend
-      dockerfile: ../proxy/Dockerfile 
+      dockerfile: ../proxy/Dockerfile
 #    volumes:
 #      - "./proxy/nginx.conf:/etc/nginx/nginx.conf:ro"
     ports:

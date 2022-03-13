@@ -35,7 +35,7 @@ ADD . /app
 RUN  --mount=type=cache,id=apk,target=/var/cache/apk ln -vs /var/cache/apk /etc/apk/cache && \
     apk add  --update  libpq && \
     adduser app -h /app -u 1000 -g 1000 -DH && \
-    chown  app . && \ 
+    chown  app . && \
     chown app /entrypoint &&  \
     chmod +x /entrypoint && \
     sed -i 's/\r$//g' /entrypoint && \
@@ -46,7 +46,7 @@ USER 1000
 # change this to match your application
 #ENTRYPOINT ["/app/bin/docker-entrypoint-web"]
 
-ENTRYPOINT [ "/entrypoint" ] 
+ENTRYPOINT [ "/entrypoint" ]
 #CMD [ "executable" ]
 EXPOSE 8000
 
