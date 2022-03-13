@@ -106,11 +106,11 @@ Python versions that should be supported by Black's output.
 ```python
 # Don't normalize string quotes or prefixes.
 
-# Hey Black, plz don't do this: 
+# Hey Black, plz don't do this:
 	""" """ => ""
 	r"" / u"" => ""
 	'' => ""
-    
+
 # Thanks
 ```
 
@@ -339,17 +339,17 @@ from .admin import PasteBinAdmin
 
 class Example(models.Model):
     """Example model."""
-    
+
     name = models.CharField()
     var = models.IntegerField()
-    
+
     def foo(self) -> int
     	return var
-    
+
     def __str__(self) -> str:
         return f'{self.name} - {self.var}'
-    
-    class Meta:  # noqa 
+
+    class Meta:  # noqa
         verbose_name = _("Example")
 ```
 
@@ -392,7 +392,7 @@ exclude = "/(migrations|backend|.mypy_cache)/"
 `ignore_missing_imports = true`
 
 ```
-This flag makes mypy ignore all missing imports. 
+This flag makes mypy ignore all missing imports.
 ```
 
 
@@ -416,7 +416,7 @@ This flag makes mypy ignore all missing imports.
 # Instead of:
     def func(x):
         return x
-	
+
 # Use this:
     def func(x: int) -> int:
         return x
@@ -516,7 +516,7 @@ Methods order
 # Normal
     def foo(self, x: int) -> int:
         return x
-    
+
 # Override
     def __save__(self) -> str:
         return self.name
@@ -529,18 +529,18 @@ Meta class
 ```python
 class Example(models.Model):
 	"""Example model"""
-    
+
     # Variables
     variable = models.IntegerField()
-    
+
     # Normal Methods
     def foo(self, x: int) -> int:
         return x
-    
+
     # Override Methods
     def __save__(self) -> str:
         return self.name
-    
+
     # Meta Class
     class Meta:
         ordering = ['id']
@@ -554,7 +554,7 @@ Function comments
 def foo(self, x: int) -> int:
     """
     Description.
-    
+
     :return: an integer value
     """
     return x
@@ -565,4 +565,3 @@ def foo(self, x: int) -> int:
     """Descritopn :returns an integer value"""
     return x
 ```
-

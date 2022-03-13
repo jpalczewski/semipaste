@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package.json yarn.lock tsconfig.json ./
 #COPY .babelrc ./
 RUN --mount=type=cache,id=yarn,target=/usr/local/share/.cache/yarn/v6   \
-     yarn install 
+     yarn install
 COPY src/ ./src/
 COPY public/ ./public/
 
