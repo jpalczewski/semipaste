@@ -59,7 +59,7 @@
     "relay-compiler": "^13.2.0"
   },
   "relay": {
-    "src": "src",
-    "schema": "schema.graphql"
+    "src": "./src",
+    "schema": "./schema.graphql"
   }
 }
