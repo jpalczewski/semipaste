@@ -10,9 +10,9 @@ import {
 } from "../../styles/Table.style";
 import "bootstrap/dist/css/bootstrap.css";
 import { tableData } from "../../dummy_data/dummyData";
-import { graphql, usePreloadedQuery } from "react-relay";
+import { users } from "../../Query/users";
 
-export const Table = () => {
+export const Tables = () => {
   return (
     <TableWrapper>
       <THead>
