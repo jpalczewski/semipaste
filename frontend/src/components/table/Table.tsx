@@ -10,22 +10,7 @@ import {
 } from "../../styles/Table.style";
 import "bootstrap/dist/css/bootstrap.css";
 import { tableData } from "../../dummy_data/dummyData";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql,
-} from "@apollo/client";
-
-//TESTY JEDNOSTKOWE
-
-const client = new ApolloClient({
-  uri: "https://http://localhost:8000",
-  cache: new InMemoryCache(),
-});
-
-console.log(client);
+import { graphql, usePreloadedQuery } from "react-relay";
 
 export const Table = () => {
   return (
