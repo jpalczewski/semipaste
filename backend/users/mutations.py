@@ -77,6 +77,7 @@ class DeleteUser(graphene.Mutation):
 
     class Arguments:
         id = graphene.ID()
+    def mutate(cls,info, **kwargs):
 
     def mutate(cls, info, **kwargs):  # type: ignore
         user = User.objects.get(pk=kwargs["id"])
