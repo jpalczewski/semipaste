@@ -16,7 +16,6 @@ from graphene_django.forms.mutation import DjangoModelFormMutation
 from .forms import AddUserForm
 from .models import User
 
-
 class UserNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
 
