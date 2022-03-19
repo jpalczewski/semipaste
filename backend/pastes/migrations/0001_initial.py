@@ -17,14 +17,13 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=50, verbose_name='title')),
                 ('paste_text', models.TextField(verbose_name='paste text')),
-                ('date_of_creation', models.DateTimeField(verbose_name='date of creation')),
+                ('date_of_creation', models.DateTimeField(auto_now_add=True, verbose_name='date of creation')),
                 ('exposure', models.BooleanField(verbose_name='exposure')),
-                ('expire_after', models.CharField(choices=[('NEVER', 'never'), ('HOUR', '1 hour'), ('DAY', '1 day'), ('WEEK', '1 week'), ('MONTH', '1 month'), ('YEAR', '1 year')], default='NEVER', max_length=5, verbose_name='expire after')),
+                ('expire_after', models.CharField(choices=[('NEVER', 'never'), ('HOUR', '1 hour'), ('DAY', '1 day'), ('WEEK', '1 week'), ('YEAR', '1 year')], default='NEVER', max_length=5, verbose_name='expire after')),
             ],
             options={
-                'ordering': ['id'],
-                'verbose_name': 'pastebin',
-                'verbose_name_plural': 'pastebins',
+                'verbose_name': 'Paste Bin',
+                'verbose_name_plural': 'Paste Bins',
             },
         ),
     ]

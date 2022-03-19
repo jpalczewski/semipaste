@@ -15,4 +15,21 @@ class Migration(migrations.Migration):
             name='date_of_expiry',
             field=models.DateTimeField(null=True, verbose_name='date of expiry'),
         ),
+        migrations.AlterModelOptions(
+            name='pastebin',
+            options={'ordering': ['id'], 'verbose_name': 'pastebin', 'verbose_name_plural': 'pastebins'},
+        ),
+        migrations.AlterField(
+            model_name='pastebin',
+            name='date_of_creation',
+            field=models.DateTimeField(verbose_name='date of creation'),
+        ),
+        migrations.AlterField(
+            model_name='pastebin',
+            name='expire_after',
+            field=models.CharField(
+                choices=[('NEVER', 'never'), ('HOUR', '1 hour'), ('DAY', '1 day'), ('WEEK', '1 week'),
+                         ('MONTH', '1 month'), ('YEAR', '1 year')], default='NEVER', max_length=5,
+                verbose_name='expire after'),
+        ),
     ]
