@@ -1,5 +1,8 @@
 """Pastes models."""
 
+# Standard Library
+from datetime import datetime, timedelta, timezone
+
 # Django
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -9,17 +12,19 @@ class PasteBin(models.Model):
     """Pastebin model."""
 
     class ExpireChoices(models.TextChoices):
+        # The first value is the actual value to be set
+        # The second value is used for humans
         NEVER = 'NEVER', _('never')
         HOUR = 'HOUR', _('1 hour')
         DAY = 'DAY', _('1 day')
         WEEK = 'WEEK', _('1 week')
+        MONTH = 'MONTH', _('1 month')
         YEAR = 'YEAR', _('1 year')
 
     # User, Language, Access_Key
-    ordering = ['id']
     title = models.CharField(_('title'), max_length=50)
     paste_text = models.TextField(_('paste text'))
-    date_of_creation = models.DateTimeField(_('date of creation'), auto_now_add=True)
+    date_of_creation = models.DateTimeField(_('date of creation'))
     exposure = models.BooleanField(_('exposure'))
     expire_after = models.CharField(
         _('expire after'),
@@ -27,10 +32,32 @@ class PasteBin(models.Model):
         choices=ExpireChoices.choices,
         default=ExpireChoices.NEVER,
     )
+    date_of_expiry = models.DateTimeField(_('date of expiry'), null=True)
 
+    # Methods
+    def save(self, *args, **kwargs):  # type: ignore
+        choice = self.expire_after
+        self.date_of_creation = datetime.now().replace(tzinfo=timezone.utc)
+        if choice == PasteBin.ExpireChoices.NEVER:
+            self.date_of_expiry = None
+        elif choice == PasteBin.ExpireChoices.HOUR:
+            self.date_of_expiry = self.date_of_creation + timedelta(seconds=3600)
+        elif choice == PasteBin.ExpireChoices.DAY:
+            self.date_of_expiry = self.date_of_creation + timedelta(days=1)
+        elif choice == PasteBin.ExpireChoices.WEEK:
+            self.date_of_expiry = self.date_of_creation + timedelta(days=7)
+        elif choice == PasteBin.ExpireChoices.MONTH:
+            self.date_of_expiry = self.date_of_creation + timedelta(days=30)
+        elif choice == PasteBin.ExpireChoices.YEAR:
+            self.date_of_expiry = self.date_of_creation + timedelta(days=360)
+        super(PasteBin, self).save(*args, **kwargs)
+
+    # Special Methods
     def __str__(self) -> str:
         return f'{self.title}'
 
+    # Meta
     class Meta:
-        verbose_name = "Paste Bin"
-        verbose_name_plural = "Paste Bins"
+        ordering = ['id']
+        verbose_name = _('pastebin')
+        verbose_name_plural = _('pastebins')

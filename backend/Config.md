@@ -441,5 +441,3 @@ This flag will add an error code [<code>] to error messages.
 ```
 This flag will add column offsets to error messages.
 ```
-
-
