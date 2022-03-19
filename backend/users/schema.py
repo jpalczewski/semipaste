@@ -43,13 +43,16 @@ class EditUser(graphene.Mutation):
         first_name = graphene.String()
         last_name = graphene.String()
         email = graphene.String()
+        description = graphene.String()
 
     def mutate(cls, info, **kwargs):  # type: ignore
         user = User.objects.get(pk=kwargs["id"])
-        user.username = kwargs.get('username', user.username)
-        user.first_name = kwargs.get('first_name', user.first_name)
-        user.last_name = kwargs.get('last_name', user.last_name)
-        user.email = kwargs.get('email', user.email)
+        for attr in kwargs.keys():
+            value = kwargs.get(attr, getattr(user, attr))
+            if attr == 'description':
+                setattr(user, attr, strip_tags(escape(value)))
+            else:
+                setattr(user, attr, value)
         user.save()
         return cls(ok=True)
 
