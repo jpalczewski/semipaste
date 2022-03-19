@@ -1,3 +1,5 @@
+"""Pastes forms."""
+
 # Django
 from django import forms
 

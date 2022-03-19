@@ -1,23 +1,34 @@
+"""Users schema."""
+
+# Django
+from django.utils.html import escape, strip_tags
+
+# 3rd-Party
 import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
+from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.forms.mutation import DjangoModelFormMutation
-from graphene_django.debug import DjangoDebug
+
+# Local
 from .forms import AddUserForm
 from .models import User
 
 
 class UserNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
+
     class Meta:
         model = User
         exclude = ('password',)
         filter_fields = ['id']
         interfaces = (relay.Node,)
 
+
 class AddUser(DjangoModelFormMutation):
     ok = graphene.Boolean()
+
     class Meta:
         form_class = AddUserForm
         exclude = ('password',)
@@ -25,6 +36,7 @@ class AddUser(DjangoModelFormMutation):
 
 class EditUser(graphene.Mutation):
     ok = graphene.Boolean()
+
     class Arguments:
         id = graphene.ID()
         username = graphene.String()
@@ -32,7 +44,7 @@ class EditUser(graphene.Mutation):
         last_name = graphene.String()
         email = graphene.String()
 
-    def mutate(cls, info, **kwargs):
+    def mutate(cls, info, **kwargs):  # type: ignore
         user = User.objects.get(pk=kwargs["id"])
         user.username = kwargs.get('username', user.username)
         user.first_name = kwargs.get('first_name', user.first_name)
@@ -42,16 +54,32 @@ class EditUser(graphene.Mutation):
         return cls(ok=True)
 
 
-class DeleteUser(graphene.Mutation):
+class EditUserDescription(graphene.Mutation):
     ok = graphene.Boolean()
+
     class Arguments:
         id = graphene.ID()
-    def mutate(cls,info, **kwargs):
+        description = graphene.String()
+
+    def mutate(cls, info, **kwargs):  # type: ignore
         user = User.objects.get(pk=kwargs["id"])
-        user.delete()
+        user.description = strip_tags(
+            escape(kwargs.get('description', user.description))
+        )
+        user.save()
         return cls(ok=True)
 
 
+class DeleteUser(graphene.Mutation):
+    ok = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.ID()
+
+    def mutate(cls, info, **kwargs):  # type: ignore
+        user = User.objects.get(pk=kwargs["id"])
+        user.delete()
+        return cls(ok=True)
 
 
 class UserQuery(graphene.ObjectType):
@@ -65,4 +93,5 @@ class UserQuery(graphene.ObjectType):
 class UserMutation(graphene.ObjectType):
     add_user = AddUser.Field()
     edit_user = EditUser.Field()
+    edit_user_description = EditUserDescription.Field()
     delete_user = DeleteUser.Field()
