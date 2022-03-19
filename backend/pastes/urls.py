@@ -1,6 +1,5 @@
 """Pastes URLs."""
 
-
 # Django
 # from django.contrib import admin
 

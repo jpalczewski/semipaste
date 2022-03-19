@@ -1,9 +1,13 @@
+"""Pastes schema."""
+
+# 3rd-Party
 import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.forms.mutation import DjangoModelFormMutation
 
+# Local
 from .forms import AddPasteBinForm
 from .models import PasteBin
 
@@ -15,18 +19,21 @@ class PasteBinNode(DjangoObjectType):
         model = PasteBin
         filter_fields = ['title', 'id']
         interfaces = (relay.Node,)
+
     # rowid = graphene.String()
     # fields = "__all__"
+
 
 class AddPasteBin(DjangoModelFormMutation):
     class Meta:
         form_class = AddPasteBinForm
         exclude_fields = ('id',)
 
+
 class PasteBinMutation(graphene.ObjectType):
     add_paste_bin = AddPasteBin.Field()
 
 
 class PasteBinQuery(graphene.ObjectType):
-   all_paste_bin = DjangoFilterConnectionField(PasteBinNode)
-   paste_bin = relay.Node.Field(PasteBinNode)
+    all_paste_bin = DjangoFilterConnectionField(PasteBinNode)
+    paste_bin = relay.Node.Field(PasteBinNode)
