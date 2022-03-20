@@ -14,7 +14,7 @@ COPY public/ ./public/
 
 USER app
 
-CMD yarn start
+CMD yarn fast-start
 
 # Build Stage 2
 # FROM node:10.15.2-alpine
