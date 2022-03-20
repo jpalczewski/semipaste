@@ -6,26 +6,10 @@ import { users } from "../../Query/users";
 import { Table } from "react-bootstrap";
 import fetchGraphQL from "../../fetchGraphQL";
 
-export const Tables = () => {
-  console.log(users);
-
-  fetchGraphQL(`
-  query{
-    allPasteBin {
-      edges {
-        node {
-          id
-          title
-          pasteText
-          exposure
-          expireAfter
-        }
-      }
-    }
-  }
-    `)
+export const Tables = (props: any) => {
+  fetchGraphQL(users)
     .then((response) => {
-      console.log("test");
+      console.log(response);
     })
     .catch((error) => {
       console.error(error);
@@ -48,6 +32,7 @@ export const Tables = () => {
             <td>{id.author}</td>
             <td>{id.lang}</td>
             <td>{id.date}</td>
+            {/* <td>{data.allPasteBin.edges.node.title}</td> */}
           </tr>
         ))}
       </tbody>
