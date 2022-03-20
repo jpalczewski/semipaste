@@ -1,20 +1,35 @@
 import React from "react";
-import {
-  TableWrapper,
-  THead,
-  TFoot,
-  TBody,
-  TR,
-  TH,
-  TD,
-} from "../../styles/Table.style";
+
 import "bootstrap/dist/css/bootstrap.css";
 import { tableData } from "../../dummy_data/dummyData";
 import { users } from "../../Query/users";
 import { Table } from "react-bootstrap";
+import fetchGraphQL from "../../fetchGraphQL";
 
 export const Tables = () => {
-  console.log(users.name);
+  console.log(users);
+
+  fetchGraphQL(`
+  query{
+    allPasteBin {
+      edges {
+        node {
+          id
+          title
+          pasteText
+          exposure
+          expireAfter
+        }
+      }
+    }
+  }
+    `)
+    .then((response) => {
+      console.log("test");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 
   return (
     <Table striped bordered hover>
