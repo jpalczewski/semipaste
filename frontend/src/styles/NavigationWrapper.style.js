@@ -17,6 +17,13 @@ export const Container = styled.div`
   padding-left: 5%;
 `;
 
+export const RightContainer = styled.div`
+  display: flex;
+  padding-right: 50px;
+  flex: 30%;
+  justify-content: flex-end;
+`;
+
 export const NavInnerCont = styled.div`
   width: 100%;
   height: 80px;
@@ -54,6 +61,14 @@ export const NavbarLinkExt = styled(Link)`
   font-size: 24px;
   text-decoration: none;
   margin: 10px;
+`;
+
+export const LogoImg = styled.img`
+  border: 10px solid black;
+  border-radius: 40%;
+  width: 150px;
+  height: 150px;
+  background: black;
 `;
 
 export const OpenLinksButton = styled.button`

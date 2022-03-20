@@ -11,28 +11,31 @@ import {
 import "bootstrap/dist/css/bootstrap.css";
 import { tableData } from "../../dummy_data/dummyData";
 import { users } from "../../Query/users";
+import { Table } from "react-bootstrap";
 
 export const Tables = () => {
+  console.log(users.name);
+
   return (
-    <TableWrapper>
-      <THead>
-        <TR>
-          <TH>Tytuł</TH>
-          <TH>Autor</TH>
-          <TH>Język</TH>
-          <TH>Dodano</TH>
-        </TR>
-      </THead>
-      <TBody>
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>Tytuł</th>
+          <th>Autor</th>
+          <th>Język</th>
+          <th>Dodano</th>
+        </tr>
+      </thead>
+      <tbody>
         {tableData.map((id) => (
-          <TR>
-            <TD>{id.title}</TD>
-            <TD>{id.author}</TD>
-            <TD>{id.lang}</TD>
-            <TD>{id.date}</TD>
-          </TR>
+          <tr>
+            <td>{id.title}</td>
+            <td>{id.author}</td>
+            <td>{id.lang}</td>
+            <td>{id.date}</td>
+          </tr>
         ))}
-      </TBody>
-    </TableWrapper>
+      </tbody>
+    </Table>
   );
 };
