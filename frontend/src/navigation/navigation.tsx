@@ -17,7 +17,6 @@ const Navigation = () => {
   const [state, setState] = useState<UserLog>();
 
   const [extNavbar, setExtNavbar] = useState(false);
-  console.log(state);
 
   return (
     <NavigationWrapper>

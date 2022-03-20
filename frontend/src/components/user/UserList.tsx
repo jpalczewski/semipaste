@@ -8,8 +8,22 @@ import { allUsers } from "../../Query/allUsers";
 import { useState } from "react";
 
 export const UserList = () => {
-  const [use, setUse] = useState({});
-  fetchGraphQL(allUsers)
+  const [use, setUse] = useState();
+  fetchGraphQL(`
+  query allUsersQuery {
+    allUsers {
+      edges {
+        node {
+          id
+          username
+          firstName
+          lastName
+          isSuperuser
+        }
+      }
+    }
+  }
+  `)
     .then((response) => {
       setUse(response);
       console.log(use);
