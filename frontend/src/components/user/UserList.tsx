@@ -3,8 +3,20 @@ import { Table } from "react-bootstrap";
 import { userData } from "../../dummy_data/userData";
 import { EditUser } from "./CRUD/EditUser";
 import { DeleteUser } from "./CRUD/DeleteUser";
+import fetchGraphQL from "../../fetchGraphQL";
+import { allUsers } from "../../Query/allUsers";
+import { useState } from "react";
 
 export const UserList = () => {
+  const [use, setUse] = useState({});
+  fetchGraphQL(allUsers)
+    .then((response) => {
+      setUse(response);
+      console.log(use);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   return (
     <div className="container">
       <CreateUser />
