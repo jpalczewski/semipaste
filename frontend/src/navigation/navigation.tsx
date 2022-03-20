@@ -2,16 +2,22 @@ import React, { useState } from "react";
 import {
   NavigationWrapper,
   Container,
+  RightContainer,
   NavInnerCont,
   NavExtendedCont,
   NavLinkCont,
   NavbarLink,
   OpenLinksButton,
   NavbarLinkExt,
+  LogoImg,
 } from "../styles/NavigationWrapper.style";
+import Logo from "../assets/obraz.png";
 
 const Navigation = () => {
+  const [state, setState] = useState<UserLog>();
+
   const [extNavbar, setExtNavbar] = useState(false);
+  console.log(state);
 
   return (
     <NavigationWrapper>
@@ -32,6 +38,12 @@ const Navigation = () => {
             </OpenLinksButton>
           </NavLinkCont>
         </Container>
+
+        <NavbarLink to="/user">
+          <RightContainer>
+            <LogoImg src={Logo} />
+          </RightContainer>
+        </NavbarLink>
       </NavInnerCont>
       {extNavbar && (
         <NavExtendedCont>

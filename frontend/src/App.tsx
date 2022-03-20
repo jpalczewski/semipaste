@@ -9,6 +9,7 @@ import { Create } from "./components/CreateScreen";
 import { Current } from "./components/CurrentScreen";
 import { Popular } from "./components/PopularScreen";
 import { About } from "./components/AboutScreen";
+import { UserScreen } from "./components/user/UserScreen";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/popular" element={<Popular />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<ErroPage />} />
+        <Route path="/user" element={<UserScreen />} />
       </Routes>
     </Router>
   );
