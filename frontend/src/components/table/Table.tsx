@@ -7,14 +7,6 @@ import { Table } from "react-bootstrap";
 import fetchGraphQL from "../../fetchGraphQL";
 
 export const Tables = (props: any) => {
-  fetchGraphQL(users)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-
   return (
     <Table striped bordered hover>
       <thead>
