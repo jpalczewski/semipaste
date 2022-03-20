@@ -50,7 +50,7 @@ class PasteBin(models.Model):
             self.date_of_expiry = self.date_of_creation + timedelta(days=30)
         elif choice == PasteBin.ExpireChoices.YEAR:
             self.date_of_expiry = self.date_of_creation + timedelta(days=360)
-        super(PasteBin, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     # Special Methods
     def __str__(self) -> str:
