@@ -1,14 +1,17 @@
 """Pastes schema."""
 
+
 # 3rd-Party
 import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.forms.mutation import DjangoModelFormMutation
 
 # Local
 from .forms import AddPasteBinForm
 from .models import PasteBin
+
 
 class PasteBinNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
