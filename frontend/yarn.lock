@@ -2695,15 +2695,6 @@
     "source-map" "^0.5.7"
     "trim-right" "^1.0.1"
 
-"babel-helper-builder-react-jsx@^6.24.1":
-  "integrity" "sha1-Of+DE7dci2Xc7/HzHTg+D/KkCKA="
-  "resolved" "https://registry.npmjs.org/babel-helper-builder-react-jsx/-/babel-helper-builder-react-jsx-6.26.0.tgz"
-  "version" "6.26.0"
-  dependencies:
-    "babel-runtime" "^6.26.0"
-    "babel-types" "^6.26.0"
-    "esutils" "^2.0.2"
-
 "babel-helpers@^6.24.1":
   "integrity" "sha1-NHHenK7DiOXIUOWX5Yom3fN2ArI="
   "resolved" "https://registry.npmjs.org/babel-helpers/-/babel-helpers-6.24.1.tgz"
@@ -2838,55 +2829,10 @@
     "lodash" "^4.17.11"
     "picomatch" "^2.3.0"
 
-"babel-plugin-syntax-flow@^6.18.0":
-  "integrity" "sha1-TDqyCiryaqIM0lmVw5jE63AxDI0="
-  "resolved" "https://registry.npmjs.org/babel-plugin-syntax-flow/-/babel-plugin-syntax-flow-6.18.0.tgz"
-  "version" "6.18.0"
-
-"babel-plugin-syntax-jsx@^6.18.0", "babel-plugin-syntax-jsx@^6.3.13", "babel-plugin-syntax-jsx@^6.8.0":
+"babel-plugin-syntax-jsx@^6.18.0":
   "integrity" "sha1-CvMqmm4Tyno/1QaeYtew9Y0NiUY="
   "resolved" "https://registry.npmjs.org/babel-plugin-syntax-jsx/-/babel-plugin-syntax-jsx-6.18.0.tgz"
   "version" "6.18.0"
-
-"babel-plugin-transform-flow-strip-types@^6.22.0":
-  "integrity" "sha1-hMtnKTXUNxT9wyvOhFaNh0Qc988="
-  "resolved" "https://registry.npmjs.org/babel-plugin-transform-flow-strip-types/-/babel-plugin-transform-flow-strip-types-6.22.0.tgz"
-  "version" "6.22.0"
-  dependencies:
-    "babel-plugin-syntax-flow" "^6.18.0"
-    "babel-runtime" "^6.22.0"
-
-"babel-plugin-transform-react-display-name@^6.23.0":
-  "integrity" "sha1-Z+K/Hx6ck6sI25Z5LgU5K/LMKNE="
-  "resolved" "https://registry.npmjs.org/babel-plugin-transform-react-display-name/-/babel-plugin-transform-react-display-name-6.25.0.tgz"
-  "version" "6.25.0"
-  dependencies:
-    "babel-runtime" "^6.22.0"
-
-"babel-plugin-transform-react-jsx-self@^6.22.0":
-  "integrity" "sha1-322AqdomEqEh5t3XVYvL7PBuY24="
-  "resolved" "https://registry.npmjs.org/babel-plugin-transform-react-jsx-self/-/babel-plugin-transform-react-jsx-self-6.22.0.tgz"
-  "version" "6.22.0"
-  dependencies:
-    "babel-plugin-syntax-jsx" "^6.8.0"
-    "babel-runtime" "^6.22.0"
-
-"babel-plugin-transform-react-jsx-source@^6.22.0":
-  "integrity" "sha1-ZqwSFT9c0tF7PBkmj0vwGX9E7NY="
-  "resolved" "https://registry.npmjs.org/babel-plugin-transform-react-jsx-source/-/babel-plugin-transform-react-jsx-source-6.22.0.tgz"
-  "version" "6.22.0"
-  dependencies:
-    "babel-plugin-syntax-jsx" "^6.8.0"
-    "babel-runtime" "^6.22.0"
-
-"babel-plugin-transform-react-jsx@^6.24.1":
-  "integrity" "sha1-hAoCjn30YN/DotKfDA2R9jduZqM="
-  "resolved" "https://registry.npmjs.org/babel-plugin-transform-react-jsx/-/babel-plugin-transform-react-jsx-6.24.1.tgz"
-  "version" "6.24.1"
-  dependencies:
-    "babel-helper-builder-react-jsx" "^6.24.1"
-    "babel-plugin-syntax-jsx" "^6.8.0"
-    "babel-runtime" "^6.22.0"
 
 "babel-plugin-transform-react-remove-prop-types@^0.4.24":
   "integrity" "sha512-eqj0hVcJUR57/Ug2zE1Yswsw4LhuqqHhD+8v120T1cl3kjg76QwtyBrdIk4WVwK+lAhBJVYCd/v+4nc4y+8JsA=="
@@ -2910,13 +2856,6 @@
     "@babel/plugin-syntax-optional-catch-binding" "^7.8.3"
     "@babel/plugin-syntax-optional-chaining" "^7.8.3"
     "@babel/plugin-syntax-top-level-await" "^7.8.3"
-
-"babel-preset-flow@^6.23.0":
-  "integrity" "sha1-5xIYiHCFrpoktb5Baa/7WZgWxJ0="
-  "resolved" "https://registry.npmjs.org/babel-preset-flow/-/babel-preset-flow-6.23.0.tgz"
-  "version" "6.23.0"
-  dependencies:
-    "babel-plugin-transform-flow-strip-types" "^6.22.0"
 
 "babel-preset-jest@^27.5.1":
   "integrity" "sha512-Nptf2FzlPCWYuJg41HBqXVT8ym6bXOevuCTbhxlUpjwtysGaIWFvDEjp4y+G7fl13FgOdjs7P/DmErqH7da0Ag=="
@@ -2947,18 +2886,6 @@
     "@babel/runtime" "^7.16.3"
     "babel-plugin-macros" "^3.1.0"
     "babel-plugin-transform-react-remove-prop-types" "^0.4.24"
-
-"babel-preset-react@^6.24.1":
-  "integrity" "sha1-umnfrqRfw+xjm2pOzqbhdwLJE4A="
-  "resolved" "https://registry.npmjs.org/babel-preset-react/-/babel-preset-react-6.24.1.tgz"
-  "version" "6.24.1"
-  dependencies:
-    "babel-plugin-syntax-jsx" "^6.3.13"
-    "babel-plugin-transform-react-display-name" "^6.23.0"
-    "babel-plugin-transform-react-jsx" "^6.24.1"
-    "babel-plugin-transform-react-jsx-self" "^6.22.0"
-    "babel-plugin-transform-react-jsx-source" "^6.22.0"
-    "babel-preset-flow" "^6.23.0"
 
 "babel-register@^6.26.0":
   "integrity" "sha1-btAhFz4vy0htestFxgCahW9kcHE="

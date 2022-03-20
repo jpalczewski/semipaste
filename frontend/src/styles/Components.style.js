@@ -5,6 +5,10 @@ export const Wrapper = styled.div`
   text-align: center;
 `;
 
+export const Header = styled.header`
+  margin-top: 40px;
+`;
+
 export const FormWrapper = styled.div`
   margin: 50px;
   padding: 20px;
