@@ -1,7 +1,7 @@
 async function fetchGraphQL(text, variables) {
   const REACT_APP_GITHUB_AUTH_TOKEN = process.env.REACT_APP_GITHUB_AUTH_TOKEN;
 
-  const response = await fetch("/graphql/v1/", {
+  const response = await fetch("http://localhost:8000/graphql/v1/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
