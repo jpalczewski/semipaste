@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<274031f60b049eddceec8b1bf2817180>>
+ * @generated SignedSource<<e3d3c47ff9d71c9f84a17d2fc4047382>>
  * @flow
  * @lightSyntaxTransform
  * @nogrep
@@ -16,11 +16,12 @@ export type allUsersQuery$data = {|
   +allUsers: ?{|
     +edges: $ReadOnlyArray<?{|
       +node: ?{|
-        +id: string,
         +username: string,
         +firstName: string,
         +lastName: string,
-        +isSuperuser: boolean,
+        +id: string,
+        +email: string,
+        +dateJoined: any,
       |},
     |}>,
   |},
@@ -61,13 +62,6 @@ var v0 = [
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
                 "name": "username",
                 "storageKey": null
               },
@@ -89,7 +83,21 @@ var v0 = [
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "isSuperuser",
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "email",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "dateJoined",
                 "storageKey": null
               }
             ],
@@ -120,17 +128,17 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "caa68e98d1a1afcbfa294ded01123235",
+    "cacheID": "b292245b4c9a14b3c099a0338454a707",
     "id": null,
     "metadata": {},
     "name": "allUsersQuery",
     "operationKind": "query",
-    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        id\n        username\n        firstName\n        lastName\n        isSuperuser\n      }\n    }\n  }\n}\n"
+    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node/*: any*/).hash = "efe541659b306eaccb7933445d7634e8";
+(node/*: any*/).hash = "91c8e27e175500b80b08336ebb2f5eb2";
 
 module.exports = ((node/*: any*/)/*: Query<
   allUsersQuery$variables,
