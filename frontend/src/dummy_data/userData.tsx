@@ -1,7 +1,7 @@
 export const userData = [
   {
     id: "01",
-    name: "nazwa01",
+    username: "nazwa01",
     email: "adam.malysz@ski.jump",
     joinDate: "01.01.01",
     lstLoggin: "01.01.01",
@@ -9,7 +9,7 @@ export const userData = [
   },
   {
     id: "02",
-    name: "nazwa02",
+    username: "nazwa02",
     email: "adam.malysz@ski.jump",
     joinDate: "02.02.02",
     lstLoggin: "02.02.02",
@@ -17,7 +17,7 @@ export const userData = [
   },
   {
     id: "03",
-    name: "nazwa03",
+    username: "nazwa03",
     email: "adam.malysz@ski.jump",
     joinDate: "03.03.03",
     lstLoggin: "03.03.03",
@@ -25,7 +25,7 @@ export const userData = [
   },
   {
     id: "04",
-    name: "nazwa04",
+    username: "nazwa04",
     email: "adam.malysz@ski.jump",
     joinDate: "04.04.04",
     lstLoggin: "04.04.04",
@@ -33,7 +33,7 @@ export const userData = [
   },
   {
     id: "05",
-    name: "nazwa05",
+    username: "nazwa05",
     email: "adam.malysz@ski.jump",
     joinDate: "05.05.05",
     lstLoggin: "05.05.05",
@@ -41,7 +41,7 @@ export const userData = [
   },
   {
     id: "06",
-    name: "nazwa06",
+    username: "nazwa06",
     email: "adam.malysz@ski.jump",
     joinDate: "06.06.06",
     lstLoggin: "06.06.06",
