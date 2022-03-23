@@ -1,17 +1,18 @@
 # 3rd-Party
 import graphene
+import graphql_jwt
 from graphene import relay
 from graphene_django.debug import DjangoDebug
-import graphql_jwt
 
 # Project
 from pastes.schema import PasteBinMutation, PasteBinQuery
-from users.schema import UserMutation, UserQuery, ObtainJSONWebTokenUser
+from users.schema import ObtainJSONWebTokenUser, UserMutation, UserQuery
 
 
 class Mutation(UserMutation, PasteBinMutation):
     token_auth = ObtainJSONWebTokenUser.Field()
     verify_token = graphql_jwt.relay.Verify.Field()
+    revoke_token = graphql_jwt.relay.Revoke.Field()
     refresh_token = graphql_jwt.relay.Refresh.Field()
 
 

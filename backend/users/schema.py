@@ -1,16 +1,17 @@
 """Users schema."""
 
+
 # Django
 from django.utils.html import escape, strip_tags
 
 # 3rd-Party
 import graphene
+import graphql_jwt
 from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.forms.mutation import DjangoModelFormMutation
-import graphql_jwt
 
 # Local
 from .forms import AddUserForm
@@ -93,7 +94,7 @@ class UserQuery(graphene.ObjectType):
     node = graphene.relay.Node.Field()
     debug = graphene.Field(DjangoDebug, name="_debug")
 
-    def resolve_user(self, info, id):
+    def resolve_user(self, info, id):  # type: ignore
         return User.objects.get(id=id)
 
 
@@ -108,5 +109,5 @@ class ObtainJSONWebTokenUser(graphql_jwt.relay.JSONWebTokenMutation):
     user = graphene.Field(UserNode)
 
     @classmethod
-    def resolve(cls, root, info, **kwargs):
+    def resolve(cls, root, info, **kwargs):  # type: ignore
         return cls(user=info.context.user)
