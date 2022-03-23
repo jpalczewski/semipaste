@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 
 # Standard Library
-from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
 
 # 3rd-Party
 import environ
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "graphene_django",
     "pastes",
+    "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
 ]
 
 MIDDLEWARE = [
@@ -81,8 +82,9 @@ AUTHENTICATION_BACKENDS = [
 
 GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
-    "JWT_EXPIRATION_DELTA": timedelta(minutes=5),
-    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+    "JWT_EXPIRATION_DELTA": timedelta(minutes=7),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=4),
 }
 
 ROOT_URLCONF = 'backend.urls'
