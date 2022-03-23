@@ -69,7 +69,7 @@ export const LoginScreen = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button type="submit" variant="primary" onClick={handleSubmit}>
-            Save Changes
+            Zaloguj
           </Button>
         </Modal.Footer>
       </Modal>

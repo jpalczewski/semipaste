@@ -5,32 +5,22 @@ import { EditUser } from "./CRUD/EditUser";
 import { DeleteUser } from "./CRUD/DeleteUser";
 import fetchGraphQL from "../../fetchGraphQL";
 import { allUsers } from "../../Query/allUsers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const UserList = () => {
   const [use, setUse] = useState();
-  fetchGraphQL(`
-  query allUsersQuery {
-    allUsers {
-      edges {
-        node {
-          id
-          username
-          firstName
-          lastName
-          isSuperuser
-        }
-      }
-    }
-  }
-  `)
-    .then((response) => {
-      setUse(response);
-      console.log(use);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
+  useEffect(() => {
+    fetchGraphQL(allUsers)
+      .then((response) => {
+        setUse(response);
+        console.log(use);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className="container">
       <CreateUser />

@@ -34,7 +34,7 @@ export const CreateUser = () => {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Utwórz as</Modal.Title>
+          <Modal.Title>Utwórz</Modal.Title>
         </Modal.Header>
         <Modal.Body onSubmit={handleSubmit}>
           <div>
@@ -71,7 +71,7 @@ export const CreateUser = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button type="submit" variant="primary" onClick={handleClose}>
-            Save Changes
+            Zapisz
           </Button>
         </Modal.Footer>
       </Modal>
