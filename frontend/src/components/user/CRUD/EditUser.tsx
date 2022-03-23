@@ -1,5 +1,5 @@
 import React, { SetStateAction, useState, Dispatch } from "react";
-// import { editUser } from "../../../Query/editUser";
+import { editUser } from "../../../Query/editUser";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useMutation } from "react-relay";
@@ -14,7 +14,6 @@ interface Props {
 export const EditUser = ({ isVisible, id, email, username }: Props) => {
   const [inputs, setInputs] = useState({ login: "", email: "", password: "" });
 
-  // const [commitEdit, setCommitEdit] = useMutation<typeof editUser>(editUser);
   const handleChange = (event: any) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -22,20 +21,6 @@ export const EditUser = ({ isVisible, id, email, username }: Props) => {
   };
 
   const handleSubmit = (event: any) => {
-    // commitEdit({
-    //   variables: {
-    //     input: {
-    //       id: "1",
-    //       username: "j.kowal",
-    //       lastName: "Kowalski",
-    //       firstName: "Jan",
-    //       email: "test@test.pl",
-    //     },
-    //   },
-    //   onCompleted(data) {
-    //     console.log(data);
-    //   },
-    // });
     console.log(inputs);
     setInputs({ login: "", password: "", email: "" });
     handleClose();
