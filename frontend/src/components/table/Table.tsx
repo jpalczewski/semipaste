@@ -1,8 +1,6 @@
 import React from "react";
-
 import "bootstrap/dist/css/bootstrap.css";
 import { tableData } from "../../dummy_data/dummyData";
-import { users } from "../../Query/users";
 import { Table } from "react-bootstrap";
 import fetchGraphQL from "../../fetchGraphQL";
 
@@ -24,7 +22,6 @@ export const Tables = (props: any) => {
             <td>{id.author}</td>
             <td>{id.lang}</td>
             <td>{id.date}</td>
-            {/* <td>{data.allPasteBin.edges.node.title}</td> */}
           </tr>
         ))}
       </tbody>
