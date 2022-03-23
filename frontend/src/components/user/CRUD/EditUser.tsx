@@ -1,5 +1,5 @@
 import React, { SetStateAction, useState, Dispatch } from "react";
-import { editUser } from "../../../Query/editUser";
+// import { editUser } from "../../../Query/editUser";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useMutation } from "react-relay";
@@ -8,10 +8,9 @@ interface Props {
   id: Number;
   email: string;
   username: string;
-  isVisible: boolean;
 }
 
-export const EditUser = ({ isVisible, id, email, username }: Props) => {
+export const EditUser = ({ id, email, username }: Props) => {
   const [inputs, setInputs] = useState({ login: "", email: "", password: "" });
 
   const handleChange = (event: any) => {
