@@ -14,8 +14,6 @@ import {
 import Logo from "../assets/obraz.png";
 
 const Navigation = () => {
-  const [state, setState] = useState<UserLog>();
-
   const [extNavbar, setExtNavbar] = useState(false);
 
   return (
