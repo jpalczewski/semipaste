@@ -10,6 +10,7 @@ from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.forms.mutation import DjangoModelFormMutation
+import graphql_jwt
 
 # Local
 from .forms import AddUserForm
@@ -21,7 +22,6 @@ class UserNode(DjangoObjectType):
 
     class Meta:
         model = User
-        exclude = ('password',)
         filter_fields = ['id']
         interfaces = (relay.Node,)
 
@@ -31,7 +31,6 @@ class AddUser(DjangoModelFormMutation):
 
     class Meta:
         form_class = AddUserForm
-        exclude = ('password',)
 
 
 class EditUser(graphene.Mutation):
@@ -44,6 +43,7 @@ class EditUser(graphene.Mutation):
         last_name = graphene.String()
         email = graphene.String()
         description = graphene.String()
+        password = graphene.String()
 
     def mutate(cls, info, **kwargs):  # type: ignore
         user = User.objects.get(pk=kwargs["id"])
@@ -54,7 +54,7 @@ class EditUser(graphene.Mutation):
             else:
                 setattr(user, attr, value)
         user.save()
-        return cls(ok=True)
+        return cls(ok=True, user=info.context.user)
 
 
 class EditUserDescription(graphene.Mutation):
@@ -70,7 +70,7 @@ class EditUserDescription(graphene.Mutation):
             escape(kwargs.get('description', user.description))
         )
         user.save()
-        return cls(ok=True)
+        return cls(ok=True, user=info.context.user)
 
 
 class DeleteUser(graphene.Mutation):
@@ -87,10 +87,14 @@ class DeleteUser(graphene.Mutation):
 
 class UserQuery(graphene.ObjectType):
     user = graphene.Field(UserNode)
+    id = graphene.Int(required=True)
     all_users = DjangoFilterConnectionField(UserNode)
 
     node = graphene.relay.Node.Field()
     debug = graphene.Field(DjangoDebug, name="_debug")
+
+    def resolve_user(self, info, id):
+        return User.objects.get(id=id)
 
 
 class UserMutation(graphene.ObjectType):
@@ -98,3 +102,11 @@ class UserMutation(graphene.ObjectType):
     edit_user = EditUser.Field()
     edit_user_description = EditUserDescription.Field()
     delete_user = DeleteUser.Field()
+
+
+class ObtainJSONWebTokenUser(graphql_jwt.relay.JSONWebTokenMutation):
+    user = graphene.Field(UserNode)
+
+    @classmethod
+    def resolve(cls, root, info, **kwargs):
+        return cls(user=info.context.user)
