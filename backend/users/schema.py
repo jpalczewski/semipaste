@@ -56,7 +56,7 @@ class DeleteUser(graphene.Mutation):
 
 class UserQuery(graphene.ObjectType):
     user = graphene.Field(UserNode)
-    all_users = DjangoFilterConnectionField(UserNode)
+    all_users_query = DjangoFilterConnectionField(UserNode)
 
     node = graphene.relay.Node.Field()
     debug = graphene.Field(DjangoDebug, name="_debug")
