@@ -65,6 +65,8 @@
   },
   "relay": {
     "src": "./src",
-    "schema": "./schema.graphql"
+    "schema": "./schema.graphql",
+    "artifactDirectory": "./src/__generated__",
+    "language" : "typescript"
   }
 }
