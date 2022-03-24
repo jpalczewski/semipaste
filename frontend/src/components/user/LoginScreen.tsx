@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Modal } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Modal, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { validPassword } from "../../Regex/Regex";
+import "../../styles/LoginScreen.css";
 
 const validate = (form: any) => {
   if (!form.username) return "login jest wymagany";
@@ -27,28 +27,44 @@ export const LoginScreen = () => {
     const errorMsg = validate(inputs);
     if (errorMsg) {
       setError(errorMsg);
-      console.log(errorMsg);
       return;
     }
-    setError("");
-    setInputs({ username: "", password: "" });
-    handleClose();
     navigate("/user");
   };
 
-  const [show, setShow] = useState(false);
-  const handleClose = () => {
-    setError("");
-    setShow(false);
-  };
-  const handleShow = () => setShow(true);
-
   return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        ZALOGUJ
-      </Button>
-      <Modal show={show} onHide={handleClose}>
+    <div className="Contener">
+      <Form>
+        {error && <Form.Text className="text-danger">{error}</Form.Text>}
+        <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Label>Login</Form.Label>
+          <Form.Control
+            type="text"
+            name="username"
+            placeholder="test"
+            value={inputs.username || ""}
+            onChange={handleChange}
+          />
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            name="password"
+            placeholder="********"
+            value={inputs.password || ""}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit" onClick={handleSubmit}>
+          Zaloguj
+        </Button>
+      </Form>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>LOGOwANIE</Modal.Title>
         </Modal.Header>
@@ -88,12 +104,7 @@ export const LoginScreen = () => {
             Zaloguj
           </Button>
         </Modal.Footer>
-        <Modal.Footer>
-          <Button type="submit" variant="primary" onClick={handleSubmit}>
-            Zaloguj
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+      </Modal> */}
+    </div>
   );
 };
