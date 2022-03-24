@@ -6,20 +6,30 @@ import { DeleteUser } from "./CRUD/DeleteUser";
 import fetchGraphQL from "../../fetchGraphQL";
 import { allUsers } from "../../Query/allUsers";
 import { useEffect, useState } from "react";
+import type allUsersQuery from "../../Query/__generated__/allUsersQuery.graphql";
 
-export const UserList = () => {
+import { loadQuery, usePreloadedQuery } from "react-relay/hooks";
+import RelayEnvironment from "../../RelayEnvironment";
+
+export const UserList = (props: any) => {
   const [use, setUse] = useState();
 
-  useEffect(() => {
-    fetchGraphQL(allUsers)
-      .then((response) => {
-        setUse(response);
-        console.log(use);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const preloadedQuery = loadQuery(RelayEnvironment, allUsers, {
+    /* query variables */
+  });
+
+  const data = usePreloadedQuery<allUsersQuery>(allUsers, preloadedQuery);
+  console.log(data);
+  console.log(typeof data);
+
+  // fetchGraphQL(allUsers)
+  //   .then((response) => {
+  //     setUse(response);
+  //     console.log(use);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 
   return (
     <div className="container">
@@ -41,7 +51,7 @@ export const UserList = () => {
         <tbody>
           {userData.map((element: any) => (
             <tr className="align-middle">
-              <td>{element.id}</td>
+              <td>{element}</td>
               <td>{element.username}</td>
               <td>{element.email}</td>
               <td>{element.joinDate}</td>
