@@ -11,7 +11,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 RUN --mount=type=cache,id=apk,target=/var/cache/apk   ln -vs /var/cache/apk /etc/apk/cache && \
     apk add --update build-base libffi-dev gcc musl-dev postgresql-dev git
 
-RUN --mount=type=cache,id=pip,target=/root/.cache/pip pip install poetry &&  \
+RUN --mount=type=cache,id=pip,target=/root/.cache/pip  pip install poetry &&  \
     mkdir /venv && \
     poetry config virtualenvs.path /venv
 #poetry config virtualenvs.in-project true
@@ -20,7 +20,7 @@ RUN --mount=type=cache,id=pip,target=/root/.cache/pip pip install poetry &&  \
 
 ADD pyproject.toml poetry.lock /app/
 
-RUN --mount=type=cache,id=poetry,target=/root/.cache/pypoetry if [ -n "$PRODUCTION" ]; then arg="--no-dev" ; fi && \
+RUN --mount=type=cache,id=poetry,target=/root/.cache/pypoetry  --mount=type=cache,id=pip,target=/root/.cache/pip if [ -n "$PRODUCTION" ]; then arg="--no-dev" ; fi && \
     poetry install --no-ansi $arg
 
 # ---
