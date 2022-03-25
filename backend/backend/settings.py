@@ -17,6 +17,7 @@ from distutils.debug import DEBUG
 from pathlib import Path
 
 # 3rd-Party
+import dj_email_url
 import environ
 from configurations import Configuration, values
 
@@ -149,11 +150,19 @@ class Common(Configuration):
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-    GRAPHQL_JWT = {
-    "JWT_VERIFY_EXPIRATION": True,
-    "JWT_EXPIRATION_DELTA": timedelta(minutes=10),
-    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=3),
-    }
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+    email_config = dj_email_url.config()
+
+    EMAIL_FILE_PATH = email_config['EMAIL_FILE_PATH']
+    EMAIL_HOST_USER = email_config['EMAIL_HOST_USER']
+    EMAIL_HOST_PASSWORD = email_config['EMAIL_HOST_PASSWORD']
+    EMAIL_HOST = email_config['EMAIL_HOST']
+    EMAIL_PORT = email_config['EMAIL_PORT']
+    EMAIL_BACKEND = email_config['EMAIL_BACKEND']
+    EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
+    EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
+    EMAIL_TIMEOUT = email_config['EMAIL_TIMEOUT']
 
 
 class Dev(Common):
