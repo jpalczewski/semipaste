@@ -105,6 +105,33 @@ tomli = {version = "*", optional = true, markers = "extra == \"toml\""}
 toml = ["tomli"]
 
 [[package]]
+name = "dj-database-url"
+version = "0.5.0"
+description = "Use Database URLs in your Django Application."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "dj-email-url"
+version = "1.0.5"
+description = "Use an URL to configure email backend settings in your Django Application."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "dj-search-url"
+version = "0.1"
+description = "Use Search URLs in your Django Haystack Application."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+tests = ["pytest"]
+
+[[package]]
 name = "django"
 version = "4.0.3"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
@@ -120,6 +147,36 @@ tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
+
+[[package]]
+name = "django-cache-url"
+version = "3.4.0"
+description = "Use Cache URLs in your Django application."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "django-configurations"
+version = "2.3.2"
+description = "A helper for organizing Django settings."
+category = "main"
+optional = false
+python-versions = ">=3.6, <4.0"
+
+[package.dependencies]
+dj-database-url = {version = "*", optional = true, markers = "extra == \"database\""}
+dj-email-url = {version = "*", optional = true, markers = "extra == \"email\""}
+dj-search-url = {version = "*", optional = true, markers = "extra == \"search\""}
+django = ">=2.2"
+django-cache-url = {version = "*", optional = true, markers = "extra == \"cache\""}
+
+[package.extras]
+cache = ["django-cache-url"]
+database = ["dj-database-url"]
+email = ["dj-email-url"]
+search = ["dj-search-url"]
+testing = ["django-cache-url (>=1.0.0)", "dj-database-url", "dj-email-url", "dj-search-url"]
 
 [[package]]
 name = "django-environ"
@@ -664,7 +721,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "cc19f391926d7bd49b389081bbd6fe70721531a9f3898f7d0dd3c0d3699554e1"
+content-hash = "5f1a802a9c841222334bd4b6394c8061d86b8a18eb3679ca09cced067762ac6d"
 
 [metadata.files]
 aniso8601 = [
@@ -823,9 +880,28 @@ coverage = [
     {file = "coverage-6.3.2-pp36.pp37.pp38-none-any.whl", hash = "sha256:18d520c6860515a771708937d2f78f63cc47ab3b80cb78e86573b0a760161faf"},
     {file = "coverage-6.3.2.tar.gz", hash = "sha256:03e2a7826086b91ef345ff18742ee9fc47a6839ccd517061ef8fa1976e652ce9"},
 ]
+dj-database-url = [
+    {file = "dj-database-url-0.5.0.tar.gz", hash = "sha256:4aeaeb1f573c74835b0686a2b46b85990571159ffc21aa57ecd4d1e1cb334163"},
+    {file = "dj_database_url-0.5.0-py2.py3-none-any.whl", hash = "sha256:851785365761ebe4994a921b433062309eb882fedd318e1b0fcecc607ed02da9"},
+]
+dj-email-url = [
+    {file = "dj-email-url-1.0.5.tar.gz", hash = "sha256:ef36f8a324ec57cf3be5c7a7ef44ed6900ca0208624a918ab33adc1cf6427b39"},
+    {file = "dj_email_url-1.0.5-py2.py3-none-any.whl", hash = "sha256:64257c4f9d8139a4af8e5267229d32260e433fbf257b0cf8fc855bb0cc39ca7d"},
+]
+dj-search-url = [
+    {file = "dj-search-url-0.1.tar.gz", hash = "sha256:424d1a5852500b3c118abfdd0e30b3e0016fe68e7ed27b8553a67afa20d4fb40"},
+]
 django = [
     {file = "Django-4.0.3-py3-none-any.whl", hash = "sha256:1239218849e922033a35d2a2f777cb8bee18bd725416744074f455f34ff50d0c"},
     {file = "Django-4.0.3.tar.gz", hash = "sha256:77ff2e7050e3324c9b67e29b6707754566f58514112a9ac73310f60cd5261930"},
+]
+django-cache-url = [
+    {file = "django-cache-url-3.4.0.tar.gz", hash = "sha256:4559398a946ff24c4ee96e32c55e3b760bd69f7c2ba48844cdf8fcb4f76d10bd"},
+    {file = "django_cache_url-3.4.0-py2.py3-none-any.whl", hash = "sha256:9061f8e7ffbb29eb92ba93fa9058003ec92393e85c537d1969570652ff8721fa"},
+]
+django-configurations = [
+    {file = "django-configurations-2.3.2.tar.gz", hash = "sha256:bd1a77a60735839b7d105912cc3977735fa005ea06544c632fbd322d1e021677"},
+    {file = "django_configurations-2.3.2-py3-none-any.whl", hash = "sha256:c0363b0111df6536442186d0f23d12138390eaa9f4f97ce46950ee78856a46c9"},
 ]
 django-environ = [
     {file = "django-environ-0.8.1.tar.gz", hash = "sha256:6f0bc902b43891656b20486938cba0861dc62892784a44919170719572a534cb"},
