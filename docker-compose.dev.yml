@@ -10,6 +10,8 @@ services:
       - .env
     volumes:
       - ./backend/:/app
+    environment:
+      - EMAIL_URL=smtp://mailhog:1025
 
   frontend:
     image: jpalczewski/semipaste-frontend:latest
@@ -30,6 +32,12 @@ services:
     restart: always
     ports:
       - 8080:8080
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+
 
 volumes:
   db_data:
