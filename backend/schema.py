@@ -6,14 +6,14 @@ from graphene_django.debug import DjangoDebug
 
 # Project
 from pastes.schema import PasteBinMutation, PasteBinQuery
-from users.schema import ObtainJSONWebTokenUser, UserMutation, UserQuery
+from users.schema import UserMutation, UserQuery
 
 
 class Mutation(UserMutation, PasteBinMutation):
-    token_auth = ObtainJSONWebTokenUser.Field()
+    token_auth = graphql_jwt.relay.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.relay.Verify.Field()
     refresh_token = graphql_jwt.relay.Refresh.Field()
-    # revoke_token = graphql_jwt.relay.Revoke.Field()
+    revoke_token = graphql_jwt.relay.Revoke.Field()
 
 
 class Query(UserQuery, PasteBinQuery):
