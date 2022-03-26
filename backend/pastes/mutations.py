@@ -32,7 +32,7 @@ class AddPasteBin(graphene.Mutation):
         expire_after = graphene.String()
         exposure = graphene.Boolean()
 
-    def mutate(cls, info, **kwargs):
+    def mutate(cls, info, **kwargs):  # type: ignore
         kwargs['author'] = info.context.user
         paste = PasteBin(**kwargs)
         paste.save()
