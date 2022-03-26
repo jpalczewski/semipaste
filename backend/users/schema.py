@@ -6,7 +6,6 @@ from django.utils.html import escape, strip_tags
 
 # 3rd-Party
 import graphene
-import graphql_jwt
 from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
