@@ -103,11 +103,3 @@ class UserMutation(graphene.ObjectType):
     edit_user = EditUser.Field()
     edit_user_description = EditUserDescription.Field()
     delete_user = DeleteUser.Field()
-
-
-class ObtainJSONWebTokenUser(graphql_jwt.relay.JSONWebTokenMutation):
-    user = graphene.Field(UserNode)
-
-    @classmethod
-    def resolve(cls, root, info, **kwargs):  # type: ignore
-        return cls(user=info.context.user)
