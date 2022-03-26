@@ -37,7 +37,7 @@ class EditUser(graphene.Mutation):
     ok = graphene.Boolean()
 
     class Arguments:
-        id = graphene.ID()
+        id = graphene.ID(required=True)
         username = graphene.String()
         first_name = graphene.String()
         last_name = graphene.String()
@@ -45,8 +45,9 @@ class EditUser(graphene.Mutation):
         description = graphene.String()
         password = graphene.String()
 
-    def mutate(cls, info, **kwargs):  # type: ignore
-        user = User.objects.get(pk=kwargs["id"])
+    def mutate(cls, info, id: graphene.ID, **kwargs):  # type: ignore
+        # type: ignore
+        user = User.objects.get(pk=id)
         for attr in kwargs.keys():
             value = kwargs.get(attr, getattr(user, attr))
             if attr == 'description':
@@ -61,11 +62,11 @@ class EditUserDescription(graphene.Mutation):
     ok = graphene.Boolean()
 
     class Arguments:
-        id = graphene.ID()
+        id = graphene.ID(required=True)
         description = graphene.String()
 
-    def mutate(cls, info, **kwargs):  # type: ignore
-        user = User.objects.get(pk=kwargs["id"])
+    def mutate(cls, info, id: graphene.ID, **kwargs):  # type: ignore
+        user = User.objects.get(pk=id)
         user.description = strip_tags(
             escape(kwargs.get('description', user.description))
         )
@@ -77,10 +78,10 @@ class DeleteUser(graphene.Mutation):
     ok = graphene.Boolean()
 
     class Arguments:
-        id = graphene.ID()
+        id = graphene.ID(required=True)
 
-    def mutate(cls, info, **kwargs):  # type: ignore
-        user = User.objects.get(pk=kwargs["id"])
+    def mutate(cls, info, id: graphene.ID, **kwargs):  # type: ignore
+        user = User.objects.get(pk=id)
         user.delete()
         return cls(ok=True)
 
