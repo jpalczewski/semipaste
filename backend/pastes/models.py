@@ -1,5 +1,6 @@
 """Pastes models."""
 
+
 # Standard Library
 from datetime import datetime, timedelta, timezone
 
@@ -7,6 +8,7 @@ from datetime import datetime, timedelta, timezone
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+# Project
 from users.models import User
 
 
@@ -36,8 +38,7 @@ class PasteBin(models.Model):
     )
     date_of_expiry = models.DateTimeField(_('date of expiry'), null=True, blank=True)
     author = models.ForeignKey(
-        User, verbose_name=_('author'),
-        on_delete=models.CASCADE, null=True, blank=True
+        User, verbose_name=_('author'), on_delete=models.CASCADE, null=True, blank=True
     )
 
     @staticmethod
@@ -62,7 +63,9 @@ class PasteBin(models.Model):
         if choice == PasteBin.ExpireChoices.NEVER:
             self.date_of_expiry = None
         else:
-            self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(choice)
+            self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
+                choice
+            )
         super().save(*args, **kwargs)
 
     # Special Methods
