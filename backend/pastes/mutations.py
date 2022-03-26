@@ -33,7 +33,10 @@ class AddPasteBin(graphene.Mutation):
         exposure = graphene.Boolean()
 
     def mutate(cls, info, **kwargs):  # type: ignore
-        kwargs['author'] = info.context.user
+        if info.context.user.is_authenticated:
+            kwargs['author'] = info.context.user
+        else:
+            kwargs['author'] = None
         paste = PasteBin(**kwargs)
         paste.save()
         return cls(ok=True)
