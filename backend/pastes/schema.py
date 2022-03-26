@@ -5,10 +5,8 @@ import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
-from graphene_django.forms.mutation import DjangoModelFormMutation
 
 # Local
-from .forms import AddPasteBinForm
 from .models import PasteBin
 
 
@@ -24,10 +22,20 @@ class PasteBinNode(DjangoObjectType):
     # fields = "__all__"
 
 
-class AddPasteBin(DjangoModelFormMutation):
-    class Meta:
-        form_class = AddPasteBinForm
-        exclude_fields = ('id',)
+class AddPasteBin(graphene.Mutation):
+    class Arguments:
+        title = graphene.String()
+        text = graphene.String()
+        expire_after = graphene.String()
+        exposure = graphene.Boolean()
+
+    ok = graphene.Boolean()
+
+    def mutate(cls, info, **kwargs):  # type: ignore
+        paste = PasteBin(**kwargs)
+        paste.author = info.context.user
+        paste.save()
+        return cls(ok=True)
 
 
 class PasteBinMutation(graphene.ObjectType):
