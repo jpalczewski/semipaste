@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 
 # Standard Library
+from datetime import timedelta
 from pathlib import Path
 
 # 3rd-Party
@@ -35,7 +36,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['backend', 'localhost']
 
 
 # Application definition
@@ -61,7 +62,28 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
 ]
+
+
+GRAPHENE = {
+    "SCHEMA": "schema.schema_v1",
+    "MIDDLEWARE": [
+        "graphql_jwt.middleware.JSONWebTokenMiddleware",
+        "graphene_django.debug.DjangoDebugMiddleware",
+    ],
+}
+
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_EXPIRATION_DELTA": timedelta(minutes=10),
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=3),
+}
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -132,8 +154,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-GRAPHENE = {"SCHEMA": "schema.schema_v1"}
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']

@@ -1,5 +1,6 @@
 """Users schema."""
 
+
 # Django
 from django.utils.html import escape, strip_tags
 
@@ -21,7 +22,6 @@ class UserNode(DjangoObjectType):
 
     class Meta:
         model = User
-        exclude = ('password',)
         filter_fields = ['id']
         interfaces = (relay.Node,)
 
@@ -31,7 +31,6 @@ class AddUser(DjangoModelFormMutation):
 
     class Meta:
         form_class = AddUserForm
-        exclude = ('password',)
 
 
 class EditUser(graphene.Mutation):
@@ -44,6 +43,7 @@ class EditUser(graphene.Mutation):
         last_name = graphene.String()
         email = graphene.String()
         description = graphene.String()
+        password = graphene.String()
 
     def mutate(cls, info, id: graphene.ID, **kwargs):  # type: ignore
         # type: ignore
@@ -55,7 +55,7 @@ class EditUser(graphene.Mutation):
             else:
                 setattr(user, attr, value)
         user.save()
-        return cls(ok=True)
+        return cls(ok=True, user=info.context.user)
 
 
 class EditUserDescription(graphene.Mutation):
@@ -71,7 +71,7 @@ class EditUserDescription(graphene.Mutation):
             escape(kwargs.get('description', user.description))
         )
         user.save()
-        return cls(ok=True)
+        return cls(ok=True, user=info.context.user)
 
 
 class DeleteUser(graphene.Mutation):
@@ -88,10 +88,14 @@ class DeleteUser(graphene.Mutation):
 
 class UserQuery(graphene.ObjectType):
     user = graphene.Field(UserNode)
+    id = graphene.Int(required=True)
     all_users = DjangoFilterConnectionField(UserNode)
 
     node = graphene.relay.Node.Field()
     debug = graphene.Field(DjangoDebug, name="_debug")
+
+    def resolve_user(self, info, id):  # type: ignore
+        return User.objects.get(id=id)
 
 
 class UserMutation(graphene.ObjectType):
