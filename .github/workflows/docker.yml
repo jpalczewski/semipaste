@@ -21,9 +21,12 @@ jobs:
       run: |
         export GITHUB_WORKFLOW=True
         export MODE="Test"
-        docker-compose -f docker-compose.ci.yml build
-        docker-compose -f docker-compose.ci.yml up -d
-        docker-compose -f docker-compose.ci.yml run backend pytest --cov
+        DOCKER_BUILDKIT=1 docker-compose -f docker-compose.ci.yml build
+        DOCKER_BUILDKIT=1 docker-compose -f docker-compose.ci.yml up -d
+        DOCKER_BUILDKIT=1 docker-compose -f docker-compose.ci.yml run backend pytest --cov
+      env:
+        DOCKER_BUILDKIT: 1
+
 
     - name: Stop containers
       if: always()
