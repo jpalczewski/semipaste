@@ -17,28 +17,54 @@ jobs:
 
 
     - uses: actions/checkout@v2.4.0
-    - name: Build the images and start the containers
-      run: |
-        export GITHUB_WORKFLOW=True
-        export MODE="Test"
-        DOCKER_BUILDKIT=1 docker-compose -f docker-compose.ci.yml build
-        DOCKER_BUILDKIT=1 docker-compose -f docker-compose.ci.yml up -d
-        DOCKER_BUILDKIT=1 docker-compose -f docker-compose.ci.yml run backend pytest --cov
-      env:
-        DOCKER_BUILDKIT: 1
+    -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v1 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
 
-    - name: Stop containers
-      if: always()
-      run: docker-compose -f "docker-compose.ci.yml" down
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
-      with:
-        directory: ./backend
-        env_vars: OS,PYTHON
-        fail_ci_if_error: true
-        files: ./coverage
-        flags: unittests
-        name: semipaste-backend
-        path_to_write_report: ./codecov_report.txt
-        verbose: true
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          # Key is named differently to avoid collision
+          key: ${{ runner.os }}-multi-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-multi-buildx
+
+      -
+        name: Build and push backend
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/jpalczewski/semipaste-backend:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          # Note the mode=max here
+          # More: https://github.com/moby/buildkit#--export-cache-options
+          # And: https://github.com/docker/buildx#--cache-tonametypetypekeyvalue
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
+      -
+        name: Build and push frontend
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/jpalczewski/semipaste-frontend:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          # Note the mode=max here
+          # More: https://github.com/moby/buildkit#--export-cache-options
+          # And: https://github.com/docker/buildx#--cache-tonametypetypekeyvalue
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
