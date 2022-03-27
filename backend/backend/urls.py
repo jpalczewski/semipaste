@@ -29,7 +29,9 @@ from schema import schema_v1
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("graphql/v1/", csrf_exempt(
-        jwt_cookie(GraphQLView.as_view(graphiql=True, schema=schema_v1))
-    ), name='Graphiql'),
+    path(
+        "graphql/v1/",
+        csrf_exempt(jwt_cookie(GraphQLView.as_view(graphiql=True, schema=schema_v1))),
+        name='Graphiql',
+    ),
 ]

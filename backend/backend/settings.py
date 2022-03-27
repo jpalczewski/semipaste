@@ -36,7 +36,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['backend','localhost']
+ALLOWED_HOSTS = ['backend', 'localhost']
 
 
 # Application definition
@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "graphene_django",
     "pastes",
-    "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
 ]
 
 MIDDLEWARE = [
@@ -82,7 +81,6 @@ AUTHENTICATION_BACKENDS = [
 
 GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
-    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
     "JWT_EXPIRATION_DELTA": timedelta(minutes=10),
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=3),
 }
