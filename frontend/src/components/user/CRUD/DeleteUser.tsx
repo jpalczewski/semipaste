@@ -1,19 +1,32 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { commitMutation, graphql } from "react-relay";
+import RelayEnvironment from "../../../RelayEnvironment";
+import { deleteUser } from "../../../Query/deleteUser";
+import { deleteUserMutation } from "../../../__generated__/deleteUserMutation.graphql";
+// import graphql from "babel-plugin-relay/macro";
 
-interface Props {
-  id: Number;
-  email: string;
-  username: string;
-  isVisible: boolean;
-}
-
-export const DeleteUser = ({ isVisible, id, email, username }: Props) => {
+export const DeleteUser = (id: any) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  console.log(id.toString());
 
-  const handleSubmit = () => {
+  const handleSubmit = (input: any) => {
+    console.log("input", input.toString());
+
+    console.log("test");
+
+    commitMutation<deleteUserMutation>(RelayEnvironment, {
+      mutation: graphql`
+        mutation deleteUserMutation($input: ID!) {
+          deleteUser(id: $input) {
+            ok
+          }
+        }
+      `,
+      variables: { input },
+    });
     handleClose();
   };
   return (
@@ -28,12 +41,16 @@ export const DeleteUser = ({ isVisible, id, email, username }: Props) => {
         <Modal.Body onSubmit={handleSubmit}>
           <div>
             <p>
-              Jesteś pewien, że chcesz usunąć <strong>{username}?</strong>
+              Jesteś pewien, że chcesz usunąć <strong>{"test"}?</strong>
             </p>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button type="submit" variant="primary" onClick={handleSubmit}>
+          <Button
+            type="submit"
+            variant="primary"
+            onClick={(id) => handleSubmit(id)}
+          >
             Save Changes
           </Button>
         </Modal.Footer>

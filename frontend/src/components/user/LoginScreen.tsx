@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { validPassword } from "../../Regex/Regex";
 import "../../styles/LoginScreen.css";
@@ -29,6 +29,7 @@ export const LoginScreen = () => {
       setError(errorMsg);
       return;
     }
+
     navigate("/user");
   };
 
@@ -64,47 +65,6 @@ export const LoginScreen = () => {
           Zaloguj
         </Button>
       </Form>
-      {/* <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>LOGOwANIE</Modal.Title>
-        </Modal.Header>
-        {error != "" && <p className="form-control">{error}</p>}
-        <Modal.Body onSubmit={handleSubmit}>
-          <div>
-            <label>
-              wprowadź login:
-              <input
-                className="form-control"
-                type="text"
-                name="username"
-                placeholder="test"
-                value={inputs.username || ""}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              wprowadź hasło:
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                placeholder="********"
-                value={inputs.password || ""}
-                onChange={handleChange}
-                required
-              />
-            </label>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button type="submit" variant="primary" onClick={handleSubmit}>
-            Zaloguj
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
     </div>
   );
 };

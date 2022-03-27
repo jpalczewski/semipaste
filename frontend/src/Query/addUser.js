@@ -1,7 +1,7 @@
 // import graphql from "babel-plugin-relay/macro";
 
-// export const addUser = grapgql`
-// mutation addUserMutation($input: variables!) {
+// export const addUser = graphql`
+//   mutation addUserMutation($input: variables!) {
 //     addUser(input: $input) {
 //       user {
 //         id
