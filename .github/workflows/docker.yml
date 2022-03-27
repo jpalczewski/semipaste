@@ -1,6 +1,9 @@
-name: CI
+name: Build and push docker containers while pushing on develop 
 
-on: [push]
+on:
+  push:
+    branches:
+      - "develop"
 
 jobs:
   build:
