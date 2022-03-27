@@ -1,0 +1,29 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+
+
+
+    steps:
+    -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+
+    - uses: actions/checkout@v2.4.0
+    - name: Build the images and start the containers
+      run: |
+        export GITHUB_WORKFLOW=True
+        export MODE="Test"
+        docker-compose -f docker-compose.yml build
+        docker-compose -f docker-compose.yml up -d
+        # run: docker-compose up -d --build
+    - name: Stop containers
+      if: always()
+      run: docker-compose -f "docker-compose.yml" down
