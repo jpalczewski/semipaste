@@ -16,6 +16,8 @@ class Mutation(UserMutation, PasteBinMutation):
     verify_token = graphql_jwt.relay.Verify.Field()
     refresh_token = graphql_jwt.relay.Refresh.Field()
     revoke_token = graphql_jwt.relay.Revoke.Field()
+    delete_token_cookie = graphql_jwt.DeleteJSONWebTokenCookie.Field()
+    delete_refresh_token_cookie = graphql_jwt.DeleteRefreshTokenCookie.Field()
 
 
 class Query(UserQuery, PasteBinQuery):
