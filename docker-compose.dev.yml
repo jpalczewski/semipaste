@@ -1,7 +1,7 @@
 version: "3.9"  # optional since v1.27.0
 services:
   backend:
-    image: jpalczewski/semipaste-backend:latest
+    image: ghcr.io/jpalczewski/semipaste-backend:latest
     build: backend
     command:  sh /app/start.sh
     ports:
@@ -14,7 +14,7 @@ services:
       - EMAIL_URL=smtp://mailhog:1025
 
   frontend:
-    image: jpalczewski/semipaste-frontend:latest
+    image: ghcr.io/jpalczewski/semipaste-frontend:latest
     build: frontend
     ports:
       - "3000:3000"
