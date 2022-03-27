@@ -1,14 +1,13 @@
 """Pastes schema."""
 
+
 # 3rd-Party
 import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
-from graphene_django.forms.mutation import DjangoModelFormMutation
 
 # Local
-from .forms import AddPasteBinForm
 from .models import PasteBin
 
 
@@ -24,10 +23,23 @@ class PasteBinNode(DjangoObjectType):
     # fields = "__all__"
 
 
-class AddPasteBin(DjangoModelFormMutation):
-    class Meta:
-        form_class = AddPasteBinForm
-        exclude_fields = ('id',)
+class AddPasteBin(graphene.Mutation):
+    ok = graphene.Boolean()
+
+    class Arguments:
+        title = graphene.String()
+        text = graphene.String()
+        expire_after = graphene.String()
+        exposure = graphene.Boolean()
+
+    def mutate(cls, info, **kwargs):  # type: ignore
+        if info.context.user.is_authenticated:
+            kwargs['author'] = info.context.user
+        else:
+            kwargs['author'] = None
+        paste = PasteBin(**kwargs)
+        paste.save()
+        return cls(ok=True)
 
 
 class PasteBinMutation(graphene.ObjectType):

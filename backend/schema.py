@@ -5,8 +5,10 @@ from graphene import relay
 from graphene_django.debug import DjangoDebug
 
 # Project
-from pastes.schema import PasteBinMutation, PasteBinQuery
-from users.schema import UserMutation, UserQuery
+from pastes.mutations import PasteBinMutation
+from pastes.queries import PasteBinQuery
+from users.mutations import UserMutation
+from users.queries import UserQuery
 
 
 class Mutation(UserMutation, PasteBinMutation):

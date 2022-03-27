@@ -1,11 +1,15 @@
 """Pastes models."""
 
+
 # Standard Library
 from datetime import datetime, timedelta, timezone
 
 # Django
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+# Project
+from users.models import User
 
 
 class PasteBin(models.Model):
@@ -23,8 +27,8 @@ class PasteBin(models.Model):
 
     # User, Language, Access_Key
     title = models.CharField(_('title'), max_length=50)
-    paste_text = models.TextField(_('paste text'))
-    date_of_creation = models.DateTimeField(_('date of creation'))
+    text = models.TextField(_('paste text'))
+    date_of_creation = models.DateTimeField(_('date of creation'), blank=True)
     exposure = models.BooleanField(_('exposure'))
     expire_after = models.CharField(
         _('expire after'),
@@ -32,24 +36,36 @@ class PasteBin(models.Model):
         choices=ExpireChoices.choices,
         default=ExpireChoices.NEVER,
     )
-    date_of_expiry = models.DateTimeField(_('date of expiry'), null=True)
+    date_of_expiry = models.DateTimeField(_('date of expiry'), null=True, blank=True)
+    author = models.ForeignKey(
+        User, verbose_name=_('author'), on_delete=models.CASCADE, null=True, blank=True
+    )
+
+    @staticmethod
+    def get_time_choice(choice: str) -> timedelta:
+        if choice == PasteBin.ExpireChoices.HOUR:
+            return timedelta(seconds=3600)
+        elif choice == PasteBin.ExpireChoices.DAY:
+            return timedelta(days=1)
+        elif choice == PasteBin.ExpireChoices.WEEK:
+            return timedelta(days=7)
+        elif choice == PasteBin.ExpireChoices.MONTH:
+            return timedelta(days=30)
+        elif choice == PasteBin.ExpireChoices.YEAR:
+            return timedelta(days=360)
 
     # Methods
     def save(self, *args, **kwargs):  # type: ignore
+        if self.author is None:
+            self.expire_after = 'WEEK'
         choice = self.expire_after
         self.date_of_creation = datetime.now().replace(tzinfo=timezone.utc)
         if choice == PasteBin.ExpireChoices.NEVER:
             self.date_of_expiry = None
-        elif choice == PasteBin.ExpireChoices.HOUR:
-            self.date_of_expiry = self.date_of_creation + timedelta(seconds=3600)
-        elif choice == PasteBin.ExpireChoices.DAY:
-            self.date_of_expiry = self.date_of_creation + timedelta(days=1)
-        elif choice == PasteBin.ExpireChoices.WEEK:
-            self.date_of_expiry = self.date_of_creation + timedelta(days=7)
-        elif choice == PasteBin.ExpireChoices.MONTH:
-            self.date_of_expiry = self.date_of_creation + timedelta(days=30)
-        elif choice == PasteBin.ExpireChoices.YEAR:
-            self.date_of_expiry = self.date_of_creation + timedelta(days=360)
+        else:
+            self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
+                choice
+            )
         super().save(*args, **kwargs)
 
     # Special Methods
