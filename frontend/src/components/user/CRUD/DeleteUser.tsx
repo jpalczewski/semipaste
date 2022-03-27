@@ -4,7 +4,6 @@ import { commitMutation } from "react-relay";
 import RelayEnvironment from "../../../RelayEnvironment";
 import { deleteUser } from "../../../Query/deleteUser";
 import { deleteUserMutation } from "../../../__generated__/deleteUserMutation.graphql";
-// import graphql from "babel-plugin-relay/macro";
 
 interface IProps {
   id: string | undefined;
@@ -13,21 +12,32 @@ interface IProps {
 export const DeleteUser: React.FC<IProps> = (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => setShow(!show);
+  const [test, setTest] = useState(props.id);
 
   const handleSubmit = (input: any) => {
+    console.log("input =>", input);
+    console.log(input);
+
+    console.log("test");
     commitMutation<deleteUserMutation>(RelayEnvironment, {
       mutation: deleteUser,
       variables: { input },
+      onCompleted: (response) => {
+        console.log("ok", response);
+      },
+      onError: (error) => {
+        console.error(error);
+      },
     });
-    handleClose();
+    handleShow();
   };
   return (
     <>
       <Button variant="danger" onClick={handleShow} size="sm">
         Usuń
       </Button>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleShow}>
         <Modal.Header closeButton>
           <Modal.Title>Usuń użytkownika</Modal.Title>
         </Modal.Header>
@@ -42,7 +52,7 @@ export const DeleteUser: React.FC<IProps> = (props) => {
           <Button
             type="submit"
             variant="primary"
-            onClick={(id) => handleSubmit(id)}
+            onClick={() => handleSubmit(test)}
           >
             Save Changes
           </Button>
