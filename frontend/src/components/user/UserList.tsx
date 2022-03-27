@@ -1,32 +1,14 @@
-import { CreateUser } from "./CRUD/CreateUser";
 import { Table } from "react-bootstrap";
-import { userData } from "../../dummy_data/userData";
+import { CreateUser } from "./CRUD/CreateUser";
 import { EditUser } from "./CRUD/EditUser";
 import { DeleteUser } from "./CRUD/DeleteUser";
-import fetchGraphQL from "../../fetchGraphQL";
-import { allUsers } from "../../Query/allUsers";
-import { useEffect, useState } from "react";
-import type  {allUsersQuery} from "../../__generated__/allUsersQuery.graphql"
 
-import { loadQuery, usePreloadedQuery } from "react-relay/hooks";
-import RelayEnvironment from "../../RelayEnvironment";
+import { allUsers } from "../../Query/allUsers";
+import { allUsersQuery } from "../../__generated__/allUsersQuery.graphql";
+import { useLazyLoadQuery } from "react-relay";
 
 export const UserList = (props: any) => {
-  const [use, setUse] = useState();
-
-  const preloadedQuery = loadQuery<allUsersQuery>(RelayEnvironment, allUsers, {
-    /* query variables */
-  });
-
-  const data = usePreloadedQuery<allUsersQuery>(allUsers, preloadedQuery);
-  // fetchGraphQL(allUsers)
-  //   .then((response) => {
-  //     setUse(response);
-  //     console.log(use);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
+  const data2 = useLazyLoadQuery<allUsersQuery>(allUsers, {});
 
   return (
     <div className="container">
@@ -46,29 +28,28 @@ export const UserList = (props: any) => {
           </tr>
         </thead>
         <tbody>
-          {userData.map((element: any) => (
-            <tr className="align-middle">
-              <td>{element}</td>
-              <td>{element.username}</td>
-              <td>{element.email}</td>
-              <td>{element.joinDate}</td>
-              <td>{element.lstLoggin}</td>
-              <td>{element.isActive ? "Tak" : "Nie"}</td>
-              <td>
-                <EditUser
-                  id={element.id}
-                  email={element.email}
-                  username={element.username}
-                />
-                <DeleteUser
-                  isVisible={true}
-                  id={element.id}
-                  email={element.email}
-                  username={element.name}
-                />
-              </td>
-            </tr>
-          ))}
+          {data2.allUsers?.edges == null ? (
+            <p>drzewo</p>
+          ) : (
+            data2.allUsers.edges.map((element: any, i) => (
+              <tr className="align-middle">
+                <td>{data2.allUsers?.edges[i]?.node?.id}</td>
+                <td>{data2.allUsers?.edges[i]?.node?.username}</td>
+                <td>{data2.allUsers?.edges[i]?.node?.email}</td>
+                <td>{data2.allUsers?.edges[i]?.node?.dateJoined}</td>
+                <td>{data2.allUsers?.edges[i]?.node?.firstName}</td>
+                <td>{"TAK"}</td>
+                <td>
+                  <EditUser
+                    id={data2.allUsers?.edges[i]?.node?.id}
+                    email={data2.allUsers?.edges[i]?.node?.email}
+                    username={data2.allUsers?.edges[i]?.node?.username}
+                  />
+                  <DeleteUser id={data2.allUsers?.edges[i]?.node?.id} />
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </Table>
     </div>

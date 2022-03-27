@@ -5,9 +5,9 @@ import { Button } from "react-bootstrap";
 import { useMutation } from "react-relay";
 
 interface Props {
-  id: Number;
-  email: string;
-  username: string;
+  id: any;
+  email: any;
+  username: any;
 }
 
 export const EditUser = ({ id, email, username }: Props) => {
