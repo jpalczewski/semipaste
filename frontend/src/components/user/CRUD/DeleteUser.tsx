@@ -1,30 +1,23 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
-import { commitMutation, graphql } from "react-relay";
+import { commitMutation } from "react-relay";
 import RelayEnvironment from "../../../RelayEnvironment";
 import { deleteUser } from "../../../Query/deleteUser";
 import { deleteUserMutation } from "../../../__generated__/deleteUserMutation.graphql";
 // import graphql from "babel-plugin-relay/macro";
 
-export const DeleteUser = (id: any) => {
+interface IProps {
+  id: string | undefined;
+}
+
+export const DeleteUser: React.FC<IProps> = (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  console.log(id.toString());
 
   const handleSubmit = (input: any) => {
-    console.log("input", input.toString());
-
-    console.log("test");
-
     commitMutation<deleteUserMutation>(RelayEnvironment, {
-      mutation: graphql`
-        mutation deleteUserMutation($input: ID!) {
-          deleteUser(id: $input) {
-            ok
-          }
-        }
-      `,
+      mutation: deleteUser,
       variables: { input },
     });
     handleClose();
