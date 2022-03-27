@@ -21,9 +21,21 @@ jobs:
       run: |
         export GITHUB_WORKFLOW=True
         export MODE="Test"
-        docker-compose -f docker-compose.yml build
-        docker-compose -f docker-compose.yml up -d
-        # run: docker-compose up -d --build
+        docker-compose -f docker-compose.ci.yml build
+        docker-compose -f docker-compose.ci.yml up -d
+        docker-compose -f docker-compose.ci.yml run backend pytest --cov
+
     - name: Stop containers
       if: always()
-      run: docker-compose -f "docker-compose.yml" down
+      run: docker-compose -f "docker-compose.ci.yml" down
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        directory: ./backend
+        env_vars: OS,PYTHON
+        fail_ci_if_error: true
+        files: ./coverage
+        flags: unittests
+        name: semipaste-backend
+        path_to_write_report: ./codecov_report.txt
+        verbose: true
