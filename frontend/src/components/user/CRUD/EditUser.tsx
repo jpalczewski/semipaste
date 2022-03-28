@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { editUser } from "../../../Query/editUser";
-import { editUserMutation } from "../../../__generated__/editUserMutation.graphql";
 import RelayEnvironment from "../../../RelayEnvironment";
 import { commitMutation } from "react-relay";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import { editUserMutation } from "../../../Query/__generated__/editUserMutation.graphql";
 
 interface Props {
   id: string | undefined;

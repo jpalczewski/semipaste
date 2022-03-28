@@ -1,38 +1,35 @@
 /**
- * @generated SignedSource<<e3d3c47ff9d71c9f84a17d2fc4047382>>
- * @flow
+ * @generated SignedSource<<fa7f0bb4a0801d3a15e9d86b7ac8220d>>
  * @lightSyntaxTransform
  * @nogrep
  */
 
+/* tslint:disable */
 /* eslint-disable */
+// @ts-nocheck
 
-'use strict';
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type allUsersQuery$variables = {};
+export type allUsersQuery$data = {
+  readonly allUsers: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly username: string;
+        readonly firstName: string;
+        readonly lastName: string;
+        readonly id: string;
+        readonly email: string;
+        readonly dateJoined: any;
+      } | null;
+    } | null>;
+  } | null;
+};
+export type allUsersQuery = {
+  variables: allUsersQuery$variables;
+  response: allUsersQuery$data;
+};
 
-/*::
-import type { ConcreteRequest, Query } from 'relay-runtime';
-export type allUsersQuery$variables = {||};
-export type allUsersQuery$data = {|
-  +allUsers: ?{|
-    +edges: $ReadOnlyArray<?{|
-      +node: ?{|
-        +username: string,
-        +firstName: string,
-        +lastName: string,
-        +id: string,
-        +email: string,
-        +dateJoined: any,
-      |},
-    |}>,
-  |},
-|};
-export type allUsersQuery = {|
-  variables: allUsersQuery$variables,
-  response: allUsersQuery$data,
-|};
-*/
-
-var node/*: ConcreteRequest*/ = (function(){
+const node: ConcreteRequest = (function(){
 var v0 = [
   {
     "alias": null,
@@ -138,9 +135,6 @@ return {
 };
 })();
 
-(node/*: any*/).hash = "91c8e27e175500b80b08336ebb2f5eb2";
+(node as any).hash = "91c8e27e175500b80b08336ebb2f5eb2";
 
-module.exports = ((node/*: any*/)/*: Query<
-  allUsersQuery$variables,
-  allUsersQuery$data,
->*/);
+export default node;
