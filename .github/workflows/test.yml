@@ -16,6 +16,7 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USERNAME }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -24,6 +25,11 @@ jobs:
           --health-retries 5
     env:
       DJANGO_CONFIGURATION: Actions
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USERNAME }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      POSTGRES_HOST: postgres
 
     steps:
     - uses: actions/checkout@v3
