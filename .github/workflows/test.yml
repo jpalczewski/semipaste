@@ -59,12 +59,18 @@ jobs:
       run: poetry install
       working-directory: ./backend
     - name: Run migrations
-      run: poetry run python manage.py migrate --configuration=Actions
+      run: |
+       source .venv/bin/activate
+       ls
+       env
+       python manage.py migrate   --settings backend.settings --configuration=CI
       working-directory: ./backend
       env:
-        DJANGO_CONFIGURATION: Actions
+        DJANGO_CONFIGURATION: CI
     - name: Run tests
-      run: poetry run pytest --cov --dc=Actions && ls
+      run:  |
+        source .venv/bin/activate
+        pytest --cov --dc=CI
       working-directory: ./backend
       env:
-        DJANGO_CONFIGURATION: Actions
+        DJANGO_CONFIGURATION: CI

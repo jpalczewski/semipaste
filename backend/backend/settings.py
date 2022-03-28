@@ -177,7 +177,7 @@ class Prod(Common):
     ALLOWED_HOSTS = ['proxy', 'backend']
 
 
-class Actions(Common):
+class CI(Common):
 
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
     email_config = ''
