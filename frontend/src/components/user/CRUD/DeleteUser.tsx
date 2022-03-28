@@ -11,15 +11,10 @@ interface IProps {
 
 export const DeleteUser: React.FC<IProps> = (props) => {
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
   const handleShow = () => setShow(!show);
   const [test, setTest] = useState(props.id);
 
   const handleSubmit = (input: any) => {
-    console.log("input =>", input);
-    console.log(input);
-
-    console.log("test");
     commitMutation<deleteUserMutation>(RelayEnvironment, {
       mutation: deleteUser,
       variables: { input },

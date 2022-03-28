@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import { commitMutation } from "react-relay";
 import { useNavigate } from "react-router-dom";
-import { addUser } from "../../Query/addUser";
 import { validPassword } from "../../Regex/Regex";
-import RelayEnvironment from "../../RelayEnvironment";
-import { addUserMutation } from "../../__generated__/addUserMutation.graphql";
 import "../../styles/LoginScreen.css";
 
 const validate = (form: any) => {
@@ -31,29 +27,15 @@ export const RegistrationScreen = () => {
   const handleChange = (event: any) => {
     const { name, value } = event.currentTarget;
     setInputs({ ...inputs, [name]: value });
-    // const name = event.target.name;
-    // const value = event.target.value;
-    // setInputs((values) => ({ ...values, [name]: value }));
   };
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    console.log(inputs);
-    console.log(event);
     const errorMsg = validate(inputs);
     if (errorMsg) {
       setError(errorMsg);
       return;
     }
-    commitMutation<addUserMutation>(RelayEnvironment, {
-      mutation: addUser,
-      variables: event,
-      onCompleted: (response) => {
-        navigate("/user");
-      },
-      onError: (error) => {
-        console.error(error);
-      },
-    });
+    navigate("/user");
   };
 
   return (

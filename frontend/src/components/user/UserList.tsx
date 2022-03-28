@@ -47,6 +47,7 @@ export const UserList = (props: any) => {
                     firnstname={data2.allUsers?.edges[i]?.node?.firstName}
                     lstname={data2.allUsers?.edges[i]?.node?.lastName}
                   />
+                  <br />
                   <DeleteUser id={data2.allUsers?.edges[i]?.node?.id} />
                 </td>
               </tr>
