@@ -1,5 +1,5 @@
-POSTGRES_USER=username
+POSTGRES_USER=postgres
 POSTGRES_PASSWORD=password
-POSTGRES_DB=default_database
+POSTGRES_DB=semipaste
 SECRET_KEY=key
 POSTGRES_HOST=db
