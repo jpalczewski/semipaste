@@ -58,8 +58,12 @@ jobs:
       run: poetry install
       working-directory: ./backend
     - name: Run migrations
-      run: DJANGO_CONFIGURATION=Actions poetry run python manage.py migrate --configuration=Actions
+      run: poetry run python manage.py migrate --configuration=Actions
       working-directory: ./backend
+      env:
+        DJANGO_CONFIGURATION: Actions
     - name: Run tests
       run: poetry run pytest --cov --dc=Actions && ls
       working-directory: ./backend
+      env:
+        DJANGO_CONFIGURATION: Actions

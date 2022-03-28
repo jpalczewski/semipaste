@@ -184,10 +184,18 @@ class Actions(Common):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_NAME'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': os.environ.get('POSTGRES_HOST'),
+            'NAME': values.Value(
+                'semipaste', environ_name='POSTGRES_DB', environ_prefix=None
+            ),
+            'USER': values.Value(
+                'postgres', environ_name='POSTGRES_USER', environ_prefix=None
+            ),
+            'PASSWORD': values.Value(
+                'password', environ_name='POSTGRES_PASSWORD', environ_prefix=None
+            ),
+            'HOST': values.Value(
+                'db', environ_name='POSTGRES_HOST', environ_prefix=None
+            ),
             'PORT': 5432,
         }
     }
