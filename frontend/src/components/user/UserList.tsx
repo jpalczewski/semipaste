@@ -22,8 +22,8 @@ export const UserList = (props: any) => {
             <th scope="col">Nazwa użytkownika</th>
             <th scope="col">Email</th>
             <th scope="col">Data dołączenia</th>
-            <th scope="col">Data ostatniego logowania</th>
-            <th scope="col">Aktywny</th>
+            <th scope="col">Imie</th>
+            <th scope="col">Nazwsiko</th>
             <th scope="col">Akcje</th>
           </tr>
         </thead>
@@ -38,12 +38,14 @@ export const UserList = (props: any) => {
                 <td>{data2.allUsers?.edges[i]?.node?.email}</td>
                 <td>{data2.allUsers?.edges[i]?.node?.dateJoined}</td>
                 <td>{data2.allUsers?.edges[i]?.node?.firstName}</td>
-                <td>{"TAK"}</td>
+                <td>{data2.allUsers?.edges[i]?.node?.lastName}</td>
                 <td>
                   <EditUser
                     id={data2.allUsers?.edges[i]?.node?.id}
                     email={data2.allUsers?.edges[i]?.node?.email}
                     username={data2.allUsers?.edges[i]?.node?.username}
+                    firnstname={data2.allUsers?.edges[i]?.node?.firstName}
+                    lstname={data2.allUsers?.edges[i]?.node?.lastName}
                   />
                   <DeleteUser id={data2.allUsers?.edges[i]?.node?.id} />
                 </td>

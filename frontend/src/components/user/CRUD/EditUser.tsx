@@ -1,27 +1,43 @@
 import React, { SetStateAction, useState, Dispatch } from "react";
-// import { editUser } from "../../../Query/editUser";
+import { editUser } from "../../../Query/editUser";
+import { editUserMutation } from "../../../__generated__/editUserMutation.graphql";
+import RelayEnvironment from "../../../RelayEnvironment";
+import { commitMutation } from "react-relay";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useMutation } from "react-relay";
 
 interface Props {
-  id: any;
-  email: any;
-  username: any;
+  id: string | undefined;
+  email: string | undefined;
+  username: string | undefined;
+  firnstname: string | undefined;
+  lstname: string | undefined;
 }
 
-export const EditUser = ({ id, email, username }: Props) => {
-  const [inputs, setInputs] = useState({ login: "", email: "", password: "" });
+export const EditUser: React.FC<Props> = (props) => {
+  const [inputs, setInputs] = useState({});
 
   const handleChange = (event: any) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setInputs((values) => ({ ...values, [name]: value }));
+    const { name, value } = event.currentTarget;
+    setInputs({ ...inputs, [name]: value });
+    // setInputs({ ...inputs, ["id"]: props.id });
+    console.log(event);
   };
 
   const handleSubmit = (event: any) => {
     console.log(inputs);
-    setInputs({ login: "", password: "", email: "" });
+    console.log(event);
+    commitMutation<editUserMutation>(RelayEnvironment, {
+      mutation: editUser,
+      variables: event,
+      onCompleted: (response) => {
+        console.log("ok", response);
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    });
     handleClose();
   };
 
@@ -42,12 +58,25 @@ export const EditUser = ({ id, email, username }: Props) => {
         </Modal.Header>
         <Modal.Body onSubmit={handleSubmit}>
           <div>
+            <label>Id</label>
+            <input
+              name="id"
+              type="name"
+              className="form-control"
+              placeholder={props.id}
+              // value={inputs?.email || ""}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
             <label>Email</label>
             <input
+              name="email"
               type="email"
               className="form-control"
-              placeholder="adam.małysz@ski.jump"
-              value={inputs.email || ""}
+              placeholder={props.email}
+              // value={inputs?.email || ""}
               onChange={handleChange}
               required
             />
@@ -55,26 +84,43 @@ export const EditUser = ({ id, email, username }: Props) => {
           <div>
             <label>Nazwa użytkownika</label>
             <input
+              name="username"
               type="name"
               className="form-control"
-              placeholder="adam_malysz"
+              placeholder={props.username}
               onChange={handleChange}
               required
             />
           </div>
           <div>
-            <label>Hasło</label>
+            <label>Imie</label>
             <input
-              type="password"
+              name="firstName"
+              type="name"
               className="form-control"
-              placeholder="********"
+              placeholder={props.firnstname}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Nazwisko</label>
+            <input
+              name="lastName"
+              type="name"
+              className="form-control"
+              placeholder={props.lstname}
               onChange={handleChange}
               required
             />
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button type="submit" variant="primary" onClick={handleClose}>
+          <Button
+            type="submit"
+            variant="primary"
+            onClick={() => handleSubmit(inputs)}
+          >
             Save Changes
           </Button>
         </Modal.Footer>
