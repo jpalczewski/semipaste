@@ -77,3 +77,11 @@ jobs:
       working-directory: ./backend
       env:
         DJANGO_CONFIGURATION: CI
+
+    - uses: codecov/codecov-action@v2
+      with:
+        files: ./backend/coverage.xml,
+        flags: unittests # optional
+        name: semipaste-backend # optional
+        fail_ci_if_error: true # optional (default = false)
+        verbose: true # optional (default = false)
