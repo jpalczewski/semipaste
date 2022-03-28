@@ -3,6 +3,7 @@ import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { validPassword } from "../../Regex/Regex";
 import "../../styles/LoginScreen.css";
+import { RegistrationScreen } from "./RegistrationScreen";
 
 const validate = (form: any) => {
   if (!form.username) return "login jest wymagany";
@@ -24,6 +25,7 @@ export const LoginScreen = () => {
     setInputs((values) => ({ ...values, [name]: value }));
   };
   const handleSubmit = (event: any) => {
+    event.preventDefault();
     const errorMsg = validate(inputs);
     if (errorMsg) {
       setError(errorMsg);
@@ -35,6 +37,7 @@ export const LoginScreen = () => {
 
   return (
     <div className="Contener">
+      <p>Logowanie</p>
       <Form>
         {error && <Form.Text className="text-danger">{error}</Form.Text>}
         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -65,6 +68,14 @@ export const LoginScreen = () => {
           Zaloguj
         </Button>
       </Form>
+
+      {/* {vis && <RegistrationScreen />}
+      <p>
+        {!vis ? "Nie posiadasz konta?" : "Posiadasz już konto?"}
+        <Button variant="success" onClick={() => setVis(!vis)}>
+          {!vis ? "Zarejestruj się" : "Zaloguj się"}
+        </Button>
+      </p> */}
     </div>
   );
 };

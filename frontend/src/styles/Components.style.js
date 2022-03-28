@@ -17,3 +17,7 @@ export const FormWrapper = styled.div`
   flex-direction: row;
   text-align: left;
 `;
+
+export const Footer = styled.div`
+  padding: 20px;
+`;
