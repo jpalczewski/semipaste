@@ -3,7 +3,7 @@ import { Button, Modal } from "react-bootstrap";
 import { commitMutation } from "react-relay";
 import RelayEnvironment from "../../../RelayEnvironment";
 import { deleteUser } from "../../../Query/deleteUser";
-import { deleteUserMutation } from "../../../__generated__/deleteUserMutation.graphql";
+import { deleteUserMutation } from "../../../Query/__generated__/deleteUserMutation.graphql";
 
 interface IProps {
   id: string | undefined;
