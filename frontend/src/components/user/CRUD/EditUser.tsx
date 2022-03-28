@@ -1,11 +1,10 @@
-import React, { SetStateAction, useState, Dispatch } from "react";
+import React, { useState } from "react";
 import { editUser } from "../../../Query/editUser";
 import { editUserMutation } from "../../../__generated__/editUserMutation.graphql";
 import RelayEnvironment from "../../../RelayEnvironment";
 import { commitMutation } from "react-relay";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import { useMutation } from "react-relay";
 
 interface Props {
   id: string | undefined;
@@ -21,7 +20,6 @@ export const EditUser: React.FC<Props> = (props) => {
   const handleChange = (event: any) => {
     const { name, value } = event.currentTarget;
     setInputs({ ...inputs, [name]: value });
-    // setInputs({ ...inputs, ["id"]: props.id });
     console.log(event);
   };
 
