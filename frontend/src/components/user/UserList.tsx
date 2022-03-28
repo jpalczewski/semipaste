@@ -1,5 +1,4 @@
 import { Table } from "react-bootstrap";
-import { CreateUser } from "./CRUD/CreateUser";
 import { EditUser } from "./CRUD/EditUser";
 import { DeleteUser } from "./CRUD/DeleteUser";
 
@@ -12,8 +11,6 @@ export const UserList = (props: any) => {
 
   return (
     <div className="container">
-      <CreateUser />
-
       <h4 className="text-center p-2">Lista użytkowników</h4>
       <Table striped bordered hover>
         <thead>

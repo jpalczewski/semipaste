@@ -19,7 +19,7 @@ export const EditUser: React.FC<Props> = (props) => {
 
   const handleChange = (event: any) => {
     const { name, value } = event.currentTarget;
-    setInputs({ ...inputs, [name]: value });
+    setInputs({ ...inputs, [name]: value, id: props.id });
   };
 
   const handleSubmit = (event: any) => {
@@ -59,9 +59,8 @@ export const EditUser: React.FC<Props> = (props) => {
               type="name"
               className="form-control"
               placeholder={props.id}
-              // value={inputs?.email || ""}
-              onChange={handleChange}
-              required
+              value={props.id}
+              disabled
             />
           </div>
           <div>
