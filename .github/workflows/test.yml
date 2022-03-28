@@ -27,7 +27,8 @@ jobs:
       DJANGO_CONFIGURATION: Actions
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-      POSTGRES_USER: ${{ secrets.POSTGRES_USERNAME }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       POSTGRES_HOST: postgres
 
