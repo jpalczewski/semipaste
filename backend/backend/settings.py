@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 
 # Standard Library
+import os
 from datetime import timedelta
 from distutils.debug import DEBUG
 from pathlib import Path
@@ -30,7 +31,7 @@ env = environ.Env(
 class Common(Configuration):
     BASE_DIR = Path(__file__).resolve().parent.parent
 
-    SECRET_KEY = env('SECRET_KEY')
+    SECRET_KEY = values.SecretValue(environ_name='SECRET_KEY', environ_prefix=None)
 
     DEBUG = True
 
@@ -103,9 +104,6 @@ class Common(Configuration):
 
     # Database
     # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-    DATABASES = {
-        'default': env.db(),
-    }
 
     AUTH_USER_MODEL = 'users.User'
     # Password validation
@@ -150,23 +148,26 @@ class Common(Configuration):
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-    email_config = dj_email_url.config()
-
-    EMAIL_FILE_PATH = email_config['EMAIL_FILE_PATH']
-    EMAIL_HOST_USER = email_config['EMAIL_HOST_USER']
-    EMAIL_HOST_PASSWORD = email_config['EMAIL_HOST_PASSWORD']
-    EMAIL_HOST = email_config['EMAIL_HOST']
-    EMAIL_PORT = email_config['EMAIL_PORT']
-    EMAIL_BACKEND = email_config['EMAIL_BACKEND']
-    EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
-    EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
-    EMAIL_TIMEOUT = email_config['EMAIL_TIMEOUT']
-
 
 class Dev(Common):
-    pass
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+    if os.environ.get('EMAIL_URL') is not None:
+        email_config = dj_email_url.config()
+        EMAIL_FILE_PATH = email_config['EMAIL_FILE_PATH']
+        EMAIL_HOST_USER = email_config['EMAIL_HOST_USER']
+        EMAIL_HOST_PASSWORD = email_config['EMAIL_HOST_PASSWORD']
+        EMAIL_HOST = email_config['EMAIL_HOST']
+        EMAIL_PORT = email_config['EMAIL_PORT']
+        EMAIL_BACKEND = email_config['EMAIL_BACKEND']
+        EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
+        EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
+        EMAIL_TIMEOUT = email_config['EMAIL_TIMEOUT']
+
+    if os.environ.get('DATABASE_URL') is not None:
+        DATABASES = {
+            'default': env.db(),
+        }
 
 
 # Quick-start development settings - unsuitable for production
@@ -177,3 +178,27 @@ class Prod(Common):
     DEBUG = False
 
     ALLOWED_HOSTS = ['proxy', 'backend']
+
+
+class CI(Common):
+
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+    email_config = ''
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': values.Value(
+                'semipaste', environ_name='POSTGRES_DB', environ_prefix=None
+            ),
+            'USER': values.Value(
+                'postgres', environ_name='POSTGRES_USER', environ_prefix=None
+            ),
+            'PASSWORD': values.Value(
+                'password', environ_name='POSTGRES_PASSWORD', environ_prefix=None
+            ),
+            'HOST': values.Value(
+                'db', environ_name='POSTGRES_HOST', environ_prefix=None
+            ),
+            'PORT': 5432,
+        }
+    }
