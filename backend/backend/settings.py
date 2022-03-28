@@ -150,6 +150,8 @@ class Common(Configuration):
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+
+class Dev(Common):
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
     email_config = dj_email_url.config()
@@ -165,10 +167,6 @@ class Common(Configuration):
     EMAIL_TIMEOUT = email_config['EMAIL_TIMEOUT']
 
 
-class Dev(Common):
-    pass
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -177,3 +175,19 @@ class Prod(Common):
     DEBUG = False
 
     ALLOWED_HOSTS = ['proxy', 'backend']
+
+
+class Actions(Common):
+
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+    email_config = ''
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_NAME'),
+            'USER': os.environ.get('POSTGRES_USER'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'HOST': os.environ.get('POSTGRES_HOST'),
+            'PORT': 5432,
+        }
+    }

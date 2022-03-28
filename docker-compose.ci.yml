@@ -17,6 +17,12 @@ services:
     ports:
       - "3000:3000"
 
-
+  db:
+    image: postgres:14-alpine
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data/
 volumes:
   db_data:

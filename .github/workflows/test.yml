@@ -1,7 +1,7 @@
 name: Run tests
 on: [push]
 jobs:
-  test:
+  backend:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -14,12 +14,16 @@ jobs:
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USERNAME }}
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    env:
+      DJANGO_CONFIGURATION: Actions
 
     steps:
     - uses: actions/checkout@v3
@@ -27,7 +31,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v3
       with:
-        python-version: 3.10
+        python-version: "3.10"
     - name: Install and configure Poetry
       uses: snok/install-poetry@v1
       with:
@@ -41,5 +45,15 @@ jobs:
         path: backend/.venv
         key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
     - name: Install dependencies
-      run: cd backend && poetry install
+      run: poetry install
+      working-directory: ./backend
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+    - name: Install dependencies
+      run: poetry install
+      working-directory: ./backend
+    - name: Run migrations
+      run: DJANGO_CONFIGURATION=Actions poetry run python manage.py migrate --configuration=Actions
+      working-directory: ./backend
+    - name: Run tests
+      run: poetry run pytest --cov --dc=Actions && ls
+      working-directory: ./backend
