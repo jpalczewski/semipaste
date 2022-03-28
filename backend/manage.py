@@ -20,8 +20,7 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    for k, v in sorted(os.environ.items()):
-        print(k + ':', v)
+
     execute_from_command_line(sys.argv)
 
 
