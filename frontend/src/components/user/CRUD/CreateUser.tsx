@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 // import query z userami
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
