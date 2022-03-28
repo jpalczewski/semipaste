@@ -50,10 +50,12 @@ type PasteBinNodeEdge {
 type PasteBinNode implements Node {
   id: ID!
   title: String!
-  pasteText: String!
+  text: String!
   dateOfCreation: DateTime!
   exposure: Boolean!
   expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
 }
 
 """An object with an ID"""
@@ -83,33 +85,39 @@ enum PastesPasteBinExpireAfterChoices {
   """1 week"""
   WEEK
 
+  """1 month"""
+  MONTH
+
   """1 year"""
   YEAR
 }
 
 type UserNode implements Node {
   id: ID!
+  password: String!
   lastLogin: DateTime
 
   """
-  Designates that this user has all permissions without explicitly assigning them.
+  Oznacza, że ten użytkownik ma wszystkie uprawnienia bez ich jawnego przypisywania.
   """
   isSuperuser: Boolean!
 
-  """Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."""
+  """Wymagana. 150 lub mniej znaków. Jedynie litery, cyfry i @/./+/-/_."""
   username: String!
   firstName: String!
   lastName: String!
   email: String!
 
-  """Designates whether the user can log into this admin site."""
+  """Określa czy użytkownik może zalogować się do panelu administracyjnego."""
   isStaff: Boolean!
 
   """
-  Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
+  Określa czy użytkownika należy uważać za aktywnego. Odznacz zamiast usuwać konto.
   """
   isActive: Boolean!
   dateJoined: DateTime!
+  description: String!
+  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null): PasteBinNodeConnection!
 }
 
 type UserNodeConnection {
@@ -196,29 +204,21 @@ type DjangoDebugException {
 }
 
 type Mutation {
-  addPasteBin(input: AddPasteBinInput!): AddPasteBinPayload
+  addPasteBin(expireAfter: String = null, exposure: Boolean = null, text: String = null, title: String = null): AddPasteBin
   addUser(input: AddUserInput!): AddUserPayload
-  editUser(email: String = null, firstName: String = null, id: ID = null, lastName: String = null, username: String = null): EditUser
-  deleteUser(id: ID = null): DeleteUser
+  editUser(description: String = null, email: String = null, firstName: String = null, id: ID!, lastName: String = null, password: String = null, username: String = null): EditUser
+  editUserDescription(description: String = null, id: ID!): EditUserDescription
+  deleteUser(id: ID!): DeleteUser
+
+  """Obtain JSON Web Token mutation"""
+  tokenAuth(input: ObtainJSONWebTokenInput!): ObtainJSONWebTokenPayload
+  verifyToken(input: VerifyInput!): VerifyPayload
+  refreshToken(input: RefreshInput!): RefreshPayload
+  deleteTokenCookie: DeleteJSONWebTokenCookie
 }
 
-type AddPasteBinPayload {
-  pasteBin: PasteBinNode
-  errors: [ErrorType]
-  clientMutationId: String
-}
-
-type ErrorType {
-  field: String!
-  messages: [String!]!
-}
-
-input AddPasteBinInput {
-  title: String!
-  pasteText: String!
-  exposure: Boolean
-  expireAfter: String!
-  clientMutationId: String
+type AddPasteBin {
+  ok: Boolean
 }
 
 type AddUserPayload {
@@ -228,12 +228,37 @@ type AddUserPayload {
   clientMutationId: String
 }
 
+type ErrorType {
+  field: String!
+  messages: [String!]!
+}
+
 input AddUserInput {
-  """Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."""
+  password: String!
+  lastLogin: DateTime
+
+  """
+  Oznacza, że ten użytkownik ma wszystkie uprawnienia bez ich jawnego przypisywania.
+  """
+  isSuperuser: Boolean
+  groups: [ID]
+  userPermissions: [ID]
+
+  """Wymagana. 150 lub mniej znaków. Jedynie litery, cyfry i @/./+/-/_."""
   username: String!
-  email: String
   firstName: String
   lastName: String
+  email: String
+
+  """Określa czy użytkownik może zalogować się do panelu administracyjnego."""
+  isStaff: Boolean
+
+  """
+  Określa czy użytkownika należy uważać za aktywnego. Odznacz zamiast usuwać konto.
+  """
+  isActive: Boolean
+  dateJoined: DateTime!
+  description: String!
   id: ID
   clientMutationId: String
 }
@@ -242,6 +267,57 @@ type EditUser {
   ok: Boolean
 }
 
+type EditUserDescription {
+  ok: Boolean
+}
+
 type DeleteUser {
   ok: Boolean
+}
+
+"""Obtain JSON Web Token mutation"""
+type ObtainJSONWebTokenPayload {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  clientMutationId: String
+  token: String!
+}
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
+
+input ObtainJSONWebTokenInput {
+  clientMutationId: String
+  username: String!
+  password: String!
+}
+
+type VerifyPayload {
+  payload: GenericScalar!
+  clientMutationId: String
+}
+
+input VerifyInput {
+  token: String
+  clientMutationId: String
+}
+
+type RefreshPayload {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  clientMutationId: String
+  token: String!
+}
+
+input RefreshInput {
+  token: String
+  clientMutationId: String
+}
+
+type DeleteJSONWebTokenCookie {
+  deleted: Boolean!
 }

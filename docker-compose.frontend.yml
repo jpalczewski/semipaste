@@ -10,7 +10,7 @@ services:
       - .env
     volumes:
       - ./backend/:/app
-    env:
+    environment:
       - EMAIL_URL=smtp://mailhog:1025
 
   db:
