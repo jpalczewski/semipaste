@@ -24,13 +24,13 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DJANGO_CONFIGURATION: Actions
+      DJANGO_CONFIGURATION: CI
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      POSTGRES_HOST: localhost
+      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
 
     steps:
     - uses: actions/checkout@v3
