@@ -1,70 +1,94 @@
 import React, { useState } from "react";
 import { FormWrapper } from "../../styles/Components.style";
+import { Form, Button, Row, Col } from "react-bootstrap";
+import RelayEnvironment from "../../RelayEnvironment";
+import { commitMutation } from "react-relay";
+import { addPasteBin } from "../../Query/PasteBins/addPasteBin";
+import { addPasteBinMutation } from "../../Query/PasteBins/__generated__/addPasteBinMutation.graphql";
 
-export const Form = () => {
-  const [authorInput, setAuthorInput] = useState("");
-  const [titleInput, setTitleInput] = useState("");
-  const [textarea, setTextarea] = useState("");
-  const [optionInput, setOptionInput] = useState();
+export const PasteBinForm = () => {
+  const [inputs, setInputs] = useState({});
+  const [isExposure, setIsExposure] = useState<boolean>();
 
-  const textHandler = (e: any) => {
-    setTextarea(e.target.value);
-    console.log(e.target.value);
+  const handleChange = (event: any) => {
+    const { name, value } = event.currentTarget;
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+    console.log("Change-inputs =>", inputs);
   };
-  const authHandler = (e: any) => {
-    setAuthorInput(e.target.value);
-    console.log(e.target.value);
-  };
-  const titleHandler = (e: any) => {
-    setTitleInput(e.target.value);
-    console.log(e.target.value);
-  };
-  const optionHandler = (e: any) => {
-    setOptionInput(e.target.value);
-    console.log(e.target.value);
+  const handleSwitch = (event: any) => {
+    if (event == "on") setIsExposure(true);
+    else setIsExposure(false);
+    handleChange(isExposure);
   };
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    alert(`
-    Autor to: ${authorInput}
-    Tytuł to: ${titleInput}
-    Opcja: ${optionInput}
-    Tekst to: ${textarea}
-    `);
+    console.log("inputs =>", inputs);
+
+    commitMutation<addPasteBinMutation>(RelayEnvironment, {
+      mutation: addPasteBin,
+      variables: event,
+      onCompleted: (response) => {
+        console.log("ok", response);
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    });
   };
+
   return (
     <FormWrapper>
-      <form onSubmit={handleSubmit}>
-        <label>
-          {"Autor: "}
-          <input type="text" value={authorInput} onChange={authHandler} />
-        </label>
-        <label>
-          {"Tytuł: "}
-          <input type="text" value={titleInput} onChange={titleHandler} />
-        </label>
-        <label htmlFor="framework">Kolorowanie: </label>
-        <select id="framework" onChange={optionHandler}>
-          <option value="1"> opcja 1.</option>
-          <option value="2"> opcja 2.</option>
-          <option value="3"> opcja 3.</option>
-          <option value="4"> opcja 4.</option>
-        </select>
-        <br />
-        {"Twoja wklejka - Tutaj dodaj swoją wklejkę"}
-        <br />
-        <textarea
-          placeholder="The default text that goes there"
-          style={{ width: "95%" }}
-          rows={10}
-          cols={10}
-          value={textarea}
-          onChange={textHandler}
-        />
-        <br />
-        <input type="submit" />
-      </form>
+      <Form>
+        <Form.Group style={{ marginBottom: 10, width: "25%" }}>
+          <Form.Label>Tytuł</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Tytuł"
+            onChange={handleChange}
+          />
+          <Form.Text></Form.Text>
+        </Form.Group>
+        <Form.Group style={{ marginBottom: 10 }}>
+          <Form.Label>Tekst wklejki</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={5}
+            placeholder="The default text that goes there"
+            onChange={handleChange}
+          />
+          <Form.Text></Form.Text>
+        </Form.Group>
+        <Row className="mb-3">
+          <Col>
+            <Form.Group
+              className="mb-3"
+              style={{ marginBottom: 10, width: "50%" }}
+            >
+              <Form.Control type="file" size="sm" />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group>
+              <Form.Check
+                type="switch"
+                label="Widoczność"
+                onChange={handleSwitch}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Button
+          type="submit"
+          variant="success"
+          onClick={() => handleSubmit(inputs)}
+        >
+          TEST
+        </Button>
+      </Form>
     </FormWrapper>
   );
 };

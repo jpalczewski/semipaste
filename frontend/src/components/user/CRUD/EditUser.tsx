@@ -26,11 +26,9 @@ export const EditUser: React.FC<Props> = (props) => {
       password: "zaq12wsx",
       description: "fafafafafaf",
     });
-    console.log("Change-inputs =>", inputs);
   };
 
   const handleSubmit = (event: any) => {
-    console.log("Submit-inputs =>", inputs);
     commitMutation<editUserMutation>(RelayEnvironment, {
       mutation: editUser,
       variables: event,
