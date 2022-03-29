@@ -1,9 +1,9 @@
-version: "3.9"  # optional since v1.27.0
+version: "3.9" # optional since v1.27.0
 services:
   backend:
-    image: jpalczewski/semipaste-backend:latest
+    image: ghcr.io/jpalczewski/semipaste-backend:latest
     build: backend
-    command:  sh /app/start.sh
+    command: sh /app/start.sh
     ports:
       - "8000:8000"
     env_file:

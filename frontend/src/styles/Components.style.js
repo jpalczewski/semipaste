@@ -18,6 +18,13 @@ export const FormWrapper = styled.div`
   text-align: left;
 `;
 
+export const TableWrapper = styled.div`
+  margin: 50px;
+  padding: 20px;
+  font-size: 20 px;
+  width: 90%;
+`;
+
 export const Footer = styled.div`
   padding: 20px;
 `;

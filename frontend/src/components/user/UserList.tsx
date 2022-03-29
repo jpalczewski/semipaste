@@ -2,7 +2,7 @@ import { Table } from "react-bootstrap";
 import { EditUser } from "./CRUD/EditUser";
 import { DeleteUser } from "./CRUD/DeleteUser";
 
-import { allUsers } from "../../Query/allUsers";
+import { allUsers } from "../../Query/Users/allUsers";
 import { useLazyLoadQuery } from "react-relay";
 import { allUsersQuery } from "../../Query/__generated__/allUsersQuery.graphql";
 
