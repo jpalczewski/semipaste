@@ -1,11 +1,15 @@
-from schema import Query, Mutation
+# Django
 from django.test import TestCase
+
+# 3rd-Party
 import graphene
 from graphene.test import Client
 
+# Project
+from schema import Mutation, Query
+
 
 class TestSchema(TestCase):
-
     def setUp(self):
         self.allUsers = """
            query{
@@ -20,7 +24,7 @@ class TestSchema(TestCase):
                     lastName
                     email
                     isStaff
-                    isActive                
+                    isActive
                   }
                 }
               }
