@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { editUser } from "../../../Query/editUser";
+import { editUser } from "../../../Query/Users/editUser";
 import RelayEnvironment from "../../../RelayEnvironment";
 import { commitMutation } from "react-relay";
 import { Modal } from "react-bootstrap";
