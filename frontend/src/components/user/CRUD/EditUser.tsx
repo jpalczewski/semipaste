@@ -19,10 +19,18 @@ export const EditUser: React.FC<Props> = (props) => {
 
   const handleChange = (event: any) => {
     const { name, value } = event.currentTarget;
-    setInputs({ ...inputs, [name]: value, id: props.id });
+    setInputs({
+      ...inputs,
+      [name]: value,
+      id: props.id,
+      password: "zaq12wsx",
+      description: "fafafafafaf",
+    });
+    console.log("Change-inputs =>", inputs);
   };
 
   const handleSubmit = (event: any) => {
+    console.log("Submit-inputs =>", inputs);
     commitMutation<editUserMutation>(RelayEnvironment, {
       mutation: editUser,
       variables: event,

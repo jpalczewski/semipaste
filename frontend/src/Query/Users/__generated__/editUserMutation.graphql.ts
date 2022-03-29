@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<50237db53bef0b9d6726a8c83f4b3d77>>
+ * @generated SignedSource<<62d5e0ba0aa72635989f44a93db33421>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,8 @@ export type editUserMutation$variables = {
   lastName?: string | null;
   firstName?: string | null;
   email?: string | null;
+  password?: string | null;
+  description?: string | null;
 };
 export type editUserMutation$data = {
   readonly editUser: {
@@ -30,32 +32,47 @@ const node: ConcreteRequest = (function(){
 var v0 = {
   "defaultValue": "",
   "kind": "LocalArgument",
-  "name": "email"
+  "name": "description"
 },
 v1 = {
   "defaultValue": "",
   "kind": "LocalArgument",
-  "name": "firstName"
+  "name": "email"
 },
 v2 = {
+  "defaultValue": "",
+  "kind": "LocalArgument",
+  "name": "firstName"
+},
+v3 = {
   "defaultValue": null,
   "kind": "LocalArgument",
   "name": "id"
 },
-v3 = {
+v4 = {
   "defaultValue": "",
   "kind": "LocalArgument",
   "name": "lastName"
 },
-v4 = {
+v5 = {
+  "defaultValue": "",
+  "kind": "LocalArgument",
+  "name": "password"
+},
+v6 = {
   "defaultValue": "",
   "kind": "LocalArgument",
   "name": "username"
 },
-v5 = [
+v7 = [
   {
     "alias": null,
     "args": [
+      {
+        "kind": "Variable",
+        "name": "description",
+        "variableName": "description"
+      },
       {
         "kind": "Variable",
         "name": "email",
@@ -75,6 +92,11 @@ v5 = [
         "kind": "Variable",
         "name": "lastName",
         "variableName": "lastName"
+      },
+      {
+        "kind": "Variable",
+        "name": "password",
+        "variableName": "password"
       },
       {
         "kind": "Variable",
@@ -105,39 +127,43 @@ return {
       (v1/*: any*/),
       (v2/*: any*/),
       (v3/*: any*/),
-      (v4/*: any*/)
+      (v4/*: any*/),
+      (v5/*: any*/),
+      (v6/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
     "name": "editUserMutation",
-    "selections": (v5/*: any*/),
+    "selections": (v7/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
-      (v2/*: any*/),
-      (v4/*: any*/),
       (v3/*: any*/),
+      (v6/*: any*/),
+      (v4/*: any*/),
+      (v2/*: any*/),
       (v1/*: any*/),
+      (v5/*: any*/),
       (v0/*: any*/)
     ],
     "kind": "Operation",
     "name": "editUserMutation",
-    "selections": (v5/*: any*/)
+    "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "0646cc3b1fb36fab04b6d034f2ff8bbf",
+    "cacheID": "969faecce9eb462a689dfaf3f2ab023b",
     "id": null,
     "metadata": {},
     "name": "editUserMutation",
     "operationKind": "mutation",
-    "text": "mutation editUserMutation(\n  $id: ID!\n  $username: String = \"\"\n  $lastName: String = \"\"\n  $firstName: String = \"\"\n  $email: String = \"\"\n) {\n  editUser(id: $id, username: $username, lastName: $lastName, firstName: $firstName, email: $email) {\n    ok\n  }\n}\n"
+    "text": "mutation editUserMutation(\n  $id: ID!\n  $username: String = \"\"\n  $lastName: String = \"\"\n  $firstName: String = \"\"\n  $email: String = \"\"\n  $password: String = \"\"\n  $description: String = \"\"\n) {\n  editUser(id: $id, username: $username, lastName: $lastName, firstName: $firstName, email: $email, password: $password, description: $description) {\n    ok\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "07a159653208c0a0cb3ec92ab4ee4ce6";
+(node as any).hash = "1ddbee5772b7159813d2e76bf8f43400";
 
 export default node;
