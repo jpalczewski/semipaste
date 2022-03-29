@@ -1,6 +1,5 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { tableData } from "../../dummy_data/dummyData";
 import { Table } from "react-bootstrap";
 import { useLazyLoadQuery } from "react-relay";
 import { allPasteBinQuery } from "../../Query/PasteBins/__generated__/allPasteBinQuery.graphql";
@@ -8,7 +7,6 @@ import { allPasteBin } from "../../Query/PasteBins/allPasteBin";
 
 export const Tables = (props: any) => {
   const data = useLazyLoadQuery<allPasteBinQuery>(allPasteBin, {});
-  console.log("data =>", data);
 
   return (
     <Table striped bordered hover>
