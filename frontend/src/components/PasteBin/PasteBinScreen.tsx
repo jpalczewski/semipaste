@@ -16,7 +16,6 @@ export const PasteBinScreen = (props: any) => {
             <Form.Group style={{ marginBottom: 10, width: "25%" }}>
               <Form.Label>Tytuł</Form.Label>
               <Form.Control disabled type="text" placeholder={props.title} />
-              <Form.Text></Form.Text>
             </Form.Group>
             <Form.Group style={{ marginBottom: 10 }}>
               <Form.Label>Tekst wklejki</Form.Label>
