@@ -176,24 +176,30 @@ class Dev(Common):
             'console': {
                 'class': 'logging.StreamHandler',
             },
-            'file': {
-                'level': 'DEBUG',
-                'class': 'logging.FileHandler',
-                'filename': 'debug.log',
+            'console-fmt': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard3',
             },
+            # 'file': {
+            #     'level': 'DEBUG',
+            #     'class': 'logging.FileHandler',
+            #     'filename': 'debug.log',
+            # },
         },
         'formatters': {
-            'standard': {'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'},
-        },
-        'loggers': {
-            'pastes': {
-                'handlers': ['console', 'file'],
-                'level': 'DEBUG',
-                'propagate': True,
-                'formatter': 'standard',
+            'standard3': {
+                'format': '[%(asctime)s][%(levelname)s] %(name)s[:%(lineno)d]: %(message)s',
+                'datefmt': '%Y-%m-%d %H:%M:%S',
+            },
+            'standard2': {
+                'format': '%(asctime)s - %(levelname)s - %(filename)s[:%(lineno)d] - %(message)s'
+            },
+            'verbose': {
+                'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+                'style': '{',
             },
         },
-        'root': {'handlers': ['console', 'file'], 'level': 'DEBUG'},
+        'root': {'handlers': ['console-fmt'], 'level': 'DEBUG'},
         'level': 'DEBUG',
     }
 
