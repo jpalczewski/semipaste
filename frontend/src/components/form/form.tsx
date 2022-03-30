@@ -5,23 +5,30 @@ import RelayEnvironment from "../../RelayEnvironment";
 import { commitMutation } from "react-relay";
 import { addPasteBin } from "../../Query/PasteBins/addPasteBin";
 import { addPasteBinMutation } from "../../Query/PasteBins/__generated__/addPasteBinMutation.graphql";
+import CodeMirror from "react-codemirror";
+
+require("codemirror/lib/codemirror.css");
 
 export const PasteBinForm = () => {
   const [inputs, setInputs] = useState({});
-  const [isExposure, setIsExposure] = useState<boolean>();
-
-  const handleChange = (event: any) => {
-    const { name, value } = event.currentTarget;
+  const handleText = (event: any) => {
     setInputs({
       ...inputs,
-      [name]: value,
+      text: event,
     });
-    console.log("Change-inputs =>", inputs);
   };
-  const handleSwitch = (event: any) => {
-    if (event == "on") setIsExposure(true);
-    else setIsExposure(false);
-    handleChange(isExposure);
+
+  const handleChange = (event: string) => {
+    setInputs({
+      ...inputs,
+      title: event,
+    });
+  };
+  const handleSwitch = (event: boolean) => {
+    setInputs({
+      ...inputs,
+      exposure: event,
+    });
   };
 
   const handleSubmit = (event: any) => {
@@ -48,20 +55,29 @@ export const PasteBinForm = () => {
           <Form.Control
             type="text"
             placeholder="Tytuł"
-            onChange={handleChange}
+            onChange={(event) => handleChange(event.target.value)}
           />
           <Form.Text></Form.Text>
         </Form.Group>
         <Form.Group style={{ marginBottom: 10 }}>
           <Form.Label>Tekst wklejki</Form.Label>
-          <Form.Control
+          <CodeMirror
+            name="text"
+            onChange={handleText}
+            options={{ lineNumbers: true, mode: "javascript" }}
+          />
+
+          {/* <Form.Control
             as="textarea"
             rows={5}
             placeholder="The default text that goes there"
             onChange={handleChange}
-          />
+          >
+            <pre></pre>
+          </Form.Control> */}
           <Form.Text></Form.Text>
         </Form.Group>
+
         <Row className="mb-3">
           <Col>
             <Form.Group
@@ -74,9 +90,9 @@ export const PasteBinForm = () => {
           <Col>
             <Form.Group>
               <Form.Check
-                type="switch"
+                type="checkbox"
                 label="Widoczność"
-                onChange={handleSwitch}
+                onChange={(event) => handleSwitch(event.target.checked)}
               />
             </Form.Group>
           </Col>
