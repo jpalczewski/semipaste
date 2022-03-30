@@ -67,16 +67,6 @@ export const PasteBinForm = () => {
             onChange={handleText}
             options={{ lineNumbers: true, mode: "javascript" }}
           />
-
-          {/* <Form.Control
-            as="textarea"
-            rows={5}
-            placeholder="The default text that goes there"
-            onChange={handleChange}
-          >
-            <pre></pre>
-          </Form.Control> */}
-          <Form.Text></Form.Text>
         </Form.Group>
 
         <Row className="mb-3">
@@ -98,11 +88,7 @@ export const PasteBinForm = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Button
-          // type="submit"
-          variant="success"
-          onClick={() => handleSubmit(inputs)}
-        >
+        <Button variant="success" onClick={() => handleSubmit(inputs)}>
           TEST
         </Button>
       </Form>
