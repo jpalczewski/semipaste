@@ -10,7 +10,11 @@ import CodeMirror from "react-codemirror";
 require("codemirror/lib/codemirror.css");
 
 export const PasteBinForm = () => {
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState({
+    text: "",
+    title: "",
+    exposure: false,
+  });
   const handleText = (event: any) => {
     setInputs({
       ...inputs,
@@ -32,9 +36,6 @@ export const PasteBinForm = () => {
   };
 
   const handleSubmit = (event: any) => {
-    event.preventDefault();
-    console.log("inputs =>", inputs);
-
     commitMutation<addPasteBinMutation>(RelayEnvironment, {
       mutation: addPasteBin,
       variables: event,
@@ -98,7 +99,7 @@ export const PasteBinForm = () => {
           </Col>
         </Row>
         <Button
-          type="submit"
+          // type="submit"
           variant="success"
           onClick={() => handleSubmit(inputs)}
         >
