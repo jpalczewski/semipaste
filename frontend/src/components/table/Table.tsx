@@ -15,7 +15,6 @@ export const Tables = (props: any) => {
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Tytuł</th>
-          <th scope="col">Tekst</th>
           <th scope="col">Dodano</th>
           <th scope="col">Data wygaśnięcia</th>
           <th scope="col">Widoczność?</th>
@@ -30,7 +29,6 @@ export const Tables = (props: any) => {
             <tr className="align-middle">
               <td>{data.allPasteBin?.edges[i]?.node?.id}</td>
               <td>{data.allPasteBin?.edges[i]?.node?.title}</td>
-              <td>{data.allPasteBin?.edges[i]?.node?.text.slice(0, 10)}</td>
               <td>
                 {data.allPasteBin?.edges[i]?.node?.dateOfCreation.slice(0, 10)}
               </td>

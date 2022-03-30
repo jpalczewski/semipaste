@@ -16,6 +16,8 @@ interface Props {
 
 export const EditUser: React.FC<Props> = (props) => {
   const [inputs, setInputs] = useState({});
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow(!show);
 
   const handleChange = (event: any) => {
     const { name, value } = event.currentTarget;
@@ -39,13 +41,9 @@ export const EditUser: React.FC<Props> = (props) => {
         console.error(error);
       },
     });
-    handleClose();
+    handleShow();
+    window.location.reload();
   };
-
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   return (
     <>
@@ -53,7 +51,7 @@ export const EditUser: React.FC<Props> = (props) => {
         Edytuj
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleShow}>
         <Modal.Header closeButton>
           <Modal.Title>Edytuj użytkownika</Modal.Title>
         </Modal.Header>
