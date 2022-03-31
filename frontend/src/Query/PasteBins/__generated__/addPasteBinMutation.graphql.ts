@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<44c7f1b2c16214909ad501cef12cfd2f>>
+ * @generated SignedSource<<2d6148ba2aa3be5b79a9bc97cfb19374>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,14 +9,17 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type ExpireChoices = "NEVER" | "HOUR" | "DAY" | "WEEK" | "MONTH" | "YEAR" | "%future added value";
 export type addPasteBinMutation$variables = {
-  exposure?: boolean | null;
-  text?: string | null;
-  title?: string | null;
+  text: string;
+  title: string;
+  exposure: boolean;
+  expireAfter?: ExpireChoices | null;
 };
 export type addPasteBinMutation$data = {
   readonly addPasteBin: {
     readonly ok: boolean | null;
+    readonly createdPasteId: number | null;
   } | null;
 };
 export type addPasteBinMutation = {
@@ -25,44 +28,58 @@ export type addPasteBinMutation = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "exposure"
-  },
-  {
-    "defaultValue": "",
-    "kind": "LocalArgument",
-    "name": "text"
-  },
-  {
-    "defaultValue": "",
-    "kind": "LocalArgument",
-    "name": "title"
-  }
-],
-v1 = [
+var v0 = {
+  "defaultValue": "WEEK",
+  "kind": "LocalArgument",
+  "name": "expireAfter"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "exposure"
+},
+v2 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "text"
+},
+v3 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "title"
+},
+v4 = [
   {
     "alias": null,
     "args": [
       {
-        "kind": "Variable",
-        "name": "exposure",
-        "variableName": "exposure"
-      },
-      {
-        "kind": "Variable",
-        "name": "text",
-        "variableName": "text"
-      },
-      {
-        "kind": "Variable",
-        "name": "title",
-        "variableName": "title"
+        "fields": [
+          {
+            "kind": "Variable",
+            "name": "expireAfter",
+            "variableName": "expireAfter"
+          },
+          {
+            "kind": "Variable",
+            "name": "exposure",
+            "variableName": "exposure"
+          },
+          {
+            "kind": "Variable",
+            "name": "text",
+            "variableName": "text"
+          },
+          {
+            "kind": "Variable",
+            "name": "title",
+            "variableName": "title"
+          }
+        ],
+        "kind": "ObjectValue",
+        "name": "input"
       }
     ],
-    "concreteType": "AddPasteBin",
+    "concreteType": "AddPasteBinPayload",
     "kind": "LinkedField",
     "name": "addPasteBin",
     "plural": false,
@@ -73,6 +90,13 @@ v1 = [
         "kind": "ScalarField",
         "name": "ok",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "createdPasteId",
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -80,32 +104,42 @@ v1 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/),
+      (v2/*: any*/),
+      (v3/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "addPasteBinMutation",
-    "selections": (v1/*: any*/),
+    "selections": (v4/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v2/*: any*/),
+      (v3/*: any*/),
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "addPasteBinMutation",
-    "selections": (v1/*: any*/)
+    "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "398bbbd8964d4b79c83b789d3c55a750",
+    "cacheID": "8f031c2936d53328452be7bd94320a7d",
     "id": null,
     "metadata": {},
     "name": "addPasteBinMutation",
     "operationKind": "mutation",
-    "text": "mutation addPasteBinMutation(\n  $exposure: Boolean\n  $text: String = \"\"\n  $title: String = \"\"\n) {\n  addPasteBin(exposure: $exposure, text: $text, title: $title) {\n    ok\n  }\n}\n"
+    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $exposure: Boolean!\n  $expireAfter: ExpireChoices = WEEK\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, exposure: $exposure}) {\n    ok\n    createdPasteId\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ff7a4e4a5a17e88a757a3de4046ca650";
+(node as any).hash = "9d9d6b26b569430c906e874871b74725";
 
 export default node;

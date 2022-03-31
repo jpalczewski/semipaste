@@ -46,7 +46,6 @@ export const PasteBinForm = () => {
         console.error(error);
       },
     });
-    window.location.reload();
   };
 
   return (

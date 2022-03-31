@@ -204,7 +204,10 @@ type DjangoDebugException {
 }
 
 type Mutation {
-  addPasteBin(expireAfter: String = null, exposure: Boolean = null, text: String = null, title: String = null): AddPasteBin
+  addPasteBin(input: AddPasteBinInput!): AddPasteBinPayload
+
+  """Mutacja that is responsible for deleting pastes"""
+  deletePasteBin(id: ID!): DeletePasteBin
   addUser(input: AddUserInput!): AddUserPayload
   editUser(description: String = null, email: String = null, firstName: String = null, id: ID!, lastName: String = null, password: String = null, username: String = null): EditUser
   editUserDescription(description: String = null, id: ID!): EditUserDescription
@@ -217,8 +220,66 @@ type Mutation {
   deleteTokenCookie: DeleteJSONWebTokenCookie
 }
 
-type AddPasteBin {
+type AddPasteBinPayload {
+  """Mutation result"""
   ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  createdPasteId: Int
+  clientMutationId: String
+}
+
+enum ErrorCode {
+  """Requested paste just doesn't exist"""
+  NONEXISTENTPASTE
+
+  """User should be logged in to do that operation"""
+  NOTLOGGEDIN
+
+  """Lack of permissions"""
+  PERMISSIONDENIED
+  OPERATIONFAILED
+  EXCEPTIONOCCURED
+}
+
+input AddPasteBinInput {
+  """Title of new paste"""
+  title: String!
+
+  """Content of a new paste"""
+  text: String!
+
+  """Expiration time"""
+  expireAfter: ExpireChoices!
+
+  """Is it private or not?"""
+  exposure: Boolean!
+  clientMutationId: String
+}
+
+"""An enumeration."""
+enum ExpireChoices {
+  NEVER
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  YEAR
+}
+
+type DeletePasteBin {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
 }
 
 type AddUserPayload {
