@@ -24,6 +24,7 @@ class ErrorCode(graphene.Enum):
     NOTLOGGEDIN = 2
     PERMISSIONDENIED = 3
     OPERATIONFAILED = 4
+    EXCEPTIONOCCURED = 5
 
     @property
     def description(self) -> str:
@@ -54,23 +55,37 @@ class PasteBinNode(DjangoObjectType):
     # fields = "__all__"
 
 
-class AddPasteBin(graphene.Mutation):
-    ok = graphene.Boolean()
+class AddPasteBin(ResultMixin, relay.ClientIDMutation):
+    created_paste_id = graphene.Int()
 
-    class Arguments:
-        title = graphene.String()
-        text = graphene.String()
-        expire_after = graphene.String()
-        exposure = graphene.Boolean()
+    class Input:
+        title = graphene.String(required=True, description="Title of new paste")
+        text = graphene.String(required=True, description="Content of a new paste")
+        expire_after = graphene.Field(
+            graphene.types.Enum.from_enum(PasteBin.ExpireChoices),
+            required=True,
+            description="Expiration time",
+        )
+        exposure = graphene.Boolean(
+            required="True", description="Is it private or not?"
+        )
 
-    def mutate(cls, info, **kwargs):  # type: ignore
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **kwargs):  # type: ignore
         if info.context.user.is_authenticated:
             kwargs['author'] = info.context.user
         else:
             kwargs['author'] = None
-        paste = PasteBin(**kwargs)
-        paste.save()
-        return cls(ok=True)
+        try:
+            paste = PasteBin(**kwargs)
+            paste.save()
+            print(paste)
+            logger.debug("dupa")
+        except Exception as e:
+            return AddPasteBin(
+                Ok=False, error_code=ErrorCode.EXCEPTIONOCCURED, error=str(e)
+            )
+        return AddPasteBin(ok=True, created_paste_id=paste.pk)
 
 
 class DeletePasteBin(ResultMixin, graphene.Mutation):
