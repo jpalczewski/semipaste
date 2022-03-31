@@ -50,3 +50,7 @@ class TestSchema(TestCase):
           }
         """
         self.client = Client(graphene.Schema(query=Query, mutation=Mutation))
+
+    def test_01_showAllPasteBins_beforeAddMutation(self) -> None:
+        result = self.client.execute(self.query)
+        self.assertDictEqual({"data": {"allPasteBin": {"edges": []}}}, result)
