@@ -55,7 +55,7 @@ class PasteBinNode(DjangoObjectType):
 
 
 class AddPasteBin(ResultMixin, relay.ClientIDMutation):
-    created_paste_id = graphene.Int()
+    added_paste_id = graphene.Int()
 
     class Input:
         title = graphene.String(required=True, description="Title of new paste")
