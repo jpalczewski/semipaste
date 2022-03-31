@@ -4,6 +4,9 @@
 # Standard Library
 import logging
 
+# Django
+from django.db import transaction
+
 # 3rd-Party
 import graphene
 from graphene import relay
@@ -19,6 +22,8 @@ logger = logging.getLogger(__file__)
 class ErrorCode(graphene.Enum):
     NONEXISTENTPASTE = 1
     NOTLOGGEDIN = 2
+    PERMISSIONDENIED = 3
+    OPERATIONFAILED = 4
 
     @property
     def description(self) -> str:
@@ -27,6 +32,8 @@ class ErrorCode(graphene.Enum):
                 return "Requested paste just doesn't exist"
             case self.NOTLOGGEDIN:
                 return "User should be logged in to do that operation"
+            case self.PERMISSIONDENIED:
+                return "Lack of permissions"
 
 
 class ResultMixin:
@@ -70,6 +77,7 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
 
+    @transaction.atomic
     def mutate(cls, info, id, **kwargs):  # type: ignore
         logger.debug("Delete entered")
         try:
@@ -93,16 +101,23 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
             paste.delete()
             return DeletePasteBin(ok=True)
 
-        if info.context.user.is_authenticated:
-            kwargs['author'] = info.context.user
-        return cls(ok=True)
+        if paste.author != info.context.user:
+            return DeletePasteBin(
+                ok=False,
+                error="You cant delete paste that you don't own",
+                error_code=ErrorCode.PERMISSIONDENIED,
+            )
+
+        logger.debug("trying to delete")
+        paste.delete()
+
+        return DeletePasteBin(ok=True)
 
 
 class PasteBinMutation(graphene.ObjectType):
     add_paste_bin = AddPasteBin.Field()
     delete_paste_bin = DeletePasteBin.Field(
-        description="Mutacja usuwająca wklejkę. Albo należące do użytkownika, "
-        "administrator może dowolnną."
+        description="Mutacja that is responsible for deleting pastes"
     )
 
 
