@@ -32,8 +32,8 @@ flake8 = "^4.0.1"
 isort = "^5.10.1"
 black = "^22.1.0"
 factory-boy = "^3.2.1"
-flower = {git = "https://github.com/mher/flower.git"}
 Faker = "^13.3.4"
+
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
