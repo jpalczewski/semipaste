@@ -60,14 +60,15 @@ class PasteBin(models.Model):
     def save(self, *args, **kwargs):  # type: ignore
         if self.author is None:
             self.expire_after = 'WEEK'
-        choice = self.expire_after
-        self.date_of_creation = datetime.now().replace(tzinfo=timezone.utc)
-        if choice == PasteBin.ExpireChoices.NEVER:
-            self.date_of_expiry = None
-        else:
-            self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
-                choice
-            )
+        if self.date_of_expiry:
+            choice = self.expire_after
+            self.date_of_creation = datetime.now().replace(tzinfo=timezone.utc)
+            if choice == PasteBin.ExpireChoices.NEVER:
+                self.date_of_expiry = None
+            else:
+                self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
+                    choice
+                )
         super().save(*args, **kwargs)
 
     # Special Methods

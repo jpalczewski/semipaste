@@ -27,13 +27,12 @@ class ErrorCode(graphene.Enum):
 
     @property
     def description(self) -> str:
-        match (self):
-            case self.NONEXISTENTPASTE:
-                return "Requested paste just doesn't exist"
-            case self.NOTLOGGEDIN:
-                return "User should be logged in to do that operation"
-            case self.PERMISSIONDENIED:
-                return "Lack of permissions"
+        if self == self.NONEXISTENTPASTE:
+            return "Requested paste just doesn\'t exist"
+        elif self == self.NOTLOGGEDIN:
+            return "User should be logged in to do that operation"
+        elif self == self.PERMISSIONDENIED:
+            return "Lack of permissions"
 
 
 class ResultMixin:
@@ -86,7 +85,7 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
             logger.debug("not existing paste deletion requested")
             return DeletePasteBin(
                 ok=False,
-                error="Requested passte doesn't exist",
+                error="Requested passte doesn\'t exist",
                 error_code=ErrorCode.NONEXISTENTPASTE,
             )
 
@@ -104,7 +103,7 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
         if paste.author != info.context.user:
             return DeletePasteBin(
                 ok=False,
-                error="You cant delete paste that you don't own",
+                error="You can\'t delete paste that you don't own",
                 error_code=ErrorCode.PERMISSIONDENIED,
             )
 
@@ -117,7 +116,7 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
 class PasteBinMutation(graphene.ObjectType):
     add_paste_bin = AddPasteBin.Field()
     delete_paste_bin = DeletePasteBin.Field(
-        description="Mutacja that is responsible for deleting pastes"
+        description="Mutation that is responsible for deleting pastes"
     )
 
 
