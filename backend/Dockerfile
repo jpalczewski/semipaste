@@ -22,7 +22,7 @@ RUN --mount=type=cache,id=pip,target=/root/.cache/pip  pip install poetry &&  \
 ADD pyproject.toml poetry.lock /app/
 
 RUN --mount=type=cache,id=poetry,target=/root/.cache/pypoetry  --mount=type=cache,id=pip,target=/root/.cache/pip if [ -n "$PRODUCTION" ]; then arg="--no-dev" ; fi && \
-    poetry install --no-ansi $arg
+    poetry install --no-ansi $arg &&     poetry run pip install  --force-reinstall setuptools==59.6.0
 
 # ---
 
@@ -40,7 +40,8 @@ RUN  --mount=type=cache,id=apk,target=/var/cache/apk ln -vs /var/cache/apk /etc/
     chown app /entrypoint &&  \
     chmod +x /entrypoint && \
     sed -i 's/\r$//g' /entrypoint && \
-    sed -i 's/\r$//g' /app/start.sh
+    sed -i 's/\r$//g' /app/start.sh && \
+    pip install  --force-reinstall setuptools==59.6.0
 
 USER 1000
 
