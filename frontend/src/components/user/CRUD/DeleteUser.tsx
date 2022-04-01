@@ -7,12 +7,13 @@ import { deleteUserMutation } from "../../../Query/__generated__/deleteUserMutat
 
 interface IProps {
   id: string | undefined;
+  name: string | undefined;
 }
 
 export const DeleteUser: React.FC<IProps> = (props) => {
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(!show);
-  const [name, setTest] = useState(props.id);
+  const [name, setTest] = useState(props.name);
 
   const handleSubmit = (input: any) => {
     commitMutation<deleteUserMutation>(RelayEnvironment, {
@@ -48,7 +49,7 @@ export const DeleteUser: React.FC<IProps> = (props) => {
           <Button
             type="submit"
             variant="primary"
-            onClick={() => handleSubmit(test)}
+            onClick={() => handleSubmit(props.id)}
           >
             Save Changes
           </Button>

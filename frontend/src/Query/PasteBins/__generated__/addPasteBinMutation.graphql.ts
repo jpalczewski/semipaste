@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2d6148ba2aa3be5b79a9bc97cfb19374>>
+ * @generated SignedSource<<f22fb06f143bfd1e2f4db8d874c303af>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,7 +19,7 @@ export type addPasteBinMutation$variables = {
 export type addPasteBinMutation$data = {
   readonly addPasteBin: {
     readonly ok: boolean | null;
-    readonly createdPasteId: number | null;
+    readonly addedPasteId: number | null;
   } | null;
 };
 export type addPasteBinMutation = {
@@ -95,7 +95,7 @@ v4 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "createdPasteId",
+        "name": "addedPasteId",
         "storageKey": null
       }
     ],
@@ -130,16 +130,16 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "8f031c2936d53328452be7bd94320a7d",
+    "cacheID": "d0d205fb266a2e1748d2a0a34dc98bb4",
     "id": null,
     "metadata": {},
     "name": "addPasteBinMutation",
     "operationKind": "mutation",
-    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $exposure: Boolean!\n  $expireAfter: ExpireChoices = WEEK\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, exposure: $exposure}) {\n    ok\n    createdPasteId\n  }\n}\n"
+    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $exposure: Boolean!\n  $expireAfter: ExpireChoices = WEEK\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, exposure: $exposure}) {\n    ok\n    addedPasteId\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "9d9d6b26b569430c906e874871b74725";
+(node as any).hash = "2b1ebc36ec2583a162c102b73286dae0";
 
 export default node;

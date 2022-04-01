@@ -33,7 +33,9 @@ export const UserList = (props: any) => {
                 <td>{data2.allUsers?.edges[i]?.node?.id}</td>
                 <td>{data2.allUsers?.edges[i]?.node?.username}</td>
                 <td>{data2.allUsers?.edges[i]?.node?.email}</td>
-                <td>{data2.allUsers?.edges[i]?.node?.dateJoined}</td>
+                <td>
+                  {data2.allUsers?.edges[i]?.node?.dateJoined.slice(0, 10)}
+                </td>
                 <td>{data2.allUsers?.edges[i]?.node?.firstName}</td>
                 <td>{data2.allUsers?.edges[i]?.node?.lastName}</td>
                 <td>
@@ -45,7 +47,10 @@ export const UserList = (props: any) => {
                     lstname={data2.allUsers?.edges[i]?.node?.lastName}
                   />
                   <br />
-                  <DeleteUser id={data2.allUsers?.edges[i]?.node?.username} />
+                  <DeleteUser
+                    id={data2.allUsers?.edges[i]?.node?.id}
+                    name={data2.allUsers?.edges[i]?.node?.username}
+                  />
                 </td>
               </tr>
             ))
