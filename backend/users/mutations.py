@@ -7,7 +7,6 @@ import re
 import string
 
 # Django
-from django.core.mail import send_mail
 from django.utils.html import escape, strip_tags
 
 # 3rd-Party
@@ -22,6 +21,8 @@ from .models import User, UserVerification
 
 
 class UserNode(DjangoObjectType):
+    """User node."""
+
     id = graphene.ID(source='pk', required=True)
 
     class Meta:
@@ -32,6 +33,8 @@ class UserNode(DjangoObjectType):
 
 #
 class AddUser(graphene.Mutation):
+    """Add user mutation."""
+
     ok = graphene.Boolean()
     response = graphene.String()
 
@@ -43,6 +46,13 @@ class AddUser(graphene.Mutation):
 
     @staticmethod
     def password_validation(password: str) -> tuple[bool, str]:
+        """
+        Password validation:
+            - length at least 6 characters
+            - at least one lower case
+            - at least one numeral
+        :returns: boolean check and string response [True, 'Everything is fine']
+        """
         val = True
         response = "Everything is fine"
 
@@ -62,37 +72,41 @@ class AddUser(graphene.Mutation):
 
     @staticmethod
     def username_validation(username: str) -> bool:
-        return False if User.objects.filter(username=username) else True
+        """
+        Checks if username is already registered.
+        :returns: boolean
+        """
+        return False if User.objects.get(username=username) else True
 
     @staticmethod
     def email_validation(email: str) -> bool:
+        """
+        Checks if the given email is valid.
+        :returns: boolean
+        """
         regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         return True if re.search(regex, email) else False
 
     @staticmethod
     def mutate(root, info, **kwargs):  # type: ignore
+
+        # getting data
         username = kwargs.get('username')
         password = kwargs.get('password')
         confirm_password = kwargs.get('confirm_password')
         email = kwargs.get('email')
 
-        # # verify username
         if not AddUser.username_validation(username):
             return AddUser(ok=False, response="Username already exists!")
-        # # verify password
         val, response = AddUser.password_validation(password)
         if not val:
             return AddUser(ok=False, response=response)
-        # verify cofirm_password
         if confirm_password != password:
             return AddUser(ok=False, response="Passwords do not match!")
-        # verify email
         if not AddUser.email_validation(email):
             return AddUser(ok=False, response="Invalid email!")
-        # create user
         user = User(username=username, email=email, password=password)
         user.save()
-        # generate code
         code = ''.join(
             [
                 random.choice(
@@ -101,21 +115,19 @@ class AddUser(graphene.Mutation):
                 for n in range(10)
             ]
         )
-        # verification
-        verification = UserVerification(user=user, code=code)
+        verification = UserVerification(user=user,  verification_code=code)
         verification.save()
-        # send mail with the code
-        send_mail(
+        user.email_user(
             subject="Verification code",
-            message=f"Your code {code}",
-            from_email=None,
-            recipient_list=[user.email],
+            message=f"Your verification code {code}",
             fail_silently=None,
         )
         return AddUser(ok=True, response="Account created. Check your mailbox")
 
 
 class VerifyUser(graphene.Mutation):
+    """Verify user mutation."""
+
     ok = graphene.Boolean()
     response = graphene.String()
 
@@ -127,7 +139,7 @@ class VerifyUser(graphene.Mutation):
     def mutate(root, info, **kwargs):  # type: ignore
         code = kwargs.get('code')
         user = int(kwargs.get('id'))
-        ver = UserVerification.objects.filter(user=user)[0]
+        ver = UserVerification.objects.get(user=user)
         if ver.verify(code):
             ver.delete()
             return VerifyUser(ok=True, response="Account Activated.")
@@ -136,6 +148,8 @@ class VerifyUser(graphene.Mutation):
 
 
 class EditUser(graphene.Mutation):
+    """Edit user mutation."""
+
     ok = graphene.Boolean()
 
     class Arguments:
@@ -161,6 +175,8 @@ class EditUser(graphene.Mutation):
 
 
 class EditUserDescription(graphene.Mutation):
+    """Edit user description mutation."""
+
     ok = graphene.Boolean()
 
     class Arguments:
@@ -177,6 +193,8 @@ class EditUserDescription(graphene.Mutation):
 
 
 class DeleteUser(graphene.Mutation):
+    """Delete user mutation."""
+
     ok = graphene.Boolean()
 
     class Arguments:
@@ -189,6 +207,8 @@ class DeleteUser(graphene.Mutation):
 
 
 class UserQuery(graphene.ObjectType):
+    """User query."""
+
     user = graphene.Field(UserNode)
     id = graphene.Int(required=True)
     all_users = DjangoFilterConnectionField(UserNode)
@@ -201,6 +221,8 @@ class UserQuery(graphene.ObjectType):
 
 
 class UserMutation(graphene.ObjectType):
+    """The collection of user mutations."""
+
     add_user = AddUser.Field()
     verify_user = VerifyUser.Field()
     edit_user = EditUser.Field()
