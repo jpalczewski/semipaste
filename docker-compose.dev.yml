@@ -39,6 +39,13 @@ services:
     ports:
       - 8025:8025
 
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 60 1 --loglevel warning
+
 
 volumes:
   db_data:
+  redis_data:
