@@ -115,7 +115,7 @@ class AddUser(graphene.Mutation):
                 for n in range(10)
             ]
         )
-        verification = UserVerification(user=user,  verification_code=code)
+        verification = UserVerification(user=user, verification_code=code)
         verification.save()
         user.email_user(
             subject="Verification code",
