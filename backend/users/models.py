@@ -17,7 +17,6 @@ class User(AbstractUser):
 
 
 class UserVerification(models.Model):
-    """User verification model."""
 
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, verbose_name=_('user to verify')
