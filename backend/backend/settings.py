@@ -169,6 +169,40 @@ class Dev(Common):
             'default': env.db(),
         }
 
+    LOGGING = {
+        'version': 1,  # the dictConfig format version
+        'disable_existing_loggers': False,  # retain the default loggers
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+            'console-fmt': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard3',
+            },
+            # 'file': {
+            #     'level': 'DEBUG',
+            #     'class': 'logging.FileHandler',
+            #     'filename': 'debug.log',
+            # },
+        },
+        'formatters': {
+            'standard3': {
+                'format': '[%(asctime)s][%(levelname)s] %(name)s[:%(lineno)d]: %(message)s',
+                'datefmt': '%Y-%m-%d %H:%M:%S',
+            },
+            'standard2': {
+                'format': '%(asctime)s - %(levelname)s - %(filename)s[:%(lineno)d] - %(message)s'
+            },
+            'verbose': {
+                'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+                'style': '{',
+            },
+        },
+        'root': {'handlers': ['console-fmt'], 'level': 'DEBUG'},
+        'level': 'DEBUG',
+    }
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/

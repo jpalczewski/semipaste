@@ -13,7 +13,8 @@ RUN --mount=type=cache,id=apk,target=/var/cache/apk   ln -vs /var/cache/apk /etc
 
 RUN --mount=type=cache,id=pip,target=/root/.cache/pip  pip install poetry &&  \
     mkdir /venv && \
-    poetry config virtualenvs.path /venv
+    poetry config virtualenvs.path /venv && \
+    poetry config installer.parallel true
 #poetry config virtualenvs.in-project true
 
 
