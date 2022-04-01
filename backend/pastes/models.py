@@ -41,6 +41,8 @@ class PasteBin(models.Model):
         User, verbose_name=_('author'), on_delete=models.CASCADE, null=True, blank=True
     )
 
+    objects = models.Manager()
+
     @staticmethod
     def get_time_choice(choice: str) -> timedelta:
         if choice == PasteBin.ExpireChoices.HOUR:

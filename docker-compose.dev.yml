@@ -12,6 +12,7 @@ services:
       - ./backend/:/app
     environment:
       - EMAIL_URL=smtp://mailhog:1025
+      - PYTHONUNBUFFERED=1
 
   frontend:
     image: ghcr.io/jpalczewski/semipaste-frontend:latest
