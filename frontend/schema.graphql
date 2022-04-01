@@ -229,7 +229,9 @@ type AddPasteBinPayload {
 
   """Numeric error code"""
   errorCode: ErrorCode
-  createdPasteId: Int
+
+  """Returns added paste ID"""
+  addedPasteId: Int
   clientMutationId: String
 }
 
