@@ -20,8 +20,7 @@ class UserVerification(models.Model):
     """User verification model."""
 
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE,
-        verbose_name=_('user to verify')
+        User, on_delete=models.CASCADE, verbose_name=_('user to verify')
     )
     verification_code = models.TextField(_('verification code'))
 
