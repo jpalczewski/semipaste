@@ -21,8 +21,6 @@ from .models import User, UserVerification
 
 
 class UserNode(DjangoObjectType):
-    """User node."""
-
     id = graphene.ID(source='pk', required=True)
 
     class Meta:
@@ -33,8 +31,6 @@ class UserNode(DjangoObjectType):
 
 #
 class AddUser(graphene.Mutation):
-    """Add user mutation."""
-
     ok = graphene.Boolean()
     response = graphene.String()
 
@@ -46,8 +42,7 @@ class AddUser(graphene.Mutation):
 
     @staticmethod
     def password_validation(password: str) -> tuple[bool, str]:
-        """
-        Password validation:
+        """Password validation:
             - length at least 6 characters
             - at least one lower case
             - at least one numeral
@@ -109,7 +104,7 @@ class AddUser(graphene.Mutation):
         user.save()
         code = ''.join(
             [
-                random.choice(
+                random.SystemRandom().choice(
                     string.ascii_uppercase + string.ascii_lowercase + string.digits
                 )
                 for n in range(10)
@@ -126,8 +121,6 @@ class AddUser(graphene.Mutation):
 
 
 class VerifyUser(graphene.Mutation):
-    """Verify user mutation."""
-
     ok = graphene.Boolean()
     response = graphene.String()
 
@@ -148,8 +141,6 @@ class VerifyUser(graphene.Mutation):
 
 
 class EditUser(graphene.Mutation):
-    """Edit user mutation."""
-
     ok = graphene.Boolean()
 
     class Arguments:
@@ -175,8 +166,6 @@ class EditUser(graphene.Mutation):
 
 
 class EditUserDescription(graphene.Mutation):
-    """Edit user description mutation."""
-
     ok = graphene.Boolean()
 
     class Arguments:
@@ -193,8 +182,6 @@ class EditUserDescription(graphene.Mutation):
 
 
 class DeleteUser(graphene.Mutation):
-    """Delete user mutation."""
-
     ok = graphene.Boolean()
 
     class Arguments:
@@ -207,8 +194,6 @@ class DeleteUser(graphene.Mutation):
 
 
 class UserQuery(graphene.ObjectType):
-    """User query."""
-
     user = graphene.Field(UserNode)
     id = graphene.Int(required=True)
     all_users = DjangoFilterConnectionField(UserNode)
@@ -221,8 +206,6 @@ class UserQuery(graphene.ObjectType):
 
 
 class UserMutation(graphene.ObjectType):
-    """The collection of user mutations."""
-
     add_user = AddUser.Field()
     verify_user = VerifyUser.Field()
     edit_user = EditUser.Field()
