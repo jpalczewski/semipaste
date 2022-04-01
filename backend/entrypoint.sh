@@ -7,6 +7,8 @@
 # set -o nounset
 export PATH=$(echo /venv/backend*/bin):$PATH
 
+
+
 postgres_ready() {
 python << END
 import sys
@@ -33,5 +35,6 @@ done
 >&2 echo 'PostgreSQL is available'
 
 export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+export CELERY_BROKER_URL="${REDIS_URL}"
 
 exec "$@"
