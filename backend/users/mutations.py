@@ -13,8 +13,6 @@ from django.utils.html import escape, strip_tags
 import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
-from graphene_django.debug import DjangoDebug
-from graphene_django.filter import DjangoFilterConnectionField
 
 # Local
 from .models import User, UserVerification
@@ -42,12 +40,6 @@ class AddUser(graphene.Mutation):
 
     @staticmethod
     def password_validation(password: str) -> tuple[bool, str]:
-        """Password validation:
-            - length at least 6 characters
-            - at least one lower case
-            - at least one numeral
-        :returns: boolean check and string response [True, 'Everything is fine']
-        """
         val = True
         response = "Everything is fine"
 
@@ -67,25 +59,15 @@ class AddUser(graphene.Mutation):
 
     @staticmethod
     def username_validation(username: str) -> bool:
-        """
-        Checks if username is already registered.
-        :returns: boolean
-        """
         return False if User.objects.get(username=username) else True
 
     @staticmethod
     def email_validation(email: str) -> bool:
-        """
-        Checks if the given email is valid.
-        :returns: boolean
-        """
         regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         return True if re.search(regex, email) else False
 
     @staticmethod
     def mutate(root, info, **kwargs):  # type: ignore
-
-        # getting data
         username = kwargs.get('username')
         password = kwargs.get('password')
         confirm_password = kwargs.get('confirm_password')
@@ -191,18 +173,6 @@ class DeleteUser(graphene.Mutation):
         user = User.objects.get(pk=id)
         user.delete()
         return cls(ok=True)
-
-
-class UserQuery(graphene.ObjectType):
-    user = graphene.Field(UserNode)
-    id = graphene.Int(required=True)
-    all_users = DjangoFilterConnectionField(UserNode)
-
-    node = graphene.relay.Node.Field()
-    debug = graphene.Field(DjangoDebug, name="_debug")
-
-    def resolve_user(self, info, id):  # type: ignore
-        return User.objects.get(id=id)
 
 
 class UserMutation(graphene.ObjectType):
