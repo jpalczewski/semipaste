@@ -56,10 +56,10 @@ services:
     ports: []
 
   flower:
-    <<: *backend
-    command: sh  /app/start_flower.sh
+    image: mher/flower
+    command: ["celery", "--broker=redis://redis:6379/0", "flower", "--port=8888"]
     ports:
-      - "5555:5555"
+      - 8888:8888
 
 volumes:
   db_data:
