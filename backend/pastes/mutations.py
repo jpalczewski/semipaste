@@ -9,9 +9,9 @@ from django.db import transaction
 
 # 3rd-Party
 import graphene
+from _datetime import datetime, timezone
 from graphene import relay
 from graphene_django import DjangoObjectType
-from graphene_django.filter import DjangoFilterConnectionField
 
 # Local
 from .models import PasteBin
@@ -47,7 +47,7 @@ class PasteBinNode(DjangoObjectType):
 
     class Meta:
         model = PasteBin
-        filter_fields = ['title', 'id']
+        filter_fields = ['title', 'id', 'date_of_expiry']
         interfaces = (relay.Node,)
 
     # rowid = graphene.String()
@@ -58,10 +58,10 @@ class AddPasteBin(graphene.Mutation):
     ok = graphene.Boolean()
 
     class Arguments:
-        title = graphene.String()
-        text = graphene.String()
-        expire_after = graphene.String()
-        exposure = graphene.Boolean()
+        title = graphene.String(description='Tytuł wklejki')
+        text = graphene.String(description='Tekst wklejki')
+        expire_after = graphene.String(description='Data wygaszenia wklejki')
+        exposure = graphene.Boolean(description='???')
 
     def mutate(cls, info, **kwargs):  # type: ignore
         if info.context.user.is_authenticated:
@@ -71,6 +71,7 @@ class AddPasteBin(graphene.Mutation):
         paste = PasteBin(**kwargs)
         paste.save()
         return cls(ok=True)
+
 
 
 class DeletePasteBin(ResultMixin, graphene.Mutation):
@@ -120,7 +121,35 @@ class PasteBinMutation(graphene.ObjectType):
         description="Mutacja that is responsible for deleting pastes"
     )
 
+class ActivePasteBin(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
 
-class PasteBinQuery(graphene.ObjectType):
-    all_paste_bin = DjangoFilterConnectionField(PasteBinNode)
-    paste_bin = relay.Node.Field(PasteBinNode)
+    class Meta:
+        model = PasteBin
+        filter_fields = ['title', 'id', 'date_of_expiry']
+        interfaces = (relay.Node,)
+
+    @classmethod
+    def get_queryset(cls, queryset, info):  # type: ignore
+        active = queryset.filter(
+            date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc)
+        )
+        return active
+
+
+class ExpiredPasteBin(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+
+    class Meta:
+        model = PasteBin
+        filter_fields = ['title', 'id', 'date_of_expiry']
+        interfaces = (relay.Node,)
+
+    @classmethod
+    def get_queryset(cls, queryset, info):  # type: ignore
+        expired = queryset.filter(
+            date_of_expiry__lt=datetime.now().replace(tzinfo=timezone.utc)
+        )
+        return expired
+
+
