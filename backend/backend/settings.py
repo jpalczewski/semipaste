@@ -202,6 +202,9 @@ class Dev(Common):
         'root': {'handlers': ['console-fmt'], 'level': 'DEBUG'},
         'level': 'DEBUG',
     }
+    CELERY_TIMEZONE = "Europe/Warsaw"
+    CELERY_TASK_TRACK_STARTED = True
+    CELERY_TASK_TIME_LIMIT = 30 * 60
 
 
 # Quick-start development settings - unsuitable for production
