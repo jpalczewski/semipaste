@@ -151,5 +151,3 @@ class ExpiredPasteBin(DjangoObjectType):
             date_of_expiry__lt=datetime.now().replace(tzinfo=timezone.utc)
         )
         return expired
-
-
