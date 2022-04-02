@@ -107,3 +107,10 @@ class TestSchema(TestCase):
                 }
             }
             }, query_result)
+
+    def test_05_showPasteBin_title_1(self) -> None:
+        title_query = """query{ allPasteBin { edges { node { title}}}}"""
+        mutation_result = self.client.execute(self.mutation, context=self.user)
+        query_result = self.client.execute(title_query)
+        self.assertDictEqual({"data": {"addPasteBin": {"ok": True}}}, mutation_result)
+        self.assertDictEqual({"data": {"allPasteBin": {"edges": [{"node": {"title": "Title test"}}]}}}, query_result)
