@@ -1,7 +1,7 @@
 version: "3.9"  # optional since v1.27.0
 services:
-  backend:
-    image: jpalczewski/semipaste-backend:latest
+  backend: &backend
+    image: ghcr.io/jpalczewski/semipaste-backend:latest
     build: backend
     command:  sh /app/start.sh
     ports:
@@ -12,6 +12,8 @@ services:
       - ./backend/:/app
     environment:
       - EMAIL_URL=smtp://mailhog:1025
+      - PYTHONUNBUFFERED=1
+
 
   db:
     image: postgres:14-alpine
@@ -27,5 +29,33 @@ services:
     ports:
       - 8080:8080
 
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 60 1 --loglevel warning
+
+  celeryworker:
+    <<: *backend
+    command: sh  /app/start_celeryworker.sh
+    ports: []
+
+  celerybeat:
+    <<: *backend
+    command: sh  /app/start_celerybeat.sh
+    ports: []
+
+  flower:
+    image: mher/flower
+    command: ["celery", "--broker=redis://redis:6379/0", "flower", "--port=8888"]
+    ports:
+      - 8888:8888
+
 volumes:
   db_data:
+  redis_data:

@@ -9,7 +9,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN --mount=type=cache,id=apk,target=/var/cache/apk   ln -vs /var/cache/apk /etc/apk/cache && \
-    apk add --update build-base libffi-dev gcc musl-dev postgresql-dev git
+    apk add --update build-base libffi-dev gcc musl-dev postgresql-dev git rust cargo
 
 RUN --mount=type=cache,id=pip,target=/root/.cache/pip  pip install poetry &&  \
     mkdir /venv && \
@@ -34,7 +34,7 @@ COPY --from=builder /venv /venv
 COPY  entrypoint.sh /entrypoint
 ADD . /app
 RUN  --mount=type=cache,id=apk,target=/var/cache/apk ln -vs /var/cache/apk /etc/apk/cache && \
-    apk add  --update  libpq && \
+    apk add  --update  libpq  libgcc && \
     adduser app -h /app -u 1000 -g 1000 -DH && \
     chown  app . && \
     chown app /entrypoint &&  \

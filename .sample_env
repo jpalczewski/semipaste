@@ -3,3 +3,4 @@ POSTGRES_PASSWORD=password
 POSTGRES_DB=semipaste
 SECRET_KEY=key
 POSTGRES_HOST=db
+REDIS_URL=redis://redis:6379/0
