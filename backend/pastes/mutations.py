@@ -73,7 +73,6 @@ class AddPasteBin(graphene.Mutation):
         return cls(ok=True)
 
 
-
 class DeletePasteBin(ResultMixin, graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
@@ -120,6 +119,7 @@ class PasteBinMutation(graphene.ObjectType):
     delete_paste_bin = DeletePasteBin.Field(
         description="Mutacja that is responsible for deleting pastes"
     )
+
 
 class ActivePasteBin(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
