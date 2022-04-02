@@ -1,6 +1,5 @@
 """Pastes models."""
 
-
 # Standard Library
 from datetime import datetime, timedelta, timezone
 
@@ -19,6 +18,7 @@ class PasteBin(models.Model):
         # The first value is the actual value to be set
         # The second value is used for humans
         NEVER = 'NEVER', _('never')
+        MIN = 'MIN', _('1 minute')
         HOUR = 'HOUR', _('1 hour')
         DAY = 'DAY', _('1 day')
         WEEK = 'WEEK', _('1 week')
@@ -45,7 +45,9 @@ class PasteBin(models.Model):
 
     @staticmethod
     def get_time_choice(choice: str) -> timedelta:
-        if choice == PasteBin.ExpireChoices.HOUR:
+        if choice == PasteBin.ExpireChoices.MIN:
+            return timedelta(seconds=60)
+        elif choice == PasteBin.ExpireChoices.HOUR:
             return timedelta(seconds=3600)
         elif choice == PasteBin.ExpireChoices.DAY:
             return timedelta(days=1)
