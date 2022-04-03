@@ -136,3 +136,10 @@ class TestSchema(TestCase):
         query_result = self.client.execute(exposure_query)
         self.assertDictEqual({"data": {"addPasteBin": {"ok": True}}}, mutation_result)
         self.assertDictEqual({"data": {"allPasteBin": {"edges": [{"node": {"exposure": True}}]}}}, query_result)
+
+    def test_09_showPasteBin_expireAfter_DAY(self) -> None:
+        expireafter_query = """query{ allPasteBin { edges { node { expireAfter}}}}"""
+        mutation_result = self.client.execute(self.mutation, context=self.user)
+        query_result = self.client.execute(expireafter_query)
+        self.assertDictEqual({"data": {"addPasteBin": {"ok": True}}}, mutation_result)
+        self.assertDictEqual({"data": {"allPasteBin": {"edges": [{"node": {"expireAfter": "DAY"}}]}}}, query_result)
