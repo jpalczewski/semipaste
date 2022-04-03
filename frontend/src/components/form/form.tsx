@@ -51,17 +51,39 @@ export const PasteBinForm = () => {
   return (
     <FormWrapper>
       <Form>
-        <Form.Group style={{ marginBottom: 10, width: "25%" }}>
-          <Form.Label>Tytuł</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Tytuł"
-            onChange={(event) => handleChange(event.target.value)}
-          />
-          <Form.Text></Form.Text>
-        </Form.Group>
+        <Row className="mb-3">
+          <Col style={{ textAlign: "right", flex: "25%" }}>
+            <Form.Group>
+              <Form.Control
+                type="text"
+                placeholder="Tytuł"
+                onChange={(event) => handleChange(event.target.value)}
+              />
+            </Form.Group>
+          </Col>
+          <Col style={{ textAlign: "right", flex: "25%" }}>
+            <Form.Select aria-label="Default select example">
+              <option>Highlight</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </Form.Select>
+          </Col>
+          <Col style={{ textAlign: "right", flex: "35%" }}>
+            <Button variant="primary">WYCZYŚĆ</Button>
+          </Col>
+          <Col
+            style={{
+              textAlign: "right",
+              flex: "5%",
+            }}
+          >
+            <Button variant="success" onClick={() => handleSubmit(inputs)}>
+              ZAPISZ
+            </Button>
+          </Col>
+        </Row>
         <Form.Group style={{ marginBottom: 10 }}>
-          <Form.Label>Tekst wklejki</Form.Label>
           <CodeMirror
             name="text"
             onChange={handleText}
@@ -88,9 +110,6 @@ export const PasteBinForm = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Button variant="success" onClick={() => handleSubmit(inputs)}>
-          TEST
-        </Button>
       </Form>
     </FormWrapper>
   );

@@ -1,33 +1,37 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { NavLink as Link } from "react-router-dom";
 
 export const NavigationWrapper = styled.nav`
   display: flex;
   width: 100%;
-  font-size: 24px;
-  background-color: black;
+  background-color: white;
   flex-direction: column;
   text-align: center;
 `;
 
 export const Container = styled.div`
   display: flex;
-  flex: 70%;
+  flex: 55%;
   align-items: center;
   padding-left: 5%;
 `;
 
+export const LeftContainer = styled.div`
+  display: flex;
+  flex: 30%;
+`;
+
 export const RightContainer = styled.div`
   display: flex;
-  padding-right: 50px;
-  flex: 30%;
-  justify-content: flex-end;
+  justify-content: right;
+  padding: 5px;
+  flex: 15%;
 `;
 
 export const NavInnerCont = styled.div`
   width: 100%;
-  height: 80px;
   display: flex;
+  box-shadow: 0 4px 2px -2px lightgrey;
 `;
 
 export const NavExtendedCont = styled.div`
@@ -45,11 +49,16 @@ export const NavLinkCont = styled.div`
   display: flex;
 `;
 
-export const NavbarLink = styled(Link)`
-  color: white;
-  font-size: 24px;
+export const NavLink = styled(Link)`
+  color: black;
   text-decoration: none;
   margin: 10px;
+
+  &.active {
+    font-weight: bold;
+    border-bottom-style: solid;
+    border-color: rgba(58, 158, 230, 1);
+  }
 
   @media (max-width: 700px) {
     display: none;
@@ -64,11 +73,8 @@ export const NavbarLinkExt = styled(Link)`
 `;
 
 export const LogoImg = styled.img`
-  border: 10px solid black;
-  border-radius: 40%;
-  width: 150px;
-  height: 150px;
-  background: black;
+  padding: 10px;
+  margin-left: 20px;
 `;
 
 export const OpenLinksButton = styled.button`

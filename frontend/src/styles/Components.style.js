@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
+  background-color: whitesmoke;
   font-size: 20px;
   text-align: center;
+  min-height: 900px;
 `;
 
 export const Header = styled.header`
@@ -12,7 +14,7 @@ export const Header = styled.header`
 export const FormWrapper = styled.div`
   margin: 50px;
   padding: 20px;
-  background-color: lightgrey;
+  /* background-color: lightgrey; */
   font-size: 20 px;
   flex-direction: row;
   text-align: left;
@@ -27,4 +29,9 @@ export const TableWrapper = styled.div`
 
 export const Footer = styled.div`
   padding: 20px;
+`;
+export const AllFooter = styled.div`
+  width: 100%;
+  height: 40px;
+  background-color: black;
 `;

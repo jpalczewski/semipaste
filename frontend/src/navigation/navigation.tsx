@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import {
   NavigationWrapper,
   Container,
-  RightContainer,
+  LeftContainer,
   NavInnerCont,
   NavExtendedCont,
   NavLinkCont,
-  NavbarLink,
   OpenLinksButton,
   NavbarLinkExt,
   LogoImg,
+  NavLink,
+  RightContainer,
 } from "../styles/NavigationWrapper.style";
-import Logo from "../assets/obraz.png";
+import Logo from "../assets/semipaste_logo.png";
+import { Button } from "react-bootstrap";
 
 const Navigation = () => {
   const [extNavbar, setExtNavbar] = useState(false);
@@ -19,13 +21,26 @@ const Navigation = () => {
   return (
     <NavigationWrapper>
       <NavInnerCont>
+        <LeftContainer>
+          <LogoImg src={Logo} />
+        </LeftContainer>
         <Container>
           <NavLinkCont>
-            <NavbarLink to="/">Pastebin</NavbarLink>
-            <NavbarLink to="/create">Utwórz</NavbarLink>
-            <NavbarLink to="/current">Aktualne</NavbarLink>
-            <NavbarLink to="/popular">Popularne</NavbarLink>
-            <NavbarLink to="/about">O Pastebin.pl</NavbarLink>
+            <NavLink to="/" activeStyle>
+              Pastebin
+            </NavLink>
+            <NavLink to="/create" activeStyle>
+              Utwórz
+            </NavLink>
+            <NavLink to="/current" activeStyle>
+              Aktualne
+            </NavLink>
+            <NavLink to="/popular" activeStyle>
+              Popularne
+            </NavLink>
+            <NavLink to="/about" activeStyle>
+              O Pastebin.pl
+            </NavLink>
             <OpenLinksButton
               onClick={() => {
                 setExtNavbar(!extNavbar);
@@ -35,12 +50,14 @@ const Navigation = () => {
             </OpenLinksButton>
           </NavLinkCont>
         </Container>
-
-        <NavbarLink to="/user">
-          <RightContainer>
-            <LogoImg src={Logo} />
-          </RightContainer>
-        </NavbarLink>
+        <RightContainer>
+          <Button variant="primary" type="submit" style={{ marginRight: 10 }}>
+            zaloguj
+          </Button>
+          <Button variant="primary" type="submit">
+            zarejestruj
+          </Button>
+        </RightContainer>
       </NavInnerCont>
       {extNavbar && (
         <NavExtendedCont>
