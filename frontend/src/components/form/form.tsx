@@ -46,6 +46,7 @@ export const PasteBinForm = () => {
         console.error(error);
       },
     });
+    window.location.reload();
   };
 
   return (
@@ -64,9 +65,18 @@ export const PasteBinForm = () => {
           <Col style={{ textAlign: "right", flex: "25%" }}>
             <Form.Select aria-label="Default select example">
               <option>Highlight</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option value="1">Zwykły tekst</option>
+              <option value="2">CSS</option>
+              <option value="3">JavaScript</option>
+              <option value="4">HTML5</option>
+              <option value="5">Python</option>
+              <option value="6">PHP</option>
+              <option value="7">Ruby</option>
+              <option value="8">Bash</option>
+              <option value="9">C</option>
+              <option value="10">C++</option>
+              <option value="11">SQL</option>
+              <option value="12">XML</option>
             </Form.Select>
           </Col>
           <Col style={{ textAlign: "right", flex: "35%" }}>

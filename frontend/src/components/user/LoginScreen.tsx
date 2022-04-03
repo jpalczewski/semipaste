@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { commitMutation } from "relay-runtime";
+import { login } from "../../Query/Login/login";
+import { loginMutation } from "../../Query/Login/__generated__/loginMutation.graphql";
 import { validPassword } from "../../Regex/Regex";
+import RelayEnvironment from "../../RelayEnvironment";
 import "../../styles/LoginScreen.css";
-import { RegistrationScreen } from "./RegistrationScreen";
 
 const validate = (form: any) => {
   if (!form.username) return "login jest wymagany";
@@ -25,20 +28,30 @@ export const LoginScreen = () => {
     setInputs((values) => ({ ...values, [name]: value }));
   };
   const handleSubmit = (event: any) => {
-    event.preventDefault();
     const errorMsg = validate(inputs);
     if (errorMsg) {
       setError(errorMsg);
       return;
     }
-
-    navigate("/user");
+    console.log("inputs -> ", inputs);
+    console.log("event -> ", event);
+    commitMutation<loginMutation>(RelayEnvironment, {
+      mutation: login,
+      variables: event,
+      onCompleted: (response) => {
+        console.log("ok", response);
+        navigate("/user");
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    });
   };
 
   return (
     <div className="Contener">
       <p>Logowanie</p>
-      <Form>
+      <Form onSubmit={() => handleSubmit(inputs)}>
         {error && <Form.Text className="text-danger">{error}</Form.Text>}
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Login</Form.Label>
@@ -64,7 +77,14 @@ export const LoginScreen = () => {
             onChange={handleChange}
           />
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
+        <Button
+          variant="primary"
+          type="submit"
+          onClick={(e) => {
+            e.preventDefault();
+            handleSubmit(inputs);
+          }}
+        >
           Zaloguj
         </Button>
       </Form>
