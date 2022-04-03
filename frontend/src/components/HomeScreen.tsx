@@ -10,7 +10,6 @@ export const Home = () => {
   return (
     <>
       <Wrapper>
-        <p>Strona domowa</p>
         {!vis ? <LoginScreen /> : <RegistrationScreen />}
         <Footer>
           {!vis ? "Nie posiadasz konta?  " : "Posiadasz już konto?  "}

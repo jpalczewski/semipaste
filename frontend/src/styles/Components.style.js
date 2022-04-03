@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   background-color: whitesmoke;
   font-size: 20px;
   text-align: center;
-  min-height: 900px;
+  height: 150vh !important;
 `;
 
 export const Header = styled.header`

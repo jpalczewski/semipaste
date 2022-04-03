@@ -13,8 +13,8 @@ export const Routerr = () => {
     <Router>
       <Navigation />
       <Routes>
-        <Route path="" element={<Home />} />
         <Route path="/create" element={<Create />} />
+        <Route path="" element={<Home />} />
         <Route path="/current" element={<Current />} />
         <Route path="/popular" element={<Popular />} />
         <Route path="/about" element={<About />} />

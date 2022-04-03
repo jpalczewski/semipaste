@@ -13,11 +13,13 @@ import {
   RightContainer,
 } from "../styles/NavigationWrapper.style";
 import Logo from "../assets/semipaste_logo.png";
-import { Button } from "react-bootstrap";
+import Logo2 from "../assets/photo.png";
+import { Button, NavDropdown } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const [extNavbar, setExtNavbar] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <NavigationWrapper>
       <NavInnerCont>
@@ -26,9 +28,6 @@ const Navigation = () => {
         </LeftContainer>
         <Container>
           <NavLinkCont>
-            <NavLink to="/" activeStyle>
-              Pastebin
-            </NavLink>
             <NavLink to="/create" activeStyle>
               Utwórz
             </NavLink>
@@ -51,23 +50,43 @@ const Navigation = () => {
           </NavLinkCont>
         </Container>
         <RightContainer>
-          <Button variant="primary" type="submit" style={{ marginRight: 10 }}>
-            zaloguj
-          </Button>
-          <Button variant="primary" type="submit">
-            zarejestruj
-          </Button>
+          {extNavbar ? (
+            <>
+              <NavDropdown title="USERNAME">
+                <NavDropdown.Item href="#action3">Ustawienia</NavDropdown.Item>
+                <NavDropdown.Item href="#action4">
+                  Moje wklejki
+                </NavDropdown.Item>
+                <NavDropdown.Item
+                  href="#action5"
+                  onClick={() => setExtNavbar(!extNavbar)}
+                >
+                  Wyloguj
+                </NavDropdown.Item>
+              </NavDropdown>
+              <img src={Logo2}></img>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="primary"
+                type="submit"
+                style={{ marginRight: 10 }}
+                onClick={() => navigate("")}
+              >
+                zaloguj
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={() => navigate("")}
+              >
+                zarejestruj
+              </Button>
+            </>
+          )}
         </RightContainer>
       </NavInnerCont>
-      {extNavbar && (
-        <NavExtendedCont>
-          <NavbarLinkExt to="/">Pastebin</NavbarLinkExt>
-          <NavbarLinkExt to="/create">Utwórz</NavbarLinkExt>
-          <NavbarLinkExt to="/current">Aktualne</NavbarLinkExt>
-          <NavbarLinkExt to="/popular">Popularne</NavbarLinkExt>
-          <NavbarLinkExt to="/about">O Pastebin.pl</NavbarLinkExt>
-        </NavExtendedCont>
-      )}
     </NavigationWrapper>
   );
 };

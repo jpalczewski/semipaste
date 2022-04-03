@@ -68,14 +68,6 @@ export const LoginScreen = () => {
           Zaloguj
         </Button>
       </Form>
-
-      {/* {vis && <RegistrationScreen />}
-      <p>
-        {!vis ? "Nie posiadasz konta?" : "Posiadasz już konto?"}
-        <Button variant="success" onClick={() => setVis(!vis)}>
-          {!vis ? "Zarejestruj się" : "Zaloguj się"}
-        </Button>
-      </p> */}
     </div>
   );
 };
