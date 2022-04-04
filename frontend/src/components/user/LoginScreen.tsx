@@ -28,11 +28,11 @@ export const LoginScreen = () => {
     setInputs((values) => ({ ...values, [name]: value }));
   };
   const handleSubmit = (event: any) => {
-    const errorMsg = validate(inputs);
-    if (errorMsg) {
-      setError(errorMsg);
-      return;
-    }
+    // const errorMsg = validate(inputs);
+    // if (errorMsg) {
+    //   setError(errorMsg);
+    //   return;
+    // }
     console.log("inputs -> ", inputs);
     console.log("event -> ", event);
     commitMutation<loginMutation>(RelayEnvironment, {
@@ -40,6 +40,11 @@ export const LoginScreen = () => {
       variables: event,
       onCompleted: (response) => {
         console.log("ok", response);
+        console.log("message", response.tokenAuth);
+        {
+          //response.tokenAuth != null && navigate("/user");
+        }
+
         navigate("/user");
       },
       onError: (error) => {

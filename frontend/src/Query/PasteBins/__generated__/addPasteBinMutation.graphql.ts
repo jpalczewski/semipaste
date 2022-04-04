@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f22fb06f143bfd1e2f4db8d874c303af>>
+ * @generated SignedSource<<b53d792e50168cad100ec92c0f055a08>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,7 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type ExpireChoices = "NEVER" | "HOUR" | "DAY" | "WEEK" | "MONTH" | "YEAR" | "%future added value";
+export type ExpireChoices = "NEVER" | "MIN" | "HOUR" | "DAY" | "WEEK" | "MONTH" | "YEAR" | "%future added value";
 export type addPasteBinMutation$variables = {
   text: string;
   title: string;
