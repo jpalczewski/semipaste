@@ -41,12 +41,12 @@ export const PasteBinForm = () => {
       variables: event,
       onCompleted: (response) => {
         console.log("ok", response);
+        window.location.reload();
       },
       onError: (error) => {
         console.error(error);
       },
     });
-    window.location.reload();
   };
 
   return (

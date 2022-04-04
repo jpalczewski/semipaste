@@ -82,7 +82,7 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
             return AddPasteBin(
                 Ok=False, error_code=ErrorCode.EXCEPTIONOCCURED, error=str(e)
             )
-        return AddPasteBin(ok=True, created_paste_id=paste.pk)
+        return AddPasteBin(ok=True, added_paste_id=paste.pk)
 
 
 class DeletePasteBin(ResultMixin, graphene.Mutation):
