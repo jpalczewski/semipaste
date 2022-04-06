@@ -15,26 +15,30 @@ from ..factories import PasteBinFactory
 class TestSchema(GraphQLTestCase):
     def setUp(self) -> None:
         class Object:
-            user = get_user_model().objects.create()
+            user = get_user_model().objects.create(
+                username="test",
+                email="t@t.pl",
+                password="123",
+                is_superuser=True)
 
         self.user = Object
         self.client = Client(graphene.Schema(query=Query, mutation=Mutation))
 
     def test_01_showAllPasteBins_beforeAddMutation(self) -> None:
-        query ="""query{allPasteBin {edges {node {id title text exposure expireAfter author{id}}}}}"""
+        query = """query{allPasteBin {edges {node {id title text exposure expireAfter author{id}}}}}"""
         response = self.client.execute(query)
-        self.assertEqual(response["data"]["allPasteBin"]["edges"],[])
+        self.assertEqual(response["data"]["allPasteBin"]["edges"], [])
 
     def test_02_addPasteBin_mutation(self) -> None:
         mutation = """mutation($title: String $text: String $exposure: Boolean $expireAfter: String){addPasteBin(
         title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter) {ok}} """
         pasteBin = PasteBinFactory()
         variables = {"title": pasteBin.title,
-                     "text":pasteBin.text,
-                     "exposure":pasteBin.exposure,
-                     "expireAfter":pasteBin.expire_after}
-        mutation_result = self.client.execute(mutation,variable_values=variables ,context=self.user)
-        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"],True)
+                     "text": pasteBin.text,
+                     "exposure": pasteBin.exposure,
+                     "expireAfter": pasteBin.expire_after}
+        mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
 
     def test_03_showPasteBin_id_1(self) -> None:
         id_query = """query{ allPasteBin { edges { node { id}}}}"""
@@ -42,37 +46,27 @@ class TestSchema(GraphQLTestCase):
                 title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter) {ok}} """
         pasteBin = PasteBinFactory()
         variables = {"title": pasteBin.title,
-                     "text":pasteBin.text,
-                     "exposure":pasteBin.exposure,
-                     "expireAfter":pasteBin.expire_after}
+                     "text": pasteBin.text,
+                     "exposure": pasteBin.exposure,
+                     "expireAfter": pasteBin.expire_after}
         mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
         query_result = self.client.execute(id_query)
-        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"],True)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"], '3')
 
     def test_04_showPasteBin_id_2(self) -> None:
-        id_query = """query{ allPasteBin(id: 3) { edges { node { id title text exposure expireAfter author {id}}}}}"""
-        mutation_result = self.client.execute(self.mutation, context=self.user)
+        id_query = """query{ allPasteBin(id: 5) { edges { node { id title text exposure expireAfter author {id}}}}}"""
+        mutation = """mutation($title: String $text: String $exposure: Boolean $expireAfter: String){addPasteBin(
+                title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter) {ok}} """
+        pasteBin = PasteBinFactory()
+        variables = {"title": pasteBin.title,
+                     "text": pasteBin.text,
+                     "exposure": pasteBin.exposure,
+                     "expireAfter": pasteBin.expire_after}
+        mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
         query_result = self.client.execute(id_query)
-        self.assertDictEqual({"data": {"addPasteBin": {"ok": True}}}, mutation_result)
-        self.assertDictEqual(
-            {"data": {
-                "allPasteBin": {
-                    "edges": [
-                        {
-                            "node": {
-                                "id": "3",
-                                "title": "Title test",
-                                "text": "Paste text test",
-                                "exposure": True,
-                                "expireAfter": "DAY",
-                                "author": {'id': '4'}
-                            }
-                        }
-                    ]
-                }
-            }
-            }, query_result)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"], '5')
 
     def test_05_showPasteBin_title_1(self) -> None:
         title_query = """query{ allPasteBin { edges { node { title}}}}"""
