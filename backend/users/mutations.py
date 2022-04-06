@@ -19,11 +19,11 @@ from .models import User, UserVerification
 
 
 class UserNode(DjangoObjectType):
-    id = graphene.ID(source='pk', required=True)
+    id = graphene.ID(source="pk", required=True)
 
     class Meta:
         model = User
-        filter_fields = ['id']
+        filter_fields = ["id"]
         interfaces = (relay.Node,)
 
 
@@ -44,15 +44,15 @@ class AddUser(graphene.Mutation):
         response = "Everything is fine"
 
         if len(password) < 6:
-            response = 'length should be at least 6'
+            response = "length should be at least 6"
             val = False
 
         if not any(char.isdigit() for char in password):
-            response = 'Password should have at least one numeral'
+            response = "Password should have at least one numeral"
             val = False
 
         if not any(char.islower() for char in password):
-            response = 'Password should have at least one lowercase letter'
+            response = "Password should have at least one lowercase letter"
             val = False
 
         return val, response
@@ -63,15 +63,15 @@ class AddUser(graphene.Mutation):
 
     @staticmethod
     def email_validation(email: str) -> bool:
-        regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        regex = r"^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
         return True if re.search(regex, email) else False
 
     @staticmethod
     def mutate(root, info, **kwargs):  # type: ignore
-        username = kwargs.get('username')
-        password = kwargs.get('password')
-        confirm_password = kwargs.get('confirm_password')
-        email = kwargs.get('email')
+        username = kwargs.get("username")
+        password = kwargs.get("password")
+        confirm_password = kwargs.get("confirm_password")
+        email = kwargs.get("email")
 
         if not AddUser.username_validation(username):
             return AddUser(ok=False, response="Username already exists!")
@@ -84,7 +84,7 @@ class AddUser(graphene.Mutation):
             return AddUser(ok=False, response="Invalid email!")
         user = User(username=username, email=email, password=password)
         user.save()
-        code = ''.join(
+        code = "".join(
             [
                 random.SystemRandom().choice(
                     string.ascii_uppercase + string.ascii_lowercase + string.digits
@@ -92,7 +92,9 @@ class AddUser(graphene.Mutation):
                 for n in range(10)
             ]
         )
-        verification = UserVerification(user=user, verification_code=code)
+        verification = UserVerification(
+            user=user, verification_code=code, code_type="token"
+        )
         verification.save()
         user.email_user(
             subject="Verification code",
@@ -112,10 +114,10 @@ class VerifyUser(graphene.Mutation):
 
     @staticmethod
     def mutate(root, info, **kwargs):  # type: ignore
-        code = kwargs.get('code')
-        user = int(kwargs.get('id'))
+        code = kwargs.get("code")
+        user = int(kwargs.get("id"))
         ver = UserVerification.objects.get(user=user)
-        if ver.verify(code):
+        if ver.verify(code, "token"):
             ver.delete()
             return VerifyUser(ok=True, response="Account Activated.")
         else:
@@ -132,18 +134,54 @@ class NewPassword(graphene.Mutation):
     @staticmethod
     def mutate(root, info, **kwargs):  # type: ignore
 
-        email = kwargs.get('email')
+        email = kwargs.get("email")
         if User.objects.get(email=email):
             user = User.objects.get(email=email)
+            code = "".join(random.choice(string.ascii_letters) for i in range(10))
+            verification = UserVerification(
+                user=user, verification_code=code, code_type="password"
+            )
+            verification.save()
             user.email_user(
-                subject="Tesstingus",
-                message="Here's your confirmation code: "
-                + ''.join(random.choice(string.ascii_letters) for i in range(10)),
+                subject="Password recovery",
+                message="Here's your confirmation code: " + code,
                 fail_silently=None,
             )
             return NewPassword(ok=True, response="Sending massage to your email!")
         else:
             return NewPassword(ok=False, response="No such email.")
+
+
+class EditPassword(graphene.Mutation):
+    ok = graphene.Boolean()
+    response = graphene.String()
+
+    class Arguments:
+        email = graphene.String()
+        code = graphene.String()
+        new_password = graphene.String()
+        confirm_new_password = graphene.String()
+
+    @staticmethod
+    def mutate(root, info, **kwargs):  # type: ignore
+
+        email = kwargs.get("email")
+        code = kwargs.get("code")
+        passw = kwargs.get("new_password")
+        confirm_passw = kwargs.get("confirm_new_password")
+        if User.objects.get(email=email):
+            user = User.objects.get(email=email)
+            userid = user.id
+            if UserVerification.objects.get(user_id=userid):
+                ver = UserVerification.objects.get(user_id=userid)
+                if ver.verification_code == code:
+                    if passw == confirm_passw:
+                        setattr(user, "password", passw)
+                        user.save()
+
+            return EditPassword(ok=True, response="Password changed")
+        else:
+            return EditPassword(ok=False, response="Wrong mail")
 
 
 class EditUser(graphene.Mutation):
@@ -163,7 +201,7 @@ class EditUser(graphene.Mutation):
         user = User.objects.get(pk=id)
         for attr in kwargs.keys():
             value = kwargs.get(attr, getattr(user, attr))
-            if attr == 'description':
+            if attr == "description":
                 setattr(user, attr, strip_tags(escape(value)))
             else:
                 setattr(user, attr, value)
@@ -181,7 +219,7 @@ class EditUserDescription(graphene.Mutation):
     def mutate(cls, info, id: graphene.ID, **kwargs):  # type: ignore
         user = User.objects.get(pk=id)
         user.description = strip_tags(
-            escape(kwargs.get('description', user.description))
+            escape(kwargs.get("description", user.description))
         )
         user.save()
         return cls(ok=True, user=info.context.user)
@@ -206,3 +244,4 @@ class UserMutation(graphene.ObjectType):
     edit_user_description = EditUserDescription.Field()
     delete_user = DeleteUser.Field()
     new_password = NewPassword.Field()
+    edit_password = EditPassword.Field()
