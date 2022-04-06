@@ -7,7 +7,7 @@ export const editUser = graphql`
     $lastName: String = ""
     $firstName: String = ""
     $email: String = ""
-    $password: String = ""
+    $password: String
     $description: String = ""
   ) {
     editUser(

@@ -85,7 +85,8 @@ class AddUser(graphene.Mutation):
             return AddUser(ok=False, response="Passwords do not match!")
         if not AddUser.email_validation(email):
             return AddUser(ok=False, response="Invalid email!")
-        user = User(username=username, email=email, password=password)
+        user = User(username=username, email=email)
+        user.set_password(password)
         user.save()
         code = ''.join(
             [
@@ -152,6 +153,8 @@ class EditUser(ResultMixin, graphene.Mutation):
             if value != '':
                 if attr == 'description':
                     setattr(user, attr, strip_tags(escape(value)))
+                elif attr == 'password':
+                    user.set_password(value)
                 else:
                     setattr(user, attr, value)
         user.save()
