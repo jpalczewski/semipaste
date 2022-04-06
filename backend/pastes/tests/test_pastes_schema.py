@@ -70,10 +70,17 @@ class TestSchema(GraphQLTestCase):
 
     def test_05_showPasteBin_title_1(self) -> None:
         title_query = """query{ allPasteBin { edges { node { title}}}}"""
-        mutation_result = self.client.execute(self.mutation, context=self.user)
+        mutation = """mutation($title: String $text: String $exposure: Boolean $expireAfter: String){addPasteBin(
+                        title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter) {ok}} """
+        pasteBin = PasteBinFactory()
+        variables = {"title": pasteBin.title,
+                     "text": pasteBin.text,
+                     "exposure": pasteBin.exposure,
+                     "expireAfter": pasteBin.expire_after}
+        mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
         query_result = self.client.execute(title_query)
-        self.assertDictEqual({"data": {"addPasteBin": {"ok": True}}}, mutation_result)
-        self.assertDictEqual({"data": {"allPasteBin": {"edges": [{"node": {"title": "Title test"}}]}}}, query_result)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["title"], pasteBin.title)
 
     def test_06_showPasteBin_title_2(self) -> None:
         title_query = ("""query{ allPasteBin(title: "Title test") { edges { node { title}}}}""")
