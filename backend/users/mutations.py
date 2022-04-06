@@ -59,7 +59,7 @@ class AddUser(graphene.Mutation):
 
     @staticmethod
     def username_validation(username: str) -> bool:
-        return False if User.objects.get(username=username) else True
+        return True
 
     @staticmethod
     def email_validation(email: str) -> bool:
@@ -122,6 +122,30 @@ class VerifyUser(graphene.Mutation):
             return VerifyUser(ok=False, response="Something went wrong...")
 
 
+class NewPassword(graphene.Mutation):
+    ok = graphene.Boolean()
+    response = graphene.String()
+
+    class Arguments:
+        email = graphene.String()
+
+    @staticmethod
+    def mutate(root, info, **kwargs):  # type: ignore
+
+        email = kwargs.get('email')
+        if User.objects.get(email=email):
+            user = User.objects.get(email=email)
+            user.email_user(
+                subject="Tesstingus",
+                message="Here's your confirmation code: "
+                + ''.join(random.choice(string.ascii_letters) for i in range(10)),
+                fail_silently=None,
+            )
+            return NewPassword(ok=True, response="Sending massage to your email!")
+        else:
+            return NewPassword(ok=False, response="No such email.")
+
+
 class EditUser(graphene.Mutation):
     ok = graphene.Boolean()
 
@@ -181,3 +205,4 @@ class UserMutation(graphene.ObjectType):
     edit_user = EditUser.Field()
     edit_user_description = EditUserDescription.Field()
     delete_user = DeleteUser.Field()
+    new_password = NewPassword.Field()
