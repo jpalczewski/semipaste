@@ -194,12 +194,16 @@ class TestSchema(GraphQLTestCase):
 
     def test_14_showPasteBin_expireAfter_YEAR(self) -> None:
         expireafter_query = """query{ allPasteBin { edges { node { expireAfter}}}}"""
-        mutation_result = self.client.execute(
-            """mutation{addPasteBin(title: "Title test", text: "Paste text test", exposure: true, expireAfter: "YEAR") {ok}}""",
-            context=self.user)
+        mutation = """mutation($title: String $text: String $exposure: Boolean $expireAfter: String){addPasteBin(
+                                                                        title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter) {ok}} """
+        variables_mutation = {"title": "Title test",
+                              "text": "Text test",
+                              "exposure": True,
+                              "expireAfter": "YEAR"}
+        mutation_result = self.client.execute(mutation, variable_values=variables_mutation, context=self.user)
         query_result = self.client.execute(expireafter_query)
-        self.assertDictEqual({"data": {"addPasteBin": {"ok": True}}}, mutation_result)
-        self.assertDictEqual({"data": {"allPasteBin": {"edges": [{"node": {"expireAfter": "YEAR"}}]}}}, query_result)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], "YEAR")
 
     def test_15_showPasteBins_afterAddMutation(self) -> None:
         mutation_result = self.client.execute(self.mutation, context=self.user)
