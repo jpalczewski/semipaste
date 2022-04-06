@@ -24,6 +24,7 @@ class ErrorCode(graphene.Enum):
     NOTLOGGEDIN = 2
     PERMISSIONDENIED = 3
     OPERATIONFAILED = 4
+    EXCEPTIONOCCURED = 5
 
     @property
     def description(self) -> str:
@@ -53,23 +54,35 @@ class PasteBinNode(DjangoObjectType):
     # fields = "__all__"
 
 
-class AddPasteBin(graphene.Mutation):
-    ok = graphene.Boolean()
+class AddPasteBin(ResultMixin, relay.ClientIDMutation):
+    added_paste_id = graphene.Int(description="Returns added paste ID")
 
-    class Arguments:
-        title = graphene.String(description='Tytuł wklejki')
-        text = graphene.String(description='Tekst wklejki')
-        expire_after = graphene.String(description='Data wygaszenia wklejki')
-        exposure = graphene.Boolean(description='???')
+    class Input:
+        title = graphene.String(required=True, description="Title of new paste")
+        text = graphene.String(required=True, description="Content of a new paste")
+        expire_after = graphene.Field(
+            graphene.types.Enum.from_enum(PasteBin.ExpireChoices),
+            required=True,
+            description="Expiration time",
+        )
+        exposure = graphene.Boolean(
+            required="True", description="Is it private or not?"
+        )
 
-    def mutate(cls, info, **kwargs):  # type: ignore
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **kwargs):  # type: ignore
         if info.context.user.is_authenticated:
             kwargs['author'] = info.context.user
         else:
             kwargs['author'] = None
-        paste = PasteBin(**kwargs)
-        paste.save()
-        return cls(ok=True)
+        try:
+            paste = PasteBin(**kwargs)
+            paste.save()
+        except Exception as e:
+            return AddPasteBin(
+                Ok=False, error_code=ErrorCode.EXCEPTIONOCCURED, error=str(e)
+            )
+        return AddPasteBin(ok=True, added_paste_id=paste.pk)
 
 
 class DeletePasteBin(ResultMixin, graphene.Mutation):
@@ -85,14 +98,14 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
             logger.debug("not existing paste deletion requested")
             return DeletePasteBin(
                 ok=False,
-                error="Requested passte doesn\'t exist",
+                error="Requested paste doesn\'t exist",
                 error_code=ErrorCode.NONEXISTENTPASTE,
             )
 
         if not info.context.user.is_authenticated:
             return DeletePasteBin(
                 ok=False,
-                error="You need to be logged in ",
+                error="You need to be logged in",
                 error_code=ErrorCode.NONEXISTENTPASTE,
             )
 

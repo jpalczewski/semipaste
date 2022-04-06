@@ -2,17 +2,18 @@ import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { commitMutation } from "react-relay";
 import RelayEnvironment from "../../../RelayEnvironment";
-import { deleteUser } from "../../../Query/deleteUser";
+import { deleteUser } from "../../../Query/Users/deleteUser";
 import { deleteUserMutation } from "../../../Query/__generated__/deleteUserMutation.graphql";
 
 interface IProps {
   id: string | undefined;
+  name: string | undefined;
 }
 
 export const DeleteUser: React.FC<IProps> = (props) => {
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(!show);
-  const [test, setTest] = useState(props.id);
+  const [name, setTest] = useState(props.name);
 
   const handleSubmit = (input: any) => {
     commitMutation<deleteUserMutation>(RelayEnvironment, {
@@ -26,6 +27,7 @@ export const DeleteUser: React.FC<IProps> = (props) => {
       },
     });
     handleShow();
+    window.location.reload();
   };
   return (
     <>
@@ -39,7 +41,7 @@ export const DeleteUser: React.FC<IProps> = (props) => {
         <Modal.Body onSubmit={handleSubmit}>
           <div>
             <p>
-              Jesteś pewien, że chcesz usunąć <strong>{"test"}?</strong>
+              Jesteś pewien, że chcesz usunąć <strong>{name}?</strong>
             </p>
           </div>
         </Modal.Body>
@@ -47,7 +49,7 @@ export const DeleteUser: React.FC<IProps> = (props) => {
           <Button
             type="submit"
             variant="primary"
-            onClick={() => handleSubmit(test)}
+            onClick={() => handleSubmit(props.id)}
           >
             Save Changes
           </Button>

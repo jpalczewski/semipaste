@@ -7,6 +7,8 @@ export const editUser = graphql`
     $lastName: String = ""
     $firstName: String = ""
     $email: String = ""
+    $password: String = ""
+    $description: String = ""
   ) {
     editUser(
       id: $id
@@ -14,6 +16,8 @@ export const editUser = graphql`
       lastName: $lastName
       firstName: $firstName
       email: $email
+      password: $password
+      description: $description
     ) {
       ok
     }

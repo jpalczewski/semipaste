@@ -2,7 +2,7 @@ import { Table } from "react-bootstrap";
 import { EditUser } from "./CRUD/EditUser";
 import { DeleteUser } from "./CRUD/DeleteUser";
 
-import { allUsers } from "../../Query/allUsers";
+import { allUsers } from "../../Query/Users/allUsers";
 import { useLazyLoadQuery } from "react-relay";
 import { allUsersQuery } from "../../Query/__generated__/allUsersQuery.graphql";
 
@@ -33,7 +33,9 @@ export const UserList = (props: any) => {
                 <td>{data2.allUsers?.edges[i]?.node?.id}</td>
                 <td>{data2.allUsers?.edges[i]?.node?.username}</td>
                 <td>{data2.allUsers?.edges[i]?.node?.email}</td>
-                <td>{data2.allUsers?.edges[i]?.node?.dateJoined}</td>
+                <td>
+                  {data2.allUsers?.edges[i]?.node?.dateJoined.slice(0, 10)}
+                </td>
                 <td>{data2.allUsers?.edges[i]?.node?.firstName}</td>
                 <td>{data2.allUsers?.edges[i]?.node?.lastName}</td>
                 <td>
@@ -45,7 +47,10 @@ export const UserList = (props: any) => {
                     lstname={data2.allUsers?.edges[i]?.node?.lastName}
                   />
                   <br />
-                  <DeleteUser id={data2.allUsers?.edges[i]?.node?.id} />
+                  <DeleteUser
+                    id={data2.allUsers?.edges[i]?.node?.id}
+                    name={data2.allUsers?.edges[i]?.node?.username}
+                  />
                 </td>
               </tr>
             ))

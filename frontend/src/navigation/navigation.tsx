@@ -2,30 +2,44 @@ import React, { useState } from "react";
 import {
   NavigationWrapper,
   Container,
-  RightContainer,
+  LeftContainer,
   NavInnerCont,
   NavExtendedCont,
   NavLinkCont,
-  NavbarLink,
   OpenLinksButton,
   NavbarLinkExt,
   LogoImg,
+  NavLink,
+  RightContainer,
 } from "../styles/NavigationWrapper.style";
-import Logo from "../assets/obraz.png";
+import Logo from "../assets/semipaste_logo.png";
+import Logo2 from "../assets/photo.png";
+import { Button, NavDropdown } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const [extNavbar, setExtNavbar] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <NavigationWrapper>
       <NavInnerCont>
+        <LeftContainer>
+          <LogoImg src={Logo} />
+        </LeftContainer>
         <Container>
           <NavLinkCont>
-            <NavbarLink to="/">Pastebin</NavbarLink>
-            <NavbarLink to="/create">Utwórz</NavbarLink>
-            <NavbarLink to="/current">Aktualne</NavbarLink>
-            <NavbarLink to="/popular">Popularne</NavbarLink>
-            <NavbarLink to="/about">O Pastebin.pl</NavbarLink>
+            <NavLink to="/create" activeStyle>
+              Utwórz
+            </NavLink>
+            <NavLink to="/current" activeStyle>
+              Aktualne
+            </NavLink>
+            <NavLink to="/popular" activeStyle>
+              Popularne
+            </NavLink>
+            <NavLink to="/about" activeStyle>
+              O Pastebin.pl
+            </NavLink>
             <OpenLinksButton
               onClick={() => {
                 setExtNavbar(!extNavbar);
@@ -35,22 +49,44 @@ const Navigation = () => {
             </OpenLinksButton>
           </NavLinkCont>
         </Container>
-
-        <NavbarLink to="/user">
-          <RightContainer>
-            <LogoImg src={Logo} />
-          </RightContainer>
-        </NavbarLink>
+        <RightContainer>
+          {extNavbar ? (
+            <>
+              <NavDropdown title="USERNAME">
+                <NavDropdown.Item href="#action3">Ustawienia</NavDropdown.Item>
+                <NavDropdown.Item href="#action4">
+                  Moje wklejki
+                </NavDropdown.Item>
+                <NavDropdown.Item
+                  href="#action5"
+                  onClick={() => setExtNavbar(!extNavbar)}
+                >
+                  Wyloguj
+                </NavDropdown.Item>
+              </NavDropdown>
+              <img src={Logo2}></img>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="primary"
+                type="submit"
+                style={{ marginRight: 10 }}
+                onClick={() => navigate("")}
+              >
+                zaloguj
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                onClick={() => navigate("")}
+              >
+                zarejestruj
+              </Button>
+            </>
+          )}
+        </RightContainer>
       </NavInnerCont>
-      {extNavbar && (
-        <NavExtendedCont>
-          <NavbarLinkExt to="/">Pastebin</NavbarLinkExt>
-          <NavbarLinkExt to="/create">Utwórz</NavbarLinkExt>
-          <NavbarLinkExt to="/current">Aktualne</NavbarLinkExt>
-          <NavbarLinkExt to="/popular">Popularne</NavbarLinkExt>
-          <NavbarLinkExt to="/about">O Pastebin.pl</NavbarLinkExt>
-        </NavExtendedCont>
-      )}
     </NavigationWrapper>
   );
 };

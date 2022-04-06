@@ -1,12 +1,28 @@
 import React from "react";
-import { Wrapper } from "../styles/Components.style";
-import { Form } from "./form/form";
+import { AllFooter, Wrapper } from "../styles/Components.style";
+import { PasteBinForm } from "./form/form";
 
 export const Create = () => {
   return (
-    <Wrapper>
-      <p>Utwórz nową wklejkę</p>
-      <Form />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <p style={{ textAlign: "left", paddingLeft: 50, paddingTop: 50 }}>
+          UTWÓRZ NOWĄ WKLEJKĘ
+        </p>
+        <PasteBinForm />
+      </Wrapper>
+      <AllFooter>
+        <p
+          style={{
+            color: "white",
+            fontSize: 10,
+            textAlign: "left",
+            padding: 10,
+          }}
+        >
+          @2022 Średnik - all rights reserved
+        </p>
+      </AllFooter>
+    </>
   );
 };

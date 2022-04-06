@@ -1,5 +1,7 @@
 type Query {
-  allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null): PasteBinNodeConnection
+  allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): PasteBinNodeConnection @deprecated(reason: "It will be soon available only for superusers")
+  activePasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ActivePasteBinConnection
+  expiredPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection
   pasteBin(
     """The ID of the object"""
     id: ID!
@@ -76,6 +78,9 @@ enum PastesPasteBinExpireAfterChoices {
   """never"""
   NEVER
 
+  """1 minute"""
+  MIN
+
   """1 hour"""
   HOUR
 
@@ -117,7 +122,64 @@ type UserNode implements Node {
   isActive: Boolean!
   dateJoined: DateTime!
   description: String!
-  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null): PasteBinNodeConnection!
+  isVerified: Boolean!
+  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection!
+}
+
+type ExpiredPasteBinConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ExpiredPasteBinEdge]!
+}
+
+"""A Relay edge containing a `ExpiredPasteBin` and its cursor."""
+type ExpiredPasteBinEdge {
+  """The item at the end of the edge"""
+  node: ExpiredPasteBin
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ExpiredPasteBin implements Node {
+  id: ID!
+  title: String!
+  text: String!
+  dateOfCreation: DateTime!
+  exposure: Boolean!
+  expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
+}
+
+type ActivePasteBinConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ActivePasteBinEdge]!
+}
+
+"""A Relay edge containing a `ActivePasteBin` and its cursor."""
+type ActivePasteBinEdge {
+  """The item at the end of the edge"""
+  node: ActivePasteBin
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ActivePasteBin implements Node {
+  id: ID!
+  title: String!
+  text: String!
+  dateOfCreation: DateTime!
+  exposure: Boolean!
+  expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
 }
 
 type UserNodeConnection {
@@ -204,8 +266,12 @@ type DjangoDebugException {
 }
 
 type Mutation {
-  addPasteBin(expireAfter: String = null, exposure: Boolean = null, text: String = null, title: String = null): AddPasteBin
-  addUser(input: AddUserInput!): AddUserPayload
+  addPasteBin(input: AddPasteBinInput!): AddPasteBinPayload
+
+  """Mutation that is responsible for deleting pastes"""
+  deletePasteBin(id: ID!): DeletePasteBin
+  addUser(confirmPassword: String = null, email: String!, password: String!, username: String!): AddUser
+  verifyUser(code: String = null, id: ID = null): VerifyUser
   editUser(description: String = null, email: String = null, firstName: String = null, id: ID!, lastName: String = null, password: String = null, username: String = null): EditUser
   editUserDescription(description: String = null, id: ID!): EditUserDescription
   deleteUser(id: ID!): DeleteUser
@@ -217,50 +283,79 @@ type Mutation {
   deleteTokenCookie: DeleteJSONWebTokenCookie
 }
 
-type AddPasteBin {
+type AddPasteBinPayload {
+  """Mutation result"""
   ok: Boolean
-}
 
-type AddUserPayload {
-  user: UserNode
-  errors: [ErrorType]
-  ok: Boolean
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+
+  """Returns added paste ID"""
+  addedPasteId: Int
   clientMutationId: String
 }
 
-type ErrorType {
-  field: String!
-  messages: [String!]!
+enum ErrorCode {
+  """Requested paste just doesn't exist"""
+  NONEXISTENTPASTE
+
+  """User should be logged in to do that operation"""
+  NOTLOGGEDIN
+
+  """Lack of permissions"""
+  PERMISSIONDENIED
+  OPERATIONFAILED
+  EXCEPTIONOCCURED
 }
 
-input AddUserInput {
-  password: String!
-  lastLogin: DateTime
+input AddPasteBinInput {
+  """Title of new paste"""
+  title: String!
 
-  """
-  Oznacza, że ten użytkownik ma wszystkie uprawnienia bez ich jawnego przypisywania.
-  """
-  isSuperuser: Boolean
-  groups: [ID]
-  userPermissions: [ID]
+  """Content of a new paste"""
+  text: String!
 
-  """Wymagana. 150 lub mniej znaków. Jedynie litery, cyfry i @/./+/-/_."""
-  username: String!
-  firstName: String
-  lastName: String
-  email: String
+  """Expiration time"""
+  expireAfter: ExpireChoices!
 
-  """Określa czy użytkownik może zalogować się do panelu administracyjnego."""
-  isStaff: Boolean
-
-  """
-  Określa czy użytkownika należy uważać za aktywnego. Odznacz zamiast usuwać konto.
-  """
-  isActive: Boolean
-  dateJoined: DateTime!
-  description: String!
-  id: ID
+  """Is it private or not?"""
+  exposure: Boolean!
   clientMutationId: String
+}
+
+"""An enumeration."""
+enum ExpireChoices {
+  NEVER
+  MIN
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  YEAR
+}
+
+type DeletePasteBin {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+}
+
+type AddUser {
+  ok: Boolean
+  response: String
+}
+
+type VerifyUser {
+  ok: Boolean
+  response: String
 }
 
 type EditUser {

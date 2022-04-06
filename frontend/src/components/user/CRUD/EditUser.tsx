@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { editUser } from "../../../Query/editUser";
+import { editUser } from "../../../Query/Users/editUser";
 import RelayEnvironment from "../../../RelayEnvironment";
 import { commitMutation } from "react-relay";
 import { Modal } from "react-bootstrap";
@@ -16,10 +16,18 @@ interface Props {
 
 export const EditUser: React.FC<Props> = (props) => {
   const [inputs, setInputs] = useState({});
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow(!show);
 
   const handleChange = (event: any) => {
     const { name, value } = event.currentTarget;
-    setInputs({ ...inputs, [name]: value, id: props.id });
+    setInputs({
+      ...inputs,
+      [name]: value,
+      id: props.id,
+      password: "zaq12wsx",
+      description: "fafafafafaf",
+    });
   };
 
   const handleSubmit = (event: any) => {
@@ -33,13 +41,9 @@ export const EditUser: React.FC<Props> = (props) => {
         console.error(error);
       },
     });
-    handleClose();
+    handleShow();
+    window.location.reload();
   };
-
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   return (
     <>
@@ -47,7 +51,7 @@ export const EditUser: React.FC<Props> = (props) => {
         Edytuj
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleShow}>
         <Modal.Header closeButton>
           <Modal.Title>Edytuj użytkownika</Modal.Title>
         </Modal.Header>
