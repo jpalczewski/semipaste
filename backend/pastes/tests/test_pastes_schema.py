@@ -9,18 +9,15 @@ from graphene.test import Client
 # Project
 from schema import Mutation, Query
 from ..factories import PasteBinFactory
+from users.factories import UserFactory
 
 
 class TestSchema(GraphQLTestCase):
     def setUp(self) -> None:
-        class Object:
-            user = get_user_model().objects.create(
-                username="test",
-                email="t@t.pl",
-                password="123",
-                is_superuser=True)
+        class User:
+            user = UserFactory()
 
-        self.user = Object
+        self.user = User
         self.client = Client(graphene.Schema(query=Query, mutation=Mutation))
 
     def test_01_showAllPasteBins_beforeAddMutation(self) -> None:
