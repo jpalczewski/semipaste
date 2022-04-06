@@ -1,6 +1,5 @@
 # Django
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 
 # 3rd-Party
 import graphene
@@ -38,7 +37,6 @@ class TestSchema(GraphQLTestCase):
                      "exposure": pasteBin.exposure,
                      "expireAfter": pasteBin.expire_after}
         mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
-        print(mutation_result)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
 
     def test_03_showPasteBin_id_1(self) -> None:
@@ -224,3 +222,24 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["exposure"], pasteBin.exposure)
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], pasteBin.expire_after)
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"], pasteBin.author)
+
+    def test_16_deletePasteBin_mutation(self) -> None:
+        id_query = """query{ allPasteBin { edges { node { id}}}}"""
+        add_mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
+        addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok}} """
+        delete_mutation = """mutation($id: ID!){deletePasteBin(id: $id) {ok error errorCode}}"""
+        pasteBin = PasteBinFactory()
+        add_variables = {"title": pasteBin.title,
+                         "text": pasteBin.text,
+                         "exposure": pasteBin.exposure,
+                         "expireAfter": pasteBin.expire_after}
+        add_mutation_result = self.client.execute(add_mutation, variable_values=add_variables, context=self.user)
+        self.assertEqual(add_mutation_result["data"]["addPasteBin"]["ok"], True)
+        query_result = self.client.execute(id_query)
+        pasteBinID = query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"]
+        delete_variables = {"id": pasteBinID}
+        delete_mutation_result = self.client.execute(delete_mutation, variable_values=delete_variables,
+                                                     context=self.user)
+        self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["ok"], True)
+        self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["error"], None)
+        self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], None)
