@@ -9,6 +9,7 @@ from graphene.test import Client
 
 # Project
 from schema import Mutation, Query
+from ..factories import PasteBinFactory
 
 
 class TestSchema(GraphQLTestCase):
@@ -17,19 +18,6 @@ class TestSchema(GraphQLTestCase):
             user = get_user_model().objects.create()
 
         self.user = Object
-
-        self.mutation = """
-        mutation{
-          addPasteBin(
-            title: "Title test",
-            text: "Paste text test",
-            exposure: true,
-            expireAfter: "DAY"
-          ) {
-            ok
-            }
-          }
-        """
         self.client = Client(graphene.Schema(query=Query, mutation=Mutation))
 
     def test_01_showAllPasteBins_beforeAddMutation(self) -> None:
@@ -38,28 +26,15 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(response["data"]["allPasteBin"]["edges"],[])
 
     def test_02_addPasteBin_mutation(self) -> None:
-        mutation_result = self.client.execute(self.mutation, context=self.user)
-        query_result = self.client.execute(self.query)
-        self.assertDictEqual({"data": {"addPasteBin": {"ok": True}}}, mutation_result)
-        self.assertDictEqual(
-            {
-                "data": {
-                    "allPasteBin": {
-                        "edges": [
-                            {
-                                "node": {
-                                    "id": "1",
-                                    "title": "Title test",
-                                    "text": "Paste text test",
-                                    "exposure": True,
-                                    "expireAfter": "DAY",
-                                    "author": {'id': '2'}
-                                }
-                            }
-                        ]
-                    }
-                }
-            }, query_result)
+        mutation = """mutation($title: String $text: String $exposure: Boolean $expireAfter: String){addPasteBin(
+        title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter) {ok}} """
+        pasteBin = PasteBinFactory()
+        variables = {"title": pasteBin.title,
+                     "text":pasteBin.text,
+                     "exposure":pasteBin.exposure,
+                     "expireAfter":pasteBin.expire_after}
+        mutation_result = self.client.execute(mutation,variable_values=variables ,context=self.user)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"],True)
 
     def test_03_showPasteBin_id_1(self) -> None:
         id_query = """query{ allPasteBin { edges { node { id}}}}"""
