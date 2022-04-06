@@ -266,3 +266,12 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["error"],
                          "You can\'t delete paste that you don't own")
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], "PERMISSIONDENIED")
+
+    def test_18_deletePasteBin_doesnt_exist_mutation(self) -> None:
+        delete_mutation = """mutation($id: ID!){deletePasteBin(id: $id) {ok error errorCode}}"""
+        delete_variables = {"id": 999}
+        delete_mutation_result = self.client.execute(delete_mutation, variable_values=delete_variables,
+                                                     context=self.user)
+        self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["ok"], False)
+        self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["error"], "Requested paste doesn't exist")
+        self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], "NONEXISTENTPASTE")
