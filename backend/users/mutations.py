@@ -38,7 +38,7 @@ class AddUser(graphene.Mutation):
     class Arguments:
         username = graphene.String(required=True)
         password = graphene.String(required=True)
-        confirm_password = graphene.String(required=False)
+        confirm_password = graphene.String(required=True)
         email = graphene.String(required=True)
 
     @staticmethod
@@ -62,7 +62,7 @@ class AddUser(graphene.Mutation):
 
     @staticmethod
     def username_validation(username: str) -> bool:
-        return False if User.objects.get(username=username) else True
+        return False if User.objects.filter(username=username) else True
 
     @staticmethod
     def email_validation(email: str) -> bool:
