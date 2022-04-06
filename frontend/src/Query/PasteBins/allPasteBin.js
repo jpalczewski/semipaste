@@ -11,7 +11,6 @@ export const allPasteBin = graphql`
           id
           exposure
           dateOfExpiry
-          language
         }
       }
     }

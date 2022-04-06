@@ -109,31 +109,31 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
 
         return DeletePasteBin(ok=True)
 
-class HighlightPreview(graphene.Mutation):
+class HighlightPreview(relay.ClientIDMutation):
     highlight = graphene.String()
 
-    class Arguments:
+    class Input:
         code = graphene.String(required=True)
         lang = graphene.String()
 
     @staticmethod
-    def mutate(root, info, **kwargs):
-        code = kwargs.get('code')
-        lang = kwargs.get('lang')
+    def mutate_and_get_payload(root, info, **input):
+        code = input.get('code')
+        lang = input.get('lang')
         if lang:
             lex = lexers.get_lexer_by_name(lang)
             code = pygments.highlight(code, lex, HtmlFormatter())
         return HighlightPreview(highlight=code)
 
-class HighlightPasteBin(graphene.Mutation):
+class HighlightPasteBin(relay.ClientIDMutation):
     highlighted = graphene.String()
 
-    class Arguments:
+    class Input:
         id = graphene.ID(required=True)
 
     @staticmethod
-    def mutate(root, info, **kwargs):
-        pk = int(kwargs.get('id'))
+    def mutate_and_get_payload(root, info, **input):
+        pk = int(input.get('id'))
         paste = PasteBin.objects.get(id=pk)
         code = paste.text
         if paste.language != 'Plain Text':
