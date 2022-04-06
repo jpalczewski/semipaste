@@ -1,14 +1,21 @@
 """Pastes models."""
 
+
 # Standard Library
 from datetime import datetime, timedelta, timezone
+from hashlib import md5
 
 # Django
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+# 3rd-Party
+from configurations import values
+
 # Project
 from users.models import User
+
+SECRET_KEY = values.SecretValue(environ_name="SECRET_KEY", environ_prefix=None)
 
 
 class PasteBin(models.Model):
@@ -83,3 +90,14 @@ class PasteBin(models.Model):
         ordering = ['id']
         verbose_name = _('pastebin')
         verbose_name_plural = _('pastebins')
+
+
+class Attachment(models.Model):
+    def get_attachment_filename(self, filename: str) -> str:  #
+        return 'attachments/{}/{}'.format(
+            md5((str(SECRET_KEY) + str(self.paste.pk)).encode('utf-8')).hexdigest(),
+            filename,
+        )
+
+    image = models.ImageField(upload_to=get_attachment_filename)
+    paste = models.ForeignKey(PasteBin, on_delete=models.CASCADE)

@@ -138,3 +138,5 @@ staticfiles/
 frontend/src/__generated__/*.js
 frontend/src/__generated__/*.ts
 backend/.bash_history
+backend/.pythonhist
+backend/media

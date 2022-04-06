@@ -17,6 +17,9 @@ from datetime import timedelta
 from distutils.debug import DEBUG
 from pathlib import Path
 
+# Django
+from django.conf.urls.static import static
+
 # 3rd-Party
 import dj_email_url
 import environ
@@ -168,6 +171,9 @@ class Dev(Common):
         DATABASES = {
             'default': env.db(),
         }
+
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(Common.BASE_DIR, 'media/')
 
     LOGGING = {
         'version': 1,  # the dictConfig format version
