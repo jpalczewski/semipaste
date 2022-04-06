@@ -206,27 +206,20 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], "YEAR")
 
     def test_15_showPasteBins_afterAddMutation(self) -> None:
-        mutation_result = self.client.execute(self.mutation, context=self.user)
-        query_result = self.client.execute(self.query)
-        self.assertDictEqual({"data": {"addPasteBin": {"ok": True}}}, mutation_result)
-        self.assertDictEqual(
-            {
-                "data": {
-                    "allPasteBin": {
-                        "edges": [
-                            {
-                                "node": {
-                                    "id": '14',
-                                    "title": "Title test",
-                                    "text": "Paste text test",
-                                    "exposure": True,
-                                    "expireAfter": "DAY",
-                                    "author": {'id': '15'}
-                                }
-                            }
-                        ]
-                    }
-                }
-            },
-            query_result
-        )
+        query = """query{allPasteBin {edges {node {id title text exposure expireAfter author{id}}}}}"""
+        mutation = """mutation($title: String $text: String $exposure: Boolean $expireAfter: String){addPasteBin(
+                title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter) {ok}} """
+        pasteBin = PasteBinFactory()
+        variables = {"title": pasteBin.title,
+                     "text": pasteBin.text,
+                     "exposure": pasteBin.exposure,
+                     "expireAfter": pasteBin.expire_after}
+        mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
+        query_result = self.client.execute(query)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"], '21')
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["title"], pasteBin.title)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["text"], pasteBin.text)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["exposure"], pasteBin.exposure)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], pasteBin.expire_after)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"], pasteBin.author)
