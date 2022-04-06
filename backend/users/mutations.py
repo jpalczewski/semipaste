@@ -14,6 +14,9 @@ import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
 
+# Project
+from backend.mixins import ErrorCode, ResultMixin
+
 # Local
 from .models import User, UserVerification
 
@@ -122,9 +125,7 @@ class VerifyUser(graphene.Mutation):
             return VerifyUser(ok=False, response="Something went wrong...")
 
 
-class EditUser(graphene.Mutation):
-    ok = graphene.Boolean()
-
+class EditUser(ResultMixin, graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
         username = graphene.String()
@@ -134,17 +135,27 @@ class EditUser(graphene.Mutation):
         description = graphene.String()
         password = graphene.String()
 
-    def mutate(cls, info, id: graphene.ID, **kwargs):  # type: ignore
+    @staticmethod
+    def mutate(root, info, id: graphene.ID, **kwargs):  # type: ignore
         # type: ignore
-        user = User.objects.get(pk=id)
+        try:
+            user = User.objects.get(pk=id)
+        except User.DoesNotExist:
+            return EditUser(
+                ok=False,
+                error_code=ErrorCode.USERNOTFOUND,
+                error="User with specified ID not found",
+            )
         for attr in kwargs.keys():
+
             value = kwargs.get(attr, getattr(user, attr))
-            if attr == 'description':
-                setattr(user, attr, strip_tags(escape(value)))
-            else:
-                setattr(user, attr, value)
+            if value != '':
+                if attr == 'description':
+                    setattr(user, attr, strip_tags(escape(value)))
+                else:
+                    setattr(user, attr, value)
         user.save()
-        return cls(ok=True, user=info.context.user)
+        return EditUser(ok=True, user=info.context.user)
 
 
 class EditUserDescription(graphene.Mutation):
