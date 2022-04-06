@@ -243,3 +243,26 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["ok"], True)
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["error"], None)
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], None)
+
+    def test_17_deletePasteBin_dont_own_mutation(self) -> None:
+        id_query = """query{ allPasteBin { edges { node { id}}}}"""
+        add_mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
+        addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok}} """
+        delete_mutation = """mutation($id: ID!){deletePasteBin(id: $id) {ok error errorCode}}"""
+        pasteBin = PasteBinFactory()
+        add_variables = {"title": pasteBin.title,
+                         "text": pasteBin.text,
+                         "exposure": pasteBin.exposure,
+                         "expireAfter": pasteBin.expire_after}
+        add_mutation_result = self.client.execute(add_mutation, variable_values=add_variables, context=self.user)
+        self.assertEqual(add_mutation_result["data"]["addPasteBin"]["ok"], True)
+        query_result = self.client.execute(id_query)
+        pasteBinID = query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"]
+        delete_variables = {"id": pasteBinID}
+        user = self.user
+        user.user.is_superuser = False
+        delete_mutation_result = self.client.execute(delete_mutation, variable_values=delete_variables, context=user)
+        self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["ok"], False)
+        self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["error"],
+                         "You can\'t delete paste that you don't own")
+        self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], "PERMISSIONDENIED")
