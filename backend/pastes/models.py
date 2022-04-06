@@ -40,7 +40,7 @@ class PasteBin(models.Model):
     author = models.ForeignKey(
         User, verbose_name=_('author'), on_delete=models.CASCADE, null=True, blank=True
     )
-
+    language = models.CharField(_('langauge'), max_length=50, default='Plain Text')
     objects = models.Manager()
 
     @staticmethod

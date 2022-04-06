@@ -12,6 +12,9 @@ import graphene
 from _datetime import datetime, timezone
 from graphene import relay
 from graphene_django import DjangoObjectType
+import pygments
+from pygments import lexers
+from pygments.formatters import HtmlFormatter
 
 # Project
 from backend.mixins import ErrorCode, ResultMixin
@@ -48,6 +51,7 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
         exposure = graphene.Boolean(
             required="True", description="Is it private or not?"
         )
+        language = graphene.String(description="Syntax Highlight")
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **kwargs):  # type: ignore
@@ -105,12 +109,45 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
 
         return DeletePasteBin(ok=True)
 
+class HighlightPreview(graphene.Mutation):
+    highlight = graphene.String()
+
+    class Arguments:
+        code = graphene.String(required=True)
+        lang = graphene.String()
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        code = kwargs.get('code')
+        lang = kwargs.get('lang')
+        if lang:
+            lex = lexers.get_lexer_by_name(lang)
+            code = pygments.highlight(code, lex, HtmlFormatter())
+        return HighlightPreview(highlight=code)
+
+class HighlightPasteBin(graphene.Mutation):
+    highlighted = graphene.String()
+
+    class Arguments:
+        id = graphene.ID(required=True)
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        pk = int(kwargs.get('id'))
+        paste = PasteBin.objects.get(id=pk)
+        code = paste.text
+        if paste.language != 'Plain Text':
+            lexer = lexers.get_lexer_by_name(paste.language)
+            code = pygments.highlight(code, lexer, HtmlFormatter())
+        return HighlightPasteBin(highlighted=code)
 
 class PasteBinMutation(graphene.ObjectType):
     add_paste_bin = AddPasteBin.Field()
     delete_paste_bin = DeletePasteBin.Field(
         description="Mutation that is responsible for deleting pastes"
     )
+    highlight_paste_bin = HighlightPasteBin.Field()
+    highlight_preview = HighlightPreview.Field()
 
 
 class ActivePasteBin(DjangoObjectType):

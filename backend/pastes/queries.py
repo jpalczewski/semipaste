@@ -6,6 +6,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 # Local
 from .mutations import ActivePasteBin, ExpiredPasteBin, PasteBinNode
 
+from pygments import lexers
 
 class PasteBinQuery(graphene.ObjectType):
     all_paste_bin = DjangoFilterConnectionField(
@@ -15,3 +16,9 @@ class PasteBinQuery(graphene.ObjectType):
     active_paste_bin = DjangoFilterConnectionField(ActivePasteBin)
     expired_paste_bin = DjangoFilterConnectionField(ExpiredPasteBin)
     paste_bin = relay.Node.Field(PasteBinNode)
+
+class LanguageQuery(graphene.ObjectType):
+    all_languages = graphene.List(graphene.String)
+
+    def resolve_all_languages(self, info):
+        return ['Plain Text'] + [lex[0] for lex in list(lexers.get_all_lexers())]
