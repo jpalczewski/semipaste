@@ -101,3 +101,6 @@ class Attachment(models.Model):
 
     image = models.ImageField(upload_to=get_attachment_filename)
     paste = models.ForeignKey(PasteBin, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f'{self.paste.title} - { self.image.name}'

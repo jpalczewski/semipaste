@@ -212,7 +212,9 @@ class Dev(Common):
     CELERY_TASK_TRACK_STARTED = True
     CELERY_TASK_TIME_LIMIT = 30 * 60
 
-    INSTALLED_APPS = Common.INSTALLED_APPS + ['django_extensions']
+    INSTALLED_APPS = Common.INSTALLED_APPS + [
+        'django_extensions',
+    ]
 
 
 # Quick-start development settings - unsuitable for production

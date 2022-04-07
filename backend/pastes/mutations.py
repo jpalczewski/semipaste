@@ -20,7 +20,7 @@ from pygments.formatters import HtmlFormatter
 from backend.mixins import ErrorCode, ResultMixin
 
 # Local
-from .models import PasteBin
+from .models import Attachment, PasteBin
 
 logger = logging.getLogger(__file__)
 
@@ -110,6 +110,7 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
         return DeletePasteBin(ok=True)
 
 
+
 def convert_to_html(code: str, lang: str) -> str:
     if lang != "Plain Text":
         escape_chars = '___ESCAPE_CHARS___'
@@ -164,6 +165,37 @@ class HighlightPasteBin(relay.ClientIDMutation):
         code = convert_to_html(paste.text, paste.language)
         return HighlightPasteBin(highlight=code)
 
+class AddAttachment(ResultMixin, graphene.ClientIDMutation):
+    class Input:
+        token = graphene.String(required=True, description="Upload token")
+        description = graphene.String(description="Image description")
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):  # type: ignore
+        token = input['token']
+        logger.debug(f"Received add attachment request with token {token}")
+        file = info.context.FILES['image']
+        if len(info.context.FILES) != 0:
+            logger.debug(f"Received files {file}")
+        else:
+            return AddAttachment(ok=False, error="No files provided")
+
+        try:
+            paste = PasteBin.objects.get(pk=token)
+
+            print(vars(file))
+
+            attachment = Attachment.objects.create(paste=paste, image=file)
+            attachment.save()
+            print(vars(attachment))
+            logger.debug(f"Attachment saved: {attachment}")
+            return AddAttachment(ok=True, error=attachment)
+        except PasteBin.DoesNotExist:
+            return AddAttachment(ok=False, error="Invalid token")
+        except Exception as e:
+            return AddAttachment(ok=False, error=f"{e}")
+        return AddAttachment(ok=False, error="Something went wrong")
+
 
 class PasteBinMutation(graphene.ObjectType):
     add_paste_bin = AddPasteBin.Field()
@@ -172,6 +204,7 @@ class PasteBinMutation(graphene.ObjectType):
     )
     highlight_paste_bin = HighlightPasteBin.Field()
     highlight_preview = HighlightPreview.Field()
+    add_attachment = AddAttachment.Field(description="Add an attachment to a paste")
 
 
 class ActivePasteBin(DjangoObjectType):
