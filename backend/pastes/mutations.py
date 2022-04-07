@@ -122,11 +122,11 @@ class HighlightPreview(relay.ClientIDMutation):
         lang = input.get('lang')
         if lang:
             lex = lexers.get_lexer_by_name(lang)
-            code = pygments.highlight(code, lex, HtmlFormatter())
+            code = pygments.highlight(code, lex, HtmlFormatter()).strip().replace('\n', '<br>').replace('\"', '\'')
         return HighlightPreview(highlight=code)
 
 class HighlightPasteBin(relay.ClientIDMutation):
-    highlighted = graphene.String()
+    highlight = graphene.String()
 
     class Input:
         id = graphene.ID(required=True)
@@ -138,8 +138,8 @@ class HighlightPasteBin(relay.ClientIDMutation):
         code = paste.text
         if paste.language != 'Plain Text':
             lexer = lexers.get_lexer_by_name(paste.language)
-            code = pygments.highlight(code, lexer, HtmlFormatter())
-        return HighlightPasteBin(highlighted=code)
+            code = pygments.highlight(code, lexer, HtmlFormatter()).strip().replace('\n', '<br>').replace('\"', '\'')
+        return HighlightPasteBin(highlight=code)
 
 class PasteBinMutation(graphene.ObjectType):
     add_paste_bin = AddPasteBin.Field()
