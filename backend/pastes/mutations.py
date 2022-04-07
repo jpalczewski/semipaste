@@ -32,13 +32,30 @@ class PasteBinNode(DjangoObjectType):
         model = PasteBin
         filter_fields = ['title', 'id', 'date_of_expiry']
         interfaces = (relay.Node,)
+        exclude = ("attachment_token",)
 
     # rowid = graphene.String()
     # fields = "__all__"
 
 
+class AttachmentNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+    url = graphene.String()
+
+    def resolve_url(root, info, **kwargs) -> str:  # type: ignore
+        return f"http://{info.context.META['HTTP_HOST']}{root.image.url}"
+
+    class Meta:
+        model = Attachment
+        interfaces = (relay.Node,)
+        exclude = ("paste",)
+
+
 class AddPasteBin(ResultMixin, relay.ClientIDMutation):
     added_paste_id = graphene.Int(description="Returns added paste ID")
+    attachment_token = graphene.String(
+        description="Token required to upload attachments"
+    )
 
     class Input:
         title = graphene.String(required=True, description="Title of new paste")
@@ -66,7 +83,9 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
             return AddPasteBin(
                 Ok=False, error_code=ErrorCode.EXCEPTIONOCCURED, error=str(e)
             )
-        return AddPasteBin(ok=True, added_paste_id=paste.pk)
+        return AddPasteBin(
+            ok=True, added_paste_id=paste.pk, attachment_token=paste.attachment_token
+        )
 
 
 class DeletePasteBin(ResultMixin, graphene.Mutation):
@@ -181,9 +200,12 @@ class AddAttachment(ResultMixin, graphene.ClientIDMutation):
             return AddAttachment(ok=False, error="No files provided")
 
         try:
-            paste = PasteBin.objects.get(pk=token)
+            paste = PasteBin.objects.get(attachment_token=token)
 
-            print(vars(file))
+            if not paste.is_uploading_attachments_allowed():
+                return AddAttachment(
+                    ok=False, error="Too late to upload attachment to that paste"
+                )
 
             attachment = Attachment.objects.create(paste=paste, image=file)
             attachment.save()

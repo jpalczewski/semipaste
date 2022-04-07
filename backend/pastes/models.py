@@ -1,7 +1,7 @@
 """Pastes models."""
 
-
 # Standard Library
+import secrets
 from datetime import datetime, timedelta, timezone
 from hashlib import md5
 
@@ -16,6 +16,9 @@ from configurations import values
 from users.models import User
 
 SECRET_KEY = values.SecretValue(environ_name="SECRET_KEY", environ_prefix=None)
+ATTACHMENT_TIMESPAN = values.IntegerValue(
+    environ_name="ATTACHMENT_TIMESPAN", environ_prefix=None, default=300
+)
 
 
 class PasteBin(models.Model):
@@ -49,6 +52,13 @@ class PasteBin(models.Model):
         User, verbose_name=_('author'), on_delete=models.CASCADE, null=True, blank=True
     )
     language = models.CharField(_('langauge'), max_length=50, default='Plain Text')
+    attachment_token = models.CharField(
+        _('token issued to upload attachments'),
+        null=False,
+        blank=False,
+        max_length=32,
+        db_index=True,
+    )
     objects = models.Manager()
 
     # Static methods
@@ -79,7 +89,14 @@ class PasteBin(models.Model):
             self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
                 choice
             )
+        self.attachment_token = secrets.token_hex(16)
         super().save(*args, **kwargs)
+
+    def is_uploading_attachments_allowed(self) -> bool:
+        upload_time_limit = self.date_of_creation + timedelta(
+            seconds=ATTACHMENT_TIMESPAN
+        )
+        return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
 
     # Special Methods
     def __str__(self) -> str:
@@ -100,7 +117,9 @@ class Attachment(models.Model):
         )
 
     image = models.ImageField(upload_to=get_attachment_filename)
-    paste = models.ForeignKey(PasteBin, on_delete=models.CASCADE)
+    paste = models.ForeignKey(
+        PasteBin, on_delete=models.CASCADE, related_name='attachments'
+    )
 
     def __str__(self) -> str:
-        return f'{self.paste.title} - { self.image.name}'
+        return f'{self.paste.title} - {self.image.name}'

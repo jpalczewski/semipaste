@@ -216,6 +216,10 @@ class Dev(Common):
         'django_extensions',
     ]
 
+    ATTACHMENT_TIMESPAN = values.IntegerValue(
+        environ_name="ATTACHMENT_TIMESPAN", environ_prefix=None, default=300
+    )
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
