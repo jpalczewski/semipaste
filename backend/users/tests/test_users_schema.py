@@ -46,3 +46,19 @@ class TestSchema(TestCase):
         query_result = self.client.execute(id_query)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
         self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["id"], '21')
+
+    def test_04_showUser_id_2(self) -> None:
+        id_query = """query{allUsers(id: 23){edges{node{id lastLogin isSuperuser username firstName lastName email isStaff 
+        isActive}}}} """
+        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok }} """
+        example_user = UserFactory()
+        variables = {"confirmPassword": example_user.password,
+                     "email": example_user.email,
+                     "password": example_user.password,
+                     "username": "Test04"}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        query_result = self.client.execute(id_query)
+        print(query_result)
+        self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["id"], '23')
