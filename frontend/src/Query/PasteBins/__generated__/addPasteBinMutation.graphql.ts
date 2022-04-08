@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b53d792e50168cad100ec92c0f055a08>>
+ * @generated SignedSource<<a62f6454401019b967465ebcb5569a27>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,7 @@ export type addPasteBinMutation$variables = {
   title: string;
   exposure: boolean;
   expireAfter?: ExpireChoices | null;
+  language?: string | null;
 };
 export type addPasteBinMutation$data = {
   readonly addPasteBin: {
@@ -29,7 +30,7 @@ export type addPasteBinMutation = {
 
 const node: ConcreteRequest = (function(){
 var v0 = {
-  "defaultValue": "WEEK",
+  "defaultValue": "MIN",
   "kind": "LocalArgument",
   "name": "expireAfter"
 },
@@ -41,14 +42,19 @@ v1 = {
 v2 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "text"
+  "name": "language"
 },
 v3 = {
   "defaultValue": null,
   "kind": "LocalArgument",
+  "name": "text"
+},
+v4 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
   "name": "title"
 },
-v4 = [
+v5 = [
   {
     "alias": null,
     "args": [
@@ -63,6 +69,11 @@ v4 = [
             "kind": "Variable",
             "name": "exposure",
             "variableName": "exposure"
+          },
+          {
+            "kind": "Variable",
+            "name": "language",
+            "variableName": "language"
           },
           {
             "kind": "Variable",
@@ -108,38 +119,40 @@ return {
       (v0/*: any*/),
       (v1/*: any*/),
       (v2/*: any*/),
-      (v3/*: any*/)
+      (v3/*: any*/),
+      (v4/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
     "name": "addPasteBinMutation",
-    "selections": (v4/*: any*/),
+    "selections": (v5/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
-      (v2/*: any*/),
       (v3/*: any*/),
+      (v4/*: any*/),
       (v1/*: any*/),
-      (v0/*: any*/)
+      (v0/*: any*/),
+      (v2/*: any*/)
     ],
     "kind": "Operation",
     "name": "addPasteBinMutation",
-    "selections": (v4/*: any*/)
+    "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "d0d205fb266a2e1748d2a0a34dc98bb4",
+    "cacheID": "3f7359f8e182e5e36df71f3fb44a4026",
     "id": null,
     "metadata": {},
     "name": "addPasteBinMutation",
     "operationKind": "mutation",
-    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $exposure: Boolean!\n  $expireAfter: ExpireChoices = WEEK\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, exposure: $exposure}) {\n    ok\n    addedPasteId\n  }\n}\n"
+    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $exposure: Boolean!\n  $expireAfter: ExpireChoices = MIN\n  $language: String\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, exposure: $exposure, language: $language}) {\n    ok\n    addedPasteId\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "2b1ebc36ec2583a162c102b73286dae0";
+(node as any).hash = "a88bc66aeb5b80be841ea76b72ae0be0";
 
 export default node;

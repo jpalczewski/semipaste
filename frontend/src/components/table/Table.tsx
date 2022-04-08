@@ -46,7 +46,7 @@ export const Tables = (props: any) => {
               <td style={{ width: 200 }}>
                 <PasteBinScreen
                   title={data.activePasteBin?.edges[i]?.node?.title}
-                  text={data.activePasteBin?.edges[i]?.node?.text}
+                  id={data.activePasteBin?.edges[i]?.node?.id}
                 />
               </td>
             </tr>
