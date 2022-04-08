@@ -5,17 +5,15 @@
 import logging
 
 # Django
-import re
-
 from django.db import transaction
 from django.utils.html import strip_tags
 
 # 3rd-Party
 import graphene
+import pygments
 from _datetime import datetime, timezone
 from graphene import relay
 from graphene_django import DjangoObjectType
-import pygments
 from pygments import lexers
 from pygments.formatters import HtmlFormatter
 
@@ -112,6 +110,7 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
 
         return DeletePasteBin(ok=True)
 
+
 def convert_to_html(code: str, lang: str) -> str:
     if lang != "Plain Text":
         escape_chars = '___ESCAPE_CHARS___'
@@ -125,13 +124,20 @@ def convert_to_html(code: str, lang: str) -> str:
                 code = code.replace(bsq, bsq.replace('\\', escape_chars))
         code = code.replace('\\n', '\n')
         lex = lexers.get_lexer_by_name(lang)
-        code = pygments.highlight(code, lex, HtmlFormatter(lineseparator='<br>'))\
-                .strip()\
-                .replace(escape_chars, '&#92;')\
-                .replace("class=\"", "class=\'").replace("\">", "\'>")
+        code = (
+            pygments.highlight(code, lex, HtmlFormatter(lineseparator='<br>'))
+            .strip()
+            .replace(escape_chars, '&#92;')
+            .replace("class=\"", "class=\'")
+            .replace("\">", "\'>")
+        )
     else:
         code = strip_tags(code)
-        code = '<pre>' + code.replace('\\', '&#92;').replace('\"', "&#34;").replace("\'", '&#39;') + '</pre>'
+        code = (
+            '<pre>'
+            + code.replace('\\', '&#92;').replace('\"', "&#34;").replace("\'", '&#39;')
+            + '</pre>'
+        )
     return code
 
 
@@ -143,7 +149,7 @@ class HighlightPreview(relay.ClientIDMutation):
         lang = graphene.String()
 
     @staticmethod
-    def mutate_and_get_payload(root, info, **input):
+    def mutate_and_get_payload(root, info, **input):  # type: ignore
         code = input.get('code')
         if input.get('lang'):
             lang = input.get('lang')
@@ -152,6 +158,7 @@ class HighlightPreview(relay.ClientIDMutation):
         code = convert_to_html(code, lang)
         return HighlightPreview(highlight=code)
 
+
 class HighlightPasteBin(relay.ClientIDMutation):
     highlight = graphene.String()
 
@@ -159,11 +166,12 @@ class HighlightPasteBin(relay.ClientIDMutation):
         id = graphene.ID(required=True)
 
     @staticmethod
-    def mutate_and_get_payload(root, info, **input):
+    def mutate_and_get_payload(root, info, **input):  # type: ignore
         pk = int(input.get('id'))
         paste = PasteBin.objects.get(id=pk)
         code = convert_to_html(paste.text, paste.language)
         return HighlightPasteBin(highlight=code)
+
 
 class PasteBinMutation(graphene.ObjectType):
     add_paste_bin = AddPasteBin.Field()

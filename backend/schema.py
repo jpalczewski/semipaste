@@ -6,7 +6,7 @@ from graphene_django.debug import DjangoDebug
 
 # Project
 from pastes.mutations import PasteBinMutation
-from pastes.queries import PasteBinQuery, LanguageQuery
+from pastes.queries import LanguageQuery, PasteBinQuery
 from users.mutations import UserMutation
 from users.queries import UserQuery
 
