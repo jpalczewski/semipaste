@@ -111,21 +111,27 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
 
         return DeletePasteBin(ok=True)
 
-def between_quotes(code: str) -> str:
-    between_double_quotes = code.split('"')[1::2]
-    between_single_quotes = code.split("'")[1::2]
-    for bdq in between_double_quotes:
-        code = code.replace(bdq, bdq.replace('\\n', '/n'))
-    for bq in between_single_quotes:
-        code = code.replace(bq, bq.replace('\\n', '/n'))
-    return code.replace('\\n', '\n')
-
-def convert_html(code: str) -> str:
-    code = code.strip()
-    code = re.sub(r"class=\"", "class=\'", code)
-    code = re.sub(r"\">", "\'>", code)
-    code = code.replace('/n', '&#92;n')
+def convert_to_html(code: str, lang: str) -> str:
+    if lang != "Plain Text":
+        escape_chars = '___ESCAPE_CHARS___'
+        between_double_quotes = code.split('"')[1::2]
+        between_single_quotes = code.split("'")[1::2]
+        for bdq in between_double_quotes:
+            if '\\n' in bdq:
+                code = code.replace(bdq, bdq.replace('\\', escape_chars))
+        for bsq in between_single_quotes:
+            if '\\n' in bsq:
+                code = code.replace(bsq, bsq.replace('\\', escape_chars))
+        code = code.replace('\\n', '\n')
+        lex = lexers.get_lexer_by_name(lang)
+        code = pygments.highlight(code, lex, HtmlFormatter(lineseparator='<br>'))\
+                .strip()\
+                .replace(escape_chars, '&#92;')\
+                .replace("class=\"", "class=\'").replace("\">", "\'>")
+    else:
+        code = '<pre>' + code.replace('\\', '&#92;').replace('\"', "&#34;").replace("\'", '&#39;') + '</pre>'
     return code
+
 
 class HighlightPreview(relay.ClientIDMutation):
     highlight = graphene.String()
@@ -138,11 +144,7 @@ class HighlightPreview(relay.ClientIDMutation):
     def mutate_and_get_payload(root, info, **input):
         code = input.get('code')
         lang = input.get('lang')
-        code = between_quotes(code)
-        if lang:
-            lex = lexers.get_lexer_by_name(lang)
-            code = pygments.highlight(code, lex, HtmlFormatter(lineseparator='<br>'))
-            code = convert_html(code)
+        code = convert_to_html(code, lang)
         return HighlightPreview(highlight=code)
 
 class HighlightPasteBin(relay.ClientIDMutation):
@@ -155,12 +157,7 @@ class HighlightPasteBin(relay.ClientIDMutation):
     def mutate_and_get_payload(root, info, **input):
         pk = int(input.get('id'))
         paste = PasteBin.objects.get(id=pk)
-        code = paste.text
-        code = between_quotes(code)
-        if paste.language != 'Plain Text':
-            lexer = lexers.get_lexer_by_name(paste.language)
-            code = pygments.highlight(code, lexer, HtmlFormatter(lineseparator='<br>'))
-            code = convert_html(code)
+        code = convert_to_html(paste.text, paste.language)
         return HighlightPasteBin(highlight=code)
 
 class PasteBinMutation(graphene.ObjectType):
