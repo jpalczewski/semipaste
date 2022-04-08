@@ -16,6 +16,7 @@ Including another URLconf
 
 
 # Django
+from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
@@ -26,7 +27,6 @@ from graphene_django.views import GraphQLView
 from graphql_jwt.decorators import jwt_cookie
 
 # Project
-from backend import settings
 from schema import schema_v1
 
 urlpatterns = [
