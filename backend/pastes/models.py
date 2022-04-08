@@ -14,6 +14,7 @@ from users.models import User
 class PasteBin(models.Model):
     """Pastebin model."""
 
+    # Choices
     class ExpireChoices(models.TextChoices):
         # The first value is the actual value to be set
         # The second value is used for humans
@@ -25,7 +26,7 @@ class PasteBin(models.Model):
         MONTH = 'MONTH', _('1 month')
         YEAR = 'YEAR', _('1 year')
 
-    # User, Language, Access_Key
+    # Attributes
     title = models.CharField(_('title'), max_length=50)
     text = models.TextField(_('paste text'))
     date_of_creation = models.DateTimeField(_('date of creation'), blank=True)
@@ -43,6 +44,7 @@ class PasteBin(models.Model):
     language = models.CharField(_('langauge'), max_length=50, default='Plain Text')
     objects = models.Manager()
 
+    # Static methods
     @staticmethod
     def get_time_choice(choice: str) -> timedelta:
         if choice == PasteBin.ExpireChoices.MIN:

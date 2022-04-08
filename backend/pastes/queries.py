@@ -22,6 +22,7 @@ class LanguageQuery(graphene.ObjectType):
     all_languages = graphene.List(graphene.String)
 
     def resolve_all_languages(self, info):  # type: ignore
+        """Gettting all sorted languages from pygments library"""
         languages = [lex[0] for lex in list(lexers.get_all_lexers())]
         languages.sort()
         return ['Plain Text'] + languages

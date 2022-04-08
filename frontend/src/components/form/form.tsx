@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { FormWrapper } from "../../styles/Components.style";
-import {Form, Button, Row, Col} from "react-bootstrap";
+import { Form, Button, Row, Col } from "react-bootstrap";
 import RelayEnvironment from "../../RelayEnvironment";
-import {commitMutation, useLazyLoadQuery} from "react-relay";
+import { commitMutation, useLazyLoadQuery } from "react-relay";
 import { addPasteBin } from "../../Query/PasteBins/addPasteBin";
 import { addPasteBinMutation } from "../../Query/PasteBins/__generated__/addPasteBinMutation.graphql";
 import CodeMirror from "react-codemirror";
-import {allLanguagesQuery} from "../../Query/SyntaxHighlight/__generated__/allLanguagesQuery.graphql";
-import {Languages} from "../../Query/SyntaxHighlight/allLanguages";
-import {highlightPreview} from "../../Query/SyntaxHighlight/highlightPreview";
-import {highlightPreviewMutation} from "../../Query/SyntaxHighlight/__generated__/highlightPreviewMutation.graphql";
+import { allLanguagesQuery } from "../../Query/SyntaxHighlight/__generated__/allLanguagesQuery.graphql";
+import { Languages } from "../../Query/SyntaxHighlight/allLanguages";
+import { highlightPreview } from "../../Query/SyntaxHighlight/highlightPreview";
+import { highlightPreviewMutation } from "../../Query/SyntaxHighlight/__generated__/highlightPreviewMutation.graphql";
 import '../../styles/PasteHighlight.css'
 
 require("codemirror/lib/codemirror.css");
@@ -47,7 +47,7 @@ export const PasteBinForm = () => {
   const handleLanguage = (event: string) => {
     setInputs({
       ...inputs,
-      language: event
+      language: event,
     });
   };
 
@@ -73,27 +73,26 @@ export const PasteBinForm = () => {
         commitMutation<highlightPreviewMutation>(RelayEnvironment, {
           mutation: highlightPreview,
           variables: {code: inputs.text, lang: inputs.language},
-          onCompleted: response => {setSyntax(response.highlightPreview?.highlight!)},
-          onError: error => {setSyntax("Error")}
+          onCompleted: response => {
+            setSyntax(response.highlightPreview?.highlight!)
+          },
+          onError: error => {
+            setSyntax("Error")
+          },
         });
       } else {
         setSyntax("");
       }
     }
-  }
+  };
 
-  const languages = useLazyLoadQuery<allLanguagesQuery>(Languages, {}).allLanguages;
+  const languages = useLazyLoadQuery<allLanguagesQuery>( Languages, {} ).allLanguages;
 
   return (
     <FormWrapper>
       <Form>
         <Row className="mb-3">
-          {!preview &&
-              <>
-                <h4>Preview</h4>
-              <pre dangerouslySetInnerHTML={{__html: syntax}}></pre>
-              </>
-          }
+          { !preview && <><h4>Preview</h4><pre dangerouslySetInnerHTML={{__html: syntax}}></pre></> }
         </Row>
         <Row className="mb-3">
           <Col style={{ textAlign: "right", flex: "25%" }}>
@@ -108,9 +107,7 @@ export const PasteBinForm = () => {
           <Col style={{ textAlign: "right", flex: "25%" }}>
             <Form.Select aria-label="Default select example" onChange={(event) => handleLanguage(event.target.value)}>
               {languages?.map((language, i) => {
-                      return <option key={i} value={language!}>
-                        {language}
-                      </option>
+                      return <option key={i} value={ language! }>{ language }</option>
               })}
             </Form.Select>
           </Col>

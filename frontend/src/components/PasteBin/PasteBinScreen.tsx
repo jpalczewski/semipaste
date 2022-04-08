@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Form, Button, Modal } from "react-bootstrap";
-import {commitMutation} from "react-relay";
+import { commitMutation } from "react-relay";
 import RelayEnvironment from "../../RelayEnvironment";
-import {highlightPasteBinMutation} from "../../Query/SyntaxHighlight/__generated__/highlightPasteBinMutation.graphql";
-import {highlightPasteBin} from "../../Query/SyntaxHighlight/highlightPasteBin";
+import { highlightPasteBinMutation } from "../../Query/SyntaxHighlight/__generated__/highlightPasteBinMutation.graphql";
+import { highlightPasteBin } from "../../Query/SyntaxHighlight/highlightPasteBin";
 
 require("codemirror/lib/codemirror.css");
 
@@ -13,12 +13,14 @@ export const PasteBinScreen = (props: any) => {
 
   commitMutation<highlightPasteBinMutation>(RelayEnvironment, {
     mutation: highlightPasteBin,
-    variables: {id: props.id},
-    onCompleted: response => { setSyntax(response.highlightPasteBin?.highlight!) },
-    onError: error => {setSyntax("Error")}
+    variables: { id: props.id },
+    onCompleted: (response) => {
+      setSyntax(response.highlightPasteBin?.highlight!)
+    },
+    onError: (error) => {
+      setSyntax("Error")
+    },
   });
-
-  console.log(props.language);
 
   return (
     <>
@@ -36,7 +38,7 @@ export const PasteBinScreen = (props: any) => {
             </Form.Group>
             <Form.Group style={{ marginBottom: 25, marginTop: 25 }}>
               <Form.Label>Tekst wklejki</Form.Label>
-              <pre dangerouslySetInnerHTML={{__html: syntax}}></pre>
+              <pre dangerouslySetInnerHTML={{ __html: syntax }}></pre>
             </Form.Group>
           </Form>
         </div>

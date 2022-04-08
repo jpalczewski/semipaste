@@ -1,3 +1,5 @@
+"""Backend schema."""
+
 # 3rd-Party
 import graphene
 import graphql_jwt
