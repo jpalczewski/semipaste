@@ -1,12 +1,15 @@
 """Pastes models."""
 
 # Standard Library
+import logging
+import os.path
 import secrets
 from datetime import datetime, timedelta, timezone
 from hashlib import md5
 
 # Django
 from django.db import models
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 # 3rd-Party
@@ -19,6 +22,8 @@ SECRET_KEY = values.SecretValue(environ_name="SECRET_KEY", environ_prefix=None)
 ATTACHMENT_TIMESPAN = values.IntegerValue(
     environ_name="ATTACHMENT_TIMESPAN", environ_prefix=None, default=300
 )
+
+logger = logging.getLogger(__name__)
 
 
 class PasteBin(models.Model):
@@ -100,7 +105,7 @@ class PasteBin(models.Model):
 
     # Special Methods
     def __str__(self) -> str:
-        return f'{self.title}'
+        return f'{self.pk}. {self.title}'
 
     # Meta
     class Meta:
@@ -122,4 +127,17 @@ class Attachment(models.Model):
     )
 
     def __str__(self) -> str:
-        return f'{self.paste.title} - {self.image.name}'
+        return f'{self.paste} - attachment id: {self.pk}, path: {self.image.name}'
+
+
+@receiver(models.signals.pre_delete, sender=Attachment)
+def auto_delete_attachments_on_delete(  # type: ignore
+    sender, instance: Attachment, **kwargs  # type: ignore
+):  # type: ignore
+    logger.debug("Received post_delete signal for an attachment")
+    path = instance.image.path
+    if os.path.isfile(path):
+        os.remove(path)
+        logger.debug(f"Removed {path} from deleting {instance.pk}")
+    else:
+        logger.warning("Received a post_delete signal for possibly deleted image")

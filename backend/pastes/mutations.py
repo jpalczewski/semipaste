@@ -219,6 +219,30 @@ class AddAttachment(ResultMixin, graphene.ClientIDMutation):
         return AddAttachment(ok=False, error="Something went wrong")
 
 
+class DeleteAttachment(ResultMixin, graphene.ClientIDMutation):
+    class Input:
+        id = graphene.ID()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, id, **input):  # type: ignore
+        try:
+            attachment = Attachment.objects.get(pk=id)
+            paste_author = attachment.paste.author
+            if not info.context.user.is_superuser or info.context.user == paste_author:
+                return DeleteAttachment(ok=False, error="Permission denied")
+            attachment.delete()
+            return DeleteAttachment(
+                ok=True,
+            )
+        except Attachment.DoesNotExist:
+            return DeleteAttachment(ok=False, error="Attachment does not exist")
+        except Exception as e:
+            logger.error(
+                f"During deleting attachment {attachment.pk} exception \"{e}\" occured"
+            )
+            return DeleteAttachment(ok=False, error=e)
+
+
 class PasteBinMutation(graphene.ObjectType):
     add_paste_bin = AddPasteBin.Field()
     delete_paste_bin = DeletePasteBin.Field(
@@ -227,6 +251,7 @@ class PasteBinMutation(graphene.ObjectType):
     highlight_paste_bin = HighlightPasteBin.Field()
     highlight_preview = HighlightPreview.Field()
     add_attachment = AddAttachment.Field(description="Add an attachment to a paste")
+    delete_attachment = DeleteAttachment.Field(description="Delete an attachment")
 
 
 class ActivePasteBin(DjangoObjectType):
