@@ -5,7 +5,6 @@ import logging
 import os.path
 import secrets
 from datetime import datetime, timedelta, timezone
-from hashlib import md5
 
 # Django
 from django.db import models
@@ -117,7 +116,7 @@ class PasteBin(models.Model):
 class Attachment(models.Model):
     def get_attachment_filename(self, filename: str) -> str:  #
         return 'attachments/{}/{}'.format(
-            md5((str(SECRET_KEY) + str(self.paste.pk)).encode('utf-8')).hexdigest(),
+            secrets.token_hex(16),
             filename,
         )
 
