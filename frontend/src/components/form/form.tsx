@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FormWrapper } from "../../styles/Components.style";
-import {Form, Button, Row, Col, FormGroup} from "react-bootstrap";
+import {Form, Button, Row, Col} from "react-bootstrap";
 import RelayEnvironment from "../../RelayEnvironment";
 import {commitMutation, useLazyLoadQuery} from "react-relay";
 import { addPasteBin } from "../../Query/PasteBins/addPasteBin";

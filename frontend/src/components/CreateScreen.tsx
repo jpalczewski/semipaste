@@ -1,7 +1,6 @@
 import React from "react";
 import { AllFooter, Wrapper } from "../styles/Components.style";
 import { PasteBinForm } from "./form/form";
-import {Button, Dropdown} from "react-bootstrap";
 
 export const Create = () => {
   return (
