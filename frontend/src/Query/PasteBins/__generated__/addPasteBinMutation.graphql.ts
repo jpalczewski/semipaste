@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a62f6454401019b967465ebcb5569a27>>
+ * @generated SignedSource<<c7701731ff957269209c35c192dba6f2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -30,7 +30,7 @@ export type addPasteBinMutation = {
 
 const node: ConcreteRequest = (function(){
 var v0 = {
-  "defaultValue": "MIN",
+  "defaultValue": "DAY",
   "kind": "LocalArgument",
   "name": "expireAfter"
 },
@@ -143,16 +143,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "3f7359f8e182e5e36df71f3fb44a4026",
+    "cacheID": "9dc93d18b30085b490f93735054f95d0",
     "id": null,
     "metadata": {},
     "name": "addPasteBinMutation",
     "operationKind": "mutation",
-    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $exposure: Boolean!\n  $expireAfter: ExpireChoices = MIN\n  $language: String\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, exposure: $exposure, language: $language}) {\n    ok\n    addedPasteId\n  }\n}\n"
+    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $exposure: Boolean!\n  $expireAfter: ExpireChoices = DAY\n  $language: String\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, exposure: $exposure, language: $language}) {\n    ok\n    addedPasteId\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "a88bc66aeb5b80be841ea76b72ae0be0";
+(node as any).hash = "266f9af41e1c365531ba4f93a662e54b";
 
 export default node;

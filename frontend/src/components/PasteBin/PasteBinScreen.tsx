@@ -9,6 +9,16 @@ require("codemirror/lib/codemirror.css");
 
 export const PasteBinScreen = (props: any) => {
   const [show, setShow] = useState(false);
+  const [syntax, setSyntax] = useState<string>("");
+
+  commitMutation<highlightPasteBinMutation>(RelayEnvironment, {
+    mutation: highlightPasteBin,
+    variables: {id: props.id},
+    onCompleted: response => { setSyntax(response.highlightPasteBin?.highlight!) },
+    onError: error => {setSyntax("Error")}
+  });
+
+  console.log(props.language);
 
   return (
     <>
@@ -20,8 +30,13 @@ export const PasteBinScreen = (props: any) => {
               <Form.Label>Tytuł</Form.Label>
               <Form.Control disabled type="text" placeholder={props.title} />
             </Form.Group>
+            <Form.Group style={{ marginBottom: 10, width: "25%" }}>
+              <Form.Label>Language</Form.Label>
+              <Form.Control disabled type="text" placeholder={props.language} />
+            </Form.Group>
             <Form.Group style={{ marginBottom: 25, marginTop: 25 }}>
               <Form.Label>Tekst wklejki</Form.Label>
+              <pre dangerouslySetInnerHTML={{__html: syntax}}></pre>
             </Form.Group>
           </Form>
         </div>

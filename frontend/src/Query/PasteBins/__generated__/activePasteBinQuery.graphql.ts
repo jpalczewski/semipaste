@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<72cc8ddcc2027cd4510f052eaa3f2d73>>
+ * @generated SignedSource<<44069b01bb2c6287f30b0140310cd13e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,7 @@ export type activePasteBinQuery$data = {
         readonly id: string;
         readonly exposure: boolean;
         readonly dateOfExpiry: any | null;
+        readonly language: string;
       } | null;
     } | null>;
   } | null;
@@ -96,6 +97,13 @@ var v0 = [
                 "kind": "ScalarField",
                 "name": "dateOfExpiry",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "language",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -125,16 +133,16 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "6a4833c583aeb6d3468a9b3a353deccb",
+    "cacheID": "f513d1f23032c38a8d4ebdc4acef6f99",
     "id": null,
     "metadata": {},
     "name": "activePasteBinQuery",
     "operationKind": "query",
-    "text": "query activePasteBinQuery {\n  activePasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        exposure\n        dateOfExpiry\n      }\n    }\n  }\n}\n"
+    "text": "query activePasteBinQuery {\n  activePasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        exposure\n        dateOfExpiry\n        language\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "d28940bf06967d5911c599d6e27c7091";
+(node as any).hash = "4da96e045c7b3e213bc8164b9771c699";
 
 export default node;

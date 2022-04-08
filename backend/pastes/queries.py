@@ -21,4 +21,6 @@ class LanguageQuery(graphene.ObjectType):
     all_languages = graphene.List(graphene.String)
 
     def resolve_all_languages(self, info):
-        return ['Plain Text'] + [lex[0] for lex in list(lexers.get_all_lexers())]
+        languages = [lex[0] for lex in list(lexers.get_all_lexers())]
+        languages.sort()
+        return ['Plain Text'] + languages
