@@ -1,9 +1,14 @@
 """Users models."""
 
+
 # Django
 from django.contrib.auth.models import AbstractUser
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+# Project
+from reports.models import Report
 
 
 class User(AbstractUser):
@@ -11,6 +16,8 @@ class User(AbstractUser):
 
     description = models.TextField(_('user\'s description'))
     is_verified = models.BooleanField(_('is verified'), default=False)
+
+    reports = GenericRelation(Report)
 
     def __str__(self) -> str:
         return f'{self.username}'
