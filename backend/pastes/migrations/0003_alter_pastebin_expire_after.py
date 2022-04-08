@@ -15,4 +15,9 @@ class Migration(migrations.Migration):
             name='expire_after',
             field=models.CharField(choices=[('NEVER', 'never'), ('MIN', '1 minute'), ('HOUR', '1 hour'), ('DAY', '1 day'), ('WEEK', '1 week'), ('MONTH', '1 month'), ('YEAR', '1 year')], default='NEVER', max_length=5, verbose_name='expire after'),
         ),
+        migrations.AddField(
+            model_name='pastebin',
+            name='language',
+            field=models.CharField(default='Plain Text', max_length=50, verbose_name='langauge'),
+        ),
     ]
