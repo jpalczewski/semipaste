@@ -49,7 +49,8 @@ class Common(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
         "graphene_django",
-        "pastes",
+        'pastes',
+        'reports',
         # "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     ]
 

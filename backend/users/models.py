@@ -17,7 +17,7 @@ class User(AbstractUser):
     description = models.TextField(_('user\'s description'))
     is_verified = models.BooleanField(_('is verified'), default=False)
 
-    reports = GenericRelation(Report)
+    reports = GenericRelation(Report, related_query_name='users')
 
     def __str__(self) -> str:
         return f'{self.username}'

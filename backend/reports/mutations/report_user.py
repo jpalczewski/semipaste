@@ -1,18 +1,29 @@
+# Standard Library
+import logging
+
 # 3rd-Party
 import graphene
 from graphene import relay
-from graphql_jwt.decorators import login_required
 
 # Project
 from backend.mixins import ResultMixin
+from users.models import User
+
+logger = logging.getLogger(__name__)
 
 
 class ReportUser(ResultMixin, relay.ClientIDMutation):
     class Input:
-        id = graphene.ID(required=True)
-        description = graphene.String(required=True)
+        uid = graphene.ID(required=True)
+        reason = graphene.String(required=True)
 
-    @classmethod
-    @login_required
-    def mutate_and_get_payload(cls, root, info, **kwargs):  # type: ignore
-        return ReportUser(ok=True)
+    def mutate_and_get_payload(cls, info, uid, reason):  # type: ignore
+        logger.debug("entered report_user")
+        try:
+            reported_user = User.objects.get(pk=uid)
+            reported_user.reports.create(author=info.context.user, reason=reason)
+
+        except User.DoesNotExist:
+            return ReportUser(ok=False, error="Reported user not found")
+
+        return ReportUser(ok=True, error="rly")

@@ -21,6 +21,7 @@ from backend.mixins import ErrorCode, ResultMixin
 
 # Local
 from .models import Attachment, PasteBin
+from pastes.models import PasteBin
 
 logger = logging.getLogger(__file__)
 
