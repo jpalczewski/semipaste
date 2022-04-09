@@ -38,7 +38,10 @@ export const PasteBinScreen = (props: any) => {
             </Form.Group>
             <Form.Group style={{ marginBottom: 25, marginTop: 25 }}>
               <Form.Label>Tekst wklejki</Form.Label>
-              <pre dangerouslySetInnerHTML={{ __html: syntax }}></pre>
+              { props.language != "Plain Text"
+              ? <><pre dangerouslySetInnerHTML={{__html: syntax}}></pre></>
+                  : <><pre>{syntax}</pre></>
+          }
             </Form.Group>
           </Form>
         </div>

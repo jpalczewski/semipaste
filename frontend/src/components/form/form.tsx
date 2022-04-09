@@ -92,9 +92,6 @@ export const PasteBinForm = () => {
     <FormWrapper>
       <Form>
         <Row className="mb-3">
-          { !preview && <><h4>Preview</h4><pre dangerouslySetInnerHTML={{__html: syntax}}></pre></> }
-        </Row>
-        <Row className="mb-3">
           <Col style={{ textAlign: "right", flex: "25%" }}>
             <Form.Group>
               <Form.Control
@@ -159,6 +156,12 @@ export const PasteBinForm = () => {
               />
             </Form.Group>
           </Col>
+        </Row>
+        <Row className="mb-3">
+          { (!preview && inputs.language != "Plain Text")
+              ? <><pre dangerouslySetInnerHTML={{__html: syntax}}></pre></>
+              : <><pre>{syntax}</pre></>
+          }
         </Row>
       </Form>
     </FormWrapper>

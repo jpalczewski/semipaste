@@ -6,7 +6,6 @@ import logging
 
 # Django
 from django.db import transaction
-from django.utils.html import strip_tags
 
 # 3rd-Party
 import graphene
@@ -130,13 +129,6 @@ def convert_to_html(code: str, lang: str) -> str:
             .replace(escape_chars, '&#92;')
             .replace("class=\"", "class=\'")
             .replace("\">", "\'>")
-        )
-    else:
-        code = strip_tags(code)
-        code = (
-            '<pre>'
-            + code.replace('\\', '&#92;').replace('\"', "&#34;").replace("\'", '&#39;')
-            + '</pre>'
         )
     return code
 
