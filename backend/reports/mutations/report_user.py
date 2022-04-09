@@ -26,4 +26,4 @@ class ReportUser(ResultMixin, relay.ClientIDMutation):
         except User.DoesNotExist:
             return ReportUser(ok=False, error="Reported user not found")
 
-        return ReportUser(ok=True, error="rly")
+        return ReportUser(ok=True)

@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 
 # 3rd-Party
 import graphene
+from graphene import relay
 from graphene_django import DjangoObjectType
 
 # Project
@@ -16,6 +17,8 @@ class UserReportType(DjangoObjectType):
     class Meta:
         model = Report
         fields = ('reason',)
+        filter_fields = ['id']
+        interfaces = (relay.Node,)
 
     user = graphene.Field(UserNode)
 
@@ -29,17 +32,9 @@ class UserReportType(DjangoObjectType):
         return queryset.filter(content_type_id=user_model_id)
 
 
-# class UserReportConnection(relay.Connection):
-#     class Meta:
-#         node = UserReportType
+class UserReportConnection(relay.Connection):
+    class Meta:
+        node = UserReportType
+
+
 #
-# class ReportedUser(graphene.ObjectType):
-#
-#     class Meta:
-#         interfaces = (relay.Node,)
-#
-#     name = graphene.String(description="The name of the ship.")
-#
-#     @classmethod
-#     def get_node(cls, info, id):
-#         return get_ship(id)
