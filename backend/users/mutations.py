@@ -172,19 +172,25 @@ class EditPassword(graphene.Mutation):
         code = kwargs.get("code")
         passw = kwargs.get("new_password")
         confirm_passw = kwargs.get("confirm_new_password")
-        if User.objects.get(email=email):
+        try:
             user = User.objects.get(email=email)
-            userid = user.id
-            if UserVerification.objects.get(user_id=userid):
-                ver = UserVerification.objects.get(user_id=userid)
-                if ver.verification_code == code:
-                    if passw == confirm_passw:
-                        setattr(user, "password", passw)
-                        user.save()
-
-            return EditPassword(ok=True, response="Password changed")
-        else:
+            ver = UserVerification.objects.get(user_id=User.objects.get(email=email))
+        except User.DoesNotExist:
             return EditPassword(ok=False, response="Wrong mail")
+        except UserVerification.DoesNotExist:
+            return EditPassword(ok=False, response="Wrong code")
+        else:
+            if ver.verification_code == code:
+                if passw == confirm_passw:
+                    setattr(user, "password", passw)
+                    user.save()
+                    return EditPassword(
+                        ok=True, response="Password changed successfully"
+                    )
+                else:
+                    return EditPassword(ok=False, response="Wrong confirmed password")
+            else:
+                return EditPassword(ok=False, response="Wrong code")
 
 class EditUser(ResultMixin, graphene.Mutation):
     class Arguments:
