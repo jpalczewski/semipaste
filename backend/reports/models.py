@@ -10,3 +10,9 @@ class Report(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
+
+    def __str__(self) -> str:
+        return (
+            f"{self.pk} - report by {self.author},"
+            f" ct {self.content_type}, oi {self.object_id}"
+        )

@@ -104,3 +104,6 @@ exclude = '''
     | backend/manage.py
 )
 '''
+[tool.pycln]
+all = true
+path = "./backend"

@@ -16,7 +16,7 @@ from users.mutations import UserNode
 class UserReportType(DjangoObjectType):
     class Meta:
         model = Report
-        fields = ('reason',)
+        fields = ('reason', 'author')
         filter_fields = ['id']
         interfaces = (relay.Node,)
 
@@ -30,11 +30,3 @@ class UserReportType(DjangoObjectType):
     def get_queryset(cls, queryset, info):  # type: ignore
         user_model_id = ContentType.objects.get_for_model(get_user_model()).id
         return queryset.filter(content_type_id=user_model_id)
-
-
-class UserReportConnection(relay.Connection):
-    class Meta:
-        node = UserReportType
-
-
-#

@@ -19,6 +19,8 @@ class ReportUser(ResultMixin, relay.ClientIDMutation):
 
     def mutate_and_get_payload(cls, info, uid, reason):  # type: ignore
         logger.debug("entered report_user")
+        if info.context.user.is_anonymous:
+            return ReportUser(ok=False, error="You need to be logged in")
         try:
             reported_user = User.objects.get(pk=uid)
             reported_user.reports.create(author=info.context.user, reason=reason)
