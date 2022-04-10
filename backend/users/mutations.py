@@ -179,7 +179,7 @@ class EditPassword(graphene.Mutation):
         else:
             if ver.verification_code == code:
                 if passw == confirm_passw:
-                    setattr(user, "password", passw)
+                    user.set_password(passw)
                     user.save()
                     return EditPassword(
                         ok=True, response="Password changed successfully"
