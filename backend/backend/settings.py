@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 
-
 # Standard Library
 import os
 from datetime import timedelta

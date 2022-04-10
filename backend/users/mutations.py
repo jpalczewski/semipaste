@@ -185,6 +185,7 @@ class EditPassword(graphene.Mutation):
             if ver.verification_code == code:
                 if passw == confirm_passw:
                     user.set_password(passw)
+                    ver.delete()
                     user.save()
                     return EditPassword(
                         ok=True, response="Password changed successfully"
