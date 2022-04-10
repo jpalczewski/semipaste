@@ -1,7 +1,6 @@
 """Pastes schema."""
 
 
-
 # Standard Library
 import logging
 
@@ -19,7 +18,6 @@ from pygments.formatters import HtmlFormatter
 
 # Project
 from backend.mixins import ErrorCode, ResultMixin
-from pastes.models import PasteBin
 
 # Local
 from .models import Attachment, PasteBin

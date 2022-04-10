@@ -3,12 +3,14 @@ import graphene
 
 
 class ErrorCode(graphene.Enum):
+    OK = 0
     NONEXISTENTPASTE = 1
     NOTLOGGEDIN = 2
     PERMISSIONDENIED = 3
     OPERATIONFAILED = 4
     EXCEPTIONOCCURED = 5
     USERNOTFOUND = 6
+    POSSIBLEFAILURE = 7
 
     @property
     def description(self) -> str:
@@ -21,6 +23,10 @@ class ErrorCode(graphene.Enum):
 
 
 class ResultMixin:
-    ok = graphene.Boolean(default_value=True, description="Mutation result")
-    error = graphene.String(default_value=None, description="Error string")
-    error_code = graphene.Field(ErrorCode, description="Numeric error code")
+    ok = graphene.Boolean(default_value=False, description="Mutation result")
+    error = graphene.String(description="Error string")
+    error_code = graphene.Field(
+        ErrorCode,
+        description="Numeric error code",
+        default_value=ErrorCode.POSSIBLEFAILURE,
+    )
