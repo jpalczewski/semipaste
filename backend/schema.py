@@ -1,3 +1,5 @@
+"""Backend schema."""
+
 # 3rd-Party
 import graphene
 import graphql_jwt
@@ -6,7 +8,7 @@ from graphene_django.debug import DjangoDebug
 
 # Project
 from pastes.mutations import PasteBinMutation
-from pastes.queries import PasteBinQuery
+from pastes.queries import LanguageQuery, PasteBinQuery
 from users.mutations import UserMutation
 from users.queries import UserQuery
 
@@ -18,7 +20,7 @@ class Mutation(UserMutation, PasteBinMutation):
     delete_token_cookie = graphql_jwt.DeleteJSONWebTokenCookie.Field()
 
 
-class Query(UserQuery, PasteBinQuery):
+class Query(UserQuery, PasteBinQuery, LanguageQuery):
     # this is required due to react relay integration
     node = relay.Node.Field()
     debug = graphene.Field(DjangoDebug, name="_debug")

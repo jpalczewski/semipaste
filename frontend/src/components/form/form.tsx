@@ -2,19 +2,28 @@ import React, { useState } from "react";
 import { FormWrapper } from "../../styles/Components.style";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import RelayEnvironment from "../../RelayEnvironment";
-import { commitMutation } from "react-relay";
+import { commitMutation, useLazyLoadQuery } from "react-relay";
 import { addPasteBin } from "../../Query/PasteBins/addPasteBin";
 import { addPasteBinMutation } from "../../Query/PasteBins/__generated__/addPasteBinMutation.graphql";
 import CodeMirror from "react-codemirror";
+import { allLanguagesQuery } from "../../Query/SyntaxHighlight/__generated__/allLanguagesQuery.graphql";
+import { Languages } from "../../Query/SyntaxHighlight/allLanguages";
+import { highlightPreview } from "../../Query/SyntaxHighlight/highlightPreview";
+import { highlightPreviewMutation } from "../../Query/SyntaxHighlight/__generated__/highlightPreviewMutation.graphql";
+import '../../styles/PasteHighlight.css'
 
 require("codemirror/lib/codemirror.css");
 
 export const PasteBinForm = () => {
+  const [preview, setPreview] = useState(true);
+  const [syntax, setSyntax] = useState<string>("");
   const [inputs, setInputs] = useState({
     text: "",
     title: "",
+    language: "Plain Text",
     exposure: false,
   });
+
   const handleText = (event: any) => {
     setInputs({
       ...inputs,
@@ -35,7 +44,15 @@ export const PasteBinForm = () => {
     });
   };
 
+  const handleLanguage = (event: string) => {
+    setInputs({
+      ...inputs,
+      language: event,
+    });
+  };
+
   const handleSubmit = (event: any) => {
+    console.log(event);
     commitMutation<addPasteBinMutation>(RelayEnvironment, {
       mutation: addPasteBin,
       variables: event,
@@ -48,6 +65,28 @@ export const PasteBinForm = () => {
       },
     });
   };
+
+  const handlePreview = () => {
+    if (inputs.text) {
+      setPreview(!preview);
+      if (preview) {
+        commitMutation<highlightPreviewMutation>(RelayEnvironment, {
+          mutation: highlightPreview,
+          variables: {code: inputs.text, lang: inputs.language},
+          onCompleted: response => {
+            setSyntax(response.highlightPreview?.highlight!)
+          },
+          onError: error => {
+            setSyntax("Error")
+          },
+        });
+      } else {
+        setSyntax("");
+      }
+    }
+  };
+
+  const languages = useLazyLoadQuery<allLanguagesQuery>( Languages, {} ).allLanguages;
 
   return (
     <FormWrapper>
@@ -63,29 +102,27 @@ export const PasteBinForm = () => {
             </Form.Group>
           </Col>
           <Col style={{ textAlign: "right", flex: "25%" }}>
-            <Form.Select aria-label="Default select example">
-              <option>Highlight</option>
-              <option value="1">Zwykły tekst</option>
-              <option value="2">CSS</option>
-              <option value="3">JavaScript</option>
-              <option value="4">HTML5</option>
-              <option value="5">Python</option>
-              <option value="6">PHP</option>
-              <option value="7">Ruby</option>
-              <option value="8">Bash</option>
-              <option value="9">C</option>
-              <option value="10">C++</option>
-              <option value="11">SQL</option>
-              <option value="12">XML</option>
+            <Form.Select aria-label="Default select example" onChange={(event) => handleLanguage(event.target.value)}>
+              {languages?.map((language, i) => {
+                      return <option key={i} value={ language! }>{ language }</option>
+              })}
             </Form.Select>
           </Col>
-          <Col style={{ textAlign: "right", flex: "35%" }}>
+          <Col style={{ textAlign: "right", flex: "15%" }}>
             <Button variant="primary">WYCZYŚĆ</Button>
           </Col>
           <Col
             style={{
               textAlign: "right",
-              flex: "5%",
+            }}
+          >
+            <Button variant="info" onClick={()=>handlePreview()}>
+              PREVIEW
+            </Button>
+          </Col>
+          <Col
+            style={{
+              textAlign: "right",
             }}
           >
             <Button variant="success" onClick={() => handleSubmit(inputs)}>
@@ -119,6 +156,12 @@ export const PasteBinForm = () => {
               />
             </Form.Group>
           </Col>
+        </Row>
+        <Row className="mb-3">
+          { (!preview && inputs.language != "Plain Text")
+              ? <><pre dangerouslySetInnerHTML={{__html: syntax}}></pre></>
+              : <><pre>{syntax}</pre></>
+          }
         </Row>
       </Form>
     </FormWrapper>

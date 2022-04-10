@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<62d5e0ba0aa72635989f44a93db33421>>
+ * @generated SignedSource<<8e7f4976e03c1640456f854cec338638>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -55,7 +55,7 @@ v4 = {
   "name": "lastName"
 },
 v5 = {
-  "defaultValue": "",
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "password"
 },
@@ -154,16 +154,16 @@ return {
     "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "969faecce9eb462a689dfaf3f2ab023b",
+    "cacheID": "27918b2c3e4b761435343ab4995df1eb",
     "id": null,
     "metadata": {},
     "name": "editUserMutation",
     "operationKind": "mutation",
-    "text": "mutation editUserMutation(\n  $id: ID!\n  $username: String = \"\"\n  $lastName: String = \"\"\n  $firstName: String = \"\"\n  $email: String = \"\"\n  $password: String = \"\"\n  $description: String = \"\"\n) {\n  editUser(id: $id, username: $username, lastName: $lastName, firstName: $firstName, email: $email, password: $password, description: $description) {\n    ok\n  }\n}\n"
+    "text": "mutation editUserMutation(\n  $id: ID!\n  $username: String = \"\"\n  $lastName: String = \"\"\n  $firstName: String = \"\"\n  $email: String = \"\"\n  $password: String\n  $description: String = \"\"\n) {\n  editUser(id: $id, username: $username, lastName: $lastName, firstName: $firstName, email: $email, password: $password, description: $description) {\n    ok\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1ddbee5772b7159813d2e76bf8f43400";
+(node as any).hash = "5638739ec672a0e845f6b58dab52141a";
 
 export default node;

@@ -1,4 +1,5 @@
 type Query {
+  allLanguages: [String]
   allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): PasteBinNodeConnection @deprecated(reason: "It will be soon available only for superusers")
   activePasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ActivePasteBinConnection
   expiredPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection
@@ -58,6 +59,7 @@ type PasteBinNode implements Node {
   expireAfter: PastesPasteBinExpireAfterChoices!
   dateOfExpiry: DateTime
   author: UserNode
+  language: String!
 }
 
 """An object with an ID"""
@@ -152,6 +154,7 @@ type ExpiredPasteBin implements Node {
   expireAfter: PastesPasteBinExpireAfterChoices!
   dateOfExpiry: DateTime
   author: UserNode
+  language: String!
 }
 
 type ActivePasteBinConnection {
@@ -180,6 +183,7 @@ type ActivePasteBin implements Node {
   expireAfter: PastesPasteBinExpireAfterChoices!
   dateOfExpiry: DateTime
   author: UserNode
+  language: String!
 }
 
 type UserNodeConnection {
@@ -270,7 +274,9 @@ type Mutation {
 
   """Mutation that is responsible for deleting pastes"""
   deletePasteBin(id: ID!): DeletePasteBin
-  addUser(confirmPassword: String = null, email: String!, password: String!, username: String!): AddUser
+  highlightPasteBin(input: HighlightPasteBinInput!): HighlightPasteBinPayload
+  highlightPreview(input: HighlightPreviewInput!): HighlightPreviewPayload
+  addUser(confirmPassword: String!, email: String!, password: String!, username: String!): AddUser
   verifyUser(code: String = null, id: ID = null): VerifyUser
   editUser(description: String = null, email: String = null, firstName: String = null, id: ID!, lastName: String = null, password: String = null, username: String = null): EditUser
   editUserDescription(description: String = null, id: ID!): EditUserDescription
@@ -309,6 +315,7 @@ enum ErrorCode {
   PERMISSIONDENIED
   OPERATIONFAILED
   EXCEPTIONOCCURED
+  USERNOTFOUND
 }
 
 input AddPasteBinInput {
@@ -323,6 +330,9 @@ input AddPasteBinInput {
 
   """Is it private or not?"""
   exposure: Boolean!
+
+  """Syntax Highlight"""
+  language: String
   clientMutationId: String
 }
 
@@ -348,6 +358,27 @@ type DeletePasteBin {
   errorCode: ErrorCode
 }
 
+type HighlightPasteBinPayload {
+  highlight: String
+  clientMutationId: String
+}
+
+input HighlightPasteBinInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type HighlightPreviewPayload {
+  highlight: String
+  clientMutationId: String
+}
+
+input HighlightPreviewInput {
+  code: String!
+  lang: String
+  clientMutationId: String
+}
+
 type AddUser {
   ok: Boolean
   response: String
@@ -359,7 +390,14 @@ type VerifyUser {
 }
 
 type EditUser {
+  """Mutation result"""
   ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
 }
 
 type EditUserDescription {

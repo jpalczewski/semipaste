@@ -7,6 +7,8 @@ import { allPasteBin } from "../../Query/PasteBins/allPasteBin";
 import { PasteBinScreen } from "../PasteBin/PasteBinScreen";
 import { activePasteBinQuery } from "../../Query/PasteBins/__generated__/activePasteBinQuery.graphql";
 import { activePasteBin } from "../../Query/PasteBins/activePasteBin";
+import '../../styles/PasteHighlight.css'
+
 
 export const Tables = (props: any) => {
   const data = useLazyLoadQuery<activePasteBinQuery>(activePasteBin, {});
@@ -46,7 +48,8 @@ export const Tables = (props: any) => {
               <td style={{ width: 200 }}>
                 <PasteBinScreen
                   title={data.activePasteBin?.edges[i]?.node?.title}
-                  text={data.activePasteBin?.edges[i]?.node?.text}
+                  id={data.activePasteBin?.edges[i]?.node?.id}
+                  language={data.activePasteBin?.edges[i]?.node?.language}
                 />
               </td>
             </tr>
