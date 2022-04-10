@@ -1,4 +1,14 @@
 type Query {
+  userReport(
+    """The ID of the object"""
+    id: ID!
+  ): UserReportType
+  userReports(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserReportTypeConnection
+  pasteReport(
+    """The ID of the object"""
+    id: ID!
+  ): PasteReportType
+  pasteReports(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): PasteReportTypeConnection
   allLanguages: [String]
   allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): PasteBinNodeConnection @deprecated(reason: "It will be soon available only for superusers")
   activePasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ActivePasteBinConnection
@@ -16,12 +26,63 @@ type Query {
   _debug: DjangoDebug
 }
 
-type PasteBinNodeConnection {
+type UserReportType implements Node {
+  reason: String!
+  author: UserNode!
+
+  """The ID of the object"""
+  id: ID!
+  user: UserNode
+}
+
+"""An object with an ID"""
+interface Node {
+  """The ID of the object"""
+  id: ID!
+}
+
+type UserNode implements Node {
+  id: ID!
+  lastLogin: DateTime
+
+  """
+  Oznacza, że ten użytkownik ma wszystkie uprawnienia bez ich jawnego przypisywania.
+  """
+  isSuperuser: Boolean!
+
+  """Wymagana. 150 lub mniej znaków. Jedynie litery, cyfry i @/./+/-/_."""
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+
+  """Określa czy użytkownik może zalogować się do panelu administracyjnego."""
+  isStaff: Boolean!
+
+  """
+  Określa czy użytkownika należy uważać za aktywnego. Odznacz zamiast usuwać konto.
+  """
+  isActive: Boolean!
+  dateJoined: DateTime!
+  description: String!
+  isVerified: Boolean!
+  reportSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserReportTypeConnection!
+  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): PasteBinNodeConnection!
+}
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+type UserReportTypeConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
 
   """Contains the nodes in this connection."""
-  edges: [PasteBinNodeEdge]!
+  edges: [UserReportTypeEdge]!
 }
 
 """
@@ -39,6 +100,23 @@ type PageInfo {
 
   """When paginating forwards, the cursor to continue."""
   endCursor: String
+}
+
+"""A Relay edge containing a `UserReportType` and its cursor."""
+type UserReportTypeEdge {
+  """The item at the end of the edge"""
+  node: UserReportType
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type PasteBinNodeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [PasteBinNodeEdge]!
 }
 
 """A Relay edge containing a `PasteBinNode` and its cursor."""
@@ -60,20 +138,8 @@ type PasteBinNode implements Node {
   dateOfExpiry: DateTime
   author: UserNode
   language: String!
+  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
 }
-
-"""An object with an ID"""
-interface Node {
-  """The ID of the object"""
-  id: ID!
-}
-
-"""
-The `DateTime` scalar type represents a DateTime
-value as specified by
-[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-"""
-scalar DateTime
 
 """An enumeration."""
 enum PastesPasteBinExpireAfterChoices {
@@ -99,62 +165,53 @@ enum PastesPasteBinExpireAfterChoices {
   YEAR
 }
 
-type UserNode implements Node {
-  id: ID!
-  password: String!
-  lastLogin: DateTime
-
-  """
-  Oznacza, że ten użytkownik ma wszystkie uprawnienia bez ich jawnego przypisywania.
-  """
-  isSuperuser: Boolean!
-
-  """Wymagana. 150 lub mniej znaków. Jedynie litery, cyfry i @/./+/-/_."""
-  username: String!
-  firstName: String!
-  lastName: String!
-  email: String!
-
-  """Określa czy użytkownik może zalogować się do panelu administracyjnego."""
-  isStaff: Boolean!
-
-  """
-  Określa czy użytkownika należy uważać za aktywnego. Odznacz zamiast usuwać konto.
-  """
-  isActive: Boolean!
-  dateJoined: DateTime!
-  description: String!
-  isVerified: Boolean!
-  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection!
-}
-
-type ExpiredPasteBinConnection {
+type AttachmentNodeConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
 
   """Contains the nodes in this connection."""
-  edges: [ExpiredPasteBinEdge]!
+  edges: [AttachmentNodeEdge]!
 }
 
-"""A Relay edge containing a `ExpiredPasteBin` and its cursor."""
-type ExpiredPasteBinEdge {
+"""A Relay edge containing a `AttachmentNode` and its cursor."""
+type AttachmentNodeEdge {
   """The item at the end of the edge"""
-  node: ExpiredPasteBin
+  node: AttachmentNode
 
   """A cursor for use in pagination"""
   cursor: String!
 }
 
-type ExpiredPasteBin implements Node {
+type AttachmentNode implements Node {
   id: ID!
-  title: String!
-  text: String!
-  dateOfCreation: DateTime!
-  exposure: Boolean!
-  expireAfter: PastesPasteBinExpireAfterChoices!
-  dateOfExpiry: DateTime
-  author: UserNode
-  language: String!
+  image: String!
+  url: String
+}
+
+type PasteReportType implements Node {
+  reason: String!
+  author: UserNode!
+
+  """The ID of the object"""
+  id: ID!
+  paste: PasteBinNode
+}
+
+type PasteReportTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [PasteReportTypeEdge]!
+}
+
+"""A Relay edge containing a `PasteReportType` and its cursor."""
+type PasteReportTypeEdge {
+  """The item at the end of the edge"""
+  node: PasteReportType
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type ActivePasteBinConnection {
@@ -184,6 +241,39 @@ type ActivePasteBin implements Node {
   dateOfExpiry: DateTime
   author: UserNode
   language: String!
+  attachmentToken: String!
+  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
+}
+
+type ExpiredPasteBinConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ExpiredPasteBinEdge]!
+}
+
+"""A Relay edge containing a `ExpiredPasteBin` and its cursor."""
+type ExpiredPasteBinEdge {
+  """The item at the end of the edge"""
+  node: ExpiredPasteBin
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ExpiredPasteBin implements Node {
+  id: ID!
+  title: String!
+  text: String!
+  dateOfCreation: DateTime!
+  exposure: Boolean!
+  expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
+  language: String!
+  attachmentToken: String!
+  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
 }
 
 type UserNodeConnection {
@@ -270,23 +360,86 @@ type DjangoDebugException {
 }
 
 type Mutation {
+  reportUser(input: ReportUserInput!): ReportUserPayload
+  reportPaste(input: ReportPasteInput!): ReportPastePayload
   addPasteBin(input: AddPasteBinInput!): AddPasteBinPayload
 
   """Mutation that is responsible for deleting pastes"""
   deletePasteBin(id: ID!): DeletePasteBin
   highlightPasteBin(input: HighlightPasteBinInput!): HighlightPasteBinPayload
   highlightPreview(input: HighlightPreviewInput!): HighlightPreviewPayload
+
+  """Add an attachment to a paste"""
+  addAttachment(input: AddAttachmentInput!): AddAttachmentPayload
+
+  """Delete an attachment"""
+  deleteAttachment(input: DeleteAttachmentInput!): DeleteAttachmentPayload
   addUser(confirmPassword: String!, email: String!, password: String!, username: String!): AddUser
-  verifyUser(code: String = null, id: ID = null): VerifyUser
   editUser(description: String = null, email: String = null, firstName: String = null, id: ID!, lastName: String = null, password: String = null, username: String = null): EditUser
   editUserDescription(description: String = null, id: ID!): EditUserDescription
   deleteUser(id: ID!): DeleteUser
+  sendNewPasswordToken(email: String = null): SendNewPasswordToken
+  setNewPassword(code: String = null, confirmNewPassword: String = null, email: String = null, newPassword: String = null): SetNewPassword
+  verifyNewUser(code: String = null, id: ID = null): VerifyNewUser
 
   """Obtain JSON Web Token mutation"""
   tokenAuth(input: ObtainJSONWebTokenInput!): ObtainJSONWebTokenPayload
   verifyToken(input: VerifyInput!): VerifyPayload
   refreshToken(input: RefreshInput!): RefreshPayload
   deleteTokenCookie: DeleteJSONWebTokenCookie
+}
+
+type ReportUserPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
+}
+
+enum ErrorCode {
+  OK
+
+  """Requested paste just doesn't exist"""
+  NONEXISTENTPASTE
+
+  """User should be logged in to do that operation"""
+  NOTLOGGEDIN
+
+  """Lack of permissions"""
+  PERMISSIONDENIED
+  OPERATIONFAILED
+  EXCEPTIONOCCURED
+  USERNOTFOUND
+  POSSIBLEFAILURE
+}
+
+input ReportUserInput {
+  uid: ID!
+  reason: String!
+  clientMutationId: String
+}
+
+type ReportPastePayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
+}
+
+input ReportPasteInput {
+  pid: ID!
+  reason: String!
+  clientMutationId: String
 }
 
 type AddPasteBinPayload {
@@ -301,21 +454,10 @@ type AddPasteBinPayload {
 
   """Returns added paste ID"""
   addedPasteId: Int
+
+  """Token required to upload attachments"""
+  attachmentToken: String
   clientMutationId: String
-}
-
-enum ErrorCode {
-  """Requested paste just doesn't exist"""
-  NONEXISTENTPASTE
-
-  """User should be logged in to do that operation"""
-  NOTLOGGEDIN
-
-  """Lack of permissions"""
-  PERMISSIONDENIED
-  OPERATIONFAILED
-  EXCEPTIONOCCURED
-  USERNOTFOUND
 }
 
 input AddPasteBinInput {
@@ -379,12 +521,45 @@ input HighlightPreviewInput {
   clientMutationId: String
 }
 
-type AddUser {
+type AddAttachmentPayload {
+  """Mutation result"""
   ok: Boolean
-  response: String
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
 }
 
-type VerifyUser {
+input AddAttachmentInput {
+  """Upload token"""
+  token: String!
+
+  """Image description"""
+  description: String
+  clientMutationId: String
+}
+
+type DeleteAttachmentPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
+}
+
+input DeleteAttachmentInput {
+  id: ID
+  clientMutationId: String
+}
+
+type AddUser {
   ok: Boolean
   response: String
 }
@@ -405,7 +580,29 @@ type EditUserDescription {
 }
 
 type DeleteUser {
+  """Mutation result"""
   ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+}
+
+type SendNewPasswordToken {
+  ok: Boolean
+  response: String
+}
+
+type SetNewPassword {
+  ok: Boolean
+  response: String
+}
+
+type VerifyNewUser {
+  ok: Boolean
+  response: String
 }
 
 """Obtain JSON Web Token mutation"""
