@@ -18,7 +18,6 @@ from distutils.debug import DEBUG
 from pathlib import Path
 
 # Django
-from django.conf.urls.static import static
 
 # 3rd-Party
 import dj_email_url
@@ -49,7 +48,8 @@ class Common(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
         "graphene_django",
-        "pastes",
+        'pastes',
+        'reports',
         # "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     ]
 

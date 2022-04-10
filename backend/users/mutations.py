@@ -28,6 +28,7 @@ class UserNode(DjangoObjectType):
         model = User
         filter_fields = ['id']
         interfaces = (relay.Node,)
+        exclude = ('password',)
 
 
 #

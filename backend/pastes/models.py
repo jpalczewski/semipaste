@@ -7,6 +7,7 @@ import secrets
 from datetime import datetime, timedelta, timezone
 
 # Django
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
@@ -15,6 +16,7 @@ from django.utils.translation import gettext_lazy as _
 from configurations import values
 
 # Project
+from reports.models import Report
 from users.models import User
 
 SECRET_KEY = values.SecretValue(environ_name="SECRET_KEY", environ_prefix=None)
@@ -64,6 +66,7 @@ class PasteBin(models.Model):
         db_index=True,
     )
     objects = models.Manager()
+    reports = GenericRelation(Report, related_query_name='pastes')
 
     # Static methods
     @staticmethod
