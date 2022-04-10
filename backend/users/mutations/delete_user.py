@@ -1,3 +1,6 @@
+# Standard Library
+import logging
+
 # 3rd-Party
 import graphene
 
@@ -5,17 +8,20 @@ import graphene
 from backend.mixins import ErrorCode, ResultMixin
 from users.models import User
 
+logger = logging.getLogger(__name__)
+
 
 class DeleteUser(ResultMixin, graphene.Mutation):
     class Arguments:
         id = graphene.ID(required=True)
 
     @classmethod
-    def mutate(cls, info, id: graphene.ID, **kwargs):  # type: ignore
+    def mutate(cls, root, info, id, **kwargs):  # type: ignore
+        logger.debug("Enter deleteUser")
         if not info.context.user.is_superuser:
             return DeleteUser(
                 ok=False,
-                errorcode=ErrorCode.PERMISSIONDENIED,
+                error_code=ErrorCode.PERMISSIONDENIED,
                 error="You don't have permission to this action",
             )
         try:
@@ -23,9 +29,11 @@ class DeleteUser(ResultMixin, graphene.Mutation):
         except User.DoesNotExist:
             return DeleteUser(
                 ok=False,
-                errorcode=ErrorCode.USERNOTFOUND,
+                error_code=ErrorCode.USERNOTFOUND,
                 error="Specified user does not exist",
             )
+        except Exception as e:
+            return DeleteUser(pk=False, error=str(e))
         else:
             user.delete()
-            return DeleteUser(ok=True)
+            return DeleteUser(ok=True, error_code=ErrorCode.OK)
