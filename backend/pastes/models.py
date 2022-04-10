@@ -1,14 +1,28 @@
 """Pastes models."""
 
 # Standard Library
+import logging
+import os.path
+import secrets
 from datetime import datetime, timedelta, timezone
 
 # Django
 from django.db import models
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
+
+# 3rd-Party
+from configurations import values
 
 # Project
 from users.models import User
+
+SECRET_KEY = values.SecretValue(environ_name="SECRET_KEY", environ_prefix=None)
+ATTACHMENT_TIMESPAN = values.IntegerValue(
+    environ_name="ATTACHMENT_TIMESPAN", environ_prefix=None, default=300
+)
+
+logger = logging.getLogger(__name__)
 
 
 class PasteBin(models.Model):
@@ -42,6 +56,13 @@ class PasteBin(models.Model):
         User, verbose_name=_('author'), on_delete=models.CASCADE, null=True, blank=True
     )
     language = models.CharField(_('langauge'), max_length=50, default='Plain Text')
+    attachment_token = models.CharField(
+        _('token issued to upload attachments'),
+        null=False,
+        blank=False,
+        max_length=32,
+        db_index=True,
+    )
     objects = models.Manager()
 
     # Static methods
@@ -72,14 +93,50 @@ class PasteBin(models.Model):
             self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
                 choice
             )
+        self.attachment_token = secrets.token_hex(16)
         super().save(*args, **kwargs)
+
+    def is_uploading_attachments_allowed(self) -> bool:
+        upload_time_limit = self.date_of_creation + timedelta(
+            seconds=ATTACHMENT_TIMESPAN
+        )
+        return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
 
     # Special Methods
     def __str__(self) -> str:
-        return f'{self.title}'
+        return f'{self.pk}. {self.title}'
 
     # Meta
     class Meta:
         ordering = ['id']
         verbose_name = _('pastebin')
         verbose_name_plural = _('pastebins')
+
+
+class Attachment(models.Model):
+    def get_attachment_filename(self, filename: str) -> str:  #
+        return 'attachments/{}/{}'.format(
+            secrets.token_hex(16),
+            filename,
+        )
+
+    image = models.ImageField(upload_to=get_attachment_filename)
+    paste = models.ForeignKey(
+        PasteBin, on_delete=models.CASCADE, related_name='attachments'
+    )
+
+    def __str__(self) -> str:
+        return f'{self.paste} - attachment id: {self.pk}, path: {self.image.name}'
+
+
+@receiver(models.signals.pre_delete, sender=Attachment)
+def auto_delete_attachments_on_delete(  # type: ignore
+    sender, instance: Attachment, **kwargs  # type: ignore
+):  # type: ignore
+    logger.debug("Received post_delete signal for an attachment")
+    path = instance.image.path
+    if os.path.isfile(path):
+        os.remove(path)
+        logger.debug(f"Removed {path} from deleting {instance.pk}")
+    else:
+        logger.warning("Received a post_delete signal for possibly deleted image")

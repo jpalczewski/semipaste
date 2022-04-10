@@ -17,6 +17,9 @@ from datetime import timedelta
 from distutils.debug import DEBUG
 from pathlib import Path
 
+# Django
+from django.conf.urls.static import static
+
 # 3rd-Party
 import dj_email_url
 import environ
@@ -169,6 +172,9 @@ class Dev(Common):
             'default': env.db(),
         }
 
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(Common.BASE_DIR, 'media/')
+
     LOGGING = {
         'version': 1,  # the dictConfig format version
         'disable_existing_loggers': False,  # retain the default loggers
@@ -205,6 +211,14 @@ class Dev(Common):
     CELERY_TIMEZONE = "Europe/Warsaw"
     CELERY_TASK_TRACK_STARTED = True
     CELERY_TASK_TIME_LIMIT = 30 * 60
+
+    INSTALLED_APPS = Common.INSTALLED_APPS + [
+        'django_extensions',
+    ]
+
+    ATTACHMENT_TIMESPAN = values.IntegerValue(
+        environ_name="ATTACHMENT_TIMESPAN", environ_prefix=None, default=300
+    )
 
 
 # Quick-start development settings - unsuitable for production

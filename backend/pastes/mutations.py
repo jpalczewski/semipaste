@@ -20,7 +20,7 @@ from pygments.formatters import HtmlFormatter
 from backend.mixins import ErrorCode, ResultMixin
 
 # Local
-from .models import PasteBin
+from .models import Attachment, PasteBin
 
 logger = logging.getLogger(__file__)
 
@@ -32,13 +32,30 @@ class PasteBinNode(DjangoObjectType):
         model = PasteBin
         filter_fields = ['title', 'id', 'date_of_expiry']
         interfaces = (relay.Node,)
+        exclude = ("attachment_token",)
 
     # rowid = graphene.String()
     # fields = "__all__"
 
 
+class AttachmentNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+    url = graphene.String()
+
+    def resolve_url(root, info, **kwargs) -> str:  # type: ignore
+        return f"http://{info.context.META['HTTP_HOST']}{root.image.url}"
+
+    class Meta:
+        model = Attachment
+        interfaces = (relay.Node,)
+        exclude = ("paste",)
+
+
 class AddPasteBin(ResultMixin, relay.ClientIDMutation):
     added_paste_id = graphene.Int(description="Returns added paste ID")
+    attachment_token = graphene.String(
+        description="Token required to upload attachments"
+    )
 
     class Input:
         title = graphene.String(required=True, description="Title of new paste")
@@ -66,7 +83,9 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
             return AddPasteBin(
                 Ok=False, error_code=ErrorCode.EXCEPTIONOCCURED, error=str(e)
             )
-        return AddPasteBin(ok=True, added_paste_id=paste.pk)
+        return AddPasteBin(
+            ok=True, added_paste_id=paste.pk, attachment_token=paste.attachment_token
+        )
 
 
 class DeletePasteBin(ResultMixin, graphene.Mutation):
@@ -165,6 +184,65 @@ class HighlightPasteBin(relay.ClientIDMutation):
         return HighlightPasteBin(highlight=code)
 
 
+class AddAttachment(ResultMixin, graphene.ClientIDMutation):
+    class Input:
+        token = graphene.String(required=True, description="Upload token")
+        description = graphene.String(description="Image description")
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):  # type: ignore
+        token = input['token']
+        logger.debug(f"Received add attachment request with token {token}")
+        file = info.context.FILES['image']
+        if len(info.context.FILES) != 0:
+            logger.debug(f"Received files {file}")
+        else:
+            return AddAttachment(ok=False, error="No files provided")
+
+        try:
+            paste = PasteBin.objects.get(attachment_token=token)
+
+            if not paste.is_uploading_attachments_allowed():
+                return AddAttachment(
+                    ok=False, error="Too late to upload attachment to that paste"
+                )
+
+            attachment = Attachment.objects.create(paste=paste, image=file)
+            attachment.save()
+            print(vars(attachment))
+            logger.debug(f"Attachment saved: {attachment}")
+            return AddAttachment(ok=True, error=attachment)
+        except PasteBin.DoesNotExist:
+            return AddAttachment(ok=False, error="Invalid token")
+        except Exception as e:
+            return AddAttachment(ok=False, error=f"{e}")
+        return AddAttachment(ok=False, error="Something went wrong")
+
+
+class DeleteAttachment(ResultMixin, graphene.ClientIDMutation):
+    class Input:
+        id = graphene.ID()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, id, **input):  # type: ignore
+        try:
+            attachment = Attachment.objects.get(pk=id)
+            paste_author = attachment.paste.author
+            if not info.context.user.is_superuser or info.context.user == paste_author:
+                return DeleteAttachment(ok=False, error="Permission denied")
+            attachment.delete()
+            return DeleteAttachment(
+                ok=True,
+            )
+        except Attachment.DoesNotExist:
+            return DeleteAttachment(ok=False, error="Attachment does not exist")
+        except Exception as e:
+            logger.error(
+                f"During deleting attachment {attachment.pk} exception \"{e}\" occured"
+            )
+            return DeleteAttachment(ok=False, error=e)
+
+
 class PasteBinMutation(graphene.ObjectType):
     add_paste_bin = AddPasteBin.Field()
     delete_paste_bin = DeletePasteBin.Field(
@@ -172,6 +250,8 @@ class PasteBinMutation(graphene.ObjectType):
     )
     highlight_paste_bin = HighlightPasteBin.Field()
     highlight_preview = HighlightPreview.Field()
+    add_attachment = AddAttachment.Field(description="Add an attachment to a paste")
+    delete_attachment = DeleteAttachment.Field(description="Delete an attachment")
 
 
 class ActivePasteBin(DjangoObjectType):
