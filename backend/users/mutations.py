@@ -128,6 +128,7 @@ class VerifyUser(graphene.Mutation):
         else:
             return VerifyUser(ok=False, response="Something went wrong...")
 
+
 class NewPassword(graphene.Mutation):
     ok = graphene.Boolean()
     response = graphene.String()
@@ -154,6 +155,7 @@ class NewPassword(graphene.Mutation):
             return NewPassword(ok=True, response="Sending massage to your email!")
         else:
             return NewPassword(ok=False, response="No such email.")
+
 
 class EditPassword(graphene.Mutation):
     ok = graphene.Boolean()
@@ -191,6 +193,7 @@ class EditPassword(graphene.Mutation):
                     return EditPassword(ok=False, response="Wrong confirmed password")
             else:
                 return EditPassword(ok=False, response="Wrong code")
+
 
 class EditUser(ResultMixin, graphene.Mutation):
     class Arguments:
