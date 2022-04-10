@@ -50,7 +50,7 @@ jobs:
         installer-parallel: true
     - name: Load cached venv
       id: cached-poetry-dependencies
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: backend/.venv
         key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
