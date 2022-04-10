@@ -8,7 +8,7 @@ from graphene_django import DjangoObjectType
 
 # Project
 from pastes.models import PasteBin
-from pastes.mutations import PasteBinNode
+from pastes.queries import PasteBinNode
 from reports.models import Report
 
 
