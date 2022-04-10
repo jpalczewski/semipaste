@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pastes', '0003_alter_pastebin_expire_after'),
+        ('pastes', '0006_alter_pastebin_attachment_token'),
     ]
 
     operations = [
