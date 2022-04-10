@@ -1,10 +1,20 @@
 # 3rd-Party
 import graphene
+from graphene import relay
+from graphene_django import DjangoObjectType
 from graphene_django.debug import DjangoDebug
 from graphene_django.filter import DjangoFilterConnectionField
+from models import User
 
-# Local
-from .mutations import UserNode
+
+class UserNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+
+    class Meta:
+        model = User
+        filter_fields = ['id']
+        interfaces = (relay.Node,)
+        exclude = ('password',)
 
 
 class UserQuery(graphene.ObjectType):

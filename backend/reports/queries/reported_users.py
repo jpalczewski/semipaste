@@ -10,7 +10,7 @@ from graphene_django import DjangoObjectType
 # Project
 from reports.models import Report
 from users.models import User
-from users.mutations import UserNode
+from users.queries import UserNode
 
 
 class UserReportType(DjangoObjectType):
