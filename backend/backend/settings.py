@@ -17,8 +17,6 @@ from datetime import timedelta
 from distutils.debug import DEBUG
 from pathlib import Path
 
-# Django
-
 # 3rd-Party
 import dj_email_url
 import environ
