@@ -18,7 +18,6 @@ from distutils.debug import DEBUG
 from pathlib import Path
 
 # Django
-from django.conf.urls.static import static
 
 # 3rd-Party
 import dj_email_url

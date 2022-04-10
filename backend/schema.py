@@ -1,5 +1,6 @@
 """Backend schema."""
 
+
 # 3rd-Party
 import graphene
 import graphql_jwt
@@ -9,7 +10,6 @@ from graphene_django.debug import DjangoDebug
 # Project
 from pastes.mutations import PasteBinMutation
 from pastes.queries import LanguageQuery, PasteBinQuery
-from pastes.queries import PasteBinQuery
 from reports.mutations import ReportMutation
 from reports.queries import ReportQuery
 from users.mutations import UserMutation
