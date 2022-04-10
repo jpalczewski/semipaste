@@ -43,7 +43,7 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
 
         if info.context.user.is_superuser:
             paste.delete()
-            return DeletePasteBin(ok=True)
+            return DeletePasteBin(ok=True, error_code=ErrorCode.OK)
 
         if paste.author != info.context.user:
             return DeletePasteBin(
@@ -55,4 +55,4 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
         logger.debug("trying to delete")
         paste.delete()
 
-        return DeletePasteBin(ok=True)
+        return DeletePasteBin(ok=True, error_code=ErrorCode.OK)
