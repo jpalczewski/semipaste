@@ -97,7 +97,9 @@ class AddUser(graphene.Mutation):
                 for n in range(10)
             ]
         )
-        verification = UserVerification(user=user, verification_code=code)
+        verification = UserVerification(
+            user=user, verification_code=code, code_type="token"
+        )
         verification.save()
         user.email_user(
             subject="Verification code",
@@ -120,11 +122,77 @@ class VerifyUser(graphene.Mutation):
         code = kwargs.get('code')
         user = int(kwargs.get('id'))
         ver = UserVerification.objects.get(user=user)
-        if ver.verify(code):
+        if ver.verify(code, "token"):
             ver.delete()
             return VerifyUser(ok=True, response="Account Activated.")
         else:
             return VerifyUser(ok=False, response="Something went wrong...")
+
+
+class NewPassword(graphene.Mutation):
+    ok = graphene.Boolean()
+    response = graphene.String()
+
+    class Arguments:
+        email = graphene.String()
+
+    @staticmethod
+    def mutate(root, info, **kwargs):  # type: ignore
+
+        email = kwargs.get('email')
+        if User.objects.get(email=email):
+            user = User.objects.get(email=email)
+            code = "".join(random.choice(string.ascii_letters) for i in range(10))
+            verification = UserVerification(
+                user=user, verification_code=code, code_type="password"
+            )
+            verification.save()
+            user.email_user(
+                subject="Password recovery",
+                message="Here's your confirmation code: " + code,
+                fail_silently=None,
+            )
+            return NewPassword(ok=True, response="Sending massage to your email!")
+        else:
+            return NewPassword(ok=False, response="No such email.")
+
+
+class EditPassword(graphene.Mutation):
+    ok = graphene.Boolean()
+    response = graphene.String()
+
+    class Arguments:
+        email = graphene.String()
+        code = graphene.String()
+        new_password = graphene.String()
+        confirm_new_password = graphene.String()
+
+    @staticmethod
+    def mutate(root, info, **kwargs):  # type: ignore
+
+        email = kwargs.get("email")
+        code = kwargs.get("code")
+        passw = kwargs.get("new_password")
+        confirm_passw = kwargs.get("confirm_new_password")
+        try:
+            user = User.objects.get(email=email)
+            ver = UserVerification.objects.get(user_id=User.objects.get(email=email))
+        except User.DoesNotExist:
+            return EditPassword(ok=False, response="Wrong mail")
+        except UserVerification.DoesNotExist:
+            return EditPassword(ok=False, response="Wrong code")
+        else:
+            if ver.verification_code == code:
+                if passw == confirm_passw:
+                    user.set_password(passw)
+                    user.save()
+                    return EditPassword(
+                        ok=True, response="Password changed successfully"
+                    )
+                else:
+                    return EditPassword(ok=False, response="Wrong confirmed password")
+            else:
+                return EditPassword(ok=False, response="Wrong code")
 
 
 class EditUser(ResultMixin, graphene.Mutation):
@@ -196,3 +264,5 @@ class UserMutation(graphene.ObjectType):
     edit_user = EditUser.Field()
     edit_user_description = EditUserDescription.Field()
     delete_user = DeleteUser.Field()
+    new_password = NewPassword.Field()
+    edit_password = EditPassword.Field()

@@ -1,7 +1,6 @@
 """Pastes schema."""
 
 
-
 # Standard Library
 import logging
 
