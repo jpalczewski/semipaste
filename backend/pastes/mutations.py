@@ -129,7 +129,6 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
         return DeletePasteBin(ok=True)
 
 
-
 def convert_to_html(code: str, lang: str) -> str:
     if lang != "Plain Text":
         escape_chars = '___ESCAPE_CHARS___'
@@ -183,6 +182,7 @@ class HighlightPasteBin(relay.ClientIDMutation):
         paste = PasteBin.objects.get(id=pk)
         code = convert_to_html(paste.text, paste.language)
         return HighlightPasteBin(highlight=code)
+
 
 class AddAttachment(ResultMixin, graphene.ClientIDMutation):
     class Input:
