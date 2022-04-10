@@ -1,10 +1,12 @@
 # 3rd-Party
 import graphene
-from mutations.add_attachment import AddAttachment
-from mutations.add_paste_bin import AddPasteBin
-from mutations.delete_attachement import DeleteAttachment
-from mutations.delete_paste_bin import DeletePasteBin
-from mutations.highlight import HighlightPasteBin, HighlightPreview
+
+# Local
+from .add_attachment import AddAttachment
+from .add_paste_bin import AddPasteBin
+from .delete_attachement import DeleteAttachment
+from .delete_paste_bin import DeletePasteBin
+from .highlight import HighlightPasteBin, HighlightPreview
 
 
 class PasteBinMutation(graphene.ObjectType):

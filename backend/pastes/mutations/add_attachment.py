@@ -3,10 +3,10 @@ import logging
 
 # 3rd-Party
 import graphene
-from models import Attachment, PasteBin
 
 # Project
 from backend.mixins import ResultMixin
+from pastes.models import Attachment, PasteBin
 
 logger = logging.getLogger(__file__)
 
