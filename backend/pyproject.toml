@@ -7,7 +7,7 @@ authors = ["Jacek Palczewski <jpalczewski@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-Django = "^4.0.2"
+Django = "^4.0.4"
 psycopg2 = "^2.9.3"
 djangorestframework = "^3.13.1"
 PyJWT = "^2.3.0"
