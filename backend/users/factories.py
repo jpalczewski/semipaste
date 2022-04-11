@@ -21,6 +21,4 @@ class UserFactory(factory.django.DjangoModelFactory):
     password = fake.password()
     email = fake.email()
     date_joined = factory.LazyFunction(datetime.now)
-    is_active = True
     is_superuser = True
-    is_staff = True
