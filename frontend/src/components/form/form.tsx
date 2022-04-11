@@ -21,7 +21,7 @@ export const PasteBinForm = () => {
     text: "",
     title: "",
     language: "Plain Text",
-    exposure: false,
+    visible: false,
   });
 
   const handleText = (event: any) => {
@@ -40,7 +40,7 @@ export const PasteBinForm = () => {
   const handleSwitch = (event: boolean) => {
     setInputs({
       ...inputs,
-      exposure: event,
+      visible: event,
     });
   };
 

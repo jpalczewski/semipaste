@@ -48,7 +48,6 @@ class Common(Configuration):
         "graphene_django",
         'pastes',
         'reports',
-        # "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     ]
 
     MIDDLEWARE = [
@@ -78,7 +77,6 @@ class Common(Configuration):
 
     GRAPHQL_JWT = {
         "JWT_VERIFY_EXPIRATION": True,
-        # "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
         "JWT_EXPIRATION_DELTA": timedelta(minutes=7),
         "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=4),
     }

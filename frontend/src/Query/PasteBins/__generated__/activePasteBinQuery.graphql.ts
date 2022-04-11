@@ -18,7 +18,7 @@ export type activePasteBinQuery$data = {
         readonly text: string;
         readonly dateOfCreation: any;
         readonly id: string;
-        readonly exposure: boolean;
+        readonly visible: boolean;
         readonly dateOfExpiry: any | null;
         readonly language: string;
       } | null;
@@ -138,7 +138,7 @@ return {
     "metadata": {},
     "name": "activePasteBinQuery",
     "operationKind": "query",
-    "text": "query activePasteBinQuery {\n  activePasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        exposure\n        dateOfExpiry\n        language\n      }\n    }\n  }\n}\n"
+    "text": "query activePasteBinQuery {\n  activePasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n      }\n    }\n  }\n}\n"
   }
 };
 })();

@@ -19,7 +19,7 @@ class TestSchema(TestCase):
                     id
                     title
                     text
-                    exposure
+                    visible
                     expireAfter
                   }
                 }
@@ -31,14 +31,14 @@ class TestSchema(TestCase):
           addPasteBin(input: {
             title: "Title test",
             text: "Paste text test",
-            exposure: true,
+            visible: true,
             expireAfter: "DAY"
           }) {
             pasteBin{
               id
               title
               text
-              exposure
+              visible
               expireAfter
             }
           }
@@ -60,7 +60,7 @@ class TestSchema(TestCase):
     #                         "id": '1',
     #                         "title": "Title test",
     #                         "text": "Paste text test",
-    #                         "exposure": True,
+    #                         "visible": True,
     #                         "expireAfter": "DAY",
     #                     }
     #                 }
@@ -78,7 +78,7 @@ class TestSchema(TestCase):
     #     )
 
     # def test_addPasteBin_mutation_and_allPasteBin_query_id_2(self) -> None:
-    #     id_query = """query{ allPasteBin(id: 6) { edges { node { id title text exposure expireAfter}}}}"""
+    #     id_query = """query{ allPasteBin(id: 6) { edges { node { id title text visible expireAfter}}}}"""
     #     self.client.execute(self.mutation)
     #     result = self.client.execute(id_query)
     #     self.assertDictEqual(
@@ -91,7 +91,7 @@ class TestSchema(TestCase):
     #                                 "id": "6",
     #                                 "title": "Title test",
     #                                 "text": "Paste text test",
-    #                                 "exposure": True,
+    #                                 "visible": True,
     #                                 "expireAfter": "DAY",
     #                             }
     #                         }
@@ -138,11 +138,11 @@ class TestSchema(TestCase):
     #     )
 
     # def test_addPasteBin_mutation_and_allPasteBin_query_exposure(self) -> None:
-    #     exposure_query = """query{ allPasteBin { edges { node { exposure}}}}"""
+    #     exposure_query = """query{ allPasteBin { edges { node { visible}}}}"""
     #     self.client.execute(self.mutation)
     #     result = self.client.execute(exposure_query)
     #     self.assertDictEqual(
-    #         {"data": {"allPasteBin": {"edges": [{"node": {"exposure": True}}]}}}, result
+    #         {"data": {"allPasteBin": {"edges": [{"node": {"visible": True}}]}}}, result
     #     )
 
     # def test_addPasteBin_mutation_and_allPasteBin_query_expireAfter(self) -> None:
@@ -167,7 +167,7 @@ class TestSchema(TestCase):
     #                                 "id": '2',
     #                                 "title": "Title test",
     #                                 "text": "Paste text test",
-    #                                 "exposure": True,
+    #                                 "visible": True,
     #                                 "expireAfter": "DAY",
     #                             }
     #                         }

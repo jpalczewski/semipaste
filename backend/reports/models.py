@@ -5,6 +5,8 @@ from django.db import models
 
 
 class Report(models.Model):
+    """Report model."""
+
     reason = models.CharField(max_length=100, null=False, blank=False)
     author = models.ForeignKey(to='users.User', on_delete=models.CASCADE)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)

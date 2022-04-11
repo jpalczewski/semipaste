@@ -18,7 +18,7 @@ export type allPasteBinQuery$data = {
         readonly text: string;
         readonly dateOfCreation: any;
         readonly id: string;
-        readonly exposure: boolean;
+        readonly visible: boolean;
         readonly dateOfExpiry: any | null;
       } | null;
     } | null>;
@@ -130,7 +130,7 @@ return {
     "metadata": {},
     "name": "allPasteBinQuery",
     "operationKind": "query",
-    "text": "query allPasteBinQuery {\n  allPasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        exposure\n        dateOfExpiry\n      }\n    }\n  }\n}\n"
+    "text": "query allPasteBinQuery {\n  allPasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n      }\n    }\n  }\n}\n"
   }
 };
 })();

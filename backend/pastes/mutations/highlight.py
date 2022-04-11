@@ -37,15 +37,12 @@ class HighlightPreview(relay.ClientIDMutation):
 
     class Input:
         code = graphene.String(required=True)
-        lang = graphene.String()
+        lang = graphene.String(required=True)
 
     @staticmethod
     def mutate_and_get_payload(root, info, **input):  # type: ignore
         code = input.get('code')
-        if input.get('lang'):
-            lang = input.get('lang')
-        else:
-            lang = "Plain Text"
+        lang = input.get('lang')
         code = convert_to_html(code, lang)
         return HighlightPreview(highlight=code)
 

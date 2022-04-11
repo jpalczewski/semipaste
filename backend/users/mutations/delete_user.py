@@ -21,7 +21,7 @@ class DeleteUser(ResultMixin, graphene.Mutation):
         if not info.context.user.is_superuser:
             return DeleteUser(
                 ok=False,
-                error_code=ErrorCode.PERMISSIONDENIED,
+                error_code=ErrorCode.PERMISSION_DENIED,
                 error="You don't have permission to this action",
             )
         try:
@@ -29,7 +29,7 @@ class DeleteUser(ResultMixin, graphene.Mutation):
         except User.DoesNotExist:
             return DeleteUser(
                 ok=False,
-                error_code=ErrorCode.USERNOTFOUND,
+                error_code=ErrorCode.USER_NOT_FOUND,
                 error="Specified user does not exist",
             )
         except Exception as e:

@@ -13,7 +13,7 @@ export type ExpireChoices = "NEVER" | "MIN" | "HOUR" | "DAY" | "WEEK" | "MONTH" 
 export type addPasteBinMutation$variables = {
   text: string;
   title: string;
-  exposure: boolean;
+  visible: boolean;
   expireAfter?: ExpireChoices | null;
   language?: string | null;
 };
@@ -148,7 +148,7 @@ return {
     "metadata": {},
     "name": "addPasteBinMutation",
     "operationKind": "mutation",
-    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $exposure: Boolean!\n  $expireAfter: ExpireChoices = DAY\n  $language: String\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, exposure: $exposure, language: $language}) {\n    ok\n    addedPasteId\n  }\n}\n"
+    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $visible: Boolean!\n  $expireAfter: ExpireChoices = DAY\n  $language: String\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, visible: $visible, language: $language}) {\n    ok\n    addedPasteId\n  }\n}\n"
   }
 };
 })();

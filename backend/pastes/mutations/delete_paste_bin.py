@@ -30,15 +30,15 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
             logger.debug("not existing paste deletion requested")
             return DeletePasteBin(
                 ok=False,
-                error="Requested paste doesn\'t exist",
-                error_code=ErrorCode.NONEXISTENTPASTE,
+                error="Requested paste doesn't exist",
+                error_code=ErrorCode.NON_EXISTENT_PASTE,
             )
 
         if not info.context.user.is_authenticated:
             return DeletePasteBin(
                 ok=False,
                 error="You need to be logged in",
-                error_code=ErrorCode.NONEXISTENTPASTE,
+                error_code=ErrorCode.NON_EXISTENT_PASTE,
             )
 
         if info.context.user.is_superuser:
@@ -48,8 +48,8 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
         if paste.author != info.context.user:
             return DeletePasteBin(
                 ok=False,
-                error="You can\'t delete paste that you don't own",
-                error_code=ErrorCode.PERMISSIONDENIED,
+                error="You can't delete paste that you don't own",
+                error_code=ErrorCode.PERMISSION_DENIED,
             )
 
         logger.debug("trying to delete")

@@ -1,5 +1,3 @@
-"""Pastes models."""
-
 # Standard Library
 import logging
 import os.path
@@ -30,7 +28,6 @@ logger = logging.getLogger(__name__)
 class PasteBin(models.Model):
     """Pastebin model."""
 
-    # Choices
     class ExpireChoices(models.TextChoices):
         # The first value is the actual value to be set
         # The second value is used for humans
@@ -42,18 +39,17 @@ class PasteBin(models.Model):
         MONTH = 'MONTH', _('1 month')
         YEAR = 'YEAR', _('1 year')
 
-    # Attributes
     title = models.CharField(_('title'), max_length=50)
     text = models.TextField(_('paste text'))
     date_of_creation = models.DateTimeField(_('date of creation'), blank=True)
-    exposure = models.BooleanField(_('exposure'))
+    visible = models.BooleanField(_('visible'), default=True)
     expire_after = models.CharField(
         _('expire after'),
         max_length=5,
         choices=ExpireChoices.choices,
         default=ExpireChoices.NEVER,
     )
-    date_of_expiry = models.DateTimeField(_('date of expiry'), null=True, blank=True)
+    date_of_expiry = models.DateTimeField(_('date of expiry'), blank=True)
     author = models.ForeignKey(
         User, verbose_name=_('author'), on_delete=models.CASCADE, null=True, blank=True
     )
@@ -68,36 +64,40 @@ class PasteBin(models.Model):
     objects = models.Manager()
     reports = GenericRelation(Report, related_query_name='pastes')
 
-    # Static methods
     @staticmethod
-    def get_time_choice(choice: str) -> timedelta:
-        if choice == PasteBin.ExpireChoices.MIN:
-            return timedelta(seconds=60)
-        elif choice == PasteBin.ExpireChoices.HOUR:
-            return timedelta(seconds=3600)
-        elif choice == PasteBin.ExpireChoices.DAY:
-            return timedelta(days=1)
-        elif choice == PasteBin.ExpireChoices.WEEK:
-            return timedelta(days=7)
-        elif choice == PasteBin.ExpireChoices.MONTH:
-            return timedelta(days=30)
-        elif choice == PasteBin.ExpireChoices.YEAR:
-            return timedelta(days=360)
+    def get_time_choice(choice: str) -> timedelta | int:
+        match choice:  # noqa: E999
+            case PasteBin.ExpireChoices.MIN:
+                return timedelta(seconds=60)
+            case PasteBin.ExpireChoices.HOUR:
+                timedelta(seconds=3600)
+            case PasteBin.ExpireChoices.DAY:
+                return timedelta(days=1)
+            case PasteBin.ExpireChoices.WEEK:
+                return timedelta(days=7)
+            case PasteBin.ExpireChoices.MONTH:
+                return timedelta(days=30)
+            case PasteBin.ExpireChoices.YEAR:
+                return timedelta(days=360)
 
-    # Methods
     def save(self, *args, **kwargs):  # type: ignore
         if self.author is None:
             self.expire_after = 'WEEK'
-        choice = self.expire_after
-        self.date_of_creation = datetime.now().replace(tzinfo=timezone.utc)
-        if choice == PasteBin.ExpireChoices.NEVER:
-            self.date_of_expiry = None
-        else:
-            self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
-                choice
-            )
+        if not self.date_of_creation:
+            self.date_of_creation = datetime.now().replace(tzinfo=timezone.utc)
+        if not self.date_of_expiry:
+            choice = self.expire_after
+            if choice == PasteBin.ExpireChoices.NEVER:
+                self.date_of_expiry = None
+            else:
+                self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
+                    choice
+                )
         self.attachment_token = secrets.token_hex(16)
         super().save(*args, **kwargs)
+
+    def get_attachments(self):
+        return Attachment.objects.filter(paste=self.pk)
 
     def is_uploading_attachments_allowed(self) -> bool:
         upload_time_limit = self.date_of_creation + timedelta(
@@ -105,11 +105,9 @@ class PasteBin(models.Model):
         )
         return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
 
-    # Special Methods
     def __str__(self) -> str:
         return f'{self.pk}. {self.title}'
 
-    # Meta
     class Meta:
         ordering = ['id']
         verbose_name = _('pastebin')
@@ -117,6 +115,8 @@ class PasteBin(models.Model):
 
 
 class Attachment(models.Model):
+    """Attachment model."""
+
     def get_attachment_filename(self, filename: str) -> str:  #
         return 'attachments/{}/{}'.format(
             secrets.token_hex(16),
@@ -130,6 +130,10 @@ class Attachment(models.Model):
 
     def __str__(self) -> str:
         return f'{self.paste} - attachment id: {self.pk}, path: {self.image.name}'
+
+    class Meta:
+        verbose_name = _('attachment')
+        verbose_name_plural = _('attachments')
 
 
 @receiver(models.signals.pre_delete, sender=Attachment)
