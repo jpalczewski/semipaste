@@ -14,7 +14,7 @@ class UserNode(DjangoObjectType):
 
     class Meta:
         model = User
-        filter_fields = ['id']
+        filter_fields = {'id': ['exact']}
         interfaces = (relay.Node,)
         exclude = ('password',)
 
