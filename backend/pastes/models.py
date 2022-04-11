@@ -49,7 +49,7 @@ class PasteBin(models.Model):
         choices=ExpireChoices.choices,
         default=ExpireChoices.NEVER,
     )
-    date_of_expiry = models.DateTimeField(_('date of expiry'), blank=True)
+    date_of_expiry = models.DateTimeField(_('date of expiry'), null=True, blank=True)
     author = models.ForeignKey(
         User, verbose_name=_('author'), on_delete=models.CASCADE, null=True, blank=True
     )
@@ -65,7 +65,7 @@ class PasteBin(models.Model):
     reports = GenericRelation(Report, related_query_name='pastes')
 
     @staticmethod
-    def get_time_choice(choice: str) -> timedelta | int:
+    def get_time_choice(choice: str) -> timedelta:
         match choice:  # noqa: E999
             case PasteBin.ExpireChoices.MIN:
                 return timedelta(seconds=60)
