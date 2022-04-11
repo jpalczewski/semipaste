@@ -6,9 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import User, UserVerification
 
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    pass
+admin.site.register(User, UserAdmin)
 
 @admin.register(UserVerification)
 class UserVerificationAdmin(admin.ModelAdmin):
