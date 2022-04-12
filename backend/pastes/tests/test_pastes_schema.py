@@ -1,4 +1,6 @@
 # 3rd-Party
+import time
+
 import graphene
 from graphene_django.utils.testing import GraphQLTestCase
 from django.contrib.auth.models import AnonymousUser
@@ -25,7 +27,6 @@ class TestSchema(GraphQLTestCase):
         pasteBinID = query_result["data"]["allUsers"]["edges"][0]["node"]["id"]
         variables = {"id": pasteBinID}
         delete_mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
-        print(delete_mutation_result)
         self.assertEqual(delete_mutation_result["data"]["deleteUser"]["ok"], True)
 
     # add_paste_bin
@@ -48,7 +49,7 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
 
     def test_03_showPasteBin_id_1(self) -> None:
-        id_query = """query{ allPasteBin { edges { node { id}}}}"""
+        id_query = """query{ allPasteBin { edges { node { id author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         pasteBin = PasteBinFactory()
@@ -61,10 +62,11 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"], '3')
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["id"], '4')
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], '3')
 
     def test_04_showPasteBin_id_2(self) -> None:
-        id_query = """query{ allPasteBin(id: 5) { edges { node { id title text exposure expireAfter author {id}}}}}"""
+        id_query = """query{ allPasteBin(id: 6) { edges { node { id title text exposure expireAfter author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         pasteBin = PasteBinFactory()
@@ -74,13 +76,15 @@ class TestSchema(GraphQLTestCase):
                      "expireAfter": pasteBin.expire_after}
         mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
         query_result = self.client.execute(id_query)
+        print(query_result)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"], '5')
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"], '6')
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"]["id"], '4')
 
     def test_05_showPasteBin_title_1(self) -> None:
-        title_query = """query{ allPasteBin { edges { node { title}}}}"""
+        title_query = """query{ allPasteBin { edges { node { title author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         pasteBin = PasteBinFactory()
@@ -93,10 +97,11 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["title"], pasteBin.title)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["title"], pasteBin.title)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], '5')
 
     def test_06_showPasteBin_title_2(self) -> None:
-        title_query = """query($title: String){ allPasteBin(title: $title) { edges { node { title}}}}"""
+        title_query = """query($title: String){ allPasteBin(title: $title) { edges { node { title author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         pasteBin = PasteBinFactory()
@@ -112,10 +117,11 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["title"], pasteBin.title)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["title"], pasteBin.title)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], '6')
 
     def test_07_showPasteBin_text(self) -> None:
-        text_query = """query{ allPasteBin { edges { node { text}}}}"""
+        text_query = """query{ allPasteBin { edges { node { text author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         pasteBin = PasteBinFactory()
@@ -128,10 +134,11 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["text"], pasteBin.text)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["text"], pasteBin.text)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], '7')
 
     def test_08_showPasteBin_exposure(self) -> None:
-        exposure_query = """query{ allPasteBin { edges { node { exposure}}}}"""
+        exposure_query = """query{ allPasteBin { edges { node { exposure author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         pasteBin = PasteBinFactory()
@@ -144,10 +151,11 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["exposure"], pasteBin.exposure)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["exposure"], pasteBin.exposure)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], '8')
 
     def test_09_showPasteBin_expireAfter_DAY(self) -> None:
-        expireafter_query = """query{ allPasteBin { edges { node { expireAfter}}}}"""
+        expireafter_query = """query{ allPasteBin { edges { node { expireAfter author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         variables_mutation = {"title": "Title test",
@@ -160,9 +168,10 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], "DAY")
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"]["id"], '9')
 
     def test_10_showPasteBin_expireAfter_NEVER(self) -> None:
-        expireafter_query = """query{ allPasteBin { edges { node { expireAfter}}}}"""
+        expireafter_query = """query{ allPasteBin { edges { node { expireAfter author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         variables_mutation = {"title": "Title test",
@@ -175,9 +184,10 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], "NEVER")
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"]["id"], '10')
 
     def test_11_showPasteBin_expireAfter_HOUR(self) -> None:
-        expireafter_query = """query{ allPasteBin { edges { node { expireAfter}}}}"""
+        expireafter_query = """query{ allPasteBin { edges { node { expireAfter author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         variables_mutation = {"title": "Title test",
@@ -190,9 +200,10 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], "HOUR")
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"]["id"], '11')
 
     def test_12_showPasteBin_expireAfter_WEEK(self) -> None:
-        expireafter_query = """query{ allPasteBin { edges { node { expireAfter}}}}"""
+        expireafter_query = """query{ allPasteBin { edges { node { expireAfter author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         variables_mutation = {"title": "Title test",
@@ -205,9 +216,10 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], "WEEK")
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"]["id"], '12')
 
     def test_13_showPasteBin_expireAfter_MONTH(self) -> None:
-        expireafter_query = """query{ allPasteBin { edges { node { expireAfter}}}}"""
+        expireafter_query = """query{ allPasteBin { edges { node { expireAfter author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         variables_mutation = {"title": "Title test",
@@ -220,9 +232,10 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], "MONTH")
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"]["id"], '13')
 
     def test_14_showPasteBin_expireAfter_YEAR(self) -> None:
-        expireafter_query = """query{ allPasteBin { edges { node { expireAfter}}}}"""
+        expireafter_query = """query{ allPasteBin { edges { node { expireAfter author {id}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         variables_mutation = {"title": "Title test",
@@ -235,6 +248,7 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], "YEAR")
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"]["id"], '14')
 
     def test_15_showPasteBins_afterAddMutation(self) -> None:
         query = """query{allPasteBin {edges {node {id title text exposure expireAfter author{id}}}}}"""
@@ -250,16 +264,16 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"], '21')
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["title"], pasteBin.title)
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["text"], pasteBin.text)
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["exposure"], pasteBin.exposure)
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["expireAfter"], pasteBin.expire_after)
-        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][0]["node"]["author"], pasteBin.author)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["id"], '22')
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["title"], pasteBin.title)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["text"], pasteBin.text)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["exposure"], pasteBin.exposure)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["expireAfter"], pasteBin.expire_after)
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], "15")
 
     # delete_paste_bin
     def test_16_deletePasteBin_mutation(self) -> None:
-        id_query = """query{ allPasteBin { edges { node { id}}}}"""
+        id_query = """query{ allPasteBin { edges { node { id author {id}}}}}"""
         add_mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         delete_mutation = """mutation($id: ID!){deletePasteBin(id: $id) {ok error errorCode}}"""
@@ -273,16 +287,17 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(add_mutation_result["data"]["addPasteBin"]["error"], None)
         self.assertEqual(add_mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
         query_result = self.client.execute(id_query)
-        pasteBinID = query_result["data"]["allPasteBin"]["edges"][0]["node"]["id"]
+        pasteBinID = query_result["data"]["allPasteBin"]["edges"][1]["node"]["id"]
         delete_variables = {"id": pasteBinID}
         delete_mutation_result = self.client.execute(delete_mutation, variable_values=delete_variables,
                                                      context=self.user)
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["ok"], True)
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["error"], None)
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], "OK")
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], '16')
 
     def test_17_deletePasteBin_dont_own_mutation(self) -> None:
-        id_query = """query{ allPasteBin { edges { node { id}}}}"""
+        id_query = """query{ allPasteBin { edges { node { id author {id}}}}}"""
         add_mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         delete_mutation = """mutation($id: ID!){deletePasteBin(id: $id) {ok error errorCode}}"""
@@ -305,6 +320,7 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["error"],
                          "You can\'t delete paste that you don't own")
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], "PERMISSIONDENIED")
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], '17')
         self.user.user.is_superuser = True
 
     def test_18_deletePasteBin_doesnt_exist_mutation(self) -> None:
@@ -317,7 +333,7 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], "NONEXISTENTPASTE")
 
     def test_19_deletePasteBin_not_logged_in(self) -> None:
-        id_query = """query{ allPasteBin { edges { node { id}}}}"""
+        id_query = """query{ allPasteBin { edges { node { id author {id}}}}}"""
         add_mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
         addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
         delete_mutation = """mutation($id: ID!){deletePasteBin(id: $id) {ok error errorCode}}"""
@@ -341,3 +357,21 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["ok"], False)
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["error"], "You need to be logged in")
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], "NONEXISTENTPASTE")
+        self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], '19')
+
+    def test_20_activePasteBin(self) -> None:
+        query = """query{ activePasteBin { edges { node { id title text dateOfCreation exposure expireAfter author{id lastLogin isSuperuser username firstName lastName email isStaff isActive}}}}}"""
+        mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
+        addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
+        pasteBin = PasteBinFactory()
+        variables = {"title": pasteBin.title,
+                     "text": pasteBin.text,
+                     "exposure": pasteBin.exposure,
+                     "expireAfter": pasteBin.expire_after}
+        mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
+        query_result = self.client.execute(query)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
+        self.assertEqual(query_result["data"]["activePasteBin"]["edges"][1]["node"]["id"], '30')
+        self.assertEqual(query_result["data"]["activePasteBin"]["edges"][1]["node"]["author"]["id"], '20')
