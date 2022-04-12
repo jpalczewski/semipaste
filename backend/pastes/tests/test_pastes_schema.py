@@ -375,3 +375,21 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
         self.assertEqual(query_result["data"]["activePasteBin"]["edges"][1]["node"]["id"], '30')
         self.assertEqual(query_result["data"]["activePasteBin"]["edges"][1]["node"]["author"]["id"], '20')
+
+    def test_21_expiredPasteBin(self) -> None:
+        query = """query{ expiredPasteBin { edges { node { id title text dateOfCreation exposure expireAfter author{id lastLogin isSuperuser username firstName lastName email isStaff isActive}}}}}"""
+        mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
+        addPasteBin( input: {title: $title ,text: $text ,exposure: $exposure ,expireAfter: $expireAfter}) {ok error errorCode}} """
+        pasteBin = PasteBinFactory()
+        variables = {"title": pasteBin.title,
+                     "text": pasteBin.text,
+                     "exposure": pasteBin.exposure,
+                     "expireAfter": "MIN"}
+        mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
+        time.sleep(60)
+        query_result = self.client.execute(query)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
+        self.assertEqual(mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLEFAILURE")
+        self.assertEqual(query_result["data"]["expiredPasteBin"]["edges"][0]["node"]["id"], '32')
+        self.assertEqual(query_result["data"]["expiredPasteBin"]["edges"][0]["node"]["author"]["id"], '21')
