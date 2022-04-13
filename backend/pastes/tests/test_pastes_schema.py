@@ -325,7 +325,7 @@ class TestSchema(GraphQLTestCase):
 
     def test_18_deletePasteBin_doesnt_exist_mutation(self) -> None:
         delete_mutation = """mutation($id: ID!){deletePasteBin(id: $id) {ok error errorCode}}"""
-        delete_variables = {"id": 999}
+        delete_variables = {"id": "-1"}
         delete_mutation_result = self.client.execute(delete_mutation, variable_values=delete_variables,
                                                      context=self.user)
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["ok"], False)
@@ -359,6 +359,7 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(delete_mutation_result["data"]["deletePasteBin"]["errorCode"], "NONEXISTENTPASTE")
         self.assertEqual(query_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"], '19')
 
+    #active_paste_bin
     def test_20_activePasteBin(self) -> None:
         query = """query{ activePasteBin { edges { node { id title text dateOfCreation exposure expireAfter author{id lastLogin isSuperuser username firstName lastName email isStaff isActive}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
@@ -376,6 +377,7 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(query_result["data"]["activePasteBin"]["edges"][1]["node"]["id"], '30')
         self.assertEqual(query_result["data"]["activePasteBin"]["edges"][1]["node"]["author"]["id"], '20')
 
+    #expired_paste_bin
     def test_21_expiredPasteBin(self) -> None:
         query = """query{ expiredPasteBin { edges { node { id title text dateOfCreation exposure expireAfter author{id lastLogin isSuperuser username firstName lastName email isStaff isActive}}}}}"""
         mutation = """mutation($title: String! $text: String! $exposure: Boolean! $expireAfter: ExpireChoices!){
