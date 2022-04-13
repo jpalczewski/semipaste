@@ -8,6 +8,7 @@ from graphene_django import DjangoObjectType
 
 # Project
 from backend.filters import PasteBinFilterFields
+from pastes.models import PasteBin
 
 # Local
 from ..models import PasteBin
@@ -28,3 +29,6 @@ class ActivePasteBin(DjangoObjectType, TotalRatingNode):
             date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc)
         )
         return active
+
+
+#
