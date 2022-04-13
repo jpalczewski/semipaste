@@ -15,6 +15,7 @@ export const PasteBinForm = () => {
     title: "",
     exposure: false,
   });
+  const [fileName, setFileName] = useState("Upload Boundary File");
   const handleText = (event: any) => {
     setInputs({
       ...inputs,
@@ -107,7 +108,12 @@ export const PasteBinForm = () => {
               className="mb-3"
               style={{ marginBottom: 10, width: "50%" }}
             >
-              <Form.Control type="file" size="sm" />
+              <Form.Control
+                type="file"
+                size="sm"
+                // label={fileName}
+                // onChange={(e) => setFileName(e.target.files[0].name)}
+              />
             </Form.Group>
           </Col>
           <Col>

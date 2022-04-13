@@ -16,3 +16,21 @@ export const allPasteBin = graphql`
     }
   }
 `;
+
+// GRAPHIQL
+// {
+//   allPasteBin {
+//     edges {
+//       node {
+//         title
+//         text
+//         dateOfExpiry
+//         id
+//         dateOfCreation
+//         exposure
+//         expireAfter
+
+//       }
+//     }
+//   }
+// }

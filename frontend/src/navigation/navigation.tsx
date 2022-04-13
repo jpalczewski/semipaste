@@ -50,7 +50,7 @@ const Navigation = () => {
           </NavLinkCont>
         </Container>
         <RightContainer>
-          {extNavbar ? (
+          {!extNavbar ? (
             <>
               <NavDropdown title="USERNAME">
                 <NavDropdown.Item href="#action3">Ustawienia</NavDropdown.Item>
