@@ -227,3 +227,16 @@ class TestSchema(TestCase):
         mutation_result = self.client.execute(mutation, variable_values=variables)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], False)
         self.assertEqual(mutation_result["data"]["addUser"]["response"], "Password should have at least one numeral")
+
+    def test_16_password_validation_3(self) -> None:
+        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        user = UserFactory()
+        variables = {"confirmPassword": "ABCDEF",
+                     "email": user.email,
+                     "password": "ABCDEF",
+                     "username": "Test15"}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        self.assertEqual(mutation_result["data"]["addUser"]["ok"], False)
+        self.assertEqual(mutation_result["data"]["addUser"]["response"],
+                         "Password should have at least one lowercase letter")
