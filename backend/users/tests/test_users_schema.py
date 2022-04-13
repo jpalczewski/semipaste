@@ -377,3 +377,16 @@ class TestSchema(TestCase):
         self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["firstName"], "First name test")
         self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["lastName"], "Last name test")
         self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["username"], "Username test")
+
+    def test_24_editUserDescription(self) -> None:
+        query = """query{allUsers{edges{node{id username firstName lastName email description}}}}"""
+        mutation = """mutation($description: String! $id: ID!){
+        editUserDescription(description: $description, id: $id){ok}} """
+        UserFactory()
+        query_result_1 = self.client.execute(query)
+        userID = query_result_1["data"]["allUsers"]["edges"][0]["node"]["id"]
+        variables = {"description": "Description test", "id": userID}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        self.assertEqual(mutation_result["data"]["editUserDescription"]["ok"], True)
+        query_result_2 = self.client.execute(query)
+        self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["description"], "Description test")
