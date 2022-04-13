@@ -23,8 +23,9 @@ class TestSchema(TestCase):
         self.assertEqual(query_result["data"]["allUsers"]["edges"], [])
 
     def test_02_addUser_mutation(self) -> None:
-        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){ 
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response}} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -37,8 +38,9 @@ class TestSchema(TestCase):
 
     def test_03_showUser_id_1(self) -> None:
         query = """query{allUsers{edges{node{id}}}}"""
-        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){ 
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response}} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -52,8 +54,9 @@ class TestSchema(TestCase):
 
     def test_04_showUser_id_2(self) -> None:
         query = """query{allUsers(id: 26){edges{node{id}}}} """
-        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){ 
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response}} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -68,7 +71,8 @@ class TestSchema(TestCase):
     def test_05_showUser_lastLogin(self) -> None:
         query = """query{allUsers{edges{node{lastLogin}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response}} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -83,7 +87,8 @@ class TestSchema(TestCase):
     def test_06_showUser_isSuperuser(self) -> None:
         query = """query{allUsers{edges{node{isSuperuser}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response}} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -99,7 +104,8 @@ class TestSchema(TestCase):
     def test_07_showUser_username(self) -> None:
         query = """query{allUsers{edges{node{username}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response}} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -115,7 +121,8 @@ class TestSchema(TestCase):
     def test_08_showUser_firstName(self) -> None:
         query = """query{allUsers{edges{node{firstName}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response}} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -131,7 +138,8 @@ class TestSchema(TestCase):
     def test_09_showUser_lastName(self) -> None:
         query = """query{allUsers{edges{node{lastName}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -147,7 +155,8 @@ class TestSchema(TestCase):
     def test_10_showUser_isActive(self) -> None:
         query = """query{allUsers{edges{node{isActive}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -162,7 +171,8 @@ class TestSchema(TestCase):
     def test_11_showUser_email(self) -> None:
         query = """query{allUsers{edges{node{email}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -177,7 +187,8 @@ class TestSchema(TestCase):
     def test_12_showUser_isStaff(self) -> None:
         query = """query{allUsers{edges{node{isStaff}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -192,7 +203,8 @@ class TestSchema(TestCase):
     def test_13_showUser_isVerified(self) -> None:
         query = """query{allUsers{edges{node{isVerified}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -206,7 +218,8 @@ class TestSchema(TestCase):
 
     def test_14_password_validation_1(self) -> None:
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": "aBc1",
                      "email": user.email,
@@ -218,7 +231,8 @@ class TestSchema(TestCase):
 
     def test_15_password_validation_2(self) -> None:
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": "aBcDeF",
                      "email": user.email,
@@ -230,7 +244,8 @@ class TestSchema(TestCase):
 
     def test_16_password_validation_3(self) -> None:
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": "ABCDEF",
                      "email": user.email,
@@ -243,7 +258,8 @@ class TestSchema(TestCase):
 
     def test_17_password_validation_4(self) -> None:
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": "4Bc0eF",
                      "email": user.email,
@@ -255,7 +271,8 @@ class TestSchema(TestCase):
 
     def test_18_username_validation(self) -> None:
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": user.email,
@@ -267,7 +284,8 @@ class TestSchema(TestCase):
 
     def test_19_email_validation(self) -> None:
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+        response }} """
         user = UserFactory()
         variables = {"confirmPassword": user.password,
                      "email": "user.email",
@@ -281,7 +299,8 @@ class TestSchema(TestCase):
     def test_20_deleteUser_1(self) -> None:
         query = """query{allUsers{edges{node{id}}}}"""
         add_mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-                addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+                addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+                response}} """
         delete_mutation = """mutation($id: ID!){deleteUser(id: $id){ok error errorCode}} """
         user2 = UserFactory()
         add_variables = {"confirmPassword": user2.password,
@@ -306,7 +325,8 @@ class TestSchema(TestCase):
     def test_21_deleteUser_2(self) -> None:
         query = """query{allUsers{edges{node{id}}}}"""
         add_mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-                addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+                addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+                response}} """
         delete_mutation = """mutation($id: ID!){deleteUser(id: $id){ok error errorCode}} """
         user2 = UserFactory()
         add_variables = {"confirmPassword": user2.password,
@@ -333,7 +353,8 @@ class TestSchema(TestCase):
 
     def test_22_deleteUser_3(self) -> None:
         add_mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-                addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+                addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok 
+                response}} """
         delete_mutation = """mutation($id: ID!){deleteUser(id: $id){ok error errorCode}} """
         user2 = UserFactory()
         add_variables = {"confirmPassword": user2.password,
@@ -355,8 +376,9 @@ class TestSchema(TestCase):
 
     def test_23_editUser(self) -> None:
         query = """query{allUsers{edges{node{id username firstName lastName email description}}}}"""
-        mutation = """mutation($description: String! $email: String! $firstName: String! $id: ID! $lastName: String! $password: String! $username: String!){
-        editUser(description: $description, email: $email, firstName: $firstName, id: $id, lastName: $lastName, password: $password, username: $username){ok error errorCode}} """
+        mutation = """mutation($description: String! $email: String! $firstName: String! $id: ID! $lastName: String! 
+        $password: String! $username: String!){ editUser(description: $description, email: $email, firstName: 
+        $firstName, id: $id, lastName: $lastName, password: $password, username: $username){ok error errorCode}} """
         UserFactory()
         query_result_1 = self.client.execute(query)
         userID = query_result_1["data"]["allUsers"]["edges"][0]["node"]["id"]
