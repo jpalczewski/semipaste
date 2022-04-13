@@ -143,3 +143,18 @@ class TestSchema(TestCase):
         self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
         self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["lastName"], user.last_name)
         self.assertEqual(query_result["data"]["allUsers"]["edges"][1]["node"]["lastName"], "")
+
+    def test_10_showUser_isActive(self) -> None:
+        query = """query{allUsers{edges{node{isActive}}}} """
+        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": user.email,
+                     "password": user.password,
+                     "username": "Test10"}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        query_result = self.client.execute(query)
+        self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][1]["node"]["isActive"], True)
