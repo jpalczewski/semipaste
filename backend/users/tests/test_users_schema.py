@@ -276,3 +276,30 @@ class TestSchema(TestCase):
         mutation_result = self.client.execute(mutation, variable_values=variables)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], False)
         self.assertEqual(mutation_result["data"]["addUser"]["response"], "Invalid email!")
+
+    # delete_user
+    def test_20_deleteUser_1(self) -> None:
+        query = """query{allUsers{edges{node{id}}}}"""
+        add_mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
+                addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        delete_mutation = """mutation($id: ID!){deleteUser(id: $id){ok error errorCode}} """
+        user2 = UserFactory()
+        add_variables = {"confirmPassword": user2.password,
+                         "email": user2.email,
+                         "password": user2.password,
+                         "username": "Test20"}
+
+        class User2:
+            user = user2
+
+        add_mutation_result = self.client.execute(add_mutation, variable_values=add_variables)
+        self.assertEqual(add_mutation_result["data"]["addUser"]["ok"], True)
+        self.assertEqual(add_mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
+        query_result = self.client.execute(query)
+        userID = query_result["data"]["allUsers"]["edges"][1]["node"]["id"]
+        delete_variables = {"id": userID}
+        delete_mutation_result = self.client.execute(delete_mutation, variable_values=delete_variables, context=User2)
+        print(delete_mutation_result)
+        self.assertEqual(delete_mutation_result["data"]["deleteUser"]["ok"], True)
+        self.assertEqual(delete_mutation_result["data"]["deleteUser"]["error"], None)
+        self.assertEqual(delete_mutation_result["data"]["deleteUser"]["errorCode"], "OK")
