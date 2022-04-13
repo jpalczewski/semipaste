@@ -15,6 +15,7 @@ class TestSchema(TestCase):
     def setUp(self) -> None:
         self.client = Client(graphene.Schema(query=Query, mutation=Mutation))
 
+    # add_user
     def test_01_showAllUsers_beforeAddMutation(self) -> None:
         query = """query{allUsers{edges{node{id lastLogin isSuperuser username firstName lastName email isStaff 
         isActive}}}} """
@@ -23,96 +24,122 @@ class TestSchema(TestCase):
 
     def test_02_addUser_mutation(self) -> None:
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok }} """
-        example_user = UserFactory()
-        variables = {"confirmPassword": example_user.password,
-                     "email": example_user.email,
-                     "password": example_user.password,
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": user.email,
+                     "password": user.password,
                      "username": "Test02"}
 
         mutation_result = self.client.execute(mutation, variable_values=variables)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
 
     def test_03_showUser_id_1(self) -> None:
-        id_query = """query{allUsers{edges{node{id}}}}"""
+        query = """query{allUsers{edges{node{id}}}}"""
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok }} """
-        example_user = UserFactory()
-        variables = {"confirmPassword": example_user.password,
-                     "email": example_user.email,
-                     "password": example_user.password,
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": user.email,
+                     "password": user.password,
                      "username": "Test03"}
         mutation_result = self.client.execute(mutation, variable_values=variables)
-        query_result = self.client.execute(id_query)
+        query_result = self.client.execute(query)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
-        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["id"], '21')
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][1]["node"]["id"], '25')
 
     def test_04_showUser_id_2(self) -> None:
-        id_query = """query{allUsers(id: 24){edges{node{id}}}} """
+        query = """query{allUsers(id: 26){edges{node{id}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok }} """
-        example_user = UserFactory()
-        variables = {"confirmPassword": example_user.password,
-                     "email": example_user.email,
-                     "password": example_user.password,
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": user.email,
+                     "password": user.password,
                      "username": "Test04"}
         mutation_result = self.client.execute(mutation, variable_values=variables)
-        query_result = self.client.execute(id_query)
+        query_result = self.client.execute(query)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
-        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["id"], '24')
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["id"], '26')
 
     def test_05_showUser_lastLogin(self) -> None:
-        id_query = """query{allUsers(id: 26){edges{node{lastLogin}}}} """
+        query = """query{allUsers{edges{node{lastLogin}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok }} """
-        example_user = UserFactory()
-        variables = {"confirmPassword": example_user.password,
-                     "email": example_user.email,
-                     "password": example_user.password,
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": user.email,
+                     "password": user.password,
                      "username": "Test05"}
         mutation_result = self.client.execute(mutation, variable_values=variables)
-        query_result = self.client.execute(id_query)
+        query_result = self.client.execute(query)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
         self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["lastLogin"], None)
 
     def test_06_showUser_isSuperuser(self) -> None:
-        id_query = """query{allUsers(id: 28){edges{node{isSuperuser}}}} """
+        query = """query{allUsers{edges{node{isSuperuser}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok }} """
-        example_user = UserFactory()
-        variables = {"confirmPassword": example_user.password,
-                     "email": example_user.email,
-                     "password": example_user.password,
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": user.email,
+                     "password": user.password,
                      "username": "Test06"}
         mutation_result = self.client.execute(mutation, variable_values=variables)
-        query_result = self.client.execute(id_query)
+        query_result = self.client.execute(query)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
-        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["isSuperuser"], False)
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["isSuperuser"], user.is_superuser)
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][1]["node"]["isSuperuser"], False)
 
     def test_07_showUser_username(self) -> None:
-        id_query = """query{allUsers(id: 30){edges{node{username}}}} """
+        query = """query{allUsers{edges{node{username}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok }} """
-        example_user = UserFactory()
-        variables = {"confirmPassword": example_user.password,
-                     "email": example_user.email,
-                     "password": example_user.password,
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": user.email,
+                     "password": user.password,
                      "username": "Test07"}
         mutation_result = self.client.execute(mutation, variable_values=variables)
-        query_result = self.client.execute(id_query)
+        query_result = self.client.execute(query)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
-        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["username"], "Test07")
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["username"], user.username)
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][1]["node"]["username"], "Test07")
 
     def test_08_showUser_firstName(self) -> None:
-        id_query = """query{allUsers(id: 32){edges{node{firstName}}}} """
+        query = """query{allUsers{edges{node{firstName}}}} """
         mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
-        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok }} """
-        example_user = UserFactory()
-        variables = {"confirmPassword": example_user.password,
-                     "email": example_user.email,
-                     "password": example_user.password,
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": user.email,
+                     "password": user.password,
                      "username": "Test08"}
         mutation_result = self.client.execute(mutation, variable_values=variables)
-        query_result = self.client.execute(id_query)
+        query_result = self.client.execute(query)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
-        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["firstName"], "")
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["firstName"], user.first_name)
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][1]["node"]["firstName"], "")
+
+    def test_09_showUser_lastName(self) -> None:
+        query = """query{allUsers{edges{node{lastName}}}} """
+        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": user.email,
+                     "password": user.password,
+                     "username": "Test09"}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        query_result = self.client.execute(query)
+        self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][0]["node"]["lastName"], user.last_name)
+        self.assertEqual(query_result["data"]["allUsers"]["edges"][1]["node"]["lastName"], "")
