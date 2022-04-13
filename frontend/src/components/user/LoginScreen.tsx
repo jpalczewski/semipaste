@@ -33,19 +33,19 @@ export const LoginScreen = () => {
     //   setError(errorMsg);
     //   return;
     // }
-    console.log("inputs -> ", inputs);
-    console.log("event -> ", event);
+
     commitMutation<loginMutation>(RelayEnvironment, {
       mutation: login,
       variables: event,
       onCompleted: (response) => {
-        console.log("ok", response);
-        console.log("message", response.tokenAuth);
         {
-          //response.tokenAuth != null && navigate("/user");
+          localStorage.setItem(
+            "token",
+            JSON.stringify(response.tokenAuth?.token)
+          );
+          response.tokenAuth != null && navigate("/user");
+          window.location.reload();
         }
-
-        navigate("/user");
       },
       onError: (error) => {
         console.error(error);

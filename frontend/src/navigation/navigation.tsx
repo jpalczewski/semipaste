@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   NavigationWrapper,
   Container,
   LeftContainer,
   NavInnerCont,
-  NavExtendedCont,
   NavLinkCont,
   OpenLinksButton,
-  NavbarLinkExt,
   LogoImg,
   NavLink,
   RightContainer,
@@ -18,7 +16,20 @@ import { Button, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
-  const [extNavbar, setExtNavbar] = useState(false);
+  const [token, setToken] = useState([]);
+
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("token")!);
+    if (token) {
+      setToken(token);
+    }
+  }, []);
+  const logOut = () => {
+    localStorage.removeItem("token");
+    window.location.reload();
+    navigate("");
+  };
+
   const navigate = useNavigate();
   return (
     <NavigationWrapper>
@@ -40,27 +51,20 @@ const Navigation = () => {
             <NavLink to="/about" activeStyle>
               O Pastebin.pl
             </NavLink>
-            <OpenLinksButton
-              onClick={() => {
-                setExtNavbar(!extNavbar);
-              }}
-            >
-              {extNavbar ? <>&#10005;</> : <>&#8801;</>}
+            <OpenLinksButton>
+              {token ? <>&#10005;</> : <>&#8801;</>}
             </OpenLinksButton>
           </NavLinkCont>
         </Container>
         <RightContainer>
-          {extNavbar ? (
+          {token.length != 0 ? (
             <>
               <NavDropdown title="USERNAME">
                 <NavDropdown.Item href="#action3">Ustawienia</NavDropdown.Item>
                 <NavDropdown.Item href="#action4">
                   Moje wklejki
                 </NavDropdown.Item>
-                <NavDropdown.Item
-                  href="#action5"
-                  onClick={() => setExtNavbar(!extNavbar)}
-                >
+                <NavDropdown.Item href="#action5" onClick={logOut}>
                   Wyloguj
                 </NavDropdown.Item>
               </NavDropdown>
