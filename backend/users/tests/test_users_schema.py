@@ -390,3 +390,12 @@ class TestSchema(TestCase):
         self.assertEqual(mutation_result["data"]["editUserDescription"]["ok"], True)
         query_result_2 = self.client.execute(query)
         self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["description"], "Description test")
+
+    def test_25_sendNewPasswordToken_1(self) -> None:
+        mutation = """mutation($email: String!){
+        sendNewPasswordToken(email: $email){ok response}} """
+        user2 = UserFactory()
+        variables = {"email": user2.email}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        self.assertEqual(mutation_result["data"]["sendNewPasswordToken"]["ok"], True)
+        self.assertEqual(mutation_result["data"]["sendNewPasswordToken"]["response"], "Sending massage to your email!")
