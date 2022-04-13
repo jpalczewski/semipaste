@@ -352,3 +352,28 @@ class TestSchema(TestCase):
         self.assertEqual(delete_mutation_result["data"]["deleteUser"]["ok"], False)
         self.assertEqual(delete_mutation_result["data"]["deleteUser"]["error"], "Specified user does not exist")
         self.assertEqual(delete_mutation_result["data"]["deleteUser"]["errorCode"], "USERNOTFOUND")
+
+    def test_23_editUser(self) -> None:
+        query = """query{allUsers{edges{node{id username firstName lastName email description}}}}"""
+        mutation = """mutation($description: String! $email: String! $firstName: String! $id: ID! $lastName: String! $password: String! $username: String!){
+        editUser(description: $description, email: $email, firstName: $firstName, id: $id, lastName: $lastName, password: $password, username: $username){ok error errorCode}} """
+        UserFactory()
+        query_result_1 = self.client.execute(query)
+        userID = query_result_1["data"]["allUsers"]["edges"][0]["node"]["id"]
+        variables = {"description": "Description test",
+                     "email": "email@test.pl",
+                     "firstName": "First name test",
+                     "id": userID,
+                     "password": "NewP4ssw0rd",
+                     "lastName": "Last name test",
+                     "username": "Username test"}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        self.assertEqual(mutation_result["data"]["editUser"]["ok"], True)
+        self.assertEqual(mutation_result["data"]["editUser"]["error"], None)
+        self.assertEqual(mutation_result["data"]["editUser"]["errorCode"], "POSSIBLEFAILURE")
+        query_result_2 = self.client.execute(query)
+        self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["description"], "Description test")
+        self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["email"], "email@test.pl")
+        self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["firstName"], "First name test")
+        self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["lastName"], "Last name test")
+        self.assertEqual(query_result_2["data"]["allUsers"]["edges"][0]["node"]["username"], "Username test")
