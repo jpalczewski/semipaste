@@ -399,3 +399,11 @@ class TestSchema(TestCase):
         mutation_result = self.client.execute(mutation, variable_values=variables)
         self.assertEqual(mutation_result["data"]["sendNewPasswordToken"]["ok"], True)
         self.assertEqual(mutation_result["data"]["sendNewPasswordToken"]["response"], "Sending massage to your email!")
+
+    def test_26_sendNewPasswordToken_2(self) -> None:
+        mutation = """mutation($email: String!){
+        sendNewPasswordToken(email: $email){ok response}} """
+        variables = {"email": "email@test.pl"}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        self.assertEqual(mutation_result["data"]["sendNewPasswordToken"]["ok"], False)
+        self.assertEqual(mutation_result["data"]["sendNewPasswordToken"]["response"], "No such email.")
