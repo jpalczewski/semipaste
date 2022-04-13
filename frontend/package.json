@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@redux-devtools/core": "^3.11.0",
-    "@types/react": "^17.0.39",
+    "@types/react": "^18.0.3",
     "@types/react-codemirror": "^1.0.7",
     "@types/react-relay": "^13.0.1",
     "@types/react-table": "^7.7.9",
