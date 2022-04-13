@@ -330,3 +330,25 @@ class TestSchema(TestCase):
         self.assertEqual(delete_mutation_result["data"]["deleteUser"]["error"],
                          "You don't have permission to this action")
         self.assertEqual(delete_mutation_result["data"]["deleteUser"]["errorCode"], "PERMISSIONDENIED")
+
+    def test_22_deleteUser_3(self) -> None:
+        add_mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
+                addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response}} """
+        delete_mutation = """mutation($id: ID!){deleteUser(id: $id){ok error errorCode}} """
+        user2 = UserFactory()
+        add_variables = {"confirmPassword": user2.password,
+                         "email": user2.email,
+                         "password": user2.password,
+                         "username": "Test20"}
+
+        class User2:
+            user = user2
+
+        add_mutation_result = self.client.execute(add_mutation, variable_values=add_variables)
+        self.assertEqual(add_mutation_result["data"]["addUser"]["ok"], True)
+        self.assertEqual(add_mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
+        delete_variables = {"id": "-1"}
+        delete_mutation_result = self.client.execute(delete_mutation, variable_values=delete_variables, context=User2)
+        self.assertEqual(delete_mutation_result["data"]["deleteUser"]["ok"], False)
+        self.assertEqual(delete_mutation_result["data"]["deleteUser"]["error"], "Specified user does not exist")
+        self.assertEqual(delete_mutation_result["data"]["deleteUser"]["errorCode"], "USERNOTFOUND")
