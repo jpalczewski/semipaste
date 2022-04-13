@@ -6,6 +6,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from pygments import lexers
 
 # Project
+from backend.filters import PasteBinFilterFields
 from pastes.models import Attachment, PasteBin
 from pastes.queries.active_paste_bin import ActivePasteBin
 from pastes.queries.expired_paste_bin import ExpiredPasteBin
@@ -16,7 +17,7 @@ class PasteBinNode(DjangoObjectType):
 
     class Meta:
         model = PasteBin
-        filter_fields = ['title', 'id', 'date_of_expiry']
+        filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
 
