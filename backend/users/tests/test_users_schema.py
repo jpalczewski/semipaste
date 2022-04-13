@@ -264,3 +264,15 @@ class TestSchema(TestCase):
         mutation_result = self.client.execute(mutation, variable_values=variables)
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], False)
         self.assertEqual(mutation_result["data"]["addUser"]["response"], "Username already exists!")
+
+    def test_19_email_validation(self) -> None:
+        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        user = UserFactory()
+        variables = {"confirmPassword": user.password,
+                     "email": "user.email",
+                     "password": user.password,
+                     "username": "Test19"}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        self.assertEqual(mutation_result["data"]["addUser"]["ok"], False)
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "Invalid email!")
