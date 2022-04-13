@@ -203,3 +203,15 @@ class TestSchema(TestCase):
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], True)
         self.assertEqual(mutation_result["data"]["addUser"]["response"], "Account created. Check your mailbox")
         self.assertEqual(query_result["data"]["allUsers"]["edges"][1]["node"]["isVerified"], False)
+
+    def test_14_password_validation_1(self) -> None:
+        mutation = """mutation($confirmPassword: String! $email: String! $password: String! $username: String!){
+        addUser(confirmPassword: $confirmPassword, email: $email, password: $password, username: $username){ok response }} """
+        user = UserFactory()
+        variables = {"confirmPassword": "aBc1",
+                     "email": user.email,
+                     "password": "aBc1",
+                     "username": "Test13"}
+        mutation_result = self.client.execute(mutation, variable_values=variables)
+        self.assertEqual(mutation_result["data"]["addUser"]["ok"], False)
+        self.assertEqual(mutation_result["data"]["addUser"]["response"], "length should be at least 6")
