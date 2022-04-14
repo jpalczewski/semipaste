@@ -60,13 +60,11 @@ const Navigation = () => {
           {token.length != 0 ? (
             <>
               <NavDropdown title="USERNAME">
-                <NavDropdown.Item href="#action3">Ustawienia</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">
-                  Moje wklejki
+                <NavDropdown.Item onClick={() => navigate("user/settings")}>
+                  Ustawienia
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#action5" onClick={logOut}>
-                  Wyloguj
-                </NavDropdown.Item>
+                <NavDropdown.Item>Moje wklejki</NavDropdown.Item>
+                <NavDropdown.Item onClick={logOut}>Wyloguj</NavDropdown.Item>
               </NavDropdown>
               <img src={Logo2}></img>
             </>

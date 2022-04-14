@@ -1,4 +1,5 @@
 import React from "react";
+import { Wrapper } from "../../styles/Components.style";
 import { useLocalStorage } from "../../useLocalStorage";
 
 export const Settings = () => {
@@ -9,8 +10,11 @@ export const Settings = () => {
   };
 
   return (
-    <button onClick={toggleTheme}>
-      {`The current theme is ${isDarkTheme ? `dark` : `light`}`}
-    </button>
+    <Wrapper>
+      <p>SETTING</p>
+      <button onClick={toggleTheme}>
+        {`The current theme is ${isDarkTheme ? `dark` : `light`}`}
+      </button>
+    </Wrapper>
   );
 };
