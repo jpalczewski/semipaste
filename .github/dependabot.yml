@@ -10,8 +10,8 @@ updates:
     directory: "/backend"
     schedule:
       interval: "daily"
-  
-  
+
+
   - package-ecosystem: "docker"
     directory: "/frontend"
     schedule:
