@@ -1,0 +1,653 @@
+type Query {
+  userReport(
+    """The ID of the object"""
+    id: ID!
+  ): UserReportType
+  userReports(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserReportTypeConnection
+  pasteReport(
+    """The ID of the object"""
+    id: ID!
+  ): PasteReportType
+  pasteReports(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): PasteReportTypeConnection
+  allLanguages: [String]
+  allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): PasteBinNodeConnection @deprecated(reason: "It will be soon available only for superusers")
+  activePasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ActivePasteBinConnection
+  expiredPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection
+  pasteBin(
+    """The ID of the object"""
+    id: ID!
+  ): PasteBinNode
+  user: UserNode
+  allUsers(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserNodeConnection
+  node(
+    """The ID of the object"""
+    id: ID!
+  ): Node
+  _debug: DjangoDebug
+}
+
+type UserReportType implements Node {
+  reason: String!
+  author: UserNode!
+
+  """The ID of the object"""
+  id: ID!
+  user: UserNode
+}
+
+"""An object with an ID"""
+interface Node {
+  """The ID of the object"""
+  id: ID!
+}
+
+type UserNode implements Node {
+  id: ID!
+  lastLogin: DateTime
+
+  """
+  Oznacza, że ten użytkownik ma wszystkie uprawnienia bez ich jawnego przypisywania.
+  """
+  isSuperuser: Boolean!
+
+  """Wymagana. 150 lub mniej znaków. Jedynie litery, cyfry i @/./+/-/_."""
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+
+  """Określa czy użytkownik może zalogować się do panelu administracyjnego."""
+  isStaff: Boolean!
+
+  """
+  Określa czy użytkownika należy uważać za aktywnego. Odznacz zamiast usuwać konto.
+  """
+  isActive: Boolean!
+  dateJoined: DateTime!
+  description: String!
+  isVerified: Boolean!
+  reportSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserReportTypeConnection!
+  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): PasteBinNodeConnection!
+}
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+type UserReportTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [UserReportTypeEdge]!
+}
+
+"""
+The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
+"""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""A Relay edge containing a `UserReportType` and its cursor."""
+type UserReportTypeEdge {
+  """The item at the end of the edge"""
+  node: UserReportType
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type PasteBinNodeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [PasteBinNodeEdge]!
+}
+
+"""A Relay edge containing a `PasteBinNode` and its cursor."""
+type PasteBinNodeEdge {
+  """The item at the end of the edge"""
+  node: PasteBinNode
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type PasteBinNode implements Node {
+  id: ID!
+  title: String!
+  text: String!
+  dateOfCreation: DateTime!
+  exposure: Boolean!
+  expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
+  language: String!
+  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
+}
+
+"""An enumeration."""
+enum PastesPasteBinExpireAfterChoices {
+  """never"""
+  NEVER
+
+  """1 minute"""
+  MIN
+
+  """1 hour"""
+  HOUR
+
+  """1 day"""
+  DAY
+
+  """1 week"""
+  WEEK
+
+  """1 month"""
+  MONTH
+
+  """1 year"""
+  YEAR
+}
+
+type AttachmentNodeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [AttachmentNodeEdge]!
+}
+
+"""A Relay edge containing a `AttachmentNode` and its cursor."""
+type AttachmentNodeEdge {
+  """The item at the end of the edge"""
+  node: AttachmentNode
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type AttachmentNode implements Node {
+  id: ID!
+  image: String!
+  url: String
+}
+
+type PasteReportType implements Node {
+  reason: String!
+  author: UserNode!
+
+  """The ID of the object"""
+  id: ID!
+  paste: PasteBinNode
+}
+
+type PasteReportTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [PasteReportTypeEdge]!
+}
+
+"""A Relay edge containing a `PasteReportType` and its cursor."""
+type PasteReportTypeEdge {
+  """The item at the end of the edge"""
+  node: PasteReportType
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ActivePasteBinConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ActivePasteBinEdge]!
+}
+
+"""A Relay edge containing a `ActivePasteBin` and its cursor."""
+type ActivePasteBinEdge {
+  """The item at the end of the edge"""
+  node: ActivePasteBin
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ActivePasteBin implements Node {
+  id: ID!
+  title: String!
+  text: String!
+  dateOfCreation: DateTime!
+  exposure: Boolean!
+  expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
+  language: String!
+  attachmentToken: String!
+  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
+}
+
+type ExpiredPasteBinConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ExpiredPasteBinEdge]!
+}
+
+"""A Relay edge containing a `ExpiredPasteBin` and its cursor."""
+type ExpiredPasteBinEdge {
+  """The item at the end of the edge"""
+  node: ExpiredPasteBin
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ExpiredPasteBin implements Node {
+  id: ID!
+  title: String!
+  text: String!
+  dateOfCreation: DateTime!
+  exposure: Boolean!
+  expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
+  language: String!
+  attachmentToken: String!
+  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
+}
+
+type UserNodeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [UserNodeEdge]!
+}
+
+"""A Relay edge containing a `UserNode` and its cursor."""
+type UserNodeEdge {
+  """The item at the end of the edge"""
+  node: UserNode
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Debugging information for the current query."""
+type DjangoDebug {
+  """Executed SQL queries for this API query."""
+  sql: [DjangoDebugSQL]
+
+  """Raise exceptions for this API query."""
+  exceptions: [DjangoDebugException]
+}
+
+"""Represents a single database query made to a Django managed DB."""
+type DjangoDebugSQL {
+  """The type of database being used (e.g. postrgesql, mysql, sqlite)."""
+  vendor: String!
+
+  """The Django database alias (e.g. 'default')."""
+  alias: String!
+
+  """The actual SQL sent to this database."""
+  sql: String
+
+  """Duration of this database query in seconds."""
+  duration: Float!
+
+  """The raw SQL of this query, without params."""
+  rawSql: String!
+
+  """JSON encoded database query parameters."""
+  params: String!
+
+  """Start time of this database query."""
+  startTime: Float!
+
+  """Stop time of this database query."""
+  stopTime: Float!
+
+  """Whether this database query took more than 10 seconds."""
+  isSlow: Boolean!
+
+  """Whether this database query was a SELECT."""
+  isSelect: Boolean!
+
+  """Postgres transaction ID if available."""
+  transId: String
+
+  """Postgres transaction status if available."""
+  transStatus: String
+
+  """Postgres isolation level if available."""
+  isoLevel: String
+
+  """Postgres connection encoding if available."""
+  encoding: String
+}
+
+"""Represents a single exception raised."""
+type DjangoDebugException {
+  """The class of the exception"""
+  excType: String!
+
+  """The message of the exception"""
+  message: String!
+
+  """The stack trace"""
+  stack: String!
+}
+
+type Mutation {
+  reportUser(input: ReportUserInput!): ReportUserPayload
+  reportPaste(input: ReportPasteInput!): ReportPastePayload
+  addPasteBin(input: AddPasteBinInput!): AddPasteBinPayload
+
+  """Mutation that is responsible for deleting pastes"""
+  deletePasteBin(id: ID!): DeletePasteBin
+  highlightPasteBin(input: HighlightPasteBinInput!): HighlightPasteBinPayload
+  highlightPreview(input: HighlightPreviewInput!): HighlightPreviewPayload
+
+  """Add an attachment to a paste"""
+  addAttachment(input: AddAttachmentInput!): AddAttachmentPayload
+
+  """Delete an attachment"""
+  deleteAttachment(input: DeleteAttachmentInput!): DeleteAttachmentPayload
+  addUser(confirmPassword: String!, email: String!, password: String!, username: String!): AddUser
+  editUser(description: String = null, email: String = null, firstName: String = null, id: ID!, lastName: String = null, password: String = null, username: String = null): EditUser
+  editUserDescription(description: String = null, id: ID!): EditUserDescription
+  deleteUser(id: ID!): DeleteUser
+  sendNewPasswordToken(email: String = null): SendNewPasswordToken
+  setNewPassword(code: String = null, confirmNewPassword: String = null, email: String = null, newPassword: String = null): SetNewPassword
+  verifyNewUser(code: String = null, id: ID = null): VerifyNewUser
+
+  """Obtain JSON Web Token mutation"""
+  tokenAuth(input: ObtainJSONWebTokenInput!): ObtainJSONWebTokenPayload
+  verifyToken(input: VerifyInput!): VerifyPayload
+  refreshToken(input: RefreshInput!): RefreshPayload
+  deleteTokenCookie: DeleteJSONWebTokenCookie
+}
+
+type ReportUserPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
+}
+
+enum ErrorCode {
+  OK
+
+  """Requested paste just doesn't exist"""
+  NONEXISTENTPASTE
+
+  """User should be logged in to do that operation"""
+  NOTLOGGEDIN
+
+  """Lack of permissions"""
+  PERMISSIONDENIED
+  OPERATIONFAILED
+  EXCEPTIONOCCURED
+  USERNOTFOUND
+  POSSIBLEFAILURE
+}
+
+input ReportUserInput {
+  uid: ID!
+  reason: String!
+  clientMutationId: String
+}
+
+type ReportPastePayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
+}
+
+input ReportPasteInput {
+  pid: ID!
+  reason: String!
+  clientMutationId: String
+}
+
+type AddPasteBinPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+
+  """Returns added paste ID"""
+  addedPasteId: Int
+
+  """Token required to upload attachments"""
+  attachmentToken: String
+  clientMutationId: String
+}
+
+input AddPasteBinInput {
+  """Title of new paste"""
+  title: String!
+
+  """Content of a new paste"""
+  text: String!
+
+  """Expiration time"""
+  expireAfter: ExpireChoices!
+
+  """Is it private or not?"""
+  exposure: Boolean!
+
+  """Syntax Highlight"""
+  language: String
+  clientMutationId: String
+}
+
+"""An enumeration."""
+enum ExpireChoices {
+  NEVER
+  MIN
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  YEAR
+}
+
+type DeletePasteBin {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+}
+
+type HighlightPasteBinPayload {
+  highlight: String
+  clientMutationId: String
+}
+
+input HighlightPasteBinInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type HighlightPreviewPayload {
+  highlight: String
+  clientMutationId: String
+}
+
+input HighlightPreviewInput {
+  code: String!
+  lang: String
+  clientMutationId: String
+}
+
+type AddAttachmentPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
+}
+
+input AddAttachmentInput {
+  """Upload token"""
+  token: String!
+
+  """Image description"""
+  description: String
+  clientMutationId: String
+}
+
+type DeleteAttachmentPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
+}
+
+input DeleteAttachmentInput {
+  id: ID
+  clientMutationId: String
+}
+
+type AddUser {
+  ok: Boolean
+  response: String
+}
+
+type EditUser {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+}
+
+type EditUserDescription {
+  ok: Boolean
+}
+
+type DeleteUser {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+}
+
+type SendNewPasswordToken {
+  ok: Boolean
+  response: String
+}
+
+type SetNewPassword {
+  ok: Boolean
+  response: String
+}
+
+type VerifyNewUser {
+  ok: Boolean
+  response: String
+}
+
+"""Obtain JSON Web Token mutation"""
+type ObtainJSONWebTokenPayload {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  clientMutationId: String
+  token: String!
+}
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
+
+input ObtainJSONWebTokenInput {
+  clientMutationId: String
+  username: String!
+  password: String!
+}
+
+type VerifyPayload {
+  payload: GenericScalar!
+  clientMutationId: String
+}
+
+input VerifyInput {
+  token: String
+  clientMutationId: String
+}
+
+type RefreshPayload {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  clientMutationId: String
+  token: String!
+}
+
+input RefreshInput {
+  token: String
+  clientMutationId: String
+}
+
+type DeleteJSONWebTokenCookie {
+  deleted: Boolean!
+}

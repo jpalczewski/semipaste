@@ -1,0 +1,56 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+-   repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+    -   id: black
+        name: black
+        entry: black
+        args: [--config=backend/pyproject.toml, backend/]
+        types: [python]
+        exclude: (^frontend/|migrations)
+-   repo: https://github.com/pycqa/flake8
+    rev: '4.0.1'  # pick a git hash / tag to point to
+    hooks:
+    -   id: flake8
+        name: flake8
+        entry: flake8
+        args: [--config=backend/setup.cfg, backend/]
+        types: [python]
+        exclude: /(migrations|tests|backend)/
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.942  # Use the sha / tag you want to point at
+    hooks:
+    -   id: mypy
+        name: mypy
+        entry: mypy
+        args: [--config-file=backend/pyproject.toml, backend/]
+        types: [python]
+        exclude: ^frontend/
+        additional_dependencies: [tokenize-rt==3.2.0]
+        pass_filenames: false
+- repo: https://github.com/pycqa/isort
+  rev: 5.10.1
+  hooks:
+  -   id: isort
+      name: isort (python)
+      entry: isort
+      args: [--profile, black, --skip, migrations, --filter-files]
+      types: [python]
+      exclude: (^frontend/|migrations)
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v2.32.0
+    hooks:
+    -   id: pyupgrade
+        args: [--py310-plus]
+- repo: https://github.com/hadialqattan/pycln
+  rev: v1.2.5 # Possible releases: https://github.com/hadialqattan/pycln/releases
+  hooks:
+      - id: pycln
+        args: [--config=backend/pyproject.toml]

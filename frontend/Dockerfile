@@ -1,15 +1,21 @@
+# syntax = docker/dockerfile:1
 FROM node:16.14.0-alpine AS appbuild
 WORKDIR /app
-COPY package.json ./
-COPY yarn.lock ./
-COPY tsconfig.json ./
+COPY package.json yarn.lock tsconfig.json schema.graphql ./
 #COPY .babelrc ./
-RUN yarn install
+RUN --mount=type=cache,id=yarn,target=/usr/local/share/.cache/yarn  mkdir "/node" && \
+     yarn install  && \
+     adduser --disabled-password  app && \
+     chown -R app:app /app /node && \
+     sed -i "s/localhost:8000/backend:8000/g" package.json
 COPY src/ ./src/
 COPY public/ ./public/
-#RUN npm run build
 
-CMD yarn start
+RUN yarn relay
+
+USER app
+
+CMD yarn fast-start
 
 # Build Stage 2
 # FROM node:10.15.2-alpine

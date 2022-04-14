@@ -1,34 +1,45 @@
+# syntax = docker/dockerfile:1
 # Based on https://github.com/python-poetry/poetry/issues/1178
 
-FROM python:3.10-alpine AS builder
+FROM python:3.10-bullseye AS builder
 WORKDIR /app
-ADD pyproject.toml poetry.lock /app/
+ARG PRODUCTION
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-RUN apk add build-base libffi-dev gcc musl-dev postgresql-dev 
-RUN pip install poetry
-RUN poetry config virtualenvs.in-project true
-RUN poetry install --no-ansi
+RUN --mount=type=cache,id=pip,target=/root/.cache/pip  pip install poetry &&  \
+    mkdir /venv && \
+    poetry config virtualenvs.path /venv && \
+    poetry config installer.parallel true
+
+
+
+ADD pyproject.toml poetry.lock /app/
+
+RUN --mount=type=cache,id=poetry,target=/root/.cache/pypoetry  --mount=type=cache,id=pip,target=/root/.cache/pip if [ -n "$PRODUCTION" ]; then arg="--no-dev" ; fi && \
+    poetry install --no-ansi $arg
 
 # ---
 
-FROM python:3.10-alpine
+FROM python:3.10-slim-bullseye as backend
 WORKDIR /app
 
 COPY --from=builder /app /app
+COPY --from=builder /venv /venv
+COPY  entrypoint.sh /entrypoint
 ADD . /app
+RUN apt-get update && apt-get install -y  libpq5 && \
+    useradd app  -d /app && \
+    chown  app . && \
+    chown app /entrypoint &&  \
+    chmod +x /entrypoint && \
+    sed -i 's/\r$//g' /entrypoint && \
+    sed -i 's/\r$//g' /app/start.sh
 
-RUN adduser app -h /app -u 1000 -g 1000 -DH
-RUN chown  app .
 USER 1000
 
-# change this to match your application
-#ENTRYPOINT ["/app/bin/docker-entrypoint-web"]
 
-CMD [ "sh", "/app/entrypoint.sh" ]
+
+ENTRYPOINT [ "/entrypoint" ]
 EXPOSE 8000
-
-#CMD ["gunicorn", "-c", "python:config.gunicorn", "config.wsgi"]
-#CMD /app/.venv/bin/python manage.py runserver 0.0.0.0:8000

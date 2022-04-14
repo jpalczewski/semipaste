@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense } from "react";
 
-function App() {
+import { RelayEnvironmentProvider } from "react-relay";
+import "./App.css";
+
+import { Routerr } from "./navigation/Router";
+import RelayEnvironment from "./RelayEnvironment";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RelayEnvironmentProvider environment={RelayEnvironment}>
+      <Suspense fallback={<h1>trwa formatowanie dysku twardego</h1>}>
+        <Routerr />
+      </Suspense>
+    </RelayEnvironmentProvider>
   );
-}
+};
 
 export default App;
