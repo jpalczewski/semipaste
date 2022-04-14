@@ -141,3 +141,4 @@ backend/.bash_history
 backend/.pythonhist
 backend/media
 *.iml
+/backend/docs/_build/
