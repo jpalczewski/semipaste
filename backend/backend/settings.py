@@ -216,6 +216,11 @@ class Dev(Common):
     ATTACHMENT_TIMESPAN = values.IntegerValue(
         environ_name="ATTACHMENT_TIMESPAN", environ_prefix=None, default=300
     )
+    """
+    .. __Timespan:
+
+    Specifies how many secoNds after paste creation uploading of an imagge is allowed.
+    """
 
 
 # Quick-start development settings - unsuitable for production
