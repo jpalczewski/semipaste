@@ -21,7 +21,11 @@ class DeleteAttachment(ResultMixin, graphene.ClientIDMutation):
             attachment = Attachment.objects.get(pk=id)
             paste_author = attachment.paste.author
             if not info.context.user.is_superuser or info.context.user == paste_author:
-                return DeleteAttachment(ok=False, error_code=ErrorCode.PERMISSION_DENIED, error="Permission denied")
+                return DeleteAttachment(
+                    ok=False,
+                    error_code=ErrorCode.PERMISSION_DENIED,
+                    error="Permission denied",
+                )
             attachment.delete()
             return DeleteAttachment(
                 ok=True,

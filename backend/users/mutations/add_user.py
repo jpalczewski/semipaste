@@ -21,10 +21,6 @@ class AddUser(graphene.Mutation):
         email = graphene.String(required=True)
 
     @staticmethod
-    def username_validation(username: str) -> bool:
-        return False if User.objects.filter(username=username) else True
-
-    @staticmethod
     def password_validation(password: str) -> tuple[bool, str]:
         val = True
         response = "Everything is fine"
@@ -55,9 +51,6 @@ class AddUser(graphene.Mutation):
         confirm_password = kwargs.get('confirm_password')
         email = kwargs.get('email')
 
-        if not AddUser.username_validation(username):
-            return AddUser(ok=False, response="Username already exists!")
-
         val, response = AddUser.password_validation(password)
         if not val:
             return AddUser(ok=False, response=response)
@@ -75,9 +68,14 @@ class AddUser(graphene.Mutation):
         except Exception as e:
             return AddUser(ok=False, response=f"Failed to create user: {e}")
 
-        code = ''.join([random.SystemRandom().choice(
-            string.ascii_uppercase + string.ascii_lowercase + string.digits
-        ) for n in range(10)])
+        code = ''.join(
+            [
+                random.SystemRandom().choice(
+                    string.ascii_uppercase + string.ascii_lowercase + string.digits
+                )
+                for n in range(10)
+            ]
+        )
 
         try:
             verification = UserVerification(
@@ -94,6 +92,8 @@ class AddUser(graphene.Mutation):
                 fail_silently=None,
             )
         except Exception as e:
-            return AddUser(ok=False, response=f"Failed to send the verification code: {e}")
+            return AddUser(
+                ok=False, response=f"Failed to send the verification code: {e}"
+            )
 
         return AddUser(ok=True, response="Account created. Check your mailbox")

@@ -1,9 +1,10 @@
+# Standard Library
+
 # Django
 from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-import typing
 
 # Project
 from reports.models import Report
@@ -29,8 +30,7 @@ class UserVerification(models.Model):
     verification_code = models.TextField(_("verification code"))
     code_type = models.TextField(_("code type"))
 
-
-    def verify(self, received_code: str, code_type: str) -> typing.Tuple[bool, str]:
+    def verify(self, received_code: str, code_type: str) -> tuple[bool, str]:
         """Verify the received code with the verification code in the object.
         :returns: tuple [boolean, string]
         """

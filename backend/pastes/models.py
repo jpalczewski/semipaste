@@ -96,11 +96,11 @@ class PasteBin(models.Model):
         self.attachment_token = secrets.token_hex(16)
         super().save(*args, **kwargs)
 
-    def get_attachments(self):
+    def get_attachments(self):  # type: ignore
         return Attachment.objects.filter(paste=self.pk)
 
     def is_uploading_attachments_allowed(self) -> bool:
-        upload_time_limit = self.date_of_creation + timedelta(
+        upload_time_limit: datetime = self.date_of_creation + timedelta(
             seconds=ATTACHMENT_TIMESPAN
         )
         return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
