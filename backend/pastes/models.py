@@ -66,7 +66,7 @@ class PasteBin(models.Model):
 
     @staticmethod
     def get_time_choice(choice: str) -> timedelta:
-        match choice:  # noqa: E999
+        match choice:
             case PasteBin.ExpireChoices.MIN:
                 return timedelta(seconds=60)
             case PasteBin.ExpireChoices.HOUR:
