@@ -16,6 +16,7 @@ repos:
         name: pycln
         entry: pycln
         language: python
+        language_version: python3.10
         types: [python]
         args: [--config=backend/pyproject.toml, backend/]
         pass_filenames: false
