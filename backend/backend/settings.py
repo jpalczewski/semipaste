@@ -45,6 +45,7 @@ class Common(Configuration):
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
+        "django_filters",
         "graphene_django",
         'pastes',
         'reports',

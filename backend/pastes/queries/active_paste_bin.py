@@ -7,6 +7,7 @@ from graphene import relay
 from graphene_django import DjangoObjectType
 
 # Project
+from backend.filters import PasteBinFilterFields
 from pastes.models import PasteBin
 
 
@@ -15,7 +16,7 @@ class ActivePasteBin(DjangoObjectType):
 
     class Meta:
         model = PasteBin
-        filter_fields = ['title', 'id', 'date_of_expiry']
+        filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
 
     @classmethod
@@ -24,3 +25,6 @@ class ActivePasteBin(DjangoObjectType):
             date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc)
         )
         return active
+
+
+#

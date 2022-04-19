@@ -1,3 +1,6 @@
+# Standard Library
+import logging
+
 # Django
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -11,6 +14,8 @@ from graphene_django import DjangoObjectType
 from reports.models import Report
 from users.models import User
 from users.queries import UserNode
+
+logger = logging.getLogger(__name__)
 
 
 class UserReportType(DjangoObjectType):
@@ -28,5 +33,8 @@ class UserReportType(DjangoObjectType):
 
     @classmethod
     def get_queryset(cls, queryset, info):  # type: ignore
+        if not info.context.user.is_superuser:
+            logger.warning("User reports without privileges requested")
+            return queryset.none()
         user_model_id = ContentType.objects.get_for_model(get_user_model()).id
         return queryset.filter(content_type_id=user_model_id)
