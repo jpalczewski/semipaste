@@ -137,10 +137,10 @@ class TestSchema(TestCase):
     #         result,
     #     )
 
-    # def test_addPasteBin_mutation_and_allPasteBin_query_exposure(self) -> None:
-    #     exposure_query = """query{ allPasteBin { edges { node { visible}}}}"""
+    # def test_addPasteBin_mutation_and_allPasteBin_query_visible(self) -> None:
+    #     visible_query = """query{ allPasteBin { edges { node { visible}}}}"""
     #     self.client.execute(self.mutation)
-    #     result = self.client.execute(exposure_query)
+    #     result = self.client.execute(visible_query)
     #     self.assertDictEqual(
     #         {"data": {"allPasteBin": {"edges": [{"node": {"visible": True}}]}}}, result
     #     )

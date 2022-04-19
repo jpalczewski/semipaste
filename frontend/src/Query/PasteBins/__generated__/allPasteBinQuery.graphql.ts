@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d22b4c6dda67448e951dc19b12358de0>>
+ * @generated SignedSource<<2bdbe767cbe739b676504a1b05ceafd4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -87,7 +87,7 @@ var v0 = [
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "exposure",
+                "name": "visible",
                 "storageKey": null
               },
               {
@@ -125,7 +125,7 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "5f31dd16b5ea717830b3f8d08d3e8c66",
+    "cacheID": "ffbf85303a663b5bc06b0428ae9ffce3",
     "id": null,
     "metadata": {},
     "name": "allPasteBinQuery",
@@ -135,6 +135,6 @@ return {
 };
 })();
 
-(node as any).hash = "2de4c20e1a8dc4583f370bf8d8bb7a94";
+(node as any).hash = "4f85f3811df6aa0eddab7c96aa035a70";
 
 export default node;

@@ -5,7 +5,7 @@ import RelayEnvironment from "../../RelayEnvironment";
 import { commitMutation, useLazyLoadQuery } from "react-relay";
 import { addPasteBin } from "../../Query/PasteBins/addPasteBin";
 import { addPasteBinMutation } from "../../Query/PasteBins/__generated__/addPasteBinMutation.graphql";
-import CodeMirror from "react-codemirror";
+import CodeMirror from 'react-codemirror';
 import { allLanguagesQuery } from "../../Query/SyntaxHighlight/__generated__/allLanguagesQuery.graphql";
 import { Languages } from "../../Query/SyntaxHighlight/allLanguages";
 import { highlightPreview } from "../../Query/SyntaxHighlight/highlightPreview";
@@ -134,7 +134,7 @@ export const PasteBinForm = () => {
           <CodeMirror
             name="text"
             onChange={handleText}
-            options={{ lineNumbers: true, mode: "javascript" }}
+            options={{ lineNumbers: true }}
           />
         </Form.Group>
 

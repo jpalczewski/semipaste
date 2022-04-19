@@ -43,7 +43,7 @@ export const Tables = (props: any) => {
                 {data.activePasteBin?.edges[i]?.node?.dateOfExpiry.slice(0, 10)}
               </td>
               <td>
-                {data.activePasteBin?.edges[i]?.node?.exposure.toString()}
+                {data.activePasteBin?.edges[i]?.node?.visible.toString()}
               </td>
               <td style={{ width: 200 }}>
                 <PasteBinScreen

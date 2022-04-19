@@ -9,7 +9,7 @@ export const allPasteBin = graphql`
           text
           dateOfCreation
           id
-          vsible
+          visible
           dateOfExpiry
         }
       }
