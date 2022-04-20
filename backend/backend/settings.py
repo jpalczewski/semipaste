@@ -48,6 +48,7 @@ class Common(Configuration):
         "graphene_django",
         'pastes',
         'reports',
+        'ratings'
         # "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     ]
 

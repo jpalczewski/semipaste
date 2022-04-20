@@ -4,6 +4,7 @@
 import logging
 import os.path
 import secrets
+import typing
 from datetime import datetime, timedelta, timezone
 
 # Django
@@ -89,7 +90,8 @@ class PasteBin(models.Model):
         if self.author is None:
             self.expire_after = 'WEEK'
         choice = self.expire_after
-        self.date_of_creation = datetime.now().replace(tzinfo=timezone.utc)
+        if not self.date_of_creation:
+            self.date_of_creation = datetime.now().replace(tzinfo=timezone.utc)
         if choice == PasteBin.ExpireChoices.NEVER:
             self.date_of_expiry = None
         else:
@@ -104,6 +106,19 @@ class PasteBin(models.Model):
             seconds=ATTACHMENT_TIMESPAN
         )
         return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
+
+    def get_likes(self):
+        return self.rating_set.filter(liked=True).count()
+
+    def get_dislikes(self):
+        return self.rating_set.filter(liked=False).count()
+
+    def get_rating(self):
+        likes = self.get_likes()
+        dislikes = self.get_dislikes()
+        total_rating = likes + dislikes
+        return likes, dislikes, total_rating, round(likes/total_rating, 2)
+
 
     # Special Methods
     def __str__(self) -> str:

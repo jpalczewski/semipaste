@@ -14,9 +14,10 @@ from reports.mutations import ReportMutation
 from reports.queries import ReportQuery
 from users.mutations import UserMutation
 from users.queries import UserQuery
+from ratings.mutations import RatingMutation
 
 
-class Mutation(UserMutation, PasteBinMutation, ReportMutation):
+class Mutation(UserMutation, PasteBinMutation, ReportMutation, RatingMutation):
     token_auth = graphql_jwt.relay.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.relay.Verify.Field()
     refresh_token = graphql_jwt.relay.Refresh.Field()

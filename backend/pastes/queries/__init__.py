@@ -9,6 +9,7 @@ from pygments import lexers
 from pastes.models import Attachment, PasteBin
 from pastes.queries.active_paste_bin import ActivePasteBin
 from pastes.queries.expired_paste_bin import ExpiredPasteBin
+from pastes.queries.top_paste_bin import TopPasteBinDay, TopPasteBinWeek, TopPasteBinMonth, TopPasteBinYear
 
 
 class PasteBinNode(DjangoObjectType):
@@ -16,7 +17,7 @@ class PasteBinNode(DjangoObjectType):
 
     class Meta:
         model = PasteBin
-        filter_fields = ['title', 'id', 'date_of_expiry']
+        filter_fields = ['title', 'id', 'date_of_expiry', 'language']
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
 
@@ -42,6 +43,10 @@ class PasteBinQuery(graphene.ObjectType):
     active_paste_bin = DjangoFilterConnectionField(ActivePasteBin)
     expired_paste_bin = DjangoFilterConnectionField(ExpiredPasteBin)
     paste_bin = relay.Node.Field(PasteBinNode)
+    top_paste_bin_day = DjangoFilterConnectionField(TopPasteBinDay)
+    top_paste_bin_week = DjangoFilterConnectionField(TopPasteBinWeek)
+    top_paste_bin_moth = DjangoFilterConnectionField(TopPasteBinMonth)
+    top_paste_bin_year = DjangoFilterConnectionField(TopPasteBinYear)
 
 
 class LanguageQuery(graphene.ObjectType):
