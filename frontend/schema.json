@@ -597,7 +597,7 @@
               "deprecationReason": null,
               "description": null,
               "isDeprecated": false,
-              "name": "exposure",
+              "name": "visible",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1621,7 +1621,7 @@
             {
               "defaultValue": null,
               "description": null,
-              "name": "exposure",
+              "name": "visible",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",

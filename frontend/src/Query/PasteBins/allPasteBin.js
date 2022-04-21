@@ -9,7 +9,7 @@ export const allPasteBin = graphql`
           text
           dateOfCreation
           id
-          exposure
+          visible
           dateOfExpiry
         }
       }

@@ -4,7 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["Jacek Palczewski <jpalczewski@gmail.com>"]
 
-
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.0.4"
@@ -38,39 +37,27 @@ Faker = "^13.3.4"
 django-extensions = "^3.1.5"
 bpython = "^0.22.1"
 
-
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-
 [tool.black]
+py310 = true
 line-length = 88
 skip-string-normalization = true
 extend-exclude =  '''
 /(
-    \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
+  \.mypy_cache
   | migrations
 )/
 '''
-
 
 [tool.isort]
 profile = "black"
 atomic = true
 combine_star = true
 honor_noqa = true
-lines_before_imports = 1
 default_section = "THIRDPARTY"
-# Headings
 import_heading_future = "Future"
 import_heading_stdlib = "Standard Library"
 import_heading_django = "Django"
@@ -78,19 +65,19 @@ import_heading_thirdparty = "3rd-Party"
 import_heading_firstparty = "Project"
 import_heading_localfolder = "Local"
 known_django = "django"
-# Order
 sections = ["FUTURE","STDLIB","DJANGO","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
-
 
 [tool.mypy]
 python_version = "3.10"
+check_untyped_defs = true
 ignore_missing_imports = true
 disallow_any_generics = true
 disallow_untyped_defs = true
 no_implicit_optional = true
 no_strict_optional = true
 no_warn_no_return = true
-warn_unreachable = true
+warn_return_any = true
+warn_redundant_case = true
 allow_untyped_globals = true
 allow_redefinition = true
 show_error_context = true
@@ -104,6 +91,6 @@ exclude = '''
     | backend/manage.py
 )
 '''
+
 [tool.pycln]
 all = true
-path = "./backend"

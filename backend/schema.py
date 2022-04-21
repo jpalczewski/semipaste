@@ -1,6 +1,3 @@
-"""Backend schema."""
-
-
 # 3rd-Party
 import graphene
 import graphql_jwt
@@ -20,7 +17,7 @@ class Mutation(UserMutation, PasteBinMutation, ReportMutation):
     token_auth = graphql_jwt.relay.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.relay.Verify.Field()
     refresh_token = graphql_jwt.relay.Refresh.Field()
-    delete_token_cookie = graphql_jwt.DeleteJSONWebTokenCookie.Field()
+    delete_token_cookie = graphql_jwt.relay.DeleteJSONWebTokenCookie.Field()
 
 
 class Query(UserQuery, PasteBinQuery, LanguageQuery, ReportQuery):
