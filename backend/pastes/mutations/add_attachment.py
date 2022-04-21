@@ -18,7 +18,7 @@ class AddAttachment(ResultMixin, graphene.ClientIDMutation):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):  # type: ignore
-        token = input['token']
+        token = input.get('token')
         logger.debug(f"Received add attachment request with token {token}")
         file = info.context.FILES['image']
         if len(info.context.FILES) != 0:

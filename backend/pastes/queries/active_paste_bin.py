@@ -25,6 +25,3 @@ class ActivePasteBin(DjangoObjectType):
             date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc)
         )
         return active
-
-
-#

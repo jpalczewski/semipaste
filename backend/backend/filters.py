@@ -20,7 +20,7 @@ PasteBinFilterFields = {
     'title': DefaultFilterClasses.DEFAULT_TEXT.value,
     'text': DefaultFilterClasses.DEFAULT_TEXT.value,
     'date_of_creation': DefaultFilterClasses.DEFAULT_DATE.value,
-    'exposure': ['exact'],
+    'visible': ['exact'],
     'expire_after': ['exact'],
     'date_of_expiry': DefaultFilterClasses.DEFAULT_DATE.value,
     'author': ['exact'],

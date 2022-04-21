@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c7701731ff957269209c35c192dba6f2>>
+ * @generated SignedSource<<e35608262fc3c04ea8eb4e5144d1cac1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,8 +13,8 @@ export type ExpireChoices = "NEVER" | "MIN" | "HOUR" | "DAY" | "WEEK" | "MONTH" 
 export type addPasteBinMutation$variables = {
   text: string;
   title: string;
-  exposure: boolean;
   expireAfter?: ExpireChoices | null;
+  visible: boolean;
   language?: string | null;
 };
 export type addPasteBinMutation$data = {
@@ -37,22 +37,22 @@ var v0 = {
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "exposure"
+  "name": "language"
 },
 v2 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "language"
+  "name": "text"
 },
 v3 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "text"
+  "name": "title"
 },
 v4 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "title"
+  "name": "visible"
 },
 v5 = [
   {
@@ -64,11 +64,6 @@ v5 = [
             "kind": "Variable",
             "name": "expireAfter",
             "variableName": "expireAfter"
-          },
-          {
-            "kind": "Variable",
-            "name": "exposure",
-            "variableName": "exposure"
           },
           {
             "kind": "Variable",
@@ -84,6 +79,11 @@ v5 = [
             "kind": "Variable",
             "name": "title",
             "variableName": "title"
+          },
+          {
+            "kind": "Variable",
+            "name": "visible",
+            "variableName": "visible"
           }
         ],
         "kind": "ObjectValue",
@@ -132,27 +132,27 @@ return {
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
+      (v2/*: any*/),
       (v3/*: any*/),
-      (v4/*: any*/),
-      (v1/*: any*/),
       (v0/*: any*/),
-      (v2/*: any*/)
+      (v4/*: any*/),
+      (v1/*: any*/)
     ],
     "kind": "Operation",
     "name": "addPasteBinMutation",
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "9dc93d18b30085b490f93735054f95d0",
+    "cacheID": "f92c77fa9cdbf4b71fdfe31d4dc5cd55",
     "id": null,
     "metadata": {},
     "name": "addPasteBinMutation",
     "operationKind": "mutation",
-    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $exposure: Boolean!\n  $expireAfter: ExpireChoices = DAY\n  $language: String\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, exposure: $exposure, language: $language}) {\n    ok\n    addedPasteId\n  }\n}\n"
+    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $expireAfter: ExpireChoices = DAY\n  $visible: Boolean!\n  $language: String\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, visible: $visible, language: $language}) {\n    ok\n    addedPasteId\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "266f9af41e1c365531ba4f93a662e54b";
+(node as any).hash = "829fe6f1870757c51b661cbcaf0c8d43";
 
 export default node;

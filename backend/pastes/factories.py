@@ -17,7 +17,7 @@ class PasteBinFactory(factory.django.DjangoModelFactory):
 
     title = fake.sentence()[:50]
     text = fake.paragraph()
-    exposure = factory.Iterator([True, False])
+    visible = factory.Iterator([True, False])
     date_of_creation = factory.LazyFunction(datetime.now)
     expire_after = factory.Iterator(PasteBin.ExpireChoices)
     date_of_expiry = None

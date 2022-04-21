@@ -1,5 +1,3 @@
-"""Users forms."""
-
 # Django
 from django import forms
 

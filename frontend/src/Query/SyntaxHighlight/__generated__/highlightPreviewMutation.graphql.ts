@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<503d04068994baccf7601e947b7d7413>>
+ * @generated SignedSource<<13a2255b0434599eed0b69725e0b7394>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,7 @@
 import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type highlightPreviewMutation$variables = {
   code: string;
-  lang?: string | null;
+  lang: string;
 };
 export type highlightPreviewMutation$data = {
   readonly highlightPreview: {
@@ -91,16 +91,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "f17ac789bf80803d6ae475ee19208845",
+    "cacheID": "aed0bed5d31670ba292c1a137ca68d2b",
     "id": null,
     "metadata": {},
     "name": "highlightPreviewMutation",
     "operationKind": "mutation",
-    "text": "mutation highlightPreviewMutation(\n  $code: String!\n  $lang: String\n) {\n  highlightPreview(input: {code: $code, lang: $lang}) {\n    highlight\n  }\n}\n"
+    "text": "mutation highlightPreviewMutation(\n  $code: String!\n  $lang: String!\n) {\n  highlightPreview(input: {code: $code, lang: $lang}) {\n    highlight\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "7fe487ad0ce0877bbd9a5fdf29bf2039";
+(node as any).hash = "c5776ecb7fc6f2932acfe479e5aaa71a";
 
 export default node;
