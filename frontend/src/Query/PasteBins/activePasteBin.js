@@ -9,7 +9,7 @@ export const activePasteBin = graphql`
           text
           dateOfCreation
           id
-          exposure
+          visible
           dateOfExpiry
           language
         }
@@ -28,7 +28,7 @@ export const activePasteBin = graphql`
 //         dateOfExpiry
 //         id
 //         dateOfCreation
-//         exposure
+//         visible
 //         expireAfter
 
 //       }

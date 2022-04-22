@@ -6,6 +6,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from pygments import lexers
 
 # Project
+from backend.filters import PasteBinFilterFields
 from pastes.models import Attachment, PasteBin
 from pastes.queries.active_paste_bin import ActivePasteBin
 from pastes.queries.expired_paste_bin import ExpiredPasteBin
@@ -17,7 +18,7 @@ class PasteBinNode(DjangoObjectType):
 
     class Meta:
         model = PasteBin
-        filter_fields = ['title', 'id', 'date_of_expiry', 'language']
+        filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
 
@@ -53,7 +54,4 @@ class LanguageQuery(graphene.ObjectType):
     all_languages = graphene.List(graphene.String)
 
     def resolve_all_languages(self, info):  # type: ignore
-        """Gettting all sorted languages from pygments library"""
-        languages = [lex[0] for lex in list(lexers.get_all_lexers())]
-        languages.sort()
-        return ['Plain Text'] + languages
+        return ['Plain Text'] + sorted(lex[0] for lex in list(lexers.get_all_lexers()))

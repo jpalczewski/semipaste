@@ -4,22 +4,31 @@ import graphene
 
 class ErrorCode(graphene.Enum):
     OK = 0
-    NONEXISTENTPASTE = 1
-    NOTLOGGEDIN = 2
-    PERMISSIONDENIED = 3
-    OPERATIONFAILED = 4
-    EXCEPTIONOCCURED = 5
-    USERNOTFOUND = 6
-    POSSIBLEFAILURE = 7
+    NON_EXISTENT_PASTE = 1
+    NOT_LOGGED_IN = 2
+    PERMISSION_DENIED = 3
+    OPERATION_FAILED = 4
+    EXCEPTION_OCCURRED = 5
+    USER_NOT_FOUND = 6
+    POSSIBLE_FAILURE = 7
 
     @property
     def description(self) -> str:
-        if self == self.NONEXISTENTPASTE:
-            return "Requested paste just doesn\'t exist"
-        elif self == self.NOTLOGGEDIN:
-            return "User should be logged in to do that operation"
-        elif self == self.PERMISSIONDENIED:
-            return "Lack of permissions"
+        match self:
+            case self.NON_EXISTENT_PASTE:
+                return "Requested paste just doesn't exist"
+            case self.NOT_LOGGED_IN:
+                return "User should be logged in to do that operation"
+            case self.PERMISSION_DENIED:
+                return "Lack of permissions"
+            case self.OPERATION_FAILED:
+                return "Operation failed"
+            case self.EXCEPTION_OCCURRED:
+                return "Exception occurred"
+            case self.USER_NOT_FOUND:
+                return "User doesn't exist"
+            case self.POSSIBLE_FAILURE:
+                return "Something went wrong"
 
 
 class ResultMixin:
@@ -28,5 +37,5 @@ class ResultMixin:
     error_code = graphene.Field(
         ErrorCode,
         description="Numeric error code",
-        default_value=ErrorCode.POSSIBLEFAILURE,
+        default_value=ErrorCode.POSSIBLE_FAILURE,
     )

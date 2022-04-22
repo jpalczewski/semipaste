@@ -26,9 +26,7 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
             required=True,
             description="Expiration time",
         )
-        exposure = graphene.Boolean(
-            required="True", description="Is it private or not?"
-        )
+        visible = graphene.Boolean(required="True", description="Is it private or not?")
         language = graphene.String(description="Syntax Highlight")
 
     @classmethod
@@ -38,11 +36,11 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
         else:
             kwargs['author'] = None
         try:
-            paste = PasteBin(**kwargs)
+            paste: PasteBin = PasteBin(**kwargs)
             paste.save()
         except Exception as e:
             return AddPasteBin(
-                Ok=False, error_code=ErrorCode.EXCEPTIONOCCURED, error=str(e)
+                Ok=False, error_code=ErrorCode.EXCEPTION_OCCURRED, error=str(e)
             )
         return AddPasteBin(
             ok=True, added_paste_id=paste.pk, attachment_token=paste.attachment_token

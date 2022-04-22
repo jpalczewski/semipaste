@@ -45,11 +45,11 @@ class Common(Configuration):
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
+        "django_filters",
         "graphene_django",
         'pastes',
         'reports',
         'ratings'
-        # "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
     ]
 
     MIDDLEWARE = [
@@ -79,7 +79,6 @@ class Common(Configuration):
 
     GRAPHQL_JWT = {
         "JWT_VERIFY_EXPIRATION": True,
-        # "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
         "JWT_EXPIRATION_DELTA": timedelta(minutes=7),
         "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=4),
     }

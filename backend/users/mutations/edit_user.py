@@ -27,7 +27,7 @@ class EditUser(ResultMixin, graphene.Mutation):
         except User.DoesNotExist:
             return EditUser(
                 ok=False,
-                error_code=ErrorCode.USERNOTFOUND,
+                error_code=ErrorCode.USER_NOT_FOUND,
                 error="User with specified ID not found",
             )
         for attr in kwargs.keys():
