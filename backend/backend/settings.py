@@ -49,7 +49,6 @@ class Common(Configuration):
         "graphene_django",
         'pastes',
         'reports',
-        'ratings'
     ]
 
     MIDDLEWARE = [

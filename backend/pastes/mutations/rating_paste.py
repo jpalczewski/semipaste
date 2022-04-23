@@ -7,7 +7,7 @@ from graphene import relay
 
 # Project
 from backend.mixins import ErrorCode, ResultMixin
-from ratings.models import Rating
+from ..models import Rating
 
 logger = logging.getLogger(__file__)
 

@@ -1,5 +1,6 @@
 # Standard Library
 import logging
+import math
 import os.path
 import secrets
 import typing
@@ -58,12 +59,16 @@ class PasteBin(models.Model):
     attachment_token = models.CharField(
         _('token issued to upload attachments'),
         null=False,
-        blank=False,
+        blank=True,
         max_length=32,
         db_index=True,
     )
     objects = models.Manager()
     reports = GenericRelation(Report, related_query_name='pastes')
+    total_rating = models.IntegerField(
+        _("total number of likes and dislikes"),
+        default=0,
+    )
 
     @staticmethod
     def get_time_choice(choice: str) -> timedelta:
@@ -94,6 +99,16 @@ class PasteBin(models.Model):
                 self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
                     choice
                 )
+        else:
+            self_pre = PasteBin.objects.get(id=self.id)
+            if self_pre.expire_after != self.expire_after:
+                choice = self.expire_after
+                if choice == PasteBin.ExpireChoices.NEVER:
+                    self.date_of_expiry = None
+                else:
+                    self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
+                        choice
+                    )
         self.attachment_token = secrets.token_hex(16)
         super().save(*args, **kwargs)
 
@@ -106,6 +121,26 @@ class PasteBin(models.Model):
         )
         return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
 
+    def add_rating(self, rate):
+        if rate:
+            self.total_rating += 1
+        else:
+            self.total_rating -= 1
+        self.save()
+
+    def remove_rating(self, rate):
+        if rate:
+            self.total_rating -= 1
+        else:
+            self.total_rating += 1
+        self.save()
+
+    def update_rating(self):
+        likes = self.get_likes()
+        dislikes = self.get_dislikes()
+        self.total_rating = likes - dislikes
+        self.save()
+
     def get_likes(self):
         return self.rating_set.filter(liked=True).count()
 
@@ -115,11 +150,18 @@ class PasteBin(models.Model):
     def get_rating(self):
         likes = self.get_likes()
         dislikes = self.get_dislikes()
-        total_rating = likes + dislikes
-        return likes, dislikes, total_rating, round(likes/total_rating, 2)
+        return likes, dislikes, self.total_rating, round(likes/self.total_rating, 2)
 
+    def epoch_seconds(self) -> float:
+        td: timedelta = self.date_of_creation - datetime(1970, 1, 1).replace(tzinfo=timezone.utc)
+        return td.days * 86400 + td.seconds + (float(td.microseconds) / 1000000)
 
-    # Special Methods
+    def get_hot(self):
+        order = math.log(max(abs(self.total_rating), 1), 10)
+        sign = 1 if self.total_rating > 0 else -1 if self.total_rating < 0 else 0
+        seconds = self.epoch_seconds() - 1134028003
+        return round(sign * order + seconds / 45000, 7)
+
     def __str__(self) -> str:
         return f'{self.pk}. {self.title}'
 
@@ -162,3 +204,47 @@ def auto_delete_attachments_on_delete(  # type: ignore
         logger.debug(f"Removed {path} from deleting {instance.pk}")
     else:
         logger.warning("Received a post_delete signal for possibly deleted image")
+
+
+class Rating(models.Model):
+    """Rating model."""
+
+    liked = models.BooleanField(_('rating'), null=True)
+    paste = models.ForeignKey(to='pastes.PasteBin', verbose_name=_('rated paste'), on_delete=models.CASCADE)
+    user = models.ForeignKey(to="users.User", verbose_name=_("rater"), on_delete=models.CASCADE)
+
+    @staticmethod
+    def is_unique(paste, user):
+        return True if Rating.objects.filter(user=user, paste=paste) else False
+
+    def save(self, *args, **kwargs):
+        try:
+            self_pre = Rating.objects.get(id=self.id)
+        except Exception:
+            # new
+            if self.liked is None:
+                return
+            else:
+                self.paste.add_rating(self.liked)
+                super(Rating, self).save(*args, **kwargs)
+        else:
+            if self_pre.paste != self.paste:
+                self_pre.paste.remove_rating(self_pre.liked)
+                self.paste.add_rating(self.liked)
+                super(Rating, self).save(*args, **kwargs)
+                return
+            elif self_pre.liked != self.liked:
+                self.paste.remove_rating(self.liked)
+                self.paste.add_rating(self.liked)
+                super(Rating, self).save(*args, **kwargs)
+                return
+
+
+    def __str__(self):
+        return f'{self.user.username} ={self.liked}= {self.paste.title}'
+
+@receiver(models.signals.pre_delete, sender=Rating)
+def auto_remove_liked(sender, instance: Rating, **kwargs):
+    if instance.liked is not None:
+        instance.paste.remove_rating(instance.liked)
+    logger.debug(f'Removing {instance.liked} from {instance.paste}')

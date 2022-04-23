@@ -1,42 +1,19 @@
 # 3rd-Party
 import graphene
+import graphene_django
 from graphene import relay
-from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from pygments import lexers
 
 # Project
-from backend.filters import PasteBinFilterFields
-from pastes.models import Attachment, PasteBin
-from pastes.queries.active_paste_bin import ActivePasteBin
-from pastes.queries.expired_paste_bin import ExpiredPasteBin
-from pastes.queries.top_paste_bin import TopPasteBinDay, TopPasteBinWeek, TopPasteBinMonth, TopPasteBinYear
+from .active_paste_bin import ActivePasteBin
+from .expired_paste_bin import ExpiredPasteBin
+from .nodes import PasteBinNode, AttachmentNode
+from .top_paste_bin import TopPasteBinQuery
+from .hot_paste_bin import HotPasteBinQuery
 
 
-class PasteBinNode(DjangoObjectType):
-    id = graphene.ID(source='pk', required=True)
-
-    class Meta:
-        model = PasteBin
-        filter_fields = PasteBinFilterFields
-        interfaces = (relay.Node,)
-        exclude = ("attachment_token",)
-
-
-class AttachmentNode(DjangoObjectType):
-    id = graphene.ID(source='pk', required=True)
-    url = graphene.String()
-
-    def resolve_url(root, info, **kwargs) -> str:  # type: ignore
-        return f"http://{info.context.META['HTTP_HOST']}{root.image.url}"
-
-    class Meta:
-        model = Attachment
-        interfaces = (relay.Node,)
-        exclude = ("paste",)
-
-
-class PasteBinQuery(graphene.ObjectType):
+class PasteBinQuery(graphene.ObjectType, TopPasteBinQuery, HotPasteBinQuery):
     all_paste_bin = DjangoFilterConnectionField(
         PasteBinNode,
         deprecation_reason="It will be soon available only for " "superusers",
@@ -44,10 +21,6 @@ class PasteBinQuery(graphene.ObjectType):
     active_paste_bin = DjangoFilterConnectionField(ActivePasteBin)
     expired_paste_bin = DjangoFilterConnectionField(ExpiredPasteBin)
     paste_bin = relay.Node.Field(PasteBinNode)
-    top_paste_bin_day = DjangoFilterConnectionField(TopPasteBinDay)
-    top_paste_bin_week = DjangoFilterConnectionField(TopPasteBinWeek)
-    top_paste_bin_moth = DjangoFilterConnectionField(TopPasteBinMonth)
-    top_paste_bin_year = DjangoFilterConnectionField(TopPasteBinYear)
 
 
 class LanguageQuery(graphene.ObjectType):
