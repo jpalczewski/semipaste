@@ -3,10 +3,11 @@ import logging
 
 # 3rd-Party
 import graphene
-from graphene import relay
 
 # Project
-from backend.mixins import ErrorCode, ResultMixin
+from backend.mixins import ResultMixin
+
+# Local
 from ..models import Rating
 
 logger = logging.getLogger(__file__)
@@ -20,7 +21,7 @@ class RatingPaste(graphene.relay.ClientIDMutation, ResultMixin):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):  # type: ignore
         if not info.context.user.is_authenticated():
-            return RatingPaste(ok=False, error=f"Not authenticated")
+            return RatingPaste(ok=False, error="Not authenticated")
         paste = input.get('paste')
         liked = input.get('liked')
         user = info.context.user
@@ -68,7 +69,9 @@ class RatingPasteID(graphene.relay.ClientIDMutation, ResultMixin):
                 try:
                     rate.save()
                 except Exception as e:
-                    return RatingPasteID(ok=False, error=f"Couldn't save the rating {e}")
+                    return RatingPasteID(
+                        ok=False, error=f"Couldn't save the rating {e}"
+                    )
                 else:
                     logger.debug(f'Rating saved {rate}')
                     return RatingPasteID(ok=True, error="Rating changed")

@@ -1,14 +1,13 @@
 # 3rd-Party
 import graphene
-import graphene_django
 from graphene import relay
 from graphene_django.filter import DjangoFilterConnectionField
 from pygments import lexers
 
-# Project
+# Local
 from .active_paste_bin import ActivePasteBin
 from .expired_paste_bin import ExpiredPasteBin
-from .nodes import PasteBinNode, AttachmentNode
+from .nodes import PasteBinNode
 from .rate_paste_bin import RatePasteBinQuery
 
 

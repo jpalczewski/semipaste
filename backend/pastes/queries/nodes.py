@@ -1,9 +1,14 @@
+# Standard Library
+
+# 3rd-Party
 import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
 
-from pastes.models import PasteBin, Attachment
+# Project
 from backend.filters import PasteBinFilterFields
+from pastes.models import Attachment, PasteBin
+
 
 class PasteBinNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
@@ -15,7 +20,8 @@ class PasteBinNode(DjangoObjectType):
         exclude = ("attachment_token",)
 
     total_rating = graphene.Int()
-    def resolve_total_rating(self, info, **kwargs):
+
+    def resolve_total_rating(self, info: dict) -> int:  # type: ignore
         return self.get_total_rating()
 
 

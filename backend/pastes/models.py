@@ -3,7 +3,6 @@ import logging
 import math
 import os.path
 import secrets
-import typing
 from datetime import datetime, timedelta, timezone
 
 # Django
@@ -102,8 +101,8 @@ class PasteBin(models.Model):
                 if choice == PasteBin.ExpireChoices.NEVER:
                     self.date_of_expiry = None
                 else:
-                    self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
-                        choice
+                    self.date_of_expiry = (
+                        self.date_of_creation + PasteBin.get_time_choice(choice)
                     )
         self.attachment_token = secrets.token_hex(16)
         super().save(*args, **kwargs)
@@ -117,26 +116,28 @@ class PasteBin(models.Model):
         )
         return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
 
-    def get_likes(self):
+    def get_likes(self) -> int:
         return self.rating_set.filter(liked=True).count()
 
-    def get_dislikes(self):
+    def get_dislikes(self) -> int:
         return self.rating_set.filter(liked=False).count()
 
-    def get_total_rating(self):
+    def get_total_rating(self) -> int:
         return self.get_likes() - self.get_dislikes()
 
-    def get_rating(self):
+    def get_rating(self) -> tuple[int, int, int, float]:
         likes = self.get_likes()
         dislikes = self.get_dislikes()
         total_rating = likes - dislikes
-        return likes, dislikes, total_rating, round(likes/total_rating, 2)
+        return likes, dislikes, total_rating, round(likes / total_rating, 2)
 
     def epoch_seconds(self) -> float:
-        td: timedelta = self.date_of_creation - datetime(1970, 1, 1).replace(tzinfo=timezone.utc)
+        td: timedelta = self.date_of_creation - datetime(1970, 1, 1).replace(
+            tzinfo=timezone.utc
+        )
         return td.days * 86400 + td.seconds + (float(td.microseconds) / 1000000)
 
-    def get_hot(self):
+    def get_hot(self) -> float:
         total_rating = self.get_total_rating()
         order = math.log(max(abs(total_rating), 1), 10)
         sign = 1 if total_rating > 0 else -1 if total_rating < 0 else 0
@@ -191,18 +192,22 @@ class Rating(models.Model):
     """Rating model."""
 
     liked = models.BooleanField(_('rating'), null=True)
-    paste = models.ForeignKey(to='pastes.PasteBin', verbose_name=_('rated paste'), on_delete=models.CASCADE)
-    user = models.ForeignKey(to="users.User", verbose_name=_("rater"), on_delete=models.CASCADE)
+    paste = models.ForeignKey(
+        to='pastes.PasteBin', verbose_name=_('rated paste'), on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        to="users.User", verbose_name=_("rater"), on_delete=models.CASCADE
+    )
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):  # type: ignore
         if self.liked is None:
             self.delete()
             return
-        super(Rating, self).save()
+        super().save()
 
     @staticmethod
-    def is_unique(paste, user):
+    def is_unique(paste: PasteBin, user: User) -> bool:
         return True if Rating.objects.filter(user=user, paste=paste) else False
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.user.username} ={self.liked}= {self.paste.title}'
