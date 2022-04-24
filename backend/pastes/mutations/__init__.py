@@ -7,7 +7,7 @@ from .add_paste_bin import AddPasteBin
 from .delete_attachement import DeleteAttachment
 from .delete_paste_bin import DeletePasteBin
 from .highlight import HighlightPasteBin, HighlightPreview
-from .rating_paste import RatingPaste, RatingPasteID
+from .rating_paste_bin import RatingPaste, RatingPasteID
 
 
 class PasteBinMutation(graphene.ObjectType):

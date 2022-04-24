@@ -9,11 +9,10 @@ from pygments import lexers
 from .active_paste_bin import ActivePasteBin
 from .expired_paste_bin import ExpiredPasteBin
 from .nodes import PasteBinNode, AttachmentNode
-from .top_paste_bin import TopPasteBinQuery
-from .hot_paste_bin import HotPasteBinQuery
+from .rate_paste_bin import RatePasteBinQuery
 
 
-class PasteBinQuery(graphene.ObjectType, TopPasteBinQuery, HotPasteBinQuery):
+class PasteBinQuery(graphene.ObjectType, RatePasteBinQuery):
     all_paste_bin = DjangoFilterConnectionField(
         PasteBinNode,
         deprecation_reason="It will be soon available only for " "superusers",

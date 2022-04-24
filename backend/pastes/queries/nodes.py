@@ -14,6 +14,10 @@ class PasteBinNode(DjangoObjectType):
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
 
+    total_rating = graphene.Int()
+    def resolve_total_rating(self, info, **kwargs):
+        return self.get_total_rating()
+
 
 class AttachmentNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
