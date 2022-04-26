@@ -1,14 +1,18 @@
 import React from "react";
 import { AllFooter, TableWrapper, Wrapper } from "../styles/Components.style";
 import { Tables } from "./table/Table";
+import {activePasteBin} from "../Query/PasteBins/activePasteBin";
+import {TableCurrent} from "./table/TableCurrent";
 
 export const Current = () => {
   return (
     <>
       <Wrapper>
-        <p>Aktualne wklejki</p>
+        <p style={{ textAlign: "left", paddingLeft: 50, paddingTop: 50 }}>
+          Aktualne Wklejki
+        </p>
         <TableWrapper>
-          <Tables />
+          <TableCurrent />
         </TableWrapper>
       </Wrapper>
       <AllFooter>

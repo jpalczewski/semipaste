@@ -10,7 +10,14 @@ from backend.filters import PasteBinFilterFields
 from pastes.models import Attachment, PasteBin
 
 
-class PasteBinNode(DjangoObjectType):
+class TotalRatingNode(graphene.ObjectType):
+    total_rating = graphene.Int()
+
+    def resolve_total_rating(self, info: dict) -> int:  # type: ignore
+        return self.get_total_rating()
+
+
+class PasteBinNode(DjangoObjectType, TotalRatingNode):
     id = graphene.ID(source='pk', required=True)
 
     class Meta:
@@ -18,11 +25,6 @@ class PasteBinNode(DjangoObjectType):
         filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
-
-    total_rating = graphene.Int()
-
-    def resolve_total_rating(self, info: dict) -> int:  # type: ignore
-        return self.get_total_rating()
 
 
 class AttachmentNode(DjangoObjectType):

@@ -142,7 +142,7 @@ class PasteBin(models.Model):
         order = math.log(max(abs(total_rating), 1), 10)
         sign = 1 if total_rating > 0 else -1 if total_rating < 0 else 0
         seconds = self.epoch_seconds() - 1134028003
-        return round(sign * order + seconds / 45000, 7)
+        return round(order + sign * seconds / 45000, 7)
 
     def __str__(self) -> str:
         return f'{self.pk}. {self.title}'

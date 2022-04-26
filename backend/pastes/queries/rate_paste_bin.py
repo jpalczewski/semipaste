@@ -9,16 +9,37 @@ from ..models import PasteBin
 from .nodes import PasteBinNode
 
 
-class TopPasteBinQuery:
-    top_paste_bin = graphene.List(PasteBinNode, mode=graphene.String())
+class PopularPasteBinQuery:
+    popular_paste_bin = graphene.List(
+        PasteBinNode, mode=graphene.String(required=True), topFilter=graphene.String()
+    )
 
-    def resolve_top_paste_bin(self, info, **kwargs):  # type: ignore
+    def resolve_popular_paste_bin(self, info, **kwargs):  # type: ignore
         mode = kwargs.get('mode')
+        match mode:
+            case "top":
+                topFilter = kwargs.get('topFilter')
+                return PopularPasteBinQuery.get_top_paste_bin(topFilter)
+            case "hot":
+                return PopularPasteBinQuery.get_hot_paste_bin()
+
+    @staticmethod
+    def get_hot_paste_bin():  # type: ignore
+        objs = list(
+            PasteBin.objects.filter(
+                visible=True,
+                date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc),
+            )
+        )
+        return sorted(objs, key=lambda el: el.get_hot(), reverse=True)
+
+    @staticmethod
+    def get_top_paste_bin(filter: str):  # type: ignore
         res = PasteBin.objects.filter(
             visible=True,
             date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc),
         )
-        match mode:
+        match filter:
             case "today":
                 today = datetime.today()
                 res = res.filter(
@@ -41,24 +62,4 @@ class TopPasteBinQuery:
                     date_of_creation__lt=datetime.now().replace(tzinfo=timezone.utc)
                     + timedelta(days=360)
                 )
-        return sorted(
-            filter(lambda paste: (paste.get_total_rating() > 0), res),
-            key=lambda paste: paste.get_total_rating(),
-        )
-
-
-class HotPasteBinQuery:
-    hot_paste_bin = graphene.List(PasteBinNode)
-
-    def resolve_hot_paste_bin(self, info, **kwargs):  # type: ignore
-        objs = list(
-            PasteBin.objects.filter(
-                visible=True,
-                date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc),
-            )
-        )
-        return sorted(objs, key=lambda el: el.get_hot(), reverse=True)
-
-
-class RatePasteBinQuery(TopPasteBinQuery, HotPasteBinQuery):
-    pass
+        return sorted(res, key=lambda paste: paste.get_total_rating(), reverse=True)

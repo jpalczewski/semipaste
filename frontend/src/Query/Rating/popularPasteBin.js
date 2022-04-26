@@ -1,8 +1,8 @@
 import graphql from "babel-plugin-relay/macro";
 
-export const hotPasteBin = graphql`
-query hotPasteBinQuery {
-  hotPasteBin {
+export const popularPasteBin = graphql`
+query popularPasteBinQuery($mode: String!, $topFilter: String) {
+  popularPasteBin(mode: $mode, topFilter: $topFilter) {
     id
     title
     text
