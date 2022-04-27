@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<24466232d695864f0e8e5c281ae2d954>>
+ * @generated SignedSource<<e8e79a2f1cbe511e0398ae606fb4c56c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,6 +22,8 @@ export type activePasteBinQuery$data = {
         readonly dateOfExpiry: any | null;
         readonly language: string;
         readonly totalRating: number | null;
+        readonly likes: number | null;
+        readonly dislikes: number | null;
       } | null;
     } | null>;
   } | null;
@@ -112,6 +114,20 @@ var v0 = [
                 "kind": "ScalarField",
                 "name": "totalRating",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "likes",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "dislikes",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -141,16 +157,16 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "5033e3f6a7b157ad890fb3ddf308c65a",
+    "cacheID": "35740cdfd3c0e59bbf07201e26cf6f21",
     "id": null,
     "metadata": {},
     "name": "activePasteBinQuery",
     "operationKind": "query",
-    "text": "query activePasteBinQuery {\n  activePasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n        totalRating\n      }\n    }\n  }\n}\n"
+    "text": "query activePasteBinQuery {\n  activePasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n        totalRating\n        likes\n        dislikes\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "00d7879ee67760e98010ecf06c64f871";
+(node as any).hash = "0b02fbf9ae4d426df389ca70cf4a27cd";
 
 export default node;

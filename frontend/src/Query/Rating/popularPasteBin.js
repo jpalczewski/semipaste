@@ -11,6 +11,11 @@ query popularPasteBinQuery($mode: String!, $topFilter: String) {
     dateOfExpiry
     language
     totalRating
+    likes
+    dislikes
+    author {
+      username
+    }
   }
 }
 `;

@@ -49,6 +49,8 @@ export const TableCurrent = (props: any) => {
                   id={data.activePasteBin?.edges[i]?.node?.id}
                   text={data.activePasteBin?.edges[i]?.node?.text}
                   language={data.activePasteBin?.edges[i]?.node?.language}
+                  ikes={data.activePasteBin?.edges[i]?.node?.likes}
+                  dislikes={data.activePasteBin?.edges[i]?.node?.dislikes}
                 />
               </td>
             </tr>

@@ -7,7 +7,7 @@ from .add_paste_bin import AddPasteBin
 from .delete_attachement import DeleteAttachment
 from .delete_paste_bin import DeletePasteBin
 from .highlight import HighlightPasteBin, HighlightPreview
-from .rating_paste_bin import RatingPasteBin, RatingPasteBinID
+from .rating_paste_bin import IsPasteBinRated, RatingPasteBin, RatingPasteBinID
 
 
 class PasteBinMutation(graphene.ObjectType):
@@ -21,3 +21,4 @@ class PasteBinMutation(graphene.ObjectType):
     delete_attachment = DeleteAttachment.Field(description="Delete an attachment")
     rate_paste_bin = RatingPasteBin.Field()
     rate_paste_bin_id = RatingPasteBinID.Field()
+    is_paste_bin_rated = IsPasteBinRated.Field()

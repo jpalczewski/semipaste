@@ -13,6 +13,8 @@ export const activePasteBin = graphql`
           dateOfExpiry
           language
           totalRating
+          likes
+          dislikes
         }
       }
     }

@@ -13,6 +13,40 @@ from ..models import Rating
 logger = logging.getLogger(__file__)
 
 
+class IsPasteBinRated(graphene.relay.ClientIDMutation, ResultMixin):
+    is_rated = graphene.Boolean()
+    rate = graphene.Boolean()
+    likes = graphene.Int()
+    dislikes = graphene.Int()
+
+    class Input:
+        paste = graphene.ID()
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, **input):  # type: ignore
+        user = info.context.user
+        paste = input.get('paste')
+        rate = Rating.objects.filter(paste=paste, user=user)
+        if rate:
+            return IsPasteBinRated(
+                ok=True,
+                is_rated=True,
+                rate=rate[0].liked,
+                likes=rate[0].paste.get_likes(),
+                dislikes=rate[0].paste.get_dislikes(),
+                error="Rate exists",
+            )
+        else:
+            return IsPasteBinRated(
+                ok=True,
+                is_rated=False,
+                rate=False,
+                likes=0,
+                dislikes=0,
+                error="Rate doesn't eist",
+            )
+
+
 class RatingPasteBin(graphene.relay.ClientIDMutation, ResultMixin):
     class Input:
         paste = graphene.ID()

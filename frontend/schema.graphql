@@ -39,6 +39,8 @@ type PasteBinNode implements Node {
   language: String!
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
   totalRating: Int
+  likes: Int
+  dislikes: Int
 }
 
 """An object with an ID"""
@@ -277,6 +279,8 @@ type ActivePasteBin implements Node {
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
   attachmentToken: String!
   totalRating: Int
+  likes: Int
+  dislikes: Int
 }
 
 type UserNodeConnection {
@@ -379,6 +383,7 @@ type Mutation {
   deleteAttachment(input: DeleteAttachmentInput!): DeleteAttachmentPayload
   ratePasteBin(input: RatingPasteBinInput!): RatingPasteBinPayload
   ratePasteBinId(input: RatingPasteBinIDInput!): RatingPasteBinIDPayload
+  isPasteBinRated(input: IsPasteBinRatedInput!): IsPasteBinRatedPayload
   addUser(confirmPassword: String!, email: String!, password: String!, username: String!): AddUser
   editUser(description: String = null, email: String = null, firstName: String = null, id: ID!, lastName: String = null, password: String = null, username: String = null): EditUser
   editUserDescription(description: String = null, id: ID!): EditUserDescription
@@ -606,6 +611,27 @@ input RatingPasteBinIDInput {
   paste: ID
   user: ID
   liked: Boolean
+  clientMutationId: String
+}
+
+type IsPasteBinRatedPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  isRated: Boolean
+  rate: Boolean
+  likes: Int
+  dislikes: Int
+  clientMutationId: String
+}
+
+input IsPasteBinRatedInput {
+  paste: ID
   clientMutationId: String
 }
 
