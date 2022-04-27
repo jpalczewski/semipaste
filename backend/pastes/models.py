@@ -136,6 +136,25 @@ class Attachment(models.Model):
         verbose_name_plural = _('attachments')
 
 
+class PasteTag(models.Model):
+    """Tag model."""
+
+    tag_name = models.TextField("tag name")
+
+    def __str__(self) -> str:
+        return f"{self.tag_name}"
+
+
+class MTMTags(models.Model):
+    """Many to many tag model."""
+
+    tag = models.ForeignKey(PasteTag, on_delete=models.CASCADE)
+    paste = models.ForeignKey(PasteBin, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f'{self.pk}'
+
+
 @receiver(models.signals.pre_delete, sender=Attachment)
 def auto_delete_attachments_on_delete(  # type: ignore
     sender, instance: Attachment, **kwargs  # type: ignore
