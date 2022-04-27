@@ -33,12 +33,13 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **kwargs):  # type: ignore
         paste = PasteBin()
+        if info.context.user.is_authenticated:
+            valued = info.context.user.id
+        elif not info.context.user.is_authenticated:
+            valued = None
+        setattr(paste, 'author_id', valued)
         for attr in kwargs:
             valued = kwargs.get(attr)
-            if info.context.user.is_authenticated and attr == 'author':
-                valued = info.context.user
-            elif not info.context.user.is_authenticated and attr == 'author':
-                valued = None
             if attr == 'tags':
                 continue
             try:
@@ -51,13 +52,8 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
         tag_values = kwargs.get('tags')
         if tag_values:
             for tag in tag_values:
-                try:
-                    PasteTag.objects.get(tag_name=tag)
-                except PasteTag.DoesNotExist:
-                    PasteTag(tag_name=tag).save()
-                finally:
-                    existing_tag = PasteTag.objects.get(tag_name=tag)
-                    MTMTags(paste_id=paste.id, tag_id=existing_tag.id).save()
+                tag_get = PasteTag.objects.get_or_create(tag_name=tag)
+                MTMTags(paste_id=paste.id, tag_id=tag_get.id).save()
         return AddPasteBin(
             ok=True, added_paste_id=paste.pk, attachment_token=paste.attachment_token
         )
