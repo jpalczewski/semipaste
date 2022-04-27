@@ -12,7 +12,7 @@ from pastes.models import PasteBin
 
 
 class ActivePasteBin(DjangoObjectType):
-    id = graphene.ID(source='pk', required=True)
+    id = graphene.ID(source='external_id', required=True)
 
     class Meta:
         model = PasteBin

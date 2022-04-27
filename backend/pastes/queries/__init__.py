@@ -13,7 +13,7 @@ from pastes.queries.expired_paste_bin import ExpiredPasteBin
 
 
 class PasteBinNode(DjangoObjectType):
-    id = graphene.ID(source='pk', required=True)
+    id = graphene.ID(source='external_id', required=True)
 
     class Meta:
         model = PasteBin

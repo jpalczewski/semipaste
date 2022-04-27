@@ -2,6 +2,7 @@
 import logging
 import os.path
 import secrets
+import uuid
 from datetime import datetime, timedelta, timezone
 
 # Django
@@ -63,6 +64,12 @@ class PasteBin(models.Model):
     )
     objects = models.Manager()
     reports = GenericRelation(Report, related_query_name='pastes')
+    external_id = models.UUIDField(
+        "External field used to view pastes",
+        default=uuid.uuid4,
+        null=False,
+        blank=False,
+    )
 
     @staticmethod
     def get_time_choice(choice: str) -> timedelta:
