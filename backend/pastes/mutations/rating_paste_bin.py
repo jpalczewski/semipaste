@@ -20,11 +20,12 @@ class RatingPasteBin(graphene.relay.ClientIDMutation, ResultMixin):
 
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):  # type: ignore
-        if not info.context.user.is_authenticated():
-            return RatingPasteBin(ok=False, error="Not authenticated")
+        user = info.context.user
+        if not user.is_authenticated:
+            return RatingPasteBin(ok=False, error="User not authenticated")
         paste = input.get('paste')
         liked = input.get('liked')
-        user = info.context.user
+        user = user.id
         rate_exists = Rating.is_unique(paste, user)
         if rate_exists:
             rate = Rating.objects.get(paste=paste, user=user)
