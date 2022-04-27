@@ -12,8 +12,8 @@ from graphene_django.filter import DjangoFilterConnectionField
 from pygments import lexers
 
 # Project
-from backend.filters import PasteBinFilterFields
-from pastes.models import Attachment, PasteBin
+from backend.filters import DefaultFilterClasses, PasteBinFilterFields
+from pastes.models import Attachment, PasteBin, PasteTag
 from pastes.queries.active_paste_bin import ActivePasteBin
 from pastes.queries.expired_paste_bin import ExpiredPasteBin
 from .nodes import PasteBinNode
@@ -26,6 +26,17 @@ class PasteBinNode(DjangoObjectType):
         filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
+
+
+class PasteTagNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+
+    class Meta:
+        model = PasteTag
+        interfaces = (relay.Node,)
+        filter_fields = {
+            'tag_name': DefaultFilterClasses.DEFAULT_TEXT.value,
+        }
 
 
 class AttachmentNode(DjangoObjectType):
@@ -51,6 +62,7 @@ class PasteBinQuery(graphene.ObjectType):
     )
     expired_paste_bin = DjangoFilterConnectionField(ExpiredPasteBin)
     paste_bin = relay.Node.Field(PasteBinNode)
+    all_paste_tags = DjangoFilterConnectionField(PasteTagNode)
 
     def resolve_active_paste_bin(self, info, **kwargs):  # type: ignore
         mode = kwargs.get('mode')
