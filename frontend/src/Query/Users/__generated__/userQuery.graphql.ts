@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fa7f0bb4a0801d3a15e9d86b7ac8220d>>
+ * @generated SignedSource<<ad0122c7f139ba05433775f43fb5635c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,8 +9,10 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-export type allUsersQuery$variables = {};
-export type allUsersQuery$data = {
+export type userQuery$variables = {
+  username?: string | null;
+};
+export type userQuery$data = {
   readonly allUsers: {
     readonly edges: ReadonlyArray<{
       readonly node: {
@@ -20,20 +22,36 @@ export type allUsersQuery$data = {
         readonly id: string;
         readonly email: string;
         readonly dateJoined: any;
+        readonly description: string;
+        readonly isSuperuser: boolean;
+        readonly lastLogin: any | null;
       } | null;
     } | null>;
   } | null;
 };
-export type allUsersQuery = {
-  variables: allUsersQuery$variables;
-  response: allUsersQuery$data;
+export type userQuery = {
+  variables: userQuery$variables;
+  response: userQuery$data;
 };
 
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
+    "defaultValue": "",
+    "kind": "LocalArgument",
+    "name": "username"
+  }
+],
+v1 = [
+  {
     "alias": null,
-    "args": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "username",
+        "variableName": "username"
+      }
+    ],
     "concreteType": "UserNodeConnection",
     "kind": "LinkedField",
     "name": "allUsers",
@@ -96,6 +114,27 @@ var v0 = [
                 "kind": "ScalarField",
                 "name": "dateJoined",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "description",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isSuperuser",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "lastLogin",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -109,32 +148,32 @@ var v0 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "allUsersQuery",
-    "selections": (v0/*: any*/),
+    "name": "userQuery",
+    "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "allUsersQuery",
-    "selections": (v0/*: any*/)
+    "name": "userQuery",
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "b292245b4c9a14b3c099a0338454a707",
+    "cacheID": "eb045c32a79cbd7e1a554b4b9d595afc",
     "id": null,
     "metadata": {},
-    "name": "allUsersQuery",
+    "name": "userQuery",
     "operationKind": "query",
-    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n      }\n    }\n  }\n}\n"
+    "text": "query userQuery(\n  $username: String = \"\"\n) {\n  allUsers(username: $username) {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        description\n        isSuperuser\n        lastLogin\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "91c8e27e175500b80b08336ebb2f5eb2";
+(node as any).hash = "ee6d376e5f300bf628bc50a53fc5215b";
 
 export default node;

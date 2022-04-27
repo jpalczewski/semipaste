@@ -6,8 +6,9 @@ import { Create } from "../components/CreateScreen";
 import { Current } from "../components/CurrentScreen";
 import { Popular } from "../components/PopularScreen";
 import { About } from "../components/AboutScreen";
-import { UserScreen } from "../components/user/UserScreen";
+import { AdminScreen } from "../components/user/AdminScreen";
 import { Settings } from "../components/user/Settings";
+import { UserScreen } from "../components/user/UserScreen";
 
 export const Routerr = () => {
   return (
@@ -20,7 +21,8 @@ export const Routerr = () => {
         <Route path="/popular" element={<Popular />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<ErroPage />} />
-        <Route path="/user" element={<UserScreen />} />
+        <Route path="/user/admin" element={<AdminScreen />} />
+        <Route path="/user/user" element={<UserScreen />} />
         <Route path="/user/settings" element={<Settings />} />
       </Routes>
     </Router>

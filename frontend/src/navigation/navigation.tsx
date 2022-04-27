@@ -16,20 +16,18 @@ import { Button, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
-  const [token, setToken] = useState([]);
-
+  const [token, setToken] = useState();
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token")!);
-    if (token) {
-      setToken(token);
-    }
+    const fetch = async () => {
+      setToken(JSON.parse(localStorage.getItem("token")!));
+    };
+    fetch().catch(console.error);
   }, []);
   const logOut = () => {
     localStorage.removeItem("token");
+    navigate("/create");
     window.location.reload();
-    navigate("");
   };
-
   const navigate = useNavigate();
   return (
     <NavigationWrapper>
@@ -57,7 +55,7 @@ const Navigation = () => {
           </NavLinkCont>
         </Container>
         <RightContainer>
-          {token.length != 0 ? (
+          {token ? (
             <>
               <NavDropdown title="USERNAME">
                 <NavDropdown.Item onClick={() => navigate("user/settings")}>

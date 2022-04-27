@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { commitMutation } from "relay-runtime";
 import { login } from "../../Query/Login/login";
@@ -7,47 +7,51 @@ import { loginMutation } from "../../Query/Login/__generated__/loginMutation.gra
 import { validPassword } from "../../Regex/Regex";
 import RelayEnvironment from "../../RelayEnvironment";
 import "../../styles/LoginScreen.css";
+import imag from "../../assets/alert_login.jpeg";
 
-const validate = (form: any) => {
-  if (!form.username) return "login jest wymagany";
-  if (form.username.length < 2) return "login jest za krótki (minimum 2 znaki)";
+// const validate = (form: any) => {
+//   if (!form.username) return "login jest wymagany";
+//   if (form.username.length < 2) return "login jest za krótki (minimum 2 znaki)";
 
-  if (!validPassword.test(form.password))
-    return "Hasło powinno się składać minimum z 9 znaków, dużych i małych liter oraz naków specjalnych";
-  return null;
-};
+//   if (!validPassword.test(form.password))
+//     return "Hasło powinno się składać minimum z 9 znaków, dużych i małych liter oraz naków specjalnych";
+//   return null;
+// };
 
 export const LoginScreen = () => {
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({ username: "", password: "" });
+  const [error, setError] = useState(false);
 
   const handleChange = (event: any) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
   };
-  const handleSubmit = (event: any) => {
-    // const errorMsg = validate(inputs);
-    // if (errorMsg) {
-    //   setError(errorMsg);
-    //   return;
-    // }
-
+  const handleSubmit = async (event: any) => {
+    const name = inputs.username;
+    localStorage.setItem("username", JSON.stringify(inputs.username));
+    event.preventDefault();
     commitMutation<loginMutation>(RelayEnvironment, {
       mutation: login,
-      variables: event,
+      variables: inputs,
       onCompleted: (response) => {
-        {
+        if (response.tokenAuth?.token != undefined) {
           localStorage.setItem(
             "token",
             JSON.stringify(response.tokenAuth?.token)
           );
-          response.tokenAuth != null && navigate("/user");
+          setError(false);
+          navigate("/user/user");
+          console.log("name", name);
+
           window.location.reload();
+        } else {
+          setError(true);
         }
       },
       onError: (error) => {
+        event.preventDefault();
         console.error(error);
       },
     });
@@ -56,6 +60,14 @@ export const LoginScreen = () => {
   return (
     <div className="Contener">
       <p>Logowanie</p>
+      {error && (
+        <Alert variant="danger" onClose={() => setError(!error)} dismissible>
+          <img src={imag} style={{ borderRadius: 20 }} />
+          <br />
+          coś się... coś się popsuło i nie było mnie słychać dlatego podaj dane
+          do logowania jeszcze raz
+        </Alert>
+      )}
       <Form onSubmit={() => handleSubmit(inputs)}>
         {error && <Form.Text className="text-danger">{error}</Form.Text>}
         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -85,8 +97,7 @@ export const LoginScreen = () => {
         <Button
           variant="primary"
           type="submit"
-          onClick={(e) => {
-            e.preventDefault();
+          onClick={(inputs) => {
             handleSubmit(inputs);
           }}
         >

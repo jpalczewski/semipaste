@@ -1,8 +1,8 @@
 import graphql from "babel-plugin-relay/macro";
 
-export const allUsers = graphql`
-  query allUsersQuery {
-    allUsers {
+export const user = graphql`
+  query userQuery($username: String = "") {
+    allUsers(username: $username) {
       edges {
         node {
           username

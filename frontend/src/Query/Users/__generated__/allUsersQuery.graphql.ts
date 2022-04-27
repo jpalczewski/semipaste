@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fa7f0bb4a0801d3a15e9d86b7ac8220d>>
+ * @generated SignedSource<<32f3876f6d95cf0f382bdd53608aab57>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,9 @@ export type allUsersQuery$data = {
         readonly id: string;
         readonly email: string;
         readonly dateJoined: any;
+        readonly description: string;
+        readonly isSuperuser: boolean;
+        readonly lastLogin: any | null;
       } | null;
     } | null>;
   } | null;
@@ -96,6 +99,27 @@ var v0 = [
                 "kind": "ScalarField",
                 "name": "dateJoined",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "description",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isSuperuser",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "lastLogin",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -125,16 +149,16 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "b292245b4c9a14b3c099a0338454a707",
+    "cacheID": "657053b1158637ef6f12ae2443ddbade",
     "id": null,
     "metadata": {},
     "name": "allUsersQuery",
     "operationKind": "query",
-    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n      }\n    }\n  }\n}\n"
+    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        description\n        isSuperuser\n        lastLogin\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "91c8e27e175500b80b08336ebb2f5eb2";
+(node as any).hash = "685ec83dc1abc53c2385f62bb28e6d17";
 
 export default node;
