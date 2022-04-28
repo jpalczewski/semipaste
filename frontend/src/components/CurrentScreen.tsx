@@ -1,8 +1,6 @@
 import React from "react";
 import { AllFooter, TableWrapper, Wrapper } from "../styles/Components.style";
 import { Tables } from "./table/Table";
-import {activePasteBin} from "../Query/PasteBins/activePasteBin";
-import {TableCurrent} from "./table/TableCurrent";
 
 export const Current = () => {
   return (
@@ -12,7 +10,7 @@ export const Current = () => {
           Aktualne Wklejki
         </p>
         <TableWrapper>
-          <TableCurrent />
+          <Tables />
         </TableWrapper>
       </Wrapper>
       <AllFooter>

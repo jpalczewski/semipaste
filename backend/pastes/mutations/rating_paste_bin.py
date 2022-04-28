@@ -8,7 +8,7 @@ import graphene
 from backend.mixins import ResultMixin
 
 # Local
-from ..models import Rating
+from ..models import PasteBin, Rating
 
 logger = logging.getLogger(__file__)
 
@@ -32,17 +32,24 @@ class IsPasteBinRated(graphene.relay.ClientIDMutation, ResultMixin):
                 ok=True,
                 is_rated=True,
                 rate=rate[0].liked,
-                likes=rate[0].paste.get_likes(),
-                dislikes=rate[0].paste.get_dislikes(),
+                likes=rate[0].paste.likes,
+                dislikes=rate[0].paste.dislikes,
                 error="Rate exists",
             )
         else:
+            paste = PasteBin.objects.filter(id=paste)
+            likes = 0
+            dislikes = 0
+            if paste:
+                paste = paste[0]
+                likes = paste.likes
+                dislikes = paste.dislikes
             return IsPasteBinRated(
                 ok=True,
                 is_rated=False,
                 rate=False,
-                likes=0,
-                dislikes=0,
+                likes=likes,
+                dislikes=dislikes,
                 error="Rate doesn't eist",
             )
 

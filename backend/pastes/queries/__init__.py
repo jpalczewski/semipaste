@@ -1,3 +1,9 @@
+# Standard Library
+from datetime import datetime, timedelta, timezone
+
+# Django
+from django.db.models import F
+
 # 3rd-Party
 import graphene
 from graphene import relay
@@ -5,20 +11,60 @@ from graphene_django.filter import DjangoFilterConnectionField
 from pygments import lexers
 
 # Local
+from ..models import PasteBin
 from .active_paste_bin import ActivePasteBin
 from .expired_paste_bin import ExpiredPasteBin
 from .nodes import PasteBinNode
-from .rate_paste_bin import PopularPasteBinQuery
 
 
-class PasteBinQuery(graphene.ObjectType, PopularPasteBinQuery):
+class PasteBinQuery(graphene.ObjectType):
     all_paste_bin = DjangoFilterConnectionField(
         PasteBinNode,
         deprecation_reason="It will be soon available only for " "superusers",
     )
-    active_paste_bin = DjangoFilterConnectionField(ActivePasteBin)
+    active_paste_bin = DjangoFilterConnectionField(
+        ActivePasteBin, mode=graphene.String()
+    )
     expired_paste_bin = DjangoFilterConnectionField(ExpiredPasteBin)
     paste_bin = relay.Node.Field(PasteBinNode)
+
+    def resolve_active_paste_bin(self, info, **kwargs):  # type: ignore
+        mode = kwargs.get('mode')
+        pastes = PasteBin.objects.all()
+        if mode:
+            pastes = PasteBinQuery.get_top_paste_bin(pastes, mode)
+            return pastes.annotate(total_rating=F("likes") - F("dislikes")).order_by(
+                '-total_rating'
+            )
+        else:
+            return pastes
+
+    @staticmethod
+    def get_top_paste_bin(pastes, filter: str):  # type: ignore
+        match filter:
+            case "today":
+                today = datetime.today()
+                pastes = pastes.filter(
+                    date_of_creation__year=today.year,
+                    date_of_creation__month=today.month,
+                    date_of_creation__day=today.day,
+                )
+            case "week":
+                pastes = pastes.filter(
+                    date_of_creation__lt=datetime.now().replace(tzinfo=timezone.utc)
+                    + timedelta(days=7)
+                )
+            case "month":
+                pastes = pastes.filter(
+                    date_of_creation__lt=datetime.now().replace(tzinfo=timezone.utc)
+                    + timedelta(days=30)
+                )
+            case "year":
+                pastes = pastes.filter(
+                    date_of_creation__lt=datetime.now().replace(tzinfo=timezone.utc)
+                    + timedelta(days=360)
+                )
+        return pastes
 
 
 class LanguageQuery(graphene.ObjectType):

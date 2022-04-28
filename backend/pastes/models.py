@@ -1,6 +1,5 @@
 # Standard Library
 import logging
-import math
 import os.path
 import secrets
 from datetime import datetime, timedelta, timezone
@@ -64,6 +63,8 @@ class PasteBin(models.Model):
     )
     objects = models.Manager()
     reports = GenericRelation(Report, related_query_name='pastes')
+    likes = models.IntegerField(_('likes'), default=0)
+    dislikes = models.IntegerField(_('dislikes'), default=0)
 
     @staticmethod
     def get_time_choice(choice: str) -> timedelta:
@@ -105,6 +106,8 @@ class PasteBin(models.Model):
                         self.date_of_creation + PasteBin.get_time_choice(choice)
                     )
         self.attachment_token = secrets.token_hex(16)
+        self.likes = self.rating_set.filter(liked=True).count()
+        self.dislikes = self.rating_set.filter(liked=False).count()
         super().save(*args, **kwargs)
 
     def get_attachments(self):  # type: ignore
@@ -116,33 +119,18 @@ class PasteBin(models.Model):
         )
         return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
 
-    def get_likes(self) -> int:
-        return self.rating_set.filter(liked=True).count()
-
-    def get_dislikes(self) -> int:
-        return self.rating_set.filter(liked=False).count()
-
-    def get_total_rating(self) -> int:
-        return self.get_likes() - self.get_dislikes()
-
-    def get_rating(self) -> tuple[int, int, int, float]:
-        likes = self.get_likes()
-        dislikes = self.get_dislikes()
-        total_rating = likes - dislikes
-        return likes, dislikes, total_rating, round(likes / total_rating, 2)
-
-    def epoch_seconds(self) -> float:
-        td: timedelta = self.date_of_creation - datetime(1970, 1, 1).replace(
-            tzinfo=timezone.utc
-        )
-        return td.days * 86400 + td.seconds + (float(td.microseconds) / 1000000)
-
-    def get_hot(self) -> float:
-        total_rating = self.get_total_rating()
-        order = math.log(max(abs(total_rating), 1), 10)
-        sign = 1 if total_rating > 0 else -1 if total_rating < 0 else 0
-        seconds = self.epoch_seconds() - 1134028003
-        return round(order + sign * seconds / 45000, 7)
+    # def epoch_seconds(self) -> float:
+    #     td: timedelta = self.date_of_creation - datetime(1970, 1, 1).replace(
+    #         tzinfo=timezone.utc
+    #     )
+    #     return td.days * 86400 + td.seconds + (float(td.microseconds) / 1000000)
+    #
+    # def get_hot(self) -> float:
+    #     total_rating = self.get_total_rating()
+    #     order = math.log(max(abs(total_rating), 1), 10)
+    #     sign = 1 if total_rating > 0 else -1 if total_rating < 0 else 0
+    #     seconds = self.epoch_seconds() - 1134028003
+    #     return round(order + sign * seconds / 45000, 7)
 
     def __str__(self) -> str:
         return f'{self.pk}. {self.title}'
@@ -202,8 +190,10 @@ class Rating(models.Model):
     def save(self, *args, **kwargs):  # type: ignore
         if self.liked is None:
             self.delete()
+            self.paste.save()
             return
         super().save()
+        self.paste.save()
 
     @staticmethod
     def is_unique(paste: PasteBin, user: User) -> bool:

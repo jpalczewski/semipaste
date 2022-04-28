@@ -12,17 +12,9 @@ from pastes.models import Attachment, PasteBin
 
 class TotalRatingNode(graphene.ObjectType):
     total_rating = graphene.Int()
-    likes = graphene.Int()
-    dislikes = graphene.Int()
 
     def resolve_total_rating(self, info: dict) -> int:  # type: ignore
-        return self.get_total_rating()
-
-    def resolve_likes(self, info):  # type: ignore
-        return self.get_likes()
-
-    def resolve_dislikes(self, info):  # type: ignore
-        return self.get_dislikes()
+        return self.likes - self.dislikes
 
 
 class PasteBinNode(DjangoObjectType, TotalRatingNode):

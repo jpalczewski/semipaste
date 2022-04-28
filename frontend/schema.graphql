@@ -1,5 +1,4 @@
 type Query {
-  popularPasteBin(mode: String!, topFilter: String = null): [PasteBinNode]
   userReport(
     """The ID of the object"""
     id: ID!
@@ -12,7 +11,7 @@ type Query {
   pasteReports(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): PasteReportTypeConnection
   allLanguages: [String]
   allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: DateTime = null, dateOfCreation_Gte: DateTime = null, dateOfCreation_Lte: DateTime = null, dateOfCreation_Range: [DateTime] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: DateTime = null, dateOfExpiry_Gte: DateTime = null, dateOfExpiry_Lte: DateTime = null, dateOfExpiry_Range: [DateTime] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): PasteBinNodeConnection @deprecated(reason: "It will be soon available only for superusers")
-  activePasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: DateTime = null, dateOfCreation_Gte: DateTime = null, dateOfCreation_Lte: DateTime = null, dateOfCreation_Range: [DateTime] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: DateTime = null, dateOfExpiry_Gte: DateTime = null, dateOfExpiry_Lte: DateTime = null, dateOfExpiry_Range: [DateTime] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): ActivePasteBinConnection
+  activePasteBin(mode: String = null, offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: DateTime = null, dateOfCreation_Gte: DateTime = null, dateOfCreation_Lte: DateTime = null, dateOfCreation_Range: [DateTime] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: DateTime = null, dateOfExpiry_Gte: DateTime = null, dateOfExpiry_Lte: DateTime = null, dateOfExpiry_Range: [DateTime] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): ActivePasteBinConnection
   expiredPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection
   pasteBin(
     """The ID of the object"""
@@ -27,57 +26,19 @@ type Query {
   _debug: DjangoDebug
 }
 
-type PasteBinNode implements Node {
+type UserReportType implements Node {
+  reason: String!
+  author: UserNode!
+
+  """The ID of the object"""
   id: ID!
-  title: String!
-  text: String!
-  dateOfCreation: DateTime!
-  visible: Boolean!
-  expireAfter: PastesPasteBinExpireAfterChoices!
-  dateOfExpiry: DateTime
-  author: UserNode
-  language: String!
-  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
-  totalRating: Int
-  likes: Int
-  dislikes: Int
+  user: UserNode
 }
 
 """An object with an ID"""
 interface Node {
   """The ID of the object"""
   id: ID!
-}
-
-"""
-The `DateTime` scalar type represents a DateTime
-value as specified by
-[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-"""
-scalar DateTime
-
-"""An enumeration."""
-enum PastesPasteBinExpireAfterChoices {
-  """never"""
-  NEVER
-
-  """1 minute"""
-  MIN
-
-  """1 hour"""
-  HOUR
-
-  """1 day"""
-  DAY
-
-  """1 week"""
-  WEEK
-
-  """1 month"""
-  MONTH
-
-  """1 year"""
-  YEAR
 }
 
 type UserNode implements Node {
@@ -108,6 +69,13 @@ type UserNode implements Node {
   reportSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserReportTypeConnection!
   pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection!
 }
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
 
 type UserReportTypeConnection {
   """Pagination data for this connection."""
@@ -143,15 +111,6 @@ type UserReportTypeEdge {
   cursor: String!
 }
 
-type UserReportType implements Node {
-  reason: String!
-  author: UserNode!
-
-  """The ID of the object"""
-  id: ID!
-  user: UserNode
-}
-
 type ExpiredPasteBinConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
@@ -179,8 +138,34 @@ type ExpiredPasteBin implements Node {
   dateOfExpiry: DateTime
   author: UserNode
   language: String!
+  likes: Int!
+  dislikes: Int!
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
   attachmentToken: String!
+}
+
+"""An enumeration."""
+enum PastesPasteBinExpireAfterChoices {
+  """never"""
+  NEVER
+
+  """1 minute"""
+  MIN
+
+  """1 hour"""
+  HOUR
+
+  """1 day"""
+  DAY
+
+  """1 week"""
+  WEEK
+
+  """1 month"""
+  MONTH
+
+  """1 year"""
+  YEAR
 }
 
 type AttachmentNodeConnection {
@@ -213,6 +198,22 @@ type PasteReportType implements Node {
   """The ID of the object"""
   id: ID!
   paste: PasteBinNode
+}
+
+type PasteBinNode implements Node {
+  id: ID!
+  title: String!
+  text: String!
+  dateOfCreation: DateTime!
+  visible: Boolean!
+  expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
+  language: String!
+  likes: Int!
+  dislikes: Int!
+  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
+  totalRating: Int
 }
 
 type PasteReportTypeConnection {
@@ -276,11 +277,11 @@ type ActivePasteBin implements Node {
   dateOfExpiry: DateTime
   author: UserNode
   language: String!
+  likes: Int!
+  dislikes: Int!
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
   attachmentToken: String!
   totalRating: Int
-  likes: Int
-  dislikes: Int
 }
 
 type UserNodeConnection {

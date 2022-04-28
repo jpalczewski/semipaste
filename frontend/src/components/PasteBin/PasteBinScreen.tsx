@@ -49,8 +49,10 @@ export const PasteBinScreen = (props: any) => {
         onCompleted: (response) => {
             setIsRated(response.isPasteBinRated?.isRated!);
             setRate(response.isPasteBinRated?.rate!);
-            setLikes(response.isPasteBinRated?.likes);
-            setDislikes(response.isPasteBinRated?.dislikes);
+            if (isPasteBinRated) {
+                setLikes(response.isPasteBinRated?.likes);
+                setDislikes(response.isPasteBinRated?.dislikes);
+            }
         },
     });
   };
