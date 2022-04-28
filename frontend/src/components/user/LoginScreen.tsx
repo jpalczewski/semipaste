@@ -22,6 +22,7 @@ export const LoginScreen = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({ username: "", password: "" });
   const [error, setError] = useState(false);
+
   const handleChange = (event: any) => {
     const name = event.target.name;
     const value = event.target.value;
