@@ -22,12 +22,20 @@ export const LoginScreen = () => {
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({ username: "", password: "" });
   const [error, setError] = useState(false);
-
   const handleChange = (event: any) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
   };
+
+  const myAccount = (prop: any) => {
+    if (prop == "a") {
+      navigate("user/admin");
+    } else {
+      navigate("user/user");
+    }
+  };
+
   const handleSubmit = async (event: any) => {
     const name = inputs.username;
     localStorage.setItem("username", JSON.stringify(inputs.username));
@@ -42,7 +50,8 @@ export const LoginScreen = () => {
             JSON.stringify(response.tokenAuth?.token)
           );
           setError(false);
-          navigate("/user/user");
+          myAccount(inputs.username);
+          // navigate("/user/user");
           console.log("name", name);
 
           window.location.reload();

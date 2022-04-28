@@ -17,12 +17,23 @@ import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const [token, setToken] = useState();
+  const [prop, setProp] = useState("");
   useEffect(() => {
     const fetch = async () => {
       setToken(JSON.parse(localStorage.getItem("token")!));
+      setProp(JSON.parse(localStorage.getItem("username")!));
     };
     fetch().catch(console.error);
   }, []);
+
+  const myAccount = () => {
+    if (prop == "a") {
+      navigate("user/admin");
+    } else {
+      navigate("user/user");
+    }
+  };
+
   const logOut = () => {
     localStorage.removeItem("token");
     navigate("/create");
@@ -58,6 +69,9 @@ const Navigation = () => {
           {token ? (
             <>
               <NavDropdown title="USERNAME">
+                <NavDropdown.Item onClick={() => myAccount()}>
+                  Moje Konto
+                </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => navigate("user/settings")}>
                   Ustawienia
                 </NavDropdown.Item>
