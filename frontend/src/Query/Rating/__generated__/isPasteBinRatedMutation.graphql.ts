@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<493b483ee2735f80fafd580ad96138d7>>
+ * @generated SignedSource<<464eb1c33e6d1db8019fde9d8aa4bdd4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,7 @@ export type isPasteBinRatedMutation$data = {
     readonly isRated: boolean | null;
     readonly likes: number | null;
     readonly dislikes: number | null;
+    readonly totalRating: number | null;
   } | null;
 };
 export type isPasteBinRatedMutation = {
@@ -97,6 +98,13 @@ v1 = [
         "kind": "ScalarField",
         "name": "dislikes",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "totalRating",
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -120,16 +128,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "367a5765772dd893ea66e54be4855cf9",
+    "cacheID": "061b114d1a6cd58c75fc7695dca6e2ab",
     "id": null,
     "metadata": {},
     "name": "isPasteBinRatedMutation",
     "operationKind": "mutation",
-    "text": "mutation isPasteBinRatedMutation(\n  $paste: ID!\n) {\n  isPasteBinRated(input: {paste: $paste}) {\n    ok\n    error\n    rate\n    isRated\n    likes\n    dislikes\n  }\n}\n"
+    "text": "mutation isPasteBinRatedMutation(\n  $paste: ID!\n) {\n  isPasteBinRated(input: {paste: $paste}) {\n    ok\n    error\n    rate\n    isRated\n    likes\n    dislikes\n    totalRating\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "98ee8f481cf2c5c49a072484f669b171";
+(node as any).hash = "d301bd3b026d51ff667dc3dc1dffe067";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3377518b130ba50a1276f19ccc008b88>>
+ * @generated SignedSource<<b1a145c4363f96b061c82dac3ba23010>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,7 @@
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type activePasteBinQuery$variables = {
   mode?: string | null;
+  time?: string | null;
 };
 export type activePasteBinQuery$data = {
   readonly activePasteBin: {
@@ -44,6 +45,11 @@ var v0 = [
     "defaultValue": null,
     "kind": "LocalArgument",
     "name": "mode"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "time"
   }
 ],
 v1 = [
@@ -51,6 +57,11 @@ v1 = [
     "kind": "Variable",
     "name": "mode",
     "variableName": "mode"
+  },
+  {
+    "kind": "Variable",
+    "name": "time",
+    "variableName": "time"
   }
 ],
 v2 = {
@@ -261,16 +272,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a98753a6b4612d4b786652f8e321b61c",
+    "cacheID": "bc81efda0de7e615cce2078570a34a66",
     "id": null,
     "metadata": {},
     "name": "activePasteBinQuery",
     "operationKind": "query",
-    "text": "query activePasteBinQuery(\n  $mode: String\n) {\n  activePasteBin(mode: $mode) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n        totalRating\n        likes\n        dislikes\n        author {\n          username\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query activePasteBinQuery(\n  $mode: String\n  $time: String\n) {\n  activePasteBin(mode: $mode, time: $time) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n        totalRating\n        likes\n        dislikes\n        author {\n          username\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "228d83bc77e39e7ea21226ed40cc111a";
+(node as any).hash = "aa841eeb8e89447ccad667f6806b7dfd";
 
 export default node;

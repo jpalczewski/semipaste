@@ -18,6 +18,7 @@ class IsPasteBinRated(graphene.relay.ClientIDMutation, ResultMixin):
     rate = graphene.Boolean()
     likes = graphene.Int()
     dislikes = graphene.Int()
+    total_rating = graphene.Int()
 
     class Input:
         paste = graphene.ID()
@@ -28,12 +29,15 @@ class IsPasteBinRated(graphene.relay.ClientIDMutation, ResultMixin):
         paste = input.get('paste')
         rate = Rating.objects.filter(paste=paste, user=user)
         if rate:
+            likes = rate[0].paste.likes
+            dislikes = rate[0].paste.dislikes
             return IsPasteBinRated(
                 ok=True,
                 is_rated=True,
                 rate=rate[0].liked,
-                likes=rate[0].paste.likes,
-                dislikes=rate[0].paste.dislikes,
+                likes=likes,
+                dislikes=dislikes,
+                total_rating=likes - dislikes,
                 error="Rate exists",
             )
         else:
@@ -50,6 +54,7 @@ class IsPasteBinRated(graphene.relay.ClientIDMutation, ResultMixin):
                 rate=False,
                 likes=likes,
                 dislikes=dislikes,
+                total_rating=likes - dislikes,
                 error="Rate doesn't eist",
             )
 

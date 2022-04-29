@@ -119,19 +119,6 @@ class PasteBin(models.Model):
         )
         return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
 
-    # def epoch_seconds(self) -> float:
-    #     td: timedelta = self.date_of_creation - datetime(1970, 1, 1).replace(
-    #         tzinfo=timezone.utc
-    #     )
-    #     return td.days * 86400 + td.seconds + (float(td.microseconds) / 1000000)
-    #
-    # def get_hot(self) -> float:
-    #     total_rating = self.get_total_rating()
-    #     order = math.log(max(abs(total_rating), 1), 10)
-    #     sign = 1 if total_rating > 0 else -1 if total_rating < 0 else 0
-    #     seconds = self.epoch_seconds() - 1134028003
-    #     return round(order + sign * seconds / 45000, 7)
-
     def __str__(self) -> str:
         return f'{self.pk}. {self.title}'
 

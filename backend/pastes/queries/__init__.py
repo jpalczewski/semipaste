@@ -23,7 +23,7 @@ class PasteBinQuery(graphene.ObjectType):
         deprecation_reason="It will be soon available only for " "superusers",
     )
     active_paste_bin = DjangoFilterConnectionField(
-        ActivePasteBin, mode=graphene.String()
+        ActivePasteBin, mode=graphene.String(), time=graphene.String()
     )
     expired_paste_bin = DjangoFilterConnectionField(ExpiredPasteBin)
     paste_bin = relay.Node.Field(PasteBinNode)
@@ -32,12 +32,19 @@ class PasteBinQuery(graphene.ObjectType):
         mode = kwargs.get('mode')
         pastes = PasteBin.objects.all()
         if mode:
-            pastes = PasteBinQuery.get_top_paste_bin(pastes, mode)
-            return pastes.annotate(total_rating=F("likes") - F("dislikes")).order_by(
-                '-total_rating'
-            )
+            match mode:
+                case "top":
+                    time = kwargs.get('time')
+                    pastes = PasteBinQuery.get_top_paste_bin(pastes, time)
+                    return pastes.annotate(
+                        total_rating=F("likes") - F("dislikes")
+                    ).order_by('-total_rating')
+                case "hot":
+                    return pastes.annotate(
+                        total_rating=F('likes') - F('dislikes')
+                    ).order_by('-total_rating', '-date_of_creation')
         else:
-            return pastes
+            return pastes.order_by('-date_of_creation')
 
     @staticmethod
     def get_top_paste_bin(pastes, filter: str):  # type: ignore

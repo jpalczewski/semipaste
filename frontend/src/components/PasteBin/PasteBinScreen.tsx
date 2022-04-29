@@ -15,10 +15,6 @@ require("codemirror/lib/codemirror.css");
 export const PasteBinScreen = (props: any) => {
   const [show, setShow] = useState(false);
   const [syntax, setSyntax] = useState<string>("");
-  const [isRated, setIsRated] = useState<boolean>(false);
-  const [rate, setRate] = useState<boolean>(false);
-  const [likes, setLikes] = useState(props.likes);
-  const [dislikes, setDislikes] = useState(props.dislikes);
 
   useEffect(() => {
       commitMutation<highlightPasteBinMutation>(RelayEnvironment, {
@@ -31,56 +27,7 @@ export const PasteBinScreen = (props: any) => {
             setSyntax("Error")
         },
   });
-
-  commitMutation<isPasteBinRatedMutation>(RelayEnvironment, {
-     mutation: isPasteBinRated,
-     variables: { paste: props.id },
-     onCompleted: (response) => {
-        setIsRated(response.isPasteBinRated?.isRated!);
-        setRate(response.isPasteBinRated?.rate!);
-     },
-  });
   }, []);
-
-  const refreshRated = () => {
-      commitMutation<isPasteBinRatedMutation>(RelayEnvironment, {
-        mutation: isPasteBinRated,
-        variables: { paste: props.id },
-        onCompleted: (response) => {
-            setIsRated(response.isPasteBinRated?.isRated!);
-            setRate(response.isPasteBinRated?.rate!);
-            if (isPasteBinRated) {
-                setLikes(response.isPasteBinRated?.likes);
-                setDislikes(response.isPasteBinRated?.dislikes);
-            }
-        },
-    });
-  };
-
-  const ratePaste = (value: any) => {
-      commitMutation<ratePasteBinMutation>(RelayEnvironment, {
-         mutation: ratePasteBin,
-         variables: {paste: props.id, liked: value},
-         onCompleted: (response) => {
-             if (response.ratePasteBin?.ok!) {
-                 refreshRated()
-             }
-         }
-      });
-  }
-
-  const handleRate = (event: any) => {
-      let value = event.target.value === "like";
-      if (isRated) {
-          if (value === rate) {
-              ratePaste(null);
-          } else {
-              ratePaste(value);
-          }
-      } else {
-          ratePaste(value);
-      }
-  };
 
   return (
     <>
@@ -127,34 +74,8 @@ export const PasteBinScreen = (props: any) => {
           </Form>
           </ModalBody>
           <ModalFooter>
-              <p>Likes: {likes}</p>
-              <p>Dislikes: {dislikes}</p>
-              {isRated
-                  ? rate &&
-                  <><Button variant="primary" value="like" onClick={handleRate}>
-                      Like
-                  </Button>
-                  <Button variant="outline-primary" value="dislike" onClick={handleRate}>
-                      Dislike
-                  </Button></>
-                  :
-                  <Button variant="outline-primary" value="like" onClick={handleRate}>
-                      Like
-                  </Button>
-              }
-              {isRated
-                  ? !rate &&
-                  <><Button variant="outline-primary" value="like" onClick={handleRate}>
-                      Like
-                  </Button>
-                  <Button variant="primary" value="dislike" onClick={handleRate}>
-                      Dislike
-                  </Button></>
-                  :
-                  <Button variant="outline-primary" value="dislike" onClick={handleRate}>
-                      Dislike
-                  </Button>
-              }
+              <p>Likes: {props.likes}</p>
+              <p>Dislikes: {props.dislikes}</p>
           </ModalFooter>
       </Modal>
     </>

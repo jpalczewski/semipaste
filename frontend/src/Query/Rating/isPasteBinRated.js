@@ -10,6 +10,7 @@ export const isPasteBinRated = graphql`
       isRated
       likes
       dislikes
+      totalRating
       }
     }
   `
