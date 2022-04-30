@@ -21,14 +21,14 @@ services:
       - .env
     volumes:
       - db_data_prod:/var/lib/postgresql/data/
-#  proxy:
-#    image: jpalczewski/semipaste-proxy:latest
-#    build:
-#      context: frontend
-#      dockerfile: ../proxy/Dockerfile
-##    volumes:
-##      - "./proxy/nginx.conf:/etc/nginx/nginx.conf:ro"
-#    ports:
-#      - "3030:80"
+  proxy:
+    image: jpalczewski/semipaste-proxy:latest
+    build:
+      context: frontend
+      dockerfile: ../proxy/Dockerfile
+#    volumes:
+#      - "./proxy/nginx.conf:/etc/nginx/nginx.conf:ro"
+    ports:
+      - "3030:80"
 volumes:
   db_data_prod:
