@@ -33,7 +33,7 @@ flake8 = "^4.0.1"
 isort = "^5.10.1"
 black = "^22.1.0"
 factory-boy = "^3.2.1"
-Faker = "^13.4.0"
+Faker = "^13.7.0"
 django-extensions = "^3.1.5"
 bpython = "^0.22.1"
 
