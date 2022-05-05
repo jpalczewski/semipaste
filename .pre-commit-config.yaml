@@ -10,7 +10,7 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
 - repo: https://github.com/hadialqattan/pycln
-  rev: v1.2.5 # Possible releases: https://github.com/hadialqattan/pycln/releases
+  rev: v1.3.2 # Possible releases: https://github.com/hadialqattan/pycln/releases
   hooks:
       - id: pycln
         name: pycln
@@ -48,7 +48,7 @@ repos:
         types: [python]
         exclude: /(migrations|tests|backend)/
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.942  # Use the sha / tag you want to point at
+    rev: v0.950  # Use the sha / tag you want to point at
     hooks:
     -   id: mypy
         name: mypy

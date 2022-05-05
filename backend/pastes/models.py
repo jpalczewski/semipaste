@@ -1,3 +1,10 @@
+"""Model of a paste and attachment
+
+    Examples:
+        See developer guide for detailed usage.
+
+"""
+
 # Standard Library
 import logging
 import os.path
@@ -28,6 +35,7 @@ logger = logging.getLogger(__name__)
 class PasteBin(models.Model):
     """Pastebin model."""
 
+    # Choices
     class ExpireChoices(models.TextChoices):
         # The first value is the actual value to be set
         # The second value is used for humans
@@ -39,6 +47,7 @@ class PasteBin(models.Model):
         MONTH = 'MONTH', _('1 month')
         YEAR = 'YEAR', _('1 year')
 
+    # Attributes
     title = models.CharField(_('title'), max_length=50)
     text = models.TextField(_('paste text'))
     date_of_creation = models.DateTimeField(_('date of creation'), blank=True)
@@ -66,22 +75,24 @@ class PasteBin(models.Model):
     likes = models.IntegerField(_('likes'), default=0)
     dislikes = models.IntegerField(_('dislikes'), default=0)
 
+    # Static methods
     @staticmethod
     def get_time_choice(choice: str) -> timedelta:
         match choice:
             case PasteBin.ExpireChoices.MIN:
-                return timedelta(seconds=60)
+                return timedelta(seconds=60)  # type: ignore
             case PasteBin.ExpireChoices.HOUR:
-                timedelta(seconds=3600)
+                timedelta(seconds=3600)  # type: ignore
             case PasteBin.ExpireChoices.DAY:
-                return timedelta(days=1)
+                return timedelta(days=1)  # type: ignore
             case PasteBin.ExpireChoices.WEEK:
-                return timedelta(days=7)
+                return timedelta(days=7)  # type: ignore
             case PasteBin.ExpireChoices.MONTH:
-                return timedelta(days=30)
+                return timedelta(days=30)  # type: ignore
             case PasteBin.ExpireChoices.YEAR:
-                return timedelta(days=360)
+                return timedelta(days=360)  # type: ignore
 
+    # Methods
     def save(self, *args, **kwargs):  # type: ignore
         if self.author is None:
             self.expire_after = 'WEEK'
@@ -114,14 +125,20 @@ class PasteBin(models.Model):
         return Attachment.objects.filter(paste=self.pk)
 
     def is_uploading_attachments_allowed(self) -> bool:
-        upload_time_limit: datetime = self.date_of_creation + timedelta(
+        """Checks if uploading of a new file is allowed.
+        I.e: if time between paste creation and  now is less than `Timespan`.
+
+        """
+        upload_time_limit = self.date_of_creation + timedelta(
             seconds=ATTACHMENT_TIMESPAN
         )
         return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
 
+    # Special Methods
     def __str__(self) -> str:
         return f'{self.pk}. {self.title}'
 
+    # Meta
     class Meta:
         ordering = ['id']
         verbose_name = _('pastebin')

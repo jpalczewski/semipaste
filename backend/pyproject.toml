@@ -2,7 +2,13 @@
 name = "backend"
 version = "0.1.0"
 description = ""
-authors = ["Jacek Palczewski <jpalczewski@gmail.com>"]
+authors = [
+    "Michał Stolarczyk",
+    "Feliks Olszewski",
+    "Marek Stefański",
+    "Adam Zalewski",
+    "Jacek Palczewski <jpalczewski@gmail.com>"]
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -24,22 +30,26 @@ redis = "^4.2.1"
 watchfiles = "^0.13"
 setuptools = "59.6.0"
 Pillow = "^9.1.0"
-Pygments = "^2.11.2"
+Pygments = "^2.12.0"
+Sphinx = "^4.5.0"
+sphinx-rtd-theme = "^1.0.0"
 [tool.poetry.dev-dependencies]
-pytest = "^7.0.1"
+pytest = "^7.1.2"
 pytest-django = "^4.5.2"
 pytest-cov = "^3.0.0"
 flake8 = "^4.0.1"
 isort = "^5.10.1"
 black = "^22.1.0"
 factory-boy = "^3.2.1"
-Faker = "^13.3.5"
+Faker = "^13.7.0"
 django-extensions = "^3.1.5"
 bpython = "^0.22.1"
+
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
 
 [tool.black]
 py310 = true
@@ -47,7 +57,15 @@ line-length = 88
 skip-string-normalization = true
 extend-exclude =  '''
 /(
-  \.mypy_cache
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
   | migrations
 )/
 '''
@@ -57,7 +75,9 @@ profile = "black"
 atomic = true
 combine_star = true
 honor_noqa = true
+lines_before_imports = 1
 default_section = "THIRDPARTY"
+# Headings
 import_heading_future = "Future"
 import_heading_stdlib = "Standard Library"
 import_heading_django = "Django"
@@ -65,7 +85,9 @@ import_heading_thirdparty = "3rd-Party"
 import_heading_firstparty = "Project"
 import_heading_localfolder = "Local"
 known_django = "django"
+# Order
 sections = ["FUTURE","STDLIB","DJANGO","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
+
 
 [tool.mypy]
 python_version = "3.10"
@@ -93,3 +115,4 @@ exclude = '''
 
 [tool.pycln]
 all = true
+path = "./backend"
