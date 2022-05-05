@@ -24,8 +24,9 @@ class EditPasteBin(ResultMixin, graphene.Mutation):
             paste = PasteBin.objects.get(pk=id)
         except paste.DoesNotExist:
             return EditPasteBin(ok=False, error="No such paste")
-        if user.id != paste.author_id or user.is_superuser:
-            return EditPasteBin(ok=False, error="Not your paste")
+        if not user.is_superuser:
+            if user.id != paste.author_id:
+                return EditPasteBin(ok=False, error="Not your paste")
         MTMTags.objects.filter(paste_id=paste.id).delete()
         print("dupa")
         for attr, val in kwargs.items():

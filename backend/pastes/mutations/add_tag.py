@@ -12,11 +12,11 @@ class AddTag(graphene.Mutation):
     response = graphene.String()
 
     class Input:
-        tagname = graphene.String(description="Gets the tag name")
+        tag_name = graphene.String(description="Gets the tag name")
 
     @staticmethod
     def mutate(root, info, **kwargs):  # type: ignore
-        name = kwargs.get('tagname')
+        name = kwargs.get('tag_name')
         if name == "":
             return AddTag(ok=False, response="no name given")
         try:
