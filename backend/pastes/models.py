@@ -107,6 +107,9 @@ class PasteBin(models.Model):
         self.attachment_token = secrets.token_hex(16)
         super().save(*args, **kwargs)
 
+    def get_attachments(self):  # type: ignore
+        return Attachment.objects.filter(paste=self.pk)
+
     def is_uploading_attachments_allowed(self) -> bool:
         """Checks if uploading of a new file is allowed.
         I.e: if time between paste creation and  now is less than `Timespan`.
