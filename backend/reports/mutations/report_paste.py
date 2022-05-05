@@ -18,6 +18,17 @@ class ReportPaste(ResultMixin, relay.ClientIDMutation):
         reason = graphene.String(required=True)
 
     def mutate_and_get_payload(root, info, pid, reason, *kwargs):  # type: ignore
+        """Method which handles reporting a paste violating rules.
+
+        Reporting user needs to be logged in
+
+        Args:
+            pid: id of a paste that will be reported
+            reason: Reason why that paste break the rules.
+
+        Returns:
+
+        """
         logger.debug("entered report_paste")
         if info.context.user.is_anonymous:
             return ReportPaste(ok=False, error="You need to be logged in")

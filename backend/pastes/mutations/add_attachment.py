@@ -43,4 +43,3 @@ class AddAttachment(ResultMixin, graphene.ClientIDMutation):
             return AddAttachment(ok=False, error="Invalid token")
         except Exception as e:
             return AddAttachment(ok=False, error=f"{e}")
-        return AddAttachment(ok=False, error="Something went wrong")

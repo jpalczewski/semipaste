@@ -18,6 +18,17 @@ class ReportUser(ResultMixin, relay.ClientIDMutation):
         reason = graphene.String(required=True)
 
     def mutate_and_get_payload(cls, info, uid, reason):  # type: ignore
+        """Method which handles reporting a user violating rules.
+
+        Reporting user needs to be logged in
+
+        Args:
+            uid: id of an user that will be reported
+
+            reason: Reason why that yser breaks the rules.
+
+
+        """
         logger.debug("entered report_user")
         if info.context.user.is_anonymous:
             return ReportUser(ok=False, error="You need to be logged in")
