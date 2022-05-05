@@ -12,9 +12,9 @@ from graphene_django.filter import DjangoFilterConnectionField
 from pygments import lexers
 
 # Project
-from backend.filters import DefaultFilterClasses, PasteBinFilterFields
-from pastes.models import Attachment, PasteBin, PasteTag
-from pastes.queries.active_paste_bin import ActivePasteBin
+from backend.filters import PasteBinFilterFields
+from pastes.models import Attachment, PasteBin
+from pastes.queries.active_paste_bin import ActivePasteBin, PasteTagNode
 from pastes.queries.expired_paste_bin import ExpiredPasteBin
 from .nodes import PasteBinNode
 
@@ -26,17 +26,6 @@ class PasteBinNode(DjangoObjectType):
         filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
-
-
-class PasteTagNode(DjangoObjectType):
-    id = graphene.ID(source='pk', required=True)
-
-    class Meta:
-        model = PasteTag
-        interfaces = (relay.Node,)
-        filter_fields = {
-            'tag_name': DefaultFilterClasses.DEFAULT_TEXT.value,
-        }
 
 
 class AttachmentNode(DjangoObjectType):
