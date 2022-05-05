@@ -78,17 +78,17 @@ class PasteBin(models.Model):
     def get_time_choice(choice: str) -> timedelta:
         match choice:
             case PasteBin.ExpireChoices.MIN:
-                return timedelta(seconds=60)
+                return timedelta(seconds=60)  # type: ignore
             case PasteBin.ExpireChoices.HOUR:
-                timedelta(seconds=3600)
+                timedelta(seconds=3600)  # type: ignore
             case PasteBin.ExpireChoices.DAY:
-                return timedelta(days=1)
+                return timedelta(days=1)  # type: ignore
             case PasteBin.ExpireChoices.WEEK:
-                return timedelta(days=7)
+                return timedelta(days=7)  # type: ignore
             case PasteBin.ExpireChoices.MONTH:
-                return timedelta(days=30)
+                return timedelta(days=30)  # type: ignore
             case PasteBin.ExpireChoices.YEAR:
-                return timedelta(days=360)
+                return timedelta(days=360)  # type: ignore
 
     # Methods
     def save(self, *args, **kwargs):  # type: ignore
