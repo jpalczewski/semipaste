@@ -21,4 +21,4 @@ class EditUserDescription(graphene.Mutation):
             escape(kwargs.get('description', user.description))
         )
         user.save()
-        return EditUserDescription(ok=True)
+        return cls(ok=True, user=info.context.user)
