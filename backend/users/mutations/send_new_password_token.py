@@ -20,7 +20,7 @@ class SendNewPasswordToken(graphene.Mutation):
     def mutate(root, info, **kwargs):  # type: ignore
 
         email = kwargs.get('email')
-        if User.objects.get(email=email):
+        if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
             code = "".join(random.choice(string.ascii_letters) for i in range(10))
             verification = UserVerification(
