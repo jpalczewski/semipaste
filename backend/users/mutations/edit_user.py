@@ -41,4 +41,4 @@ class EditUser(ResultMixin, graphene.Mutation):
                 else:
                     setattr(user, attr, value)
         user.save()
-        return EditUser(ok=True)
+        return EditUser(ok=True, user=info.context.user)
