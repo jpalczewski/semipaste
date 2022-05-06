@@ -10,15 +10,15 @@ type Query {
   ): PasteReportType
   pasteReports(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): PasteReportTypeConnection
   allLanguages: [String]
-  allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): PasteBinNodeConnection @deprecated(reason: "It will be soon available only for superusers")
-  activePasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ActivePasteBinConnection
+  allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: DateTime = null, dateOfCreation_Gte: DateTime = null, dateOfCreation_Lte: DateTime = null, dateOfCreation_Range: [DateTime] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: DateTime = null, dateOfExpiry_Gte: DateTime = null, dateOfExpiry_Lte: DateTime = null, dateOfExpiry_Range: [DateTime] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): PasteBinNodeConnection @deprecated(reason: "It will be soon available only for superusers")
+  activePasteBin(mode: String = null, time: String = null, offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: DateTime = null, dateOfCreation_Gte: DateTime = null, dateOfCreation_Lte: DateTime = null, dateOfCreation_Range: [DateTime] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: DateTime = null, dateOfExpiry_Gte: DateTime = null, dateOfExpiry_Lte: DateTime = null, dateOfExpiry_Range: [DateTime] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): ActivePasteBinConnection
   expiredPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection
   pasteBin(
     """The ID of the object"""
     id: ID!
   ): PasteBinNode
   user: UserNode
-  allUsers(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserNodeConnection
+  allUsers(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, username: String = null, username_Icontains: String = null, username_Istartswith: String = null, username_Iexact: String = null, username_Contains: String = null, username_Endswith: String = null, username_Iendswith: String = null, description: String = null, description_Icontains: String = null, description_Istartswith: String = null, description_Iexact: String = null, description_Contains: String = null, description_Endswith: String = null, description_Iendswith: String = null, isSuperuser: Boolean = null, firstName: String = null, firstName_Icontains: String = null, firstName_Istartswith: String = null, firstName_Iexact: String = null, firstName_Contains: String = null, firstName_Endswith: String = null, firstName_Iendswith: String = null, lastName: String = null, lastName_Icontains: String = null, lastName_Istartswith: String = null, lastName_Iexact: String = null, lastName_Contains: String = null, lastName_Endswith: String = null, lastName_Iendswith: String = null): UserNodeConnection
   node(
     """The ID of the object"""
     id: ID!
@@ -67,7 +67,7 @@ type UserNode implements Node {
   description: String!
   isVerified: Boolean!
   reportSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserReportTypeConnection!
-  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): PasteBinNodeConnection!
+  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection!
 }
 
 """
@@ -111,24 +111,24 @@ type UserReportTypeEdge {
   cursor: String!
 }
 
-type PasteBinNodeConnection {
+type ExpiredPasteBinConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
 
   """Contains the nodes in this connection."""
-  edges: [PasteBinNodeEdge]!
+  edges: [ExpiredPasteBinEdge]!
 }
 
-"""A Relay edge containing a `PasteBinNode` and its cursor."""
-type PasteBinNodeEdge {
+"""A Relay edge containing a `ExpiredPasteBin` and its cursor."""
+type ExpiredPasteBinEdge {
   """The item at the end of the edge"""
-  node: PasteBinNode
+  node: ExpiredPasteBin
 
   """A cursor for use in pagination"""
   cursor: String!
 }
 
-type PasteBinNode implements Node {
+type ExpiredPasteBin implements Node {
   id: ID!
   title: String!
   text: String!
@@ -138,7 +138,10 @@ type PasteBinNode implements Node {
   dateOfExpiry: DateTime
   author: UserNode
   language: String!
+  likes: Int!
+  dislikes: Int!
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
+  attachmentToken: String!
 }
 
 """An enumeration."""
@@ -197,6 +200,22 @@ type PasteReportType implements Node {
   paste: PasteBinNode
 }
 
+type PasteBinNode implements Node {
+  id: ID!
+  title: String!
+  text: String!
+  dateOfCreation: DateTime!
+  visible: Boolean!
+  expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
+  language: String!
+  likes: Int!
+  dislikes: Int!
+  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
+  totalRating: Int
+}
+
 type PasteReportTypeConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
@@ -209,6 +228,23 @@ type PasteReportTypeConnection {
 type PasteReportTypeEdge {
   """The item at the end of the edge"""
   node: PasteReportType
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type PasteBinNodeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [PasteBinNodeEdge]!
+}
+
+"""A Relay edge containing a `PasteBinNode` and its cursor."""
+type PasteBinNodeEdge {
+  """The item at the end of the edge"""
+  node: PasteBinNode
 
   """A cursor for use in pagination"""
   cursor: String!
@@ -241,39 +277,11 @@ type ActivePasteBin implements Node {
   dateOfExpiry: DateTime
   author: UserNode
   language: String!
-  attachmentToken: String!
+  likes: Int!
+  dislikes: Int!
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
-}
-
-type ExpiredPasteBinConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ExpiredPasteBinEdge]!
-}
-
-"""A Relay edge containing a `ExpiredPasteBin` and its cursor."""
-type ExpiredPasteBinEdge {
-  """The item at the end of the edge"""
-  node: ExpiredPasteBin
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type ExpiredPasteBin implements Node {
-  id: ID!
-  title: String!
-  text: String!
-  dateOfCreation: DateTime!
-  visible: Boolean!
-  expireAfter: PastesPasteBinExpireAfterChoices!
-  dateOfExpiry: DateTime
-  author: UserNode
-  language: String!
   attachmentToken: String!
-  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
+  totalRating: Int
 }
 
 type UserNodeConnection {
@@ -374,6 +382,9 @@ type Mutation {
 
   """Delete an attachment"""
   deleteAttachment(input: DeleteAttachmentInput!): DeleteAttachmentPayload
+  ratePasteBin(input: RatingPasteBinInput!): RatingPasteBinPayload
+  ratePasteBinId(input: RatingPasteBinIDInput!): RatingPasteBinIDPayload
+  isPasteBinRated(input: IsPasteBinRatedInput!): IsPasteBinRatedPayload
   addUser(confirmPassword: String!, email: String!, password: String!, username: String!): AddUser
   editUser(description: String = null, email: String = null, firstName: String = null, id: ID!, lastName: String = null, password: String = null, username: String = null): EditUser
   editUserDescription(description: String = null, id: ID!): EditUserDescription
@@ -386,7 +397,7 @@ type Mutation {
   tokenAuth(input: ObtainJSONWebTokenInput!): ObtainJSONWebTokenPayload
   verifyToken(input: VerifyInput!): VerifyPayload
   refreshToken(input: RefreshInput!): RefreshPayload
-  deleteTokenCookie: DeleteJSONWebTokenCookie
+  deleteTokenCookie(input: DeleteJSONWebTokenCookieInput!): DeleteJSONWebTokenCookiePayload
 }
 
 type ReportUserPayload {
@@ -405,17 +416,25 @@ enum ErrorCode {
   OK
 
   """Requested paste just doesn't exist"""
-  NONEXISTENTPASTE
+  NON_EXISTENT_PASTE
 
   """User should be logged in to do that operation"""
-  NOTLOGGEDIN
+  NOT_LOGGED_IN
 
   """Lack of permissions"""
-  PERMISSIONDENIED
-  OPERATIONFAILED
-  EXCEPTIONOCCURED
-  USERNOTFOUND
-  POSSIBLEFAILURE
+  PERMISSION_DENIED
+
+  """Operation failed"""
+  OPERATION_FAILED
+
+  """Exception occurred"""
+  EXCEPTION_OCCURRED
+
+  """User doesn't exist"""
+  USER_NOT_FOUND
+
+  """Something went wrong"""
+  POSSIBLE_FAILURE
 }
 
 input ReportUserInput {
@@ -517,7 +536,7 @@ type HighlightPreviewPayload {
 
 input HighlightPreviewInput {
   code: String!
-  lang: String
+  lang: String!
   clientMutationId: String
 }
 
@@ -556,6 +575,65 @@ type DeleteAttachmentPayload {
 
 input DeleteAttachmentInput {
   id: ID
+  clientMutationId: String
+}
+
+type RatingPasteBinPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
+}
+
+input RatingPasteBinInput {
+  paste: ID
+  liked: Boolean
+  clientMutationId: String
+}
+
+type RatingPasteBinIDPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  clientMutationId: String
+}
+
+input RatingPasteBinIDInput {
+  paste: ID
+  user: ID
+  liked: Boolean
+  clientMutationId: String
+}
+
+type IsPasteBinRatedPayload {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  isRated: Boolean
+  rate: Boolean
+  likes: Int
+  dislikes: Int
+  totalRating: Int
+  clientMutationId: String
+}
+
+input IsPasteBinRatedInput {
+  paste: ID
   clientMutationId: String
 }
 
@@ -648,6 +726,11 @@ input RefreshInput {
   clientMutationId: String
 }
 
-type DeleteJSONWebTokenCookie {
+type DeleteJSONWebTokenCookiePayload {
   deleted: Boolean!
+  clientMutationId: String
+}
+
+input DeleteJSONWebTokenCookieInput {
+  clientMutationId: String
 }

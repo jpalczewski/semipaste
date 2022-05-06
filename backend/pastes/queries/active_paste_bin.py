@@ -8,10 +8,13 @@ from graphene_django import DjangoObjectType
 
 # Project
 from backend.filters import PasteBinFilterFields
-from pastes.models import PasteBin
+
+# Local
+from ..models import PasteBin
+from .nodes import TotalRatingNode
 
 
-class ActivePasteBin(DjangoObjectType):
+class ActivePasteBin(DjangoObjectType, TotalRatingNode):
     id = graphene.ID(source='pk', required=True)
 
     class Meta:

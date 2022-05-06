@@ -66,12 +66,14 @@ class PasteBin(models.Model):
     attachment_token = models.CharField(
         _('token issued to upload attachments'),
         null=False,
-        blank=False,
+        blank=True,
         max_length=32,
         db_index=True,
     )
     objects = models.Manager()
     reports = GenericRelation(Report, related_query_name='pastes')
+    likes = models.IntegerField(_('likes'), default=0)
+    dislikes = models.IntegerField(_('dislikes'), default=0)
 
     # Static methods
     @staticmethod
@@ -104,7 +106,19 @@ class PasteBin(models.Model):
                 self.date_of_expiry = self.date_of_creation + PasteBin.get_time_choice(
                     choice
                 )
+        else:
+            self_pre = PasteBin.objects.get(id=self.id)
+            if self_pre.expire_after != self.expire_after:
+                choice = self.expire_after
+                if choice == PasteBin.ExpireChoices.NEVER:
+                    self.date_of_expiry = None
+                else:
+                    self.date_of_expiry = (
+                        self.date_of_creation + PasteBin.get_time_choice(choice)
+                    )
         self.attachment_token = secrets.token_hex(16)
+        self.likes = self.rating_set.filter(liked=True).count()
+        self.dislikes = self.rating_set.filter(liked=False).count()
         super().save(*args, **kwargs)
 
     def get_attachments(self):  # type: ignore
@@ -164,3 +178,30 @@ def auto_delete_attachments_on_delete(  # type: ignore
         logger.debug(f"Removed {path} from deleting {instance.pk}")
     else:
         logger.warning("Received a post_delete signal for possibly deleted image")
+
+
+class Rating(models.Model):
+    """Rating model."""
+
+    liked = models.BooleanField(_('rating'), null=True)
+    paste = models.ForeignKey(
+        to='pastes.PasteBin', verbose_name=_('rated paste'), on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        to="users.User", verbose_name=_("rater"), on_delete=models.CASCADE
+    )
+
+    def save(self, *args, **kwargs):  # type: ignore
+        if self.liked is None:
+            self.delete()
+            self.paste.save()
+            return
+        super().save()
+        self.paste.save()
+
+    @staticmethod
+    def is_unique(paste: PasteBin, user: User) -> bool:
+        return True if Rating.objects.filter(user=user, paste=paste) else False
+
+    def __str__(self) -> str:
+        return f'{self.user.username} ={self.liked}= {self.paste.title}'

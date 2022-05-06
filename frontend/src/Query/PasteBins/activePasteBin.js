@@ -1,8 +1,8 @@
 import graphql from "babel-plugin-relay/macro";
 
 export const activePasteBin = graphql`
-  query activePasteBinQuery {
-    activePasteBin {
+  query activePasteBinQuery($mode: String, $time: String) {
+    activePasteBin(mode: $mode, time: $time) {
       edges {
         node {
           title
@@ -12,6 +12,12 @@ export const activePasteBin = graphql`
           visible
           dateOfExpiry
           language
+          totalRating
+          likes
+          dislikes
+          author {
+            username
+          }
         }
       }
     }

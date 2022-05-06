@@ -6,7 +6,9 @@ export const Current = () => {
   return (
     <>
       <Wrapper>
-        <p>Aktualne wklejki</p>
+        <p style={{ textAlign: "left", paddingLeft: 50, paddingTop: 50 }}>
+          Aktualne Wklejki
+        </p>
         <TableWrapper>
           <Tables />
         </TableWrapper>
