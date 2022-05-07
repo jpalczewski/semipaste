@@ -21,12 +21,8 @@ class PasteTagNode(DjangoObjectType):
             'tag_name': DefaultFilterClasses.DEFAULT_TEXT.value,
         }
 
-# Local
-from ..models import PasteBin
-from .nodes import TotalRatingNode
 
-
-class ActivePasteBin(DjangoObjectType, TotalRatingNode):
+class ActivePasteBin(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
     tags = graphene.List(PasteTagNode)
 

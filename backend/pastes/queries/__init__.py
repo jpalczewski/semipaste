@@ -16,7 +16,7 @@ from backend.filters import PasteBinFilterFields
 from pastes.models import Attachment, PasteBin
 from pastes.queries.active_paste_bin import ActivePasteBin, PasteTagNode
 from pastes.queries.expired_paste_bin import ExpiredPasteBin
-from .nodes import PasteBinNode
+
 
 class PasteBinNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
