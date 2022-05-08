@@ -230,3 +230,27 @@ class Prod(Common):
     DEBUG = False
 
     ALLOWED_HOSTS = ['proxy', 'backend']
+
+
+class CI(Common):
+
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+    email_config = ''
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': values.Value(
+                'semipaste', environ_name='POSTGRES_DB', environ_prefix=None
+            ),
+            'USER': values.Value(
+                'postgres', environ_name='POSTGRES_USER', environ_prefix=None
+            ),
+            'PASSWORD': values.Value(
+                'password', environ_name='POSTGRES_PASSWORD', environ_prefix=None
+            ),
+            'HOST': values.Value(
+                'db', environ_name='POSTGRES_HOST', environ_prefix=None
+            ),
+            'PORT': 5432,
+        }
+    }
