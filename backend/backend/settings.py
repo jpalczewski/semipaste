@@ -147,6 +147,10 @@ class Common(Configuration):
 
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    if os.environ.get('DATABASE_URL') is not None:
+        DATABASES = {
+            'default': env.db(),
+        }
 
 
 class Dev(Common):
@@ -163,11 +167,6 @@ class Dev(Common):
         EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
         EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
         EMAIL_TIMEOUT = email_config['EMAIL_TIMEOUT']
-
-    if os.environ.get('DATABASE_URL') is not None:
-        DATABASES = {
-            'default': env.db(),
-        }
 
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(Common.BASE_DIR, 'media/')
@@ -231,27 +230,3 @@ class Prod(Common):
     DEBUG = False
 
     ALLOWED_HOSTS = ['proxy', 'backend']
-
-
-class CI(Common):
-
-    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
-    email_config = ''
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': values.Value(
-                'semipaste', environ_name='POSTGRES_DB', environ_prefix=None
-            ),
-            'USER': values.Value(
-                'postgres', environ_name='POSTGRES_USER', environ_prefix=None
-            ),
-            'PASSWORD': values.Value(
-                'password', environ_name='POSTGRES_PASSWORD', environ_prefix=None
-            ),
-            'HOST': values.Value(
-                'db', environ_name='POSTGRES_HOST', environ_prefix=None
-            ),
-            'PORT': 5432,
-        }
-    }
