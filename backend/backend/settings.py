@@ -147,6 +147,10 @@ class Common(Configuration):
 
     STATIC_ROOT = BASE_DIR / "staticfiles"
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    if os.environ.get('DATABASE_URL') is not None:
+        DATABASES = {
+            'default': env.db(),
+        }
 
 
 class Dev(Common):
@@ -163,11 +167,6 @@ class Dev(Common):
         EMAIL_USE_TLS = email_config['EMAIL_USE_TLS']
         EMAIL_USE_SSL = email_config['EMAIL_USE_SSL']
         EMAIL_TIMEOUT = email_config['EMAIL_TIMEOUT']
-
-    if os.environ.get('DATABASE_URL') is not None:
-        DATABASES = {
-            'default': env.db(),
-        }
 
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(Common.BASE_DIR, 'media/')

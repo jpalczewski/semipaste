@@ -1,8 +1,8 @@
 version: "3.9"  # optional since v1.27.0
 services:
-  backend:
+  backend: &backend
     image:  jpalczewski/semipaste-backend:prod-latest
-    command:  gunicorn backend.asgi:application -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
+    command: sh /app/start.sh
     build:
       context: backend
       args:
@@ -11,9 +11,11 @@ services:
       - .env
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings
-      - DJANGO_CONFIGURATION=Dev
+      - DJANGO_CONFIGURATION=Prod
     ports:
       - "8000:8000"
+    volumes:
+      - media:/app/media
   db:
     image: postgres:14-alpine
     restart: always
@@ -21,14 +23,32 @@ services:
       - .env
     volumes:
       - db_data_prod:/var/lib/postgresql/data/
-#  proxy:
-#    image: jpalczewski/semipaste-proxy:latest
-#    build:
-#      context: frontend
-#      dockerfile: ../proxy/Dockerfile
-##    volumes:
-##      - "./proxy/nginx.conf:/etc/nginx/nginx.conf:ro"
-#    ports:
-#      - "3030:80"
+  proxy:
+    image: jpalczewski/semipaste-proxy:latest
+    build:
+      context: frontend
+      dockerfile: ../proxy/Dockerfile
+    volumes:
+      - "./proxy/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "media:/usr/share/nginx/html/media"
+    ports:
+      - "3030:80"
+  celeryworker:
+    <<: *backend
+    command: sh  /app/start_celeryworker.sh
+    ports: []
+
+  celerybeat:
+    <<: *backend
+    command: sh  /app/start_celerybeat.sh
+    ports: []
+
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - redis_data_prod:/data
+    command: redis-server --save 60 1 --loglevel warning
 volumes:
   db_data_prod:
+  redis_data_prod:
+  media:

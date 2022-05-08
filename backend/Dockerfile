@@ -28,14 +28,20 @@ WORKDIR /app
 COPY --from=builder /app /app
 COPY --from=builder /venv /venv
 COPY  entrypoint.sh /entrypoint
-ADD . /app
 RUN apt-get update && apt-get install -y  libpq5 && \
     useradd app  -d /app && \
     chown  app . && \
     chown app /entrypoint &&  \
-    chmod +x /entrypoint && \
-    sed -i 's/\r$//g' /entrypoint && \
-    sed -i 's/\r$//g' /app/start.sh
+    chmod +x /entrypoint
+
+COPY --chmod=770 --chown=app . /app
+
+RUN sed -i 's/\r$//g' /entrypoint && \
+        sed -i 's/\r$//g' /app/start.sh && \
+        mkdir -p media  && \
+        chown -R app /app/media && \
+        chmod -R 775 /app/media
+
 
 USER 1000
 

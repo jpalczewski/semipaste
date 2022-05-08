@@ -1,6 +1,6 @@
 FROM node:16.14.0-alpine AS appbuild
 WORKDIR /app
-COPY package.json yarn.lock tsconfig.json ./
+COPY package.json yarn.lock tsconfig.json schema.graphql .babelrc setup.js ./
 #COPY .babelrc ./
 RUN --mount=type=cache,id=yarn,target=/usr/local/share/.cache/yarn/v6   \
      yarn install
