@@ -1,7 +1,7 @@
 version: "3.9"  # optional since v1.27.0
 services:
   backend: &backend
-    image:  jpalczewski/semipaste-backend:prod-latest
+    image:  ghcr.io/jpalczewski/semipaste-backend:prod-latest
     command: sh /app/start.sh
     build:
       context: backend
@@ -24,7 +24,7 @@ services:
     volumes:
       - db_data_prod:/var/lib/postgresql/data/
   proxy:
-    image: jpalczewski/semipaste-proxy:latest
+    image: ghcr.io/jpalczewski/semipaste-proxy:latest
     build:
       context: frontend
       dockerfile: ../proxy/Dockerfile
