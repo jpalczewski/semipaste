@@ -9,8 +9,8 @@ from backend.mixins import ErrorCode, ResultMixin
 from users.models import User
 
 
-class EditUser(ResultMixin, graphene.Mutation):
-    class Arguments:
+class EditUser(ResultMixin, graphene.relay.ClientIDMutation):
+    class Input:
         id = graphene.ID(required=True)
         username = graphene.String()
         first_name = graphene.String()
@@ -20,7 +20,7 @@ class EditUser(ResultMixin, graphene.Mutation):
         password = graphene.String()
 
     @staticmethod
-    def mutate(root, info, id: graphene.ID, **kwargs):  # type: ignore
+    def mutate_and_get_payload(root, info, id: graphene.ID, **relay):  # type: ignore
         # type: ignore
         try:
             user = User.objects.get(pk=id)
@@ -30,9 +30,9 @@ class EditUser(ResultMixin, graphene.Mutation):
                 error_code=ErrorCode.USER_NOT_FOUND,
                 error="User with specified ID not found",
             )
-        for attr in kwargs.keys():
+        for attr in relay.keys():
 
-            value = kwargs.get(attr, getattr(user, attr))
+            value = relay.get(attr, getattr(user, attr))
             if value != '':
                 if attr == 'description':
                     setattr(user, attr, strip_tags(escape(value)))

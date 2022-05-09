@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8e7f4976e03c1640456f854cec338638>>
+ * @generated SignedSource<<78d9f66264f38dda5503ca698f57eafc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -69,42 +69,48 @@ v7 = [
     "alias": null,
     "args": [
       {
-        "kind": "Variable",
-        "name": "description",
-        "variableName": "description"
-      },
-      {
-        "kind": "Variable",
-        "name": "email",
-        "variableName": "email"
-      },
-      {
-        "kind": "Variable",
-        "name": "firstName",
-        "variableName": "firstName"
-      },
-      {
-        "kind": "Variable",
-        "name": "id",
-        "variableName": "id"
-      },
-      {
-        "kind": "Variable",
-        "name": "lastName",
-        "variableName": "lastName"
-      },
-      {
-        "kind": "Variable",
-        "name": "password",
-        "variableName": "password"
-      },
-      {
-        "kind": "Variable",
-        "name": "username",
-        "variableName": "username"
+        "fields": [
+          {
+            "kind": "Variable",
+            "name": "description",
+            "variableName": "description"
+          },
+          {
+            "kind": "Variable",
+            "name": "email",
+            "variableName": "email"
+          },
+          {
+            "kind": "Variable",
+            "name": "firstName",
+            "variableName": "firstName"
+          },
+          {
+            "kind": "Variable",
+            "name": "id",
+            "variableName": "id"
+          },
+          {
+            "kind": "Variable",
+            "name": "lastName",
+            "variableName": "lastName"
+          },
+          {
+            "kind": "Variable",
+            "name": "password",
+            "variableName": "password"
+          },
+          {
+            "kind": "Variable",
+            "name": "username",
+            "variableName": "username"
+          }
+        ],
+        "kind": "ObjectValue",
+        "name": "input"
       }
     ],
-    "concreteType": "EditUser",
+    "concreteType": "EditUserPayload",
     "kind": "LinkedField",
     "name": "editUser",
     "plural": false,
@@ -154,16 +160,16 @@ return {
     "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "27918b2c3e4b761435343ab4995df1eb",
+    "cacheID": "488e4ad831862967af09c3d5b2850ce9",
     "id": null,
     "metadata": {},
     "name": "editUserMutation",
     "operationKind": "mutation",
-    "text": "mutation editUserMutation(\n  $id: ID!\n  $username: String = \"\"\n  $lastName: String = \"\"\n  $firstName: String = \"\"\n  $email: String = \"\"\n  $password: String\n  $description: String = \"\"\n) {\n  editUser(id: $id, username: $username, lastName: $lastName, firstName: $firstName, email: $email, password: $password, description: $description) {\n    ok\n  }\n}\n"
+    "text": "mutation editUserMutation(\n  $id: ID!\n  $username: String = \"\"\n  $lastName: String = \"\"\n  $firstName: String = \"\"\n  $email: String = \"\"\n  $password: String\n  $description: String = \"\"\n) {\n  editUser(input: {id: $id, username: $username, lastName: $lastName, firstName: $firstName, email: $email, password: $password, description: $description}) {\n    ok\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5638739ec672a0e845f6b58dab52141a";
+(node as any).hash = "52d15dc1aba1b62281b650f94f321193";
 
 export default node;

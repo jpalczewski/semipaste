@@ -10,11 +10,11 @@ import graphene
 from users.models import User, UserVerification
 
 
-class AddUser(graphene.Mutation):
+class AddUser(graphene.relay.ClientIDMutation):
     ok = graphene.Boolean()
     response = graphene.String()
 
-    class Arguments:
+    class Input:
         username = graphene.String(required=True)
         password = graphene.String(required=True)
         confirm_password = graphene.String(required=True)
@@ -45,11 +45,11 @@ class AddUser(graphene.Mutation):
         return True if re.search(regex, email) else False
 
     @staticmethod
-    def mutate(root, info, **kwargs):  # type: ignore
-        username = kwargs.get('username')
-        password = kwargs.get('password')
-        confirm_password = kwargs.get('confirm_password')
-        email = kwargs.get('email')
+    def mutate_and_get_payload(root, info, **input):  # type: ignore
+        username = input.get('username')
+        password = input.get('password')
+        confirm_password = input.get('confirm_password')
+        email = input.get('email')
 
         val, response = AddUser.password_validation(password)
         if not val:

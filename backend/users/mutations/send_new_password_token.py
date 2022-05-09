@@ -9,15 +9,15 @@ import graphene
 from users.models import User, UserVerification
 
 
-class SendNewPasswordToken(graphene.Mutation):
+class SendNewPasswordToken(graphene.relay.ClientIDMutation):
     ok = graphene.Boolean()
     response = graphene.String()
 
-    class Arguments:
+    class Input:
         email = graphene.String()
 
     @staticmethod
-    def mutate(root, info, **kwargs):  # type: ignore
+    def mutate_and_get_payload(root, info, **kwargs):  # type: ignore
 
         email = kwargs.get('email')
         if User.objects.get(email=email):

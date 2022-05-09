@@ -385,13 +385,13 @@ type Mutation {
   ratePasteBin(input: RatingPasteBinInput!): RatingPasteBinPayload
   ratePasteBinId(input: RatingPasteBinIDInput!): RatingPasteBinIDPayload
   isPasteBinRated(input: IsPasteBinRatedInput!): IsPasteBinRatedPayload
-  addUser(confirmPassword: String!, email: String!, password: String!, username: String!): AddUser
-  editUser(description: String = null, email: String = null, firstName: String = null, id: ID!, lastName: String = null, password: String = null, username: String = null): EditUser
-  editUserDescription(description: String = null, id: ID!): EditUserDescription
-  deleteUser(id: ID!): DeleteUser
-  sendNewPasswordToken(email: String = null): SendNewPasswordToken
-  setNewPassword(code: String = null, confirmNewPassword: String = null, email: String = null, newPassword: String = null): SetNewPassword
-  verifyNewUser(code: String = null, id: ID = null): VerifyNewUser
+  addUser(input: AddUserInput!): AddUserPayload
+  editUser(input: EditUserInput!): EditUserPayload
+  editUserDescription(input: EditUserDescriptionInput!): EditUserDescriptionPayload
+  deleteUser(input: DeleteUserInput!): DeleteUserPayload
+  sendNewPasswordToken(input: SendNewPasswordTokenInput!): SendNewPasswordTokenPayload
+  setNewPassword(input: SetNewPasswordInput!): SetNewPasswordPayload
+  verifyNewUser(input: VerifyNewUserInput!): VerifyNewUserPayload
 
   """Obtain JSON Web Token mutation"""
   tokenAuth(input: ObtainJSONWebTokenInput!): ObtainJSONWebTokenPayload
@@ -637,12 +637,21 @@ input IsPasteBinRatedInput {
   clientMutationId: String
 }
 
-type AddUser {
+type AddUserPayload {
   ok: Boolean
   response: String
+  clientMutationId: String
 }
 
-type EditUser {
+input AddUserInput {
+  username: String!
+  password: String!
+  confirmPassword: String!
+  email: String!
+  clientMutationId: String
+}
+
+type EditUserPayload {
   """Mutation result"""
   ok: Boolean
 
@@ -651,13 +660,32 @@ type EditUser {
 
   """Numeric error code"""
   errorCode: ErrorCode
+  clientMutationId: String
 }
 
-type EditUserDescription {
+input EditUserInput {
+  id: ID!
+  username: String
+  firstName: String
+  lastName: String
+  email: String
+  description: String
+  password: String
+  clientMutationId: String
+}
+
+type EditUserDescriptionPayload {
   ok: Boolean
+  clientMutationId: String
 }
 
-type DeleteUser {
+input EditUserDescriptionInput {
+  id: ID!
+  description: String
+  clientMutationId: String
+}
+
+type DeleteUserPayload {
   """Mutation result"""
   ok: Boolean
 
@@ -666,21 +694,49 @@ type DeleteUser {
 
   """Numeric error code"""
   errorCode: ErrorCode
+  clientMutationId: String
 }
 
-type SendNewPasswordToken {
-  ok: Boolean
-  response: String
+input DeleteUserInput {
+  id: ID!
+  clientMutationId: String
 }
 
-type SetNewPassword {
+type SendNewPasswordTokenPayload {
   ok: Boolean
   response: String
+  clientMutationId: String
 }
 
-type VerifyNewUser {
+input SendNewPasswordTokenInput {
+  email: String
+  clientMutationId: String
+}
+
+type SetNewPasswordPayload {
   ok: Boolean
   response: String
+  clientMutationId: String
+}
+
+input SetNewPasswordInput {
+  email: String
+  code: String
+  newPassword: String
+  confirmNewPassword: String
+  clientMutationId: String
+}
+
+type VerifyNewUserPayload {
+  ok: Boolean
+  response: String
+  clientMutationId: String
+}
+
+input VerifyNewUserInput {
+  id: ID
+  code: String
+  clientMutationId: String
 }
 
 """Obtain JSON Web Token mutation"""

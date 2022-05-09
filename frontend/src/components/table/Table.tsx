@@ -10,7 +10,12 @@ import {Row} from "./Row";
 
 
 export const Tables = (props: any) => {
-  const data = useLazyLoadQuery<activePasteBinQuery>(activePasteBin, {mode: props.mode, time: props.time});
+  const data = useLazyLoadQuery<activePasteBinQuery>(activePasteBin, {
+    mode: props.mode,
+    time: props.time,
+    first: props.first,
+    offset: props.offset
+  });
 
     return (
     <Table striped bordered hover>

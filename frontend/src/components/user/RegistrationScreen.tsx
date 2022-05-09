@@ -20,6 +20,7 @@ export const RegistrationScreen = () => {
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
     firstName: "",
     lastName: "",
   });
@@ -40,7 +41,7 @@ export const RegistrationScreen = () => {
 
   return (
     <div className="Contener">
-      <p>REJESTRACJA</p>
+      <p>REGISTRATION</p>
       <Form>
         {error && <Form.Text className="text-danger">{error}</Form.Text>}
         <Form.Group className="mb-3">
@@ -52,9 +53,9 @@ export const RegistrationScreen = () => {
             value={inputs.email || ""}
             onChange={handleChange}
           />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
+          {/*<Form.Text className="text-muted">*/}
+          {/*  We'll never share your email with anyone else.*/}
+          {/*</Form.Text>*/}
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -66,10 +67,10 @@ export const RegistrationScreen = () => {
             value={inputs.username || ""}
             onChange={handleChange}
           />
-          <Form.Text className="text-muted">Minimum dwa znaki</Form.Text>
+          {/*<Form.Text className="text-muted">Minimum dwa znaki</Form.Text>*/}
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Imie</Form.Label>
+          <Form.Label>First Name</Form.Label>
           <Form.Control
             type="text"
             name="firstName"
@@ -79,7 +80,7 @@ export const RegistrationScreen = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Nazwisko</Form.Label>
+          <Form.Label>Last Name</Form.Label>
           <Form.Control
             type="text"
             name="lastName"
@@ -88,7 +89,6 @@ export const RegistrationScreen = () => {
             onChange={handleChange}
           />
         </Form.Group>
-
         <Form.Group className="mb-3">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -99,8 +99,18 @@ export const RegistrationScreen = () => {
             onChange={handleChange}
           />
         </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            type="confirmPassword"
+            name="confirmPassword"
+            placeholder="********"
+            value={inputs.confirmPassword || ""}
+            onChange={handleChange}
+          />
+        </Form.Group>
         <Button variant="primary" type="submit" onClick={handleSubmit}>
-          Zarejestruj
+          Sign Up
         </Button>
       </Form>
     </div>
