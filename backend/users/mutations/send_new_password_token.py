@@ -17,9 +17,8 @@ class SendNewPasswordToken(graphene.relay.ClientIDMutation):
         email = graphene.String()
 
     @staticmethod
-    def mutate_and_get_payload(root, info, **kwargs):  # type: ignore
-
-        email = kwargs.get('email')
+    def mutate_and_get_payload(root, info, **input):  # type: ignore
+        email = input.get('email')
         if User.objects.get(email=email):
             user = User.objects.get(email=email)
             code = "".join(random.choice(string.ascii_letters) for i in range(10))

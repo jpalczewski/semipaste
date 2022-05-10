@@ -640,6 +640,7 @@ input IsPasteBinRatedInput {
 type AddUserPayload {
   ok: Boolean
   response: String
+  id: ID
   clientMutationId: String
 }
 
@@ -648,6 +649,8 @@ input AddUserInput {
   password: String!
   confirmPassword: String!
   email: String!
+  firstName: String
+  lastName: String
   clientMutationId: String
 }
 

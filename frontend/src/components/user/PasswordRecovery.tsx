@@ -5,29 +5,31 @@ import {passwordRecoveryMutation} from "../../Query/Users/__generated__/password
 import relayEnvironment from "../../RelayEnvironment";
 import {passwordRecovery} from "../../Query/Users/passwordRecovery";
 import {useNavigate} from "react-router-dom";
+import {Wrapper} from "../../styles/Components.style";
 
 export const PasswordRecovery = () => {
-    const [input, setInput] = useState("");
+    const [email, setEmail] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = () => {
-        // console.log("Test")
-        navigate('/verify', {state: {id: 0, type: "recovery"}})
-        // commitMutation<passwordRecoveryMutation>(relayEnvironment, {
-        //    mutation: passwordRecovery,
-        //     variables: {email: input},
-        //     onCompleted: response => {
-        //        if (response.sendNewPasswordToken?.ok!) {
-        //            navigate("/verify", {state: {id: 0, type: "recovery"}});
-        //        }
-        //     },
-        //     onError: error => {
-        //
-        //     }
-        // });
+        if (email === "") return;
+        commitMutation<passwordRecoveryMutation>(relayEnvironment, {
+           mutation: passwordRecovery,
+            variables: {email: email},
+            onCompleted: response => {
+               if (response.sendNewPasswordToken?.ok!) {
+                   navigate("/verify", {state: {email: email, type: "recovery"}});
+               }
+            },
+            onError: error => {
+                console.log(error);
+                console.log("Error");
+            }
+        });
     }
 
     return (
+        <Wrapper>
         <div className="Contener">
             <Form.Group className="mb-3">
                 <Form.Label className="my-5">E-mail</Form.Label>
@@ -35,13 +37,13 @@ export const PasswordRecovery = () => {
                     type="email"
                     name="email"
                     placeholder="test@test.pl"
-                    value={input || ""}
-                    onChange={(e) => {setInput(e.target.value)}}
+                    value={email || ""}
+                    onChange={(e) => {setEmail(e.target.value)}}
                 />
         </Form.Group>
         <Button className="my-5" onClick={() => handleSubmit()}>
             Send E-Mail
         </Button>
-        </div>
+        </div></Wrapper>
     );
 }

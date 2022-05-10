@@ -3,6 +3,10 @@ import { Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { validPassword } from "../../Regex/Regex";
 import "../../styles/LoginScreen.css";
+import {commitMutation} from "react-relay";
+import {addUserMutation} from "../../Query/Users/__generated__/addUserMutation.graphql";
+import relayEnvironment from "../../RelayEnvironment";
+import {addUser} from "../../Query/Users/addUser";
 
 const validate = (form: any) => {
   if (!form.username) return "login jest wymagany";
@@ -36,7 +40,19 @@ export const RegistrationScreen = () => {
       setError(errorMsg);
       return;
     }
-    navigate("/user");
+
+    commitMutation<addUserMutation>(relayEnvironment, {
+      mutation: addUser,
+      variables: inputs,
+      onCompleted: response => {
+        if (response.addUser?.ok!) {
+          navigate('/verify', {state: {id: response.addUser?.id, type: "registration"}})
+        }
+      },
+      onError: error => {
+         console.log(error);
+      }
+    });
   };
 
   return (
@@ -102,14 +118,14 @@ export const RegistrationScreen = () => {
         <Form.Group className="mb-3">
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
-            type="confirmPassword"
+            type="password"
             name="confirmPassword"
             placeholder="********"
             value={inputs.confirmPassword || ""}
             onChange={handleChange}
           />
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
+        <Button variant="primary" type="submit" onClick={(e) => handleSubmit(e)}>
           Sign Up
         </Button>
       </Form>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { Wrapper, Footer, AllFooter } from "../styles/Components.style";
-
 import { LoginScreen } from "./user/LoginScreen";
 import { RegistrationScreen } from "./user/RegistrationScreen";
 import {PasswordRecovery} from "./user/PasswordRecovery";
