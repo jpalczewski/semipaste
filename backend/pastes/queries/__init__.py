@@ -52,7 +52,6 @@ class PasteBinQuery(graphene.ObjectType):
     expired_paste_bin = DjangoFilterConnectionField(ExpiredPasteBin)
     paste_bin = relay.Node.Field(PasteBinNode)
     all_paste_tags = DjangoFilterConnectionField(PasteTagNode)
-    all_paste_tags = DjangoFilterConnectionField(PasteTagNode)
 
     def resolve_active_paste_bin(self, info, **kwargs):  # type: ignore
         mode = kwargs.get('mode')

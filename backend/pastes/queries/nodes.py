@@ -1,13 +1,14 @@
 # Standard Library
 
+
 # 3rd-Party
 import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
 
 # Project
-from backend.filters import PasteBinFilterFields
-from pastes.models import Attachment, PasteBin
+from backend.filters import DefaultFilterClasses, PasteBinFilterFields
+from pastes.models import Attachment, MTMTags, PasteBin, PasteTag
 
 
 class TotalRatingNode(graphene.ObjectType):
@@ -38,3 +39,23 @@ class AttachmentNode(DjangoObjectType):
         model = Attachment
         interfaces = (relay.Node,)
         exclude = ("paste",)
+
+
+class PasteTagNode(DjangoObjectType):
+    id = graphene.ID(source='pk', required=True)
+    posts = graphene.List(PasteBinNode)
+
+    class Meta:
+        model = PasteTag
+        interfaces = (relay.Node,)
+        filter_fields = {
+            'tag_name': DefaultFilterClasses.DEFAULT_TEXT.value,
+        }
+
+    def resolve_posts(self, info, **kwargs):  # type: ignore
+        tag_id = MTMTags.objects.filter(tag_id=self.id)
+        pastes = []
+        for ids in tag_id:
+            paste_bin_ids = PasteBin.objects.filter(id=ids.paste_id).last()
+            pastes.append(paste_bin_ids)
+        return pastes

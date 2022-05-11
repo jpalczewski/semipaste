@@ -7,19 +7,11 @@ from graphene import relay
 from graphene_django import DjangoObjectType
 
 # Project
-from backend.filters import DefaultFilterClasses, PasteBinFilterFields
+from backend.filters import PasteBinFilterFields
 from pastes.models import MTMTags, PasteBin, PasteTag
 
-
-class PasteTagNode(DjangoObjectType):
-    id = graphene.ID(source='pk', required=True)
-
-    class Meta:
-        model = PasteTag
-        interfaces = (relay.Node,)
-        filter_fields = {
-            'tag_name': DefaultFilterClasses.DEFAULT_TEXT.value,
-        }
+# Local
+from .nodes import PasteTagNode
 
 
 class ActivePasteBin(DjangoObjectType):
