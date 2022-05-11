@@ -54,6 +54,7 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
             for tag in tag_values:
                 tag_get, is_created = PasteTag.objects.get_or_create(tag_name=tag)
                 MTMTags(paste_id=paste.id, tag_id=tag_get.id).save()
+
         return AddPasteBin(
             ok=True, added_paste_id=paste.pk, attachment_token=paste.attachment_token
         )

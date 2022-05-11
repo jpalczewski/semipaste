@@ -82,7 +82,7 @@ class PasteBin(models.Model):
             case PasteBin.ExpireChoices.MIN:
                 return timedelta(seconds=60)  # type: ignore
             case PasteBin.ExpireChoices.HOUR:
-                timedelta(seconds=3600)  # type: ignore
+                return timedelta(seconds=3600)  # type: ignore
             case PasteBin.ExpireChoices.DAY:
                 return timedelta(days=1)  # type: ignore
             case PasteBin.ExpireChoices.WEEK:

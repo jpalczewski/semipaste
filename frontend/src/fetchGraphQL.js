@@ -1,5 +1,11 @@
 async function fetchGraphQL(text, variables) {
-  const response = await fetch("/graphql/v1/", {
+    let path;
+    if (process.env.NODE_ENV === "production") {
+      path = "/api";
+    } else  {
+      path = "";
+    }
+    const response = await fetch(`${path}/graphql/v1/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
