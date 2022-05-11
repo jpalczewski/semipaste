@@ -22,7 +22,7 @@ django-filter = "^21.1"
 graphene-django = {git = "https://github.com/graphql-python/graphene-django", rev = "f6ec0689c18929344c79ae363d2e3d5628fa4a2d"}
 uvicorn = {extras = ["standard"], version = "^0.17.6"}
 gunicorn = "^20.1.0"
-whitenoise = {extras = ["brotli"], version = "^6.0.0"}
+whitenoise = {extras = ["brotli"], version = "^6.1.0"}
 django-graphql-jwt = "^0.3.4"
 django-configurations = {extras = ["cache", "database", "email", "search"], version = "^2.3.2"}
 celery = {extras = ["redis"], version = "^5.2.3"}
