@@ -31,6 +31,8 @@ services:
     volumes:
       - "./proxy/nginx.conf:/etc/nginx/nginx.conf:ro"
       - "media:/usr/share/nginx/html/media"
+      - ./data/certbot/conf:/etc/letsencrypt:ro
+      - ./data/certbot/www:/var/www/certbot:ro
     ports:
       - "3030:80"
   celeryworker:
@@ -48,6 +50,14 @@ services:
     volumes:
       - redis_data_prod:/data
     command: redis-server --save 60 1 --loglevel warning
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt:rw
+      - ./data/certbot/www:/var/www/certbot:rw
+      
+
 volumes:
   db_data_prod:
   redis_data_prod:

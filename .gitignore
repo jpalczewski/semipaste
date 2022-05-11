@@ -142,3 +142,4 @@ backend/.pythonhist
 backend/media
 *.iml
 /backend/docs/_build/
+data/
