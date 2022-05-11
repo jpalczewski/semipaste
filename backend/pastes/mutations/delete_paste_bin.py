@@ -12,7 +12,7 @@ import graphene
 
 # Project
 from backend.mixins import ErrorCode, ResultMixin
-from pastes.models import PasteBin
+from pastes.models import MTMTags, PasteBin
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +40,7 @@ class DeletePasteBin(ResultMixin, graphene.Mutation):
                 error="You need to be logged in",
                 error_code=ErrorCode.NON_EXISTENT_PASTE,
             )
+        MTMTags.objects.filter(paste_id=paste.id).delete()
 
         if info.context.user.is_superuser:
             paste.delete()
