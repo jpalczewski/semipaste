@@ -40,7 +40,7 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
             paste.save()
         except Exception as e:
             return AddPasteBin(
-                Ok=False, error_code=ErrorCode.EXCEPTION_OCCURRED, error=str(e)
+                ok=False, error_code=ErrorCode.EXCEPTION_OCCURRED, error=str(e)
             )
         return AddPasteBin(
             ok=True, added_paste_id=paste.pk, attachment_token=paste.attachment_token
