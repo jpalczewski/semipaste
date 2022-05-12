@@ -3,11 +3,12 @@ import { Wrapper, TableWrapper, AllFooter } from "../styles/Components.style";
 import { Tables } from "./table/Table";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
-export const Popular = () => {
-    const [mode, setMode] = useState<string | null>("top");
+export const Pastes = () => {
+    const [mode, setMode] = useState<string | null>("");
     const [time, setTime] = useState<string | null>("all");
     const [first, setFirst] = useState(15);
     const [offset, setOffSet] = useState(0);
+
 
     const handleModeSelect = (event: string | null) => {
         setMode(event);
@@ -19,9 +20,7 @@ export const Popular = () => {
 
     const handleFirst = (e: any) => {
         setFirst(parseInt(e.target.value));
-        console.log(e.target.value);
-        console.log(first);
-    }
+    };
 
   return (
     <>
@@ -31,6 +30,9 @@ export const Popular = () => {
         </p>
 
           <select className={"form-select"} onChange={(e) => handleFirst(e)}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="5">5</option>
               <option value="15" selected>15</option>
               <option value="25">25</option>
               <option value="50">50</option>
@@ -40,9 +42,10 @@ export const Popular = () => {
           <DropdownButton
               className="d-inline mx-2"
               id="dropdown-basic-button"
-              title={mode}
+              title={mode === "" ? "new" : mode}
               onSelect={handleModeSelect}
           >
+            <Dropdown.Item eventKey="">new</Dropdown.Item>
             <Dropdown.Item eventKey="top">top</Dropdown.Item>
             <Dropdown.Item eventKey="hot">hot</Dropdown.Item>
           </DropdownButton>

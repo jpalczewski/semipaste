@@ -35,7 +35,6 @@ export const Row = (props: any) => {
             setRate(response.isPasteBinRated?.rate!);
             setLikes(response.isPasteBinRated?.likes);
             setDislikes(response.isPasteBinRated?.dislikes);
-            setTotalRating(response.isPasteBinRated?.totalRating);
         },
     });
   };
@@ -80,7 +79,7 @@ export const Row = (props: any) => {
                 {props.object?.dateOfExpiry.slice(0, 10)}
               </td>
               <td>
-                {totalRating}
+                {props.object?.totalRating}
               </td>
               <td>
                 {isRated

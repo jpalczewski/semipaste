@@ -256,6 +256,7 @@ type ActivePasteBinConnection {
 
   """Contains the nodes in this connection."""
   edges: [ActivePasteBinEdge]!
+  totalCount: Int
 }
 
 """A Relay edge containing a `ActivePasteBin` and its cursor."""

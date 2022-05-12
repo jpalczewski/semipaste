@@ -11,7 +11,7 @@ from backend.filters import PasteBinFilterFields
 
 # Local
 from ..models import PasteBin
-from .nodes import TotalRatingNode
+from .nodes import TotalRatingNode, TotalCount
 
 
 class ActivePasteBin(DjangoObjectType, TotalRatingNode):
@@ -21,6 +21,7 @@ class ActivePasteBin(DjangoObjectType, TotalRatingNode):
         model = PasteBin
         filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
+        connection_class = TotalCount
 
     @classmethod
     def get_queryset(cls, queryset, info):  # type: ignore

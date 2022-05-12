@@ -38,3 +38,13 @@ class AttachmentNode(DjangoObjectType):
         model = Attachment
         interfaces = (relay.Node,)
         exclude = ("paste",)
+
+
+class TotalCount(relay.Connection):
+    class Meta:
+        abstract = True
+
+    total_count = graphene.Int()
+
+    def resolve_total_count(self, info):
+        return PasteBin.objects.count()
