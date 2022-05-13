@@ -15,7 +15,7 @@ python = "^3.10"
 Django = "^4.0.4"
 psycopg2 = "^2.9.3"
 djangorestframework = "^3.13.1"
-PyJWT = "^2.3.0"
+PyJWT = "^2.4.0"
 django-environ = "^0.8.1"
 graphene = {git = "https://github.com/graphql-python/graphene", rev = "v3.0.0"}
 django-filter = "^21.1"
