@@ -1,4 +1,5 @@
 # Standard Library
+from datetime import datetime, timezone
 
 # 3rd-Party
 import graphene
@@ -47,4 +48,6 @@ class TotalCount(relay.Connection):
     total_count = graphene.Int()
 
     def resolve_total_count(self, info):
-        return PasteBin.objects.count()
+        return PasteBin.objects.filter(
+            date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc)
+        ).count()

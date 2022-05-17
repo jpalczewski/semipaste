@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import {Table} from "react-bootstrap";
 import {useLazyLoadQuery} from "react-relay";
@@ -6,6 +6,7 @@ import '../../styles/PasteHighlight.css'
 import {activePasteBin} from "../../Query/PasteBins/activePasteBin";
 import {activePasteBinQuery} from "../../Query/PasteBins/__generated__/activePasteBinQuery.graphql";
 import {Row} from "./Row";
+import {Pagination} from 'react-bootstrap';
 
 
 export const Tables = (props: any) => {
@@ -13,45 +14,44 @@ export const Tables = (props: any) => {
       {mode: props.mode, time: props.time, first: props.first, offset: props.offset}
   );
 
-  const [page, setPage] = useState(1);
-  const [startCrsor, setStarCursor] = useState("");
-  const [endCrsor, setEndCursor] = useState("");
 
+  // Pagination
+  const [page, setPage] = useState(1);
 
   const LeftPag = (pageNum: number) => {
     return (
-        <button onClick={() => {
+        <Pagination.Item onClick={() => {
             setPage(pageNum);
             props.setOffSet((pageNum-1) * props.first);
         }}>
             {pageNum}
-        </button>
+        </Pagination.Item>
     )
   }
 
   const renderLeftPag = () => {
       let leftPagList = [];
-      let pgNum = Math.abs(page - 3);
+      let pgNum = Math.abs(page - 2);
       while (pgNum < page) {
         if (pgNum > 0) {
             leftPagList.push(LeftPag(pgNum));
         }
         pgNum += 1;
       }
-      if (pgNum > 3) {
-          leftPagList.unshift(<button disabled>...</button>)
+      if (pgNum > 3 && pgNum-2 != 1) {
+          leftPagList.unshift(<Pagination.Ellipsis disabled />)
       }
       return leftPagList;
   }
 
     const rightPag = (pageNum: number) => {
     return (
-        <button onClick={() => {
+        <Pagination.Item onClick={() => {
             setPage(pageNum);
             props.setOffSet((pageNum-1) * props.first);
         }}>
             {pageNum}
-        </button>
+        </Pagination.Item>
     )
   }
 
@@ -59,64 +59,57 @@ export const Tables = (props: any) => {
       let rightPagList = [];
       let pgNum = page + 3;
       while (pgNum > page) {
-          if ( pgNum < (pastes.activePasteBin?.totalCount! / props.first)) {
+          if ( pgNum <= Math.ceil(pastes.activePasteBin?.totalCount! / props.first)) {
               rightPagList.unshift(rightPag(pgNum));
           }
           pgNum -= 1;
       }
-      if (pgNum-1 < pastes.activePasteBin?.totalCount! / props.first) {
-          rightPagList.push(<button disabled>...</button>)
+      if (pgNum < Math.ceil(pastes.activePasteBin?.totalCount! / props.first)-3) {
+          rightPagList.push(<Pagination.Ellipsis disabled />)
       }
       return rightPagList;
   }
 
   const renderPagination = () => {
     return (
-        <div>
+        <Pagination>
           {
             page > 1 &&
               <>
-              <button onClick={() => {
+              <Pagination.First onClick={() => {
                   setPage(1);
                   props.setOffSet(0);
                 }
-              }>
-                First
-              </button>
-              <button onClick={() => {
+              } />
+              <Pagination.Prev onClick={() => {
                   setPage(page - 1);
                   props.setOffSet( props.offset - props.first );
               }
-              }>
-                Previous
-              </button>
+              } />
                   {renderLeftPag()}
               </>
           }
-          <button disabled>
+          <Pagination.Item active>
             {page}
-          </button>
+          </Pagination.Item>
           {
             pastes.activePasteBin?.pageInfo?.hasNextPage &&
              <>
-                 {renderRightPag()}
-                 <button onClick={() => {
+             {renderRightPag()}
+             <Pagination.Next onClick={() => {
                   setPage(page + 1);
                   props.setOffSet( props.offset + props.first );
               }
-              }>
-                Next
-              </button>
-              <button onClick={() => {
-                  setPage(Math.floor((pastes.activePasteBin?.totalCount! / props.first)));
-                  props.setOffSet( ((pastes.activePasteBin?.totalCount! / props.first)-2) * props.first);
+              } />
+
+              <Pagination.Last onClick={() => {
+                  setPage(Math.ceil((pastes.activePasteBin?.totalCount! / props.first)));
+                  props.setOffSet( ((pastes.activePasteBin?.totalCount! / props.first-1)) * props.first);
               }
-              }>
-                Last
-              </button>
+              } />
              </>
           }
-        </div>
+        </Pagination>
     )
   }
 
@@ -147,7 +140,7 @@ export const Tables = (props: any) => {
         )}
       </tbody>
     </Table>
-          {renderPagination()}
+            {renderPagination()}
         </>
   );
 };
