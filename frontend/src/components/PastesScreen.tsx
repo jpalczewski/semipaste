@@ -1,14 +1,28 @@
 import React, {useState} from "react";
 import { Wrapper, TableWrapper, AllFooter } from "../styles/Components.style";
 import { Tables } from "./table/Table";
-import { Dropdown, DropdownButton } from "react-bootstrap";
+import {Dropdown, DropdownButton, Pagination} from "react-bootstrap";
+import {useLazyLoadQuery} from "react-relay";
+import {activePasteBinQuery} from "../Query/PasteBins/__generated__/activePasteBinQuery.graphql";
+import {activePasteBin} from "../Query/PasteBins/activePasteBin";
+import {useParams} from "react-router-dom";
 
 export const Pastes = () => {
+
     const [mode, setMode] = useState<string | null>("");
     const [time, setTime] = useState<string | null>("all");
     const [first, setFirst] = useState(15);
     const [offset, setOffSet] = useState(0);
 
+    const pastes = useLazyLoadQuery<activePasteBinQuery>(activePasteBin,
+      {mode: mode, time: time, first: first, offset: offset}
+    );
+
+    const { pageIndex } = useParams();
+    const [page, setPage] = useState(1);
+    if (pageIndex !== undefined) {
+        setPage(parseInt(pageIndex));
+    }
 
     const handleModeSelect = (event: string | null) => {
         setMode(event);
@@ -22,6 +36,100 @@ export const Pastes = () => {
         setFirst(parseInt(e.target.value));
     };
 
+    const LeftPag = (pageNum: number) => {
+    return (
+        <Pagination.Item onClick={() => {
+            setPage(pageNum);
+            setOffSet((pageNum-1) * first);
+        }}>
+            {pageNum}
+        </Pagination.Item>
+    )
+  }
+
+  const renderLeftPag = () => {
+      let leftPagList = [];
+      let pgNum = Math.abs(page - 2);
+      while (pgNum < page) {
+        if (pgNum > 0) {
+            leftPagList.push(LeftPag(pgNum));
+        }
+        pgNum += 1;
+      }
+      if (pgNum > 3 && pgNum-2 != 1) {
+          leftPagList.unshift(<Pagination.Ellipsis disabled />)
+      }
+      return leftPagList;
+  }
+
+    const rightPag = (pageNum: number) => {
+    return (
+        <Pagination.Item onClick={() => {
+            setPage(pageNum);
+            setOffSet((pageNum-1) * first);
+        }}>
+            {pageNum}
+        </Pagination.Item>
+    )
+  }
+
+  const renderRightPag = () => {
+      let rightPagList = [];
+      let pgNum = page + 3;
+      while (pgNum > page) {
+          if ( pgNum <= Math.ceil(pastes.activePasteBin?.totalCount! / first)) {
+              rightPagList.unshift(rightPag(pgNum));
+          }
+          pgNum -= 1;
+      }
+      if (pgNum < Math.ceil(pastes.activePasteBin?.totalCount! / first)-3) {
+          rightPagList.push(<Pagination.Ellipsis disabled />)
+      }
+      return rightPagList;
+  }
+
+  const renderPagination = () => {
+    return (
+        <Pagination>
+          {
+            page > 1 &&
+              <>
+              <Pagination.First onClick={() => {
+                  setPage(1);
+                  setOffSet(0);
+                }
+              } />
+              <Pagination.Prev onClick={() => {
+                  setPage(page - 1);
+                  setOffSet( offset - first );
+              }
+              } />
+                  {renderLeftPag()}
+              </>
+          }
+          <Pagination.Item active>
+            {page}
+          </Pagination.Item>
+          {
+            pastes.activePasteBin?.pageInfo?.hasNextPage &&
+             <>
+             {renderRightPag()}
+             <Pagination.Next onClick={() => {
+                  setPage(page + 1);
+                  setOffSet( offset + first );
+              }
+              } />
+              <Pagination.Last onClick={() => {
+                  setPage(Math.ceil((pastes.activePasteBin?.totalCount! / first)));
+                  setOffSet( ((pastes.activePasteBin?.totalCount! / first-1)) * first);
+              }
+              } />
+             </>
+          }
+        </Pagination>
+    )
+  }
+
   return (
     <>
       <Wrapper>
@@ -29,7 +137,10 @@ export const Pastes = () => {
           Popularne Wklejki
         </p>
 
-          <select className={"form-select"} onChange={(e) => handleFirst(e)}>
+          <select className={"form-select"} style={{width: "10vh", margin: "auto"}}
+                  onChange={(e) => {
+                      handleFirst(e);
+                  }}>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="5">5</option>
@@ -66,8 +177,9 @@ export const Pastes = () => {
               }
           </>
         <TableWrapper>
-          <Tables mode={mode} time={time} first={first} offset={offset} setOffSet={setOffSet}/>
+          <Tables pastes={pastes} page={page} setPage={setPage}/>
         </TableWrapper>
+          {renderPagination()}
       </Wrapper>
       <AllFooter>
         <p
