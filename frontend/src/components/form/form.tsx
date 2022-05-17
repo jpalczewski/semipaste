@@ -23,6 +23,7 @@ export const PasteBinForm = () => {
     language: "Plain Text",
     visible: false,
   });
+  const [files, setFile] = useState<File>();
 
   const handleText = (event: any) => {
     setInputs({
@@ -51,6 +52,12 @@ export const PasteBinForm = () => {
     });
   };
 
+  const handleFile = (event: any) => {
+   console.log(event);
+   setFile(event.target.files[0]);
+  }
+
+
   const handleSubmit = (event: any) => {
     console.log(event);
     commitMutation<addPasteBinMutation>(RelayEnvironment, {
@@ -58,8 +65,9 @@ export const PasteBinForm = () => {
       variables: event,
       onCompleted: (response) => {
         console.log("ok", response);
-        window.location.reload();
-      },
+        //window.location.reload();
+        console.log(files);
+      }, 
       onError: (error) => {
         console.error(error);
       },
@@ -144,7 +152,8 @@ export const PasteBinForm = () => {
               className="mb-3"
               style={{ marginBottom: 10, width: "50%" }}
             >
-              <Form.Control type="file" size="sm" />
+              <Form.Control type="file" size="sm"
+              onChange={(event) => handleFile(event)} />
             </Form.Group>
           </Col>
           <Col>
