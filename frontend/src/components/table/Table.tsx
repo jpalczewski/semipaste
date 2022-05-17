@@ -1,13 +1,8 @@
 import React, {useEffect, useState} from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import {Table} from "react-bootstrap";
-import {useLazyLoadQuery} from "react-relay";
 import '../../styles/PasteHighlight.css'
-import {activePasteBin} from "../../Query/PasteBins/activePasteBin";
-import {activePasteBinQuery} from "../../Query/PasteBins/__generated__/activePasteBinQuery.graphql";
 import {Row} from "./Row";
-import {Pagination} from 'react-bootstrap';
-
 
 export const Tables = (props: any) => {
 

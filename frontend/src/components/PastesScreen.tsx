@@ -19,9 +19,9 @@ export const Pastes = () => {
     );
 
     const { pageIndex } = useParams();
-    const [page, setPage] = useState(1);
+    let page = 1;
     if (pageIndex !== undefined) {
-        setPage(parseInt(pageIndex));
+        page = parseInt(pageIndex);
     }
 
     const handleModeSelect = (event: string | null) => {
@@ -39,7 +39,7 @@ export const Pastes = () => {
     const LeftPag = (pageNum: number) => {
     return (
         <Pagination.Item onClick={() => {
-            setPage(pageNum);
+            page = pageNum;
             setOffSet((pageNum-1) * first);
         }}>
             {pageNum}
@@ -65,7 +65,7 @@ export const Pastes = () => {
     const rightPag = (pageNum: number) => {
     return (
         <Pagination.Item onClick={() => {
-            setPage(pageNum);
+            page = pageNum;
             setOffSet((pageNum-1) * first);
         }}>
             {pageNum}
@@ -95,12 +95,12 @@ export const Pastes = () => {
             page > 1 &&
               <>
               <Pagination.First onClick={() => {
-                  setPage(1);
+                  page = 1;
                   setOffSet(0);
                 }
               } />
               <Pagination.Prev onClick={() => {
-                  setPage(page - 1);
+                  page = page - 1;
                   setOffSet( offset - first );
               }
               } />
@@ -115,12 +115,12 @@ export const Pastes = () => {
              <>
              {renderRightPag()}
              <Pagination.Next onClick={() => {
-                  setPage(page + 1);
+                  page = page + 1;
                   setOffSet( offset + first );
               }
               } />
               <Pagination.Last onClick={() => {
-                  setPage(Math.ceil((pastes.activePasteBin?.totalCount! / first)));
+                  page = Math.ceil((pastes.activePasteBin?.totalCount! / first));
                   setOffSet( ((pastes.activePasteBin?.totalCount! / first-1)) * first);
               }
               } />
@@ -177,7 +177,7 @@ export const Pastes = () => {
               }
           </>
         <TableWrapper>
-          <Tables pastes={pastes} page={page} setPage={setPage}/>
+          <Tables pastes={pastes} page={page}/>
         </TableWrapper>
           {renderPagination()}
       </Wrapper>
