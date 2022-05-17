@@ -1,5 +1,5 @@
-import {Button, Form} from "react-bootstrap";
-import React,  {useState} from "react";
+import {Alert, Button, Form} from "react-bootstrap";
+import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import {commitMutation} from "react-relay";
 import RelayEnvironment from "../../RelayEnvironment";
@@ -19,13 +19,15 @@ interface Props {
 export const VerificationScreen: React.FC = () => {
     const [code, setCode] = useState("");
     const [status, setStatus] = useState(false);
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const navigate = useNavigate();
 
     // using useState => inf loop ????
-    var email: any = undefined;
-    var id: any = undefined;
-    var type = "";
+    let email: any = undefined;
+    let id: any = undefined;
+    let type = "";
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -36,7 +38,6 @@ export const VerificationScreen: React.FC = () => {
         type = state.type;
         id = state.id;
     }
-
 
     const generateInputs = () => {
         switch(type) {
@@ -104,9 +105,12 @@ export const VerificationScreen: React.FC = () => {
                 if (response.setNewPassword?.ok!) {
                     setStatus(true);
                 }
+                setError(true);
+                setErrorMessage(response.setNewPassword?.response!);
             },
             onError: error => {
-                console.log(error);
+                setError(true);
+                setErrorMessage(error.message);
             }
         });
     }
@@ -119,15 +123,32 @@ export const VerificationScreen: React.FC = () => {
                 if (response.verifyNewUser?.ok!) {
                     setStatus(true);
                 }
+                setError(true);
+                setErrorMessage(response.verifyNewUser?.response!);
             },
             onError: error => {
-                console.log(error);
+                setError(true);
+                setErrorMessage(error.message);
             }
         });
-    }
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setError(false);
+        }, 1500);
+        return () => clearTimeout(timer);
+    }, [error]);
 
     return (
         <Wrapper>
+            {error &&
+                <Alert variant="primary" style={{width: "50vh", margin: "auto"}}>
+                    <Alert.Heading>
+                        {errorMessage}
+                    </Alert.Heading>
+                </Alert>
+            }
             <div className="Container">
             {(email === undefined && id === undefined) ? <><p>Nope</p></> :
             <>

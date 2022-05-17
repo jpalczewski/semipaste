@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import {Form, Button, Alert} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { validPassword } from "../../Regex/Regex";
 import "../../styles/LoginScreen.css";
@@ -18,7 +18,6 @@ const validate = (form: any) => {
 };
 
 export const RegistrationScreen = () => {
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     username: "",
@@ -28,6 +27,16 @@ export const RegistrationScreen = () => {
     firstName: "",
     lastName: "",
   });
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+
+  useEffect(() => {
+        const timer = setTimeout(() => {
+            setError(false);
+        }, 1500);
+        return () => clearTimeout(timer);
+    }, [error]);
 
   const handleChange = (event: any) => {
     const { name, value } = event.currentTarget;
@@ -37,7 +46,8 @@ export const RegistrationScreen = () => {
     event.preventDefault();
     const errorMsg = validate(inputs);
     if (errorMsg) {
-      setError(errorMsg);
+      setError(true);
+      setErrorMessage(errorMsg);
       return;
     }
 
@@ -48,14 +58,25 @@ export const RegistrationScreen = () => {
         if (response.addUser?.ok!) {
           navigate('/verify', {state: {id: response.addUser?.id, type: "registration"}})
         }
+        setError(true);
+        setErrorMessage(response.addUser?.response!);
       },
       onError: error => {
-         console.log(error);
+         setError(true);
+         setErrorMessage(error.message);
       }
     });
   };
 
   return (
+      <>
+        {error &&
+            <Alert variant="primary" style={{width: "50vh", margin: "auto"}}>
+              <Alert.Heading>
+                {errorMessage}
+              </Alert.Heading>
+            </Alert>
+        }
     <div className="Contener">
       <p>REGISTRATION</p>
       <Form>
@@ -69,9 +90,6 @@ export const RegistrationScreen = () => {
             value={inputs.email || ""}
             onChange={handleChange}
           />
-          {/*<Form.Text className="text-muted">*/}
-          {/*  We'll never share your email with anyone else.*/}
-          {/*</Form.Text>*/}
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -130,5 +148,6 @@ export const RegistrationScreen = () => {
         </Button>
       </Form>
     </div>
+        </>
   );
 };
