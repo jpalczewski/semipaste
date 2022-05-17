@@ -1,0 +1,9 @@
+import graphql from "babel-plugin-relay/macro";
+
+export const deleteTokenCookie = graphql`
+  mutation deleteTokenCookieMutation {
+        deleteTokenCookie {
+          deleted
+        }
+  }
+`;

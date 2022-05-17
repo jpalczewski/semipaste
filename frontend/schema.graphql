@@ -17,6 +17,7 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): PasteBinNode
+  allPasteTags(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, tagName: String = null, tagName_Icontains: String = null, tagName_Istartswith: String = null, tagName_Iexact: String = null, tagName_Contains: String = null, tagName_Endswith: String = null, tagName_Iendswith: String = null): PasteTagNodeConnection
   user: UserNode
   allUsers(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, username: String = null, username_Icontains: String = null, username_Istartswith: String = null, username_Iexact: String = null, username_Contains: String = null, username_Endswith: String = null, username_Iendswith: String = null, description: String = null, description_Icontains: String = null, description_Istartswith: String = null, description_Iexact: String = null, description_Contains: String = null, description_Endswith: String = null, description_Iendswith: String = null, isSuperuser: Boolean = null, firstName: String = null, firstName_Icontains: String = null, firstName_Istartswith: String = null, firstName_Iexact: String = null, firstName_Contains: String = null, firstName_Endswith: String = null, firstName_Iendswith: String = null, lastName: String = null, lastName_Icontains: String = null, lastName_Istartswith: String = null, lastName_Iexact: String = null, lastName_Contains: String = null, lastName_Endswith: String = null, lastName_Iendswith: String = null): UserNodeConnection
   node(
@@ -67,7 +68,7 @@ type UserNode implements Node {
   description: String!
   isVerified: Boolean!
   reportSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserReportTypeConnection!
-  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection!
+  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: DateTime = null, dateOfCreation_Gte: DateTime = null, dateOfCreation_Lte: DateTime = null, dateOfCreation_Range: [DateTime] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: DateTime = null, dateOfExpiry_Gte: DateTime = null, dateOfExpiry_Lte: DateTime = null, dateOfExpiry_Range: [DateTime] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): PasteBinNodeConnection!
 }
 
 """
@@ -111,24 +112,24 @@ type UserReportTypeEdge {
   cursor: String!
 }
 
-type ExpiredPasteBinConnection {
+type PasteBinNodeConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
 
   """Contains the nodes in this connection."""
-  edges: [ExpiredPasteBinEdge]!
+  edges: [PasteBinNodeEdge]!
 }
 
-"""A Relay edge containing a `ExpiredPasteBin` and its cursor."""
-type ExpiredPasteBinEdge {
+"""A Relay edge containing a `PasteBinNode` and its cursor."""
+type PasteBinNodeEdge {
   """The item at the end of the edge"""
-  node: ExpiredPasteBin
+  node: PasteBinNode
 
   """A cursor for use in pagination"""
   cursor: String!
 }
 
-type ExpiredPasteBin implements Node {
+type PasteBinNode implements Node {
   id: ID!
   title: String!
   text: String!
@@ -141,7 +142,6 @@ type ExpiredPasteBin implements Node {
   likes: Int!
   dislikes: Int!
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
-  attachmentToken: String!
 }
 
 """An enumeration."""
@@ -200,22 +200,6 @@ type PasteReportType implements Node {
   paste: PasteBinNode
 }
 
-type PasteBinNode implements Node {
-  id: ID!
-  title: String!
-  text: String!
-  dateOfCreation: DateTime!
-  visible: Boolean!
-  expireAfter: PastesPasteBinExpireAfterChoices!
-  dateOfExpiry: DateTime
-  author: UserNode
-  language: String!
-  likes: Int!
-  dislikes: Int!
-  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
-  totalRating: Int
-}
-
 type PasteReportTypeConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
@@ -228,23 +212,6 @@ type PasteReportTypeConnection {
 type PasteReportTypeEdge {
   """The item at the end of the edge"""
   node: PasteReportType
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type PasteBinNodeConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [PasteBinNodeEdge]!
-}
-
-"""A Relay edge containing a `PasteBinNode` and its cursor."""
-type PasteBinNodeEdge {
-  """The item at the end of the edge"""
-  node: PasteBinNode
 
   """A cursor for use in pagination"""
   cursor: String!
@@ -281,7 +248,63 @@ type ActivePasteBin implements Node {
   dislikes: Int!
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
   attachmentToken: String!
-  totalRating: Int
+  tags: [PasteTagNode]
+}
+
+type PasteTagNode implements Node {
+  id: ID!
+  tagName: String!
+  posts: [PasteBinNode]
+}
+
+type ExpiredPasteBinConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ExpiredPasteBinEdge]!
+}
+
+"""A Relay edge containing a `ExpiredPasteBin` and its cursor."""
+type ExpiredPasteBinEdge {
+  """The item at the end of the edge"""
+  node: ExpiredPasteBin
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ExpiredPasteBin implements Node {
+  id: ID!
+  title: String!
+  text: String!
+  dateOfCreation: DateTime!
+  visible: Boolean!
+  expireAfter: PastesPasteBinExpireAfterChoices!
+  dateOfExpiry: DateTime
+  author: UserNode
+  language: String!
+  likes: Int!
+  dislikes: Int!
+  attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
+  attachmentToken: String!
+}
+
+type PasteTagNodeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [PasteTagNodeEdge]!
+}
+
+"""A Relay edge containing a `PasteTagNode` and its cursor."""
+type PasteTagNodeEdge {
+  """The item at the end of the edge"""
+  node: PasteTagNode
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type UserNodeConnection {
@@ -382,6 +405,16 @@ type Mutation {
 
   """Delete an attachment"""
   deleteAttachment(input: DeleteAttachmentInput!): DeleteAttachmentPayload
+
+  """manually add a new tag"""
+  addTag(
+    """Gets the tag name"""
+    tagName: String = null
+  ): AddTag
+
+  """manually delete a tag"""
+  deleteTag(tagName: String = null): DeleteTag
+  editPaste(exposure: Boolean = null, id: ID!, tags: [String] = null, text: String = null, title: String = null): EditPasteBin
   ratePasteBin(input: RatingPasteBinInput!): RatingPasteBinPayload
   ratePasteBinId(input: RatingPasteBinIDInput!): RatingPasteBinIDPayload
   isPasteBinRated(input: IsPasteBinRatedInput!): IsPasteBinRatedPayload
@@ -397,7 +430,7 @@ type Mutation {
   tokenAuth(input: ObtainJSONWebTokenInput!): ObtainJSONWebTokenPayload
   verifyToken(input: VerifyInput!): VerifyPayload
   refreshToken(input: RefreshInput!): RefreshPayload
-  deleteTokenCookie(input: DeleteJSONWebTokenCookieInput!): DeleteJSONWebTokenCookiePayload
+  deleteTokenCookie: DeleteJSONWebTokenCookie
 }
 
 type ReportUserPayload {
@@ -494,6 +527,7 @@ input AddPasteBinInput {
 
   """Syntax Highlight"""
   language: String
+  tags: [String]
   clientMutationId: String
 }
 
@@ -576,6 +610,33 @@ type DeleteAttachmentPayload {
 input DeleteAttachmentInput {
   id: ID
   clientMutationId: String
+}
+
+type AddTag {
+  ok: Boolean
+  response: String
+}
+
+type DeleteTag {
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  response: String
+}
+
+type EditPasteBin {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
 }
 
 type RatingPasteBinPayload {
@@ -726,11 +787,6 @@ input RefreshInput {
   clientMutationId: String
 }
 
-type DeleteJSONWebTokenCookiePayload {
+type DeleteJSONWebTokenCookie {
   deleted: Boolean!
-  clientMutationId: String
-}
-
-input DeleteJSONWebTokenCookieInput {
-  clientMutationId: String
 }

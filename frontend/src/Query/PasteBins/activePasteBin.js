@@ -12,7 +12,6 @@ export const activePasteBin = graphql`
           visible
           dateOfExpiry
           language
-          totalRating
           likes
           dislikes
           author {
