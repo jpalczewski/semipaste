@@ -11,7 +11,14 @@ export const allPasteBin = graphql`
           id
           visible
           dateOfExpiry
-        }
+          language
+          totalRating
+          likes
+          dislikes
+          author {
+            username
+          }
+        } 
       }
     }
   }

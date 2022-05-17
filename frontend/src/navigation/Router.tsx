@@ -11,6 +11,7 @@ import {Dashboard} from "../components/dashboard/DashboardScreen";
 import {DashboardPastesScreen} from "../components/dashboard/DashboardPastesScreen";
 import {DashboardHomeScreen} from "../components/dashboard/DashboardHomeScreen";
 import React from "react";
+import {DashboardUsersScreen} from "../components/dashboard/DashboardUsersScreen";
 
 export const Routerr = () => {
   return (
@@ -27,6 +28,7 @@ export const Routerr = () => {
                <Route path="dashboard" element={<Dashboard />}>
                    <Route index element={<DashboardHomeScreen />} />
                    <Route path="pastes" element={<DashboardPastesScreen />} />
+                   <Route path="users" element={<DashboardUsersScreen />} />
                </Route>
            </Routes>
     </Router>

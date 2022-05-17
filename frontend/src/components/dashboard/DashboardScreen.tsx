@@ -6,7 +6,7 @@ import {Col, Container, Row} from "react-bootstrap";
 export const Dashboard: React.FC = () => {
     return (
         <Container fluid style={{height: "100vh"}}
-         className="mx-0 px-0 bg-success"
+         className="mx-0 px-0"
         >
             <Row>
                 <Col md={2} className="mx-0 px-0">
