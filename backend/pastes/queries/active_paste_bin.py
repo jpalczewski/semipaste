@@ -11,10 +11,10 @@ from backend.filters import PasteBinFilterFields
 from pastes.models import MTMTags, PasteBin, PasteTag
 
 # Local
-from .nodes import PasteTagNode
+from .nodes import PasteTagNode, TotalRatingNode
 
 
-class ActivePasteBin(DjangoObjectType):
+class ActivePasteBin(DjangoObjectType, TotalRatingNode):
     id = graphene.ID(source='pk', required=True)
     tags = graphene.List(PasteTagNode)
 

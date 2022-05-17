@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<567c107d6f87ba780fa462fd9f9102ea>>
+ * @generated SignedSource<<b1a145c4363f96b061c82dac3ba23010>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -24,6 +24,7 @@ export type activePasteBinQuery$data = {
         readonly visible: boolean;
         readonly dateOfExpiry: any | null;
         readonly language: string;
+        readonly totalRating: number | null;
         readonly likes: number;
         readonly dislikes: number;
         readonly author: {
@@ -116,17 +117,24 @@ v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "likes",
+  "name": "totalRating",
   "storageKey": null
 },
 v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "dislikes",
+  "name": "likes",
   "storageKey": null
 },
 v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "dislikes",
+  "storageKey": null
+},
+v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -173,6 +181,7 @@ return {
                   (v8/*: any*/),
                   (v9/*: any*/),
                   (v10/*: any*/),
+                  (v11/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -181,7 +190,7 @@ return {
                     "name": "author",
                     "plural": false,
                     "selections": [
-                      (v11/*: any*/)
+                      (v12/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -237,6 +246,7 @@ return {
                   (v8/*: any*/),
                   (v9/*: any*/),
                   (v10/*: any*/),
+                  (v11/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -245,7 +255,7 @@ return {
                     "name": "author",
                     "plural": false,
                     "selections": [
-                      (v11/*: any*/),
+                      (v12/*: any*/),
                       (v5/*: any*/)
                     ],
                     "storageKey": null
@@ -262,16 +272,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "26597e4cf4abb7d51c6e767c27e22318",
+    "cacheID": "bc81efda0de7e615cce2078570a34a66",
     "id": null,
     "metadata": {},
     "name": "activePasteBinQuery",
     "operationKind": "query",
-    "text": "query activePasteBinQuery(\n  $mode: String\n  $time: String\n) {\n  activePasteBin(mode: $mode, time: $time) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n        likes\n        dislikes\n        author {\n          username\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query activePasteBinQuery(\n  $mode: String\n  $time: String\n) {\n  activePasteBin(mode: $mode, time: $time) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n        totalRating\n        likes\n        dislikes\n        author {\n          username\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "a53adf87ef8fdd1d4da720e46242c552";
+(node as any).hash = "aa841eeb8e89447ccad667f6806b7dfd";
 
 export default node;

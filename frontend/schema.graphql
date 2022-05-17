@@ -248,6 +248,7 @@ type ActivePasteBin implements Node {
   dislikes: Int!
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
   attachmentToken: String!
+  totalRating: Int
   tags: [PasteTagNode]
 }
 
