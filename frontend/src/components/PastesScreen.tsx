@@ -5,24 +5,25 @@ import {Dropdown, DropdownButton, Pagination} from "react-bootstrap";
 import {useLazyLoadQuery} from "react-relay";
 import {activePasteBinQuery} from "../Query/PasteBins/__generated__/activePasteBinQuery.graphql";
 import {activePasteBin} from "../Query/PasteBins/activePasteBin";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
+import {PaginationUtils} from "../utils/pagination";
 
 export const Pastes = () => {
 
     const [mode, setMode] = useState<string | null>("");
     const [time, setTime] = useState<string | null>("all");
     const [first, setFirst] = useState(15);
-    const [offset, setOffSet] = useState(0);
+
+    let offset = 0;
+    let page = 1;
+    const search = useLocation().search;
+    const pageNumber = new URLSearchParams(search).get("pageNumber");
+    if (pageNumber !== null) page = parseInt(pageNumber);
+    if (page !== 1) offset = first * (page - 1);
 
     const pastes = useLazyLoadQuery<activePasteBinQuery>(activePasteBin,
       {mode: mode, time: time, first: first, offset: offset}
     );
-
-    const { pageIndex } = useParams();
-    let page = 1;
-    if (pageIndex !== undefined) {
-        page = parseInt(pageIndex);
-    }
 
     const handleModeSelect = (event: string | null) => {
         setMode(event);
@@ -35,100 +36,6 @@ export const Pastes = () => {
     const handleFirst = (e: any) => {
         setFirst(parseInt(e.target.value));
     };
-
-    const LeftPag = (pageNum: number) => {
-    return (
-        <Pagination.Item onClick={() => {
-            page = pageNum;
-            setOffSet((pageNum-1) * first);
-        }}>
-            {pageNum}
-        </Pagination.Item>
-    )
-  }
-
-  const renderLeftPag = () => {
-      let leftPagList = [];
-      let pgNum = Math.abs(page - 2);
-      while (pgNum < page) {
-        if (pgNum > 0) {
-            leftPagList.push(LeftPag(pgNum));
-        }
-        pgNum += 1;
-      }
-      if (pgNum > 3 && pgNum-2 != 1) {
-          leftPagList.unshift(<Pagination.Ellipsis disabled />)
-      }
-      return leftPagList;
-  }
-
-    const rightPag = (pageNum: number) => {
-    return (
-        <Pagination.Item onClick={() => {
-            page = pageNum;
-            setOffSet((pageNum-1) * first);
-        }}>
-            {pageNum}
-        </Pagination.Item>
-    )
-  }
-
-  const renderRightPag = () => {
-      let rightPagList = [];
-      let pgNum = page + 3;
-      while (pgNum > page) {
-          if ( pgNum <= Math.ceil(pastes.activePasteBin?.totalCount! / first)) {
-              rightPagList.unshift(rightPag(pgNum));
-          }
-          pgNum -= 1;
-      }
-      if (pgNum < Math.ceil(pastes.activePasteBin?.totalCount! / first)-3) {
-          rightPagList.push(<Pagination.Ellipsis disabled />)
-      }
-      return rightPagList;
-  }
-
-  const renderPagination = () => {
-    return (
-        <Pagination>
-          {
-            page > 1 &&
-              <>
-              <Pagination.First onClick={() => {
-                  page = 1;
-                  setOffSet(0);
-                }
-              } />
-              <Pagination.Prev onClick={() => {
-                  page = page - 1;
-                  setOffSet( offset - first );
-              }
-              } />
-                  {renderLeftPag()}
-              </>
-          }
-          <Pagination.Item active>
-            {page}
-          </Pagination.Item>
-          {
-            pastes.activePasteBin?.pageInfo?.hasNextPage &&
-             <>
-             {renderRightPag()}
-             <Pagination.Next onClick={() => {
-                  page = page + 1;
-                  setOffSet( offset + first );
-              }
-              } />
-              <Pagination.Last onClick={() => {
-                  page = Math.ceil((pastes.activePasteBin?.totalCount! / first));
-                  setOffSet( ((pastes.activePasteBin?.totalCount! / first-1)) * first);
-              }
-              } />
-             </>
-          }
-        </Pagination>
-    )
-  }
 
   return (
     <>
@@ -178,8 +85,8 @@ export const Pastes = () => {
           </>
         <TableWrapper>
           <Tables pastes={pastes} page={page}/>
+            {PaginationUtils({page: page, url: "", maxPage: Math.ceil(pastes.activePasteBin?.totalCount!/first)})}
         </TableWrapper>
-          {renderPagination()}
       </Wrapper>
       <AllFooter>
         <p

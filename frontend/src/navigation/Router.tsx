@@ -17,8 +17,9 @@ export const Routerr = () => {
         <Route path="/create" element={<Create />} />
         <Route path="" element={<Home />} />
         <Route path="/pastes" element={<Pastes />}>
-            <Route path=":pageIndex" element={<Pastes />} />
+            {/*<Route path=":pageIndex" element={<Pastes />} />*/}
         </Route>
+        <Route path="/pastes/?*" element={<Pastes />} />
         {/*<Route path="/current" element={<Current />} />*/}
         {/*<Route path="/popular" element={<Popular />} />*/}
         <Route path="/about" element={<About />} />
