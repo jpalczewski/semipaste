@@ -115,7 +115,7 @@ class TestSchema(TestCase):
             "Account created. Check your mailbox",
         )
         self.assertEqual(
-            query_result["data"]["allUsers"]["edges"][1]["node"]["id"], '25'
+            query_result["data"]["allUsers"]["edges"][1]["node"]["id"], '38'
         )
 
     def test_04_showUser_id_2(self) -> None:
@@ -123,7 +123,7 @@ class TestSchema(TestCase):
 
         query = """query{
                     allUsers(
-                        id: 26
+                        id: 40
                     ){
                         edges{
                             node{
@@ -162,7 +162,7 @@ class TestSchema(TestCase):
             "Account created. Check your mailbox",
         )
         self.assertEqual(
-            query_result["data"]["allUsers"]["edges"][0]["node"]["id"], '26'
+            query_result["data"]["allUsers"]["edges"][0]["node"]["id"], '40'
         )
 
     def test_05_showUser_lastLogin(self) -> None:
@@ -740,7 +740,7 @@ class TestSchema(TestCase):
 
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], False)
         self.assertEqual(
-            mutation_result["data"]["addUser"]["response"], "Username already exists!"
+            mutation_result["data"]["addUser"]["response"][:22], "Failed to create user:"
         )
 
     def test_19_email_validation(self) -> None:
@@ -911,7 +911,7 @@ class TestSchema(TestCase):
         )
         self.assertEqual(
             delete_mutation_result["data"]["deleteUser"]["errorCode"],
-            "PERMISSIONDENIED",
+            "PERMISSION_DENIED",
         )
 
     def test_22_deleteUser_3(self) -> None:
@@ -969,7 +969,7 @@ class TestSchema(TestCase):
             "Specified user does not exist",
         )
         self.assertEqual(
-            delete_mutation_result["data"]["deleteUser"]["errorCode"], "USERNOTFOUND"
+            delete_mutation_result["data"]["deleteUser"]["errorCode"], "USER_NOT_FOUND"
         )
 
     # edit user
@@ -1027,7 +1027,7 @@ class TestSchema(TestCase):
         self.assertEqual(mutation_result["data"]["editUser"]["ok"], True)
         self.assertEqual(mutation_result["data"]["editUser"]["error"], None)
         self.assertEqual(
-            mutation_result["data"]["editUser"]["errorCode"], "POSSIBLEFAILURE"
+            mutation_result["data"]["editUser"]["errorCode"], "POSSIBLE_FAILURE"
         )
 
         query_result_2 = self.client.execute(query)
