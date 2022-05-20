@@ -2,12 +2,13 @@ import {Pagination} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 
 export const PaginationUtils = (props: any) => {
+	console.log(props.offSet);
 
 	const navigate = useNavigate();
 
 	const renderRight = () => {
 		let nextButtons = [];
-		for (let pgNum = props.page + 1; pgNum <= props.page + 3; pgNum++) {
+		for (let pgNum = props.page + 1; pgNum <= props.page + 3 && pgNum <= props.maxPage; pgNum++) {
 			if (pgNum == props.page + 3) {
 				nextButtons.push(<Pagination.Ellipsis disabled/>);
 			}
@@ -31,7 +32,7 @@ export const PaginationUtils = (props: any) => {
 
 	const renderLeft = () => {
 		let prevButtons = [];
-		for (let pgNum = props.page - 1; pgNum >= props.page - 3; pgNum--) {
+		for (let pgNum = props.page - 1; pgNum >= props.page - 3 && pgNum >= 1; pgNum--) {
 			if (pgNum == props.page - 3) {
 				prevButtons.unshift(<Pagination.Ellipsis disabled/>);
 			}
@@ -39,10 +40,10 @@ export const PaginationUtils = (props: any) => {
 				let url = `${props.url}?pageNumber=${pgNum}`;
 				if (props.offSet) url += `&offSet=${props.offSet * (pgNum - 1)}`;
 				if (props.filter) url += `${props.url}?pageNumber=${pgNum}&${props.filter}`;
-				return <Pagination.Item onClick={() => navigate(url)}>{pgNum}</Pagination.Item>
+				prevButtons.unshift(<Pagination.Item onClick={() => navigate(url)}>{pgNum}</Pagination.Item>);
 			}
 		}
-		let url = `${props.url}?pageNumber=${props.page+1}`;
+		let url = `${props.url}?pageNumber=${props.page-1}`;
 		if (props.offSet) url += `&offSet=${props.offSet * (props.page - 2)}`;
 		if (props.filter) url = `${props.url}?pageNumber=${props.page+1}&${props.filter}`
 		prevButtons.unshift(<Pagination.Prev onClick={() => {

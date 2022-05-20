@@ -18,12 +18,15 @@ export const Pastes = () => {
     let page = 1;
     const search = useLocation().search;
     const pageNumber = new URLSearchParams(search).get("pageNumber");
+    const urlOffset = new URLSearchParams(search).get("offSet");
     if (pageNumber !== null) page = parseInt(pageNumber);
     if (page !== 1) offset = first * (page - 1);
 
     const pastes = useLazyLoadQuery<activePasteBinQuery>(activePasteBin,
       {mode: mode, time: time, first: first, offset: offset}
     );
+
+    const maxPage = Math.ceil(pastes.activePasteBin?.totalCount!/first)
 
     const handleModeSelect = (event: string | null) => {
         setMode(event);
@@ -85,7 +88,7 @@ export const Pastes = () => {
           </>
         <TableWrapper>
           <Tables pastes={pastes} page={page}/>
-            {PaginationUtils({page: page, url: "", maxPage: Math.ceil(pastes.activePasteBin?.totalCount!/first)})}
+            {PaginationUtils({page: page, url: "", maxPage: maxPage})}
         </TableWrapper>
       </Wrapper>
       <AllFooter>
