@@ -1,39 +1,53 @@
 import React, {useState} from "react";
 import { Wrapper, TableWrapper, AllFooter } from "../styles/Components.style";
 import { Tables } from "./table/Table";
-import {Dropdown, DropdownButton, Pagination} from "react-bootstrap";
+import {Dropdown, DropdownButton} from "react-bootstrap";
 import {useLazyLoadQuery} from "react-relay";
 import {activePasteBinQuery} from "../Query/PasteBins/__generated__/activePasteBinQuery.graphql";
 import {activePasteBin} from "../Query/PasteBins/activePasteBin";
-import {useLocation, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {PaginationUtils} from "../utils/pagination";
 
 export const Pastes = () => {
 
-    const [mode, setMode] = useState<string | null>("");
-    const [time, setTime] = useState<string | null>("all");
-    const [first, setFirst] = useState(15);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
 
-    let offset = 0;
+    const [first, setFirst] = useState(15);
+    let offSet = 0;
     let page = 1;
+    let mode: string | null = "";
+    let time: string | null = "";
     const search = useLocation().search;
-    const pageNumber = new URLSearchParams(search).get("pageNumber");
-    const urlOffset = new URLSearchParams(search).get("offSet");
+    const pageNumber = searchParams.get("pageNumber");
+    // const urlOffset = new URLSearchParams(search).get("offSet");
+    const urlMode = searchParams.get("mode");
+
     if (pageNumber !== null) page = parseInt(pageNumber);
-    if (page !== 1) offset = first * (page - 1);
+    if (page !== 1) offSet = first * (page - 1);
+    // if (urlOffset !== null) offSet = parseInt(urlOffset);
+    if (urlMode !== null) {
+        mode = urlMode;
+        if (mode == "top") {
+            let urlTime = searchParams.get("time");
+            if (urlTime !== null) {
+                time = urlTime;
+            }
+        }
+    }
 
     const pastes = useLazyLoadQuery<activePasteBinQuery>(activePasteBin,
-      {mode: mode, time: time, first: first, offset: offset}
+      {mode: mode, time: time, first: first, offset: offSet}
     );
 
     const maxPage = Math.ceil(pastes.activePasteBin?.totalCount!/first)
 
     const handleModeSelect = (event: string | null) => {
-        setMode(event);
+        mode = event;
     }
 
     const handleTimeSelect = (event: string | null) => {
-        setTime(event);
+        time = event;
     }
 
     const handleFirst = (e: any) => {
@@ -46,7 +60,6 @@ export const Pastes = () => {
         <p style={{ textAlign: "left", paddingLeft: 50, paddingTop: 50 }}>
           Popularne Wklejki
         </p>
-
           <select className={"form-select"} style={{width: "10vh", margin: "auto"}}
                   onChange={(e) => {
                       handleFirst(e);
@@ -64,8 +77,47 @@ export const Pastes = () => {
               className="d-inline mx-2"
               id="dropdown-basic-button"
               title={mode === "" ? "new" : mode}
-              onSelect={handleModeSelect}
-          >
+              onSelect={(event) => {
+                  let before = mode;
+                  handleModeSelect(event);
+                  let url: string = searchParams.toString();
+                  if (url === "") {
+                      navigate(`/pastes?&mode=${mode}`);
+                  }
+                  else {
+                      let urlMode = searchParams.get("mode");
+                      if (urlMode === null) {
+                          navigate(`/pastes?${searchParams.toString()}&mode=${mode}`);
+                      }
+                      else {
+                          if (mode === "") {
+                              let toReplace = `mode=${before}`;
+                              if (searchParams.toString().includes("&mode")) toReplace = "&" + toReplace;
+                              if (before == "top") {
+                                  let urlTime = searchParams.get("time");
+                                  if (urlTime === null) urlTime = "";
+                                  navigate(`/pastes?${searchParams.toString().replace(toReplace, "").replace(`&time=${urlTime}`, "")}`);
+                              } else {
+                                navigate(`/pastes?${searchParams.toString().replace(toReplace, "")}`);
+                              }
+                          } else {
+                              if (before == "top") {
+                                  let urlTime = searchParams.get("time");
+                                  if (urlTime === null) urlTime = "";
+                                  if (mode === before) {
+                                      navigate(`/pastes?${searchParams.toString().replace(`time=${urlTime}`, `time=${time}`)}`);
+                                  }
+                                  else {
+                                      navigate(`/pastes?${searchParams.toString().replace(`mode=${before}`, `mode=${mode}`).replace(`&time=${urlTime}`, "")}`);
+                                  }
+                              }
+                              else {
+                                navigate(`/pastes?${searchParams.toString().replace(`mode=${before}`, `mode=${mode}`)}`);
+                              }
+                          }
+                      }
+                  }
+              }}>
             <Dropdown.Item eventKey="">new</Dropdown.Item>
             <Dropdown.Item eventKey="top">top</Dropdown.Item>
             <Dropdown.Item eventKey="hot">hot</Dropdown.Item>
@@ -76,7 +128,11 @@ export const Pastes = () => {
                     className="d-inline mx-2"
                     id="dropdown-basic-button"
                     title={time == "" ? "all" : time}
-                    onSelect={handleTimeSelect}
+                    onSelect={(event) => {
+                        let before = time;
+                        handleTimeSelect(event);
+
+                    }}
                 >
                     <Dropdown.Item eventKey="today">today</Dropdown.Item>
                     <Dropdown.Item eventKey="week">week</Dropdown.Item>
@@ -88,7 +144,13 @@ export const Pastes = () => {
           </>
         <TableWrapper>
           <Tables pastes={pastes} page={page}/>
-            {PaginationUtils({page: page, url: "", maxPage: maxPage})}
+            {PaginationUtils(
+                {
+                    page: page,
+                    maxPage: maxPage,
+                    // offSet: offSet,
+                    // first: first,
+                })}
         </TableWrapper>
       </Wrapper>
       <AllFooter>

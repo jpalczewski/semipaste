@@ -5,14 +5,10 @@ import RelayEnvironment from "../../RelayEnvironment";
 import { highlightPasteBinMutation } from "../../Query/SyntaxHighlight/__generated__/highlightPasteBinMutation.graphql";
 import { highlightPasteBin } from "../../Query/SyntaxHighlight/highlightPasteBin";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {isPasteBinRatedMutation} from "../../Query/Rating/__generated__/isPasteBinRatedMutation.graphql";
-import {isPasteBinRated} from "../../Query/Rating/isPasteBinRated";
-import {ratePasteBinMutation} from "../../Query/Rating/__generated__/ratePasteBinMutation.graphql";
-import {ratePasteBin} from "../../Query/Rating/ratePasteBin";
 require("codemirror/lib/codemirror.css");
 
 
-export const PasteBinScreen = (props: any) => {
+export const PasteBinPreviewScreen = (props: any) => {
   const [show, setShow] = useState(false);
   const [syntax, setSyntax] = useState<string>("");
 
@@ -31,7 +27,7 @@ export const PasteBinScreen = (props: any) => {
 
   return (
     <>
-      <Button onClick={() => setShow(!show)}>Przeglądaj</Button>
+      <Button onClick={() => setShow(!show)}>Preview</Button>
       <Modal show={show} size="lg" onHide={() => setShow(false)}>
         <ModalHeader>
           <Modal.Title>{props.title}</Modal.Title>

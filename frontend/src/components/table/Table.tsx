@@ -10,14 +10,13 @@ export const Tables = (props: any) => {
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Tytuł</th>
-          <th scope="col">Autor</th>
-          <th scope="col">Dodano</th>
-          <th scope="col">Data wygaśnięcia</th>
-          <th scope="col">Ocena</th>
-          <th scope="col">Oceń</th>
-          <th scope="col">Akcje</th>
+          <th scope="col">Title</th>
+          <th scope="col">Author</th>
+          <th scope="col">Created</th>
+          <th scope="col">Expires</th>
+          <th scope="col">Toral Rating</th>
+          <th scope="col">Rate</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
