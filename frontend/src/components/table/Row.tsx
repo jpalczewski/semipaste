@@ -19,10 +19,6 @@ export const Row = (props: any) => {
     const [cursor, setCursor] = useState("crosshair");
 
     useEffect(() => {
-        console.log("Effect");
-    }, [totalRating]);
-
-    useEffect(() => {
         commitMutation<isPasteBinRatedMutation>(RelayEnvironment, {
             mutation: isPasteBinRated,
             variables: {paste: props.object?.id},
@@ -72,37 +68,36 @@ export const Row = (props: any) => {
         }
     };
 
-
-    const [variantLike, setVariantLike] = useState("outline-primary");
-    const [variantDislike, setVariantDislike] = useState("outline-primary");
-
-    useEffect(() => {
-        if (rate === true)  setVariantLike("primary");
-        else if (rate === false) setVariantDislike("primary");
-    }, [totalRating])
-
-    const renderRate = () => {
-        let rateRender = [];
-
-        // if (rate === true)  setVariantLike("primary");
-        // else if (rate === false) setVariantDislike("primary");
-
-        rateRender.push(
-            <Button variant={variantLike} value="like" onClick={handleRate}>
-                        &#128402;
-            </Button>
-        )
-        rateRender.push(
-            <div>{totalRating}</div>
-        )
-        rateRender.push(
-            <Button variant={variantDislike} value="dislike" onClick={handleRate}>
-                        &#128403;
-            </Button>
-        )
-
-        return rateRender;
-    }
+    // const [variantLike, setVariantLike] = useState("outline-primary");
+    // const [variantDislike, setVariantDislike] = useState("outline-primary");
+    //
+    // useEffect(() => {
+    //     if (rate === true)  setVariantLike("primary");
+    //     else if (rate === false) setVariantDislike("primary");
+    // }, [totalRating])
+    //
+    // const renderRate = () => {
+    //     let rateRender = [];
+    //
+    //     // if (rate === true)  setVariantLike("primary");
+    //     // else if (rate === false) setVariantDislike("primary");
+    //
+    //     rateRender.push(
+    //         <Button variant={variantLike} value="like" onClick={handleRate}>
+    //                     &#128402;
+    //         </Button>
+    //     )
+    //     rateRender.push(
+    //         <div>{totalRating}</div>
+    //     )
+    //     rateRender.push(
+    //         <Button variant={variantDislike} value="dislike" onClick={handleRate}>
+    //                     &#128403;
+    //         </Button>
+    //     )
+    //
+    //     return rateRender;
+    // }
 
     const navigate = useNavigate();
 

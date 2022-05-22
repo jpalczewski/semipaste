@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5645a9ba199d29a0cebff715e6f8cf98>>
+ * @generated SignedSource<<178842665348b2cb6b4c9952f498242e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,15 +14,16 @@ export type activePasteBinQuery$variables = {
   time?: string | null;
   first?: number | null;
   offset?: number | null;
+  title_Icontains?: string | null;
+  title_Istartswith?: string | null;
+  title_Iendswith?: string | null;
+  dateOfCreation_Gte?: any | null;
+  dateOfCreation_Lte?: any | null;
+  language?: string | null;
+  author__Username?: string | null;
 };
 export type activePasteBinQuery$data = {
   readonly activePasteBin: {
-    readonly pageInfo: {
-      readonly hasNextPage: boolean;
-      readonly hasPreviousPage: boolean;
-      readonly startCursor: string | null;
-      readonly endCursor: string | null;
-    };
     readonly totalCount: number | null;
     readonly edges: ReadonlyArray<{
       readonly node: {
@@ -51,28 +52,83 @@ const node: ConcreteRequest = (function(){
 var v0 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "first"
+  "name": "author__Username"
 },
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "mode"
+  "name": "dateOfCreation_Gte"
 },
 v2 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "offset"
+  "name": "dateOfCreation_Lte"
 },
 v3 = {
   "defaultValue": null,
   "kind": "LocalArgument",
+  "name": "first"
+},
+v4 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "language"
+},
+v5 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "mode"
+},
+v6 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "offset"
+},
+v7 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
   "name": "time"
 },
-v4 = [
+v8 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "title_Icontains"
+},
+v9 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "title_Iendswith"
+},
+v10 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "title_Istartswith"
+},
+v11 = [
+  {
+    "kind": "Variable",
+    "name": "author_Username",
+    "variableName": "author__Username"
+  },
+  {
+    "kind": "Variable",
+    "name": "dateOfCreation_Gte",
+    "variableName": "dateOfCreation_Gte"
+  },
+  {
+    "kind": "Variable",
+    "name": "dateOfCreation_Lte",
+    "variableName": "dateOfCreation_Lte"
+  },
   {
     "kind": "Variable",
     "name": "first",
     "variableName": "first"
+  },
+  {
+    "kind": "Variable",
+    "name": "language",
+    "variableName": "language"
   },
   {
     "kind": "Variable",
@@ -88,118 +144,94 @@ v4 = [
     "kind": "Variable",
     "name": "time",
     "variableName": "time"
+  },
+  {
+    "kind": "Variable",
+    "name": "title_Icontains",
+    "variableName": "title_Icontains"
+  },
+  {
+    "kind": "Variable",
+    "name": "title_Iendswith",
+    "variableName": "title_Iendswith"
+  },
+  {
+    "kind": "Variable",
+    "name": "title_Istartswith",
+    "variableName": "title_Istartswith"
   }
 ],
-v5 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "PageInfo",
-  "kind": "LinkedField",
-  "name": "pageInfo",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "hasNextPage",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "hasPreviousPage",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "startCursor",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "endCursor",
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
-},
-v6 = {
+v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "totalCount",
   "storageKey": null
 },
-v7 = {
+v13 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "title",
   "storageKey": null
 },
-v8 = {
+v14 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "text",
   "storageKey": null
 },
-v9 = {
+v15 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "dateOfCreation",
   "storageKey": null
 },
-v10 = {
+v16 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v11 = {
+v17 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "dateOfExpiry",
   "storageKey": null
 },
-v12 = {
+v18 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "language",
   "storageKey": null
 },
-v13 = {
+v19 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "totalRating",
   "storageKey": null
 },
-v14 = {
+v20 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "likes",
   "storageKey": null
 },
-v15 = {
+v21 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "dislikes",
   "storageKey": null
 },
-v16 = {
+v22 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -212,7 +244,14 @@ return {
       (v0/*: any*/),
       (v1/*: any*/),
       (v2/*: any*/),
-      (v3/*: any*/)
+      (v3/*: any*/),
+      (v4/*: any*/),
+      (v5/*: any*/),
+      (v6/*: any*/),
+      (v7/*: any*/),
+      (v8/*: any*/),
+      (v9/*: any*/),
+      (v10/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
@@ -220,14 +259,13 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v4/*: any*/),
+        "args": (v11/*: any*/),
         "concreteType": "ActivePasteBinConnection",
         "kind": "LinkedField",
         "name": "activePasteBin",
         "plural": false,
         "selections": [
-          (v5/*: any*/),
-          (v6/*: any*/),
+          (v12/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -244,15 +282,15 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v7/*: any*/),
-                  (v8/*: any*/),
-                  (v9/*: any*/),
-                  (v10/*: any*/),
-                  (v11/*: any*/),
-                  (v12/*: any*/),
                   (v13/*: any*/),
                   (v14/*: any*/),
                   (v15/*: any*/),
+                  (v16/*: any*/),
+                  (v17/*: any*/),
+                  (v18/*: any*/),
+                  (v19/*: any*/),
+                  (v20/*: any*/),
+                  (v21/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -261,7 +299,7 @@ return {
                     "name": "author",
                     "plural": false,
                     "selections": [
-                      (v16/*: any*/)
+                      (v22/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -281,24 +319,30 @@ return {
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
-      (v1/*: any*/),
+      (v5/*: any*/),
+      (v7/*: any*/),
       (v3/*: any*/),
-      (v0/*: any*/),
-      (v2/*: any*/)
+      (v6/*: any*/),
+      (v8/*: any*/),
+      (v10/*: any*/),
+      (v9/*: any*/),
+      (v1/*: any*/),
+      (v2/*: any*/),
+      (v4/*: any*/),
+      (v0/*: any*/)
     ],
     "kind": "Operation",
     "name": "activePasteBinQuery",
     "selections": [
       {
         "alias": null,
-        "args": (v4/*: any*/),
+        "args": (v11/*: any*/),
         "concreteType": "ActivePasteBinConnection",
         "kind": "LinkedField",
         "name": "activePasteBin",
         "plural": false,
         "selections": [
-          (v5/*: any*/),
-          (v6/*: any*/),
+          (v12/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -315,15 +359,15 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v7/*: any*/),
-                  (v8/*: any*/),
-                  (v9/*: any*/),
-                  (v10/*: any*/),
-                  (v11/*: any*/),
-                  (v12/*: any*/),
                   (v13/*: any*/),
                   (v14/*: any*/),
                   (v15/*: any*/),
+                  (v16/*: any*/),
+                  (v17/*: any*/),
+                  (v18/*: any*/),
+                  (v19/*: any*/),
+                  (v20/*: any*/),
+                  (v21/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -332,8 +376,8 @@ return {
                     "name": "author",
                     "plural": false,
                     "selections": [
-                      (v16/*: any*/),
-                      (v10/*: any*/)
+                      (v22/*: any*/),
+                      (v16/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -349,16 +393,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "aebf25b75090b3f174c6cb63d67f16a0",
+    "cacheID": "b76c044bb511527ef61ca9481f3e6f1b",
     "id": null,
     "metadata": {},
     "name": "activePasteBinQuery",
     "operationKind": "query",
-    "text": "query activePasteBinQuery(\n  $mode: String\n  $time: String\n  $first: Int\n  $offset: Int\n) {\n  activePasteBin(mode: $mode, time: $time, first: $first, offset: $offset) {\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n      startCursor\n      endCursor\n    }\n    totalCount\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        dateOfExpiry\n        language\n        totalRating\n        likes\n        dislikes\n        author {\n          username\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query activePasteBinQuery(\n  $mode: String\n  $time: String\n  $first: Int\n  $offset: Int\n  $title_Icontains: String\n  $title_Istartswith: String\n  $title_Iendswith: String\n  $dateOfCreation_Gte: Date\n  $dateOfCreation_Lte: Date\n  $language: String\n  $author__Username: String\n) {\n  activePasteBin(mode: $mode, time: $time, first: $first, offset: $offset, title_Icontains: $title_Icontains, title_Istartswith: $title_Istartswith, title_Iendswith: $title_Iendswith, dateOfCreation_Gte: $dateOfCreation_Gte, dateOfCreation_Lte: $dateOfCreation_Lte, language: $language, author_Username: $author__Username) {\n    totalCount\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        dateOfExpiry\n        language\n        totalRating\n        likes\n        dislikes\n        author {\n          username\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "00e57aeb761b21119b418773e1d3e8e5";
+(node as any).hash = "754573417071a2a9deb8a6829fcd1149";
 
 export default node;

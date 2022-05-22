@@ -7,14 +7,14 @@ import {Row} from "./Row";
 export const Tables = (props: any) => {
 
     return (
-    <Table striped bordered hover>
+    <Table className="my-3" striped bordered hover responsive>
       <thead>
         <tr>
           <th scope="col">Title</th>
           <th scope="col">Author</th>
           <th scope="col">Created</th>
           <th scope="col">Expires</th>
-          <th scope="col">Toral Rating</th>
+          <th scope="col">Rating</th>
           <th scope="col">Rate</th>
           <th scope="col">Actions</th>
         </tr>

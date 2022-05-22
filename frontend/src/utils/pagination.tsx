@@ -1,24 +1,32 @@
 import {Pagination} from "react-bootstrap";
 import {useNavigate, useSearchParams} from "react-router-dom";
 
-export const setURL = (searchParams: URLSearchParams, pageNumber: number) => {
-	let url = searchParams.toString();
-
-	// empty
+export const getPaginationURL = (searchParams: URLSearchParams, pageNumber: number) => {
+	let url: string = searchParams.toString();
+	// if there are no params
 	if (url === "") {
+		// add the first param -> page number
 		url += `?pageNumber=${pageNumber}`;
 	}
-	// not empty
+	// if there are params already
 	else {
-		let urlPageNumber = searchParams.get("pageNumber");
-
+		// check if the page number param is already in query
+		const urlPageNumber = searchParams.get("pageNumber");
+		// if there is no page number param
+		if (urlPageNumber == null) {
+			url += `&pageNumber=${pageNumber}`;
+		}
+		// it there is already the page number param
+		else {
+			url = url.replace(`pageNumber=${urlPageNumber}`, `pageNumber=${pageNumber}`)
+		}
 	}
 	return url;
 }
 
 export const PaginationUtils = (props: any) => {
 
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	// const getUrl = (pageNumber: number, setOffSet: number) => {
@@ -28,7 +36,6 @@ export const PaginationUtils = (props: any) => {
 	// 	return url;
 	// }
 
-
 	const renderRight = () => {
 		let nextButtons = [];
 		for (let pgNum = props.page + 1; pgNum <= props.page + 3 && pgNum <= props.maxPage; pgNum++) {
@@ -37,16 +44,16 @@ export const PaginationUtils = (props: any) => {
 			}
 			else {
 				// let url = getUrl(pgNum, props.offSet * (pgNum - 1));
-				let url = setURL(searchParams, pgNum);
+				let url = getPaginationURL(searchParams, pgNum);
 				nextButtons.push(<Pagination.Item onClick={() => {
-					navigate(url);
+					setSearchParams(url);
 				}}>{pgNum}</Pagination.Item>);
 			}
 		}
 		// let url = getUrl(props.page+1, props.offSet * (props.page));
-		let url = setURL(searchParams, props.page+1);
+		let url = getPaginationURL(searchParams, props.page+1);
 		nextButtons.push(<Pagination.Next onClick={() => {
-			navigate(url);
+			setSearchParams(url);
 		}}/>);
 		return nextButtons;
 	}
@@ -59,32 +66,32 @@ export const PaginationUtils = (props: any) => {
 			}
 			else {
 				// let url = getUrl(pgNum, props.offSet * (pgNum - 1));
-				let url = setURL(searchParams, pgNum);
-				prevButtons.unshift(<Pagination.Item onClick={() => navigate(url)}>{pgNum}</Pagination.Item>);
+				let url = getPaginationURL(searchParams, pgNum);
+				prevButtons.unshift(<Pagination.Item onClick={() => setSearchParams(url)}>{pgNum}</Pagination.Item>);
 			}
 		}
 		// let url = getUrl(props.page-1, props.offSet * (props.page - 2));
-		let url = setURL(searchParams, props.page-1);
+		let url = getPaginationURL(searchParams, props.page-1);
 		prevButtons.unshift(<Pagination.Prev onClick={() => {
-			navigate(url);
+			setSearchParams(url);
 		}}/>);
 		return prevButtons;
 	}
 
 	const renderFirst = () => {
 		// let url = getUrl(1, 0);
-		let url = setURL(searchParams, 1);
-		return <Pagination.First onClick={() => navigate(url)} />
+		let url = getPaginationURL(searchParams, 1);
+		return <Pagination.First onClick={() => setSearchParams(url)} />
 	}
 
 	const renderLast = () => {
 		// let url = getUrl(props.maxPage, props.offSet * (props.maxPage-1));
-		let url = setURL(searchParams, props.maxPage);
-		return <Pagination.Last onClick={() => navigate(url)} />
+		let url = getPaginationURL(searchParams, props.maxPage);
+		return <Pagination.Last onClick={() => setSearchParams(url)} />
 	}
 
 	return (
-		<Pagination>
+		<Pagination className="m-0">
 			{props.page > 1 && renderFirst()}
 			{props.page > 1 && renderLeft()}
 			<Pagination.Item active>{props.page}</Pagination.Item>
