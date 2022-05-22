@@ -66,7 +66,7 @@ export const Pastes = () => {
 
     let author: string | null = null;
     const URLauthor = searchParams.get("author");
-    if (URLauthor !== null) author = URLauthor;
+    if (URLauthor !== null && URLauthor !== "") author = URLauthor;
 
 
     const pastes = useLazyLoadQuery<activePasteBinQuery>(activePasteBin,
@@ -90,8 +90,13 @@ export const Pastes = () => {
     const dateOfCreationGte_ref = useRef<HTMLInputElement>(null);
     const dateOfCreationLte_ref = useRef<HTMLInputElement>(null);
 
-    const totalCount = pastes.activePasteBin?.edges.length;
-    const maxPage = Math.ceil(totalCount!/first)
+    const [isFilter, setIsFilter] = useState(false);
+
+    const totalCount_got = pastes.activePasteBin?.edges.length;
+    const totalCount_all = pastes.activePasteBin?.totalCount;
+    const maxPage = (isFilter) ? Math.ceil(totalCount_got!/first) : Math.ceil(totalCount_all!/first);
+
+    // const maxPage = Math.ceil(totalCount!/first)
 
     const handleModeSelect = (event: string | null) => {
         mode = event;
@@ -168,62 +173,187 @@ export const Pastes = () => {
 
     const handleFilters = () => {
         let url = searchParams.toString();
+        const author_value = author_ref?.current?.value;
+        const language_value = encodeURIComponent(language_ref?.current?.value!);
+        const dateOfCreationGte_value = dateOfCreationGte_ref?.current?.value!.toString();
+        const dateOfCreationLte_value = dateOfCreationLte_ref?.current?.value!.toString();
+
+        console.log("Date of creation gte: ", dateOfCreationGte_value);
+        console.log("Date of creation lte: ", dateOfCreationLte_value);
 
         // if the query is empty
         if (url === "") {
             // it's going to add filters
-            if (author_ref?.current?.value !== "") {
-                url += `&author=${author_ref?.current?.value}`;
+            if (author_value !== "") {
+                url += `&author=${author_value}`;
             }
-            if (language_ref?.current?.value !== "") {
-                url += `&language=${language_ref?.current?.value}`;
+            if (language_value !== "") {
+                url += `&language=${language_value}`;
             }
-            if (dateOfCreationGte_ref?.current?.value !== "") {
-                url += `&dateOfCreation_Gte=${dateOfCreationGte_ref}`;
+            if (dateOfCreationGte_value !== "") {
+                url += `&dateOfCreation_Gte=${dateOfCreationGte_value}`;
             }
-            if (dateOfCreationLte_ref?.current?.value !== "") {
-                url += `&dateOfCreation_Lte=${dateOfCreationLte_ref}`;
+            if (dateOfCreationLte_value !== "") {
+                url += `&dateOfCreation_Lte=${dateOfCreationLte_value}`;
             }
         }
         // not empty, so changing
         else {
             // if there is no author param in the query
-            if (URLauthor !== null) {
-                url += `&author=${author_ref?.current?.value}`;
+            if (URLauthor === null && author_value !== "") {
+                url += `&author=${author_value}`;
+            }
+            // changing
+            else {
+                // different
+                if (URLauthor !== author_value) {
+                    // remove
+                    if (author_value === "") {
+                        let toReplace = `author=${URLauthor}`;
+                        if (url.includes("&author")) {
+                            toReplace = "&" + toReplace;
+                        }
+                        url = url.replace(toReplace, "")
+                    }
+                    // update
+                    else {
+                        let toReplace = `author=${URLauthor}`;
+                        let toSet = `author=${author_value}`;
+                        if (url.includes("&author")) {
+                            toReplace = "&" + toReplace;
+                            toSet = "&" + toSet;
+                        }
+                        url = url.replace(toReplace, toSet);
+                    }
+                }
+            }
+
+            if (URLlanguage === null && language_value !== "") {
+                url += `&language=${language_value}`;
             }
             else {
-
+                // different
+                if (URLlanguage !== language_value) {
+                    // remove
+                    if (language_value === "") {
+                        if (URLlanguage !== null) {
+                            let toReplace = `language=${encodeURIComponent(URLlanguage)}`;
+                            if (url.includes("&language")) {
+                                toReplace = "&" + toReplace;
+                            }
+                            url = url.replace(toReplace, "")
+                        }
+                    }
+                    // update
+                    else {
+                        if (URLlanguage !== null) {
+                            let toReplace = `language=${encodeURI(URLlanguage)}`;
+                            let toSet = `language=${language_value}`;
+                            if (url.includes("&language")) {
+                                toReplace = "&" + toReplace;
+                                toSet = "&" + toSet;
+                            }
+                            url = url.replace(toReplace, toSet);
+                        }
+                    }
+                }
             }
 
-            if (URLlanguage !== null) {
-                url += `&language=${language_ref?.current?.value}`;
+            if (URLdateOfCreationGte === null && dateOfCreationGte_value !== "") {
+                url += `&dateOfCreation_Gte=${dateOfCreationGte_value}`;
             }
             else {
-
+                // different
+                if (URLdateOfCreationGte !== dateOfCreationGte_value) {
+                    // remove
+                    if (dateOfCreationGte_value === "") {
+                        let toReplace = `dateOfCreation_Gte=${URLdateOfCreationGte}`;
+                        if (url.includes("&dateOfCreation_Gte")) {
+                            toReplace = "&" + toReplace;
+                        }
+                        url = url.replace(toReplace, "")
+                    }
+                    // update
+                    else {
+                        let toReplace = `dateOfCreation_Gte=${URLdateOfCreationGte}`;
+                        let toSet = `dateOfCreation_Gte=${dateOfCreationGte_value}`;
+                        if (url.includes("&dateOfCreation_Gte")) {
+                            toReplace = "&" + toReplace;
+                            toSet = "&" + toSet;
+                        }
+                        url = url.replace(toReplace, toSet);
+                    }
+                }
             }
 
-            if (URLdateOfCreationGte !== null) {
-                url += `&dateOfCreation_Gte=${dateOfCreationGte_ref}`;
-            }
-            else{
-
-            }
-
-            if (URLdateOfCreationGte !== null) {
-                url += `&dateOfCreation_Lte=${dateOfCreationLte_ref}`;
+            if (URLdateOfCreationLte === null && dateOfCreationLte_value !== "") {
+                url += `&dateOfCreation_Lte=${dateOfCreationLte_value}`;
             }
             else {
-
+                // different
+                if (URLdateOfCreationLte !== dateOfCreationLte_value) {
+                    // remove
+                    if (dateOfCreationLte_value === "") {
+                        let toReplace = `dateOfCreation_Lte=${URLdateOfCreationLte}`;
+                        if (url.includes("&dateOfCreation_Lte")) {
+                            toReplace = "&" + toReplace;
+                        }
+                        url = url.replace(toReplace, "")
+                    }
+                    // update
+                    else {
+                        let toReplace = `dateOfCreation_Lte=${URLdateOfCreationLte}`;
+                        let toSet = `dateOfCreation_Lte=${dateOfCreationLte_value}`;
+                        if (url.includes("&dateOfCreation_Lte")) {
+                            toReplace = "&" + toReplace;
+                            toSet = "&" + toSet;
+                        }
+                        url = url.replace(toReplace, toSet);
+                    }
+                }
             }
         }
+
+        const pgNum = searchParams.get("pageNumber");
+        if (pgNum !== null) {
+            url = url.replace(`pageNumber=${pgNum}`, "pageNumber=1");
+            // add offset
+            // add first
+        }
+        console.log(url);
+        setIsFilter(true);
         setSearchParams(url);
     }
 
     const handleFiltersClear = () => {
-        author_ref!.current!.value = "";
-        language_ref!.current!.value = "";
-        dateOfCreationGte_ref!.current!.value = "";
-        dateOfCreationLte_ref!.current!.value = "";
+        filterInput.author = "";
+        filterInput.language = "";
+        filterInput.dateOfCreationGte = "";
+        filterInput.dateOfCreationLte = "";
+
+        setIsFilter(false);
+        let url = searchParams.toString();
+        if (URLauthor !== null) {
+            let toReplace = `author=${URLauthor}`;
+            if (url.includes("&author")) toReplace = "&" + toReplace;
+            url = url.replace(toReplace, "");
+        }
+        if (URLlanguage !== null) {
+            let toReplace = `language=${encodeURIComponent(URLlanguage)}`;
+            if (url.includes("&language")) toReplace = "&" + toReplace;
+            url = url.replace(toReplace, "");
+        }
+        if (URLdateOfCreationGte !== null) {
+            let toReplace = `dateOfCreation_Gte=${URLdateOfCreationGte}`;
+            if (url.includes("&dateOfCreation_Gte")) toReplace = "&" + toReplace;
+            url = url.replace(toReplace, "");
+        }
+        if (URLdateOfCreationLte !== null) {
+            let toReplace = `dateOfCreation_Lte=${URLdateOfCreationLte}`;
+            if (url.includes("&dateOfCreation_Lte")) toReplace = "&" + toReplace;
+            url = url.replace(toReplace, "");
+        }
+        setSearchParams(url);
     }
 
     const languages = useLazyLoadQuery<allLanguagesQuery>( Languages, {} ).allLanguages;
@@ -316,12 +446,13 @@ export const Pastes = () => {
                         </div>
                     </div>
                     <ButtonGroup
-                        onClick={handleFiltersClear}
                         className="mt-5 mb-4">
                         <Button
                             onClick={handleFilters}
                             style={{marginRight: "3vh"}}>Apply</Button>
-                        <Button variant="danger">Clear</Button>
+                        <Button
+                            onClick={handleFiltersClear}
+                            variant="danger">Clear</Button>
                     </ButtonGroup>
                     <hr className="mb-5" />
                 </div>
