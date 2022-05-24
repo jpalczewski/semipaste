@@ -1,5 +1,4 @@
 import React, { Suspense } from "react";
-
 import { RelayEnvironmentProvider } from "react-relay";
 import "./App.css";
 

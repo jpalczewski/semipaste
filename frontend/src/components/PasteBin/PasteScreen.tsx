@@ -1,17 +1,18 @@
-import {Form} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {commitMutation, useLazyLoadQuery} from "react-relay";
 import {highlightPasteBinMutation} from "../../Query/SyntaxHighlight/__generated__/highlightPasteBinMutation.graphql";
 import RelayEnvironment from "../../RelayEnvironment";
 import {highlightPasteBin} from "../../Query/SyntaxHighlight/highlightPasteBin";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {getPasteBinQuery} from "../../Query/PasteBins/__generated__/getPasteBinQuery.graphql";
 import {getPasteBin} from "../../Query/PasteBins/getPasteBin";
 import {Wrapper} from "../../styles/Components.style";
+import {PasteReportScreen} from "./PasteReportScreen";
 
-export const PasteScreen = () => {
+export const PasteScreen = (props: any) => {
     const [syntax, setSyntax] = useState<string>("");
-    const { pk } = useParams();
+    const pk = props.id;
     const paste = useLazyLoadQuery<getPasteBinQuery>(getPasteBin, {id: pk!});
 
     useEffect(() => {
@@ -27,10 +28,19 @@ export const PasteScreen = () => {
   });
   }, []);
 
+    const navigate = useNavigate();
+
     return (
         <Wrapper style={{textAlign: "left"}}>
-            <div className="container-fluid p-3" style={{height: "100vh"}}>
+            <div className="p-3">
             <div className="container bg-white p-4">
+                <div className="mt-3 mb-5 d-flex justify-content-between">
+                    <Button onClick={() => navigate("/pastes")}>Go back</Button>
+                </div>
+                <div></div>
+                <div>
+
+                </div>
             <div className="row mb-3">
                 <div className="col">
                     <h2>{paste.allPasteBin?.edges?.[0]?.node?.title}</h2>
@@ -54,11 +64,12 @@ export const PasteScreen = () => {
                 <pre dangerouslySetInnerHTML={{__html: syntax}}></pre>
             </div>
             <div className="row py-3">
-                    <p>Raw Code</p>
-                    <textarea rows={10} disabled>{paste.allPasteBin?.edges?.[0]?.node?.text}</textarea>
+                <p>Raw Code</p>
+                <textarea rows={10} disabled>{paste.allPasteBin?.edges?.[0]?.node?.text}</textarea>
             </div>
-        </div>
-        </div>
+                <PasteReportScreen pid={paste.allPasteBin?.edges?.[0]?.node?.id} title={paste.allPasteBin?.edges?.[0]?.node?.title}/>
+            </div>
+            </div>
         </Wrapper>
     )
 }

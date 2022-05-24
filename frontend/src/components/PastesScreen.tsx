@@ -90,13 +90,8 @@ export const Pastes = () => {
     const dateOfCreationGte_ref = useRef<HTMLInputElement>(null);
     const dateOfCreationLte_ref = useRef<HTMLInputElement>(null);
 
-    const [isFilter, setIsFilter] = useState(false);
+    const maxPage = Math.ceil(pastes.activePasteBin?.totalCount!/first);
 
-    const totalCount_got = pastes.activePasteBin?.edges.length;
-    const totalCount_all = pastes.activePasteBin?.totalCount;
-    const maxPage = (isFilter) ? Math.ceil(totalCount_got!/first) : Math.ceil(totalCount_all!/first);
-
-    // const maxPage = Math.ceil(totalCount!/first)
 
     const handleModeSelect = (event: string | null) => {
         mode = event;
@@ -177,9 +172,6 @@ export const Pastes = () => {
         const language_value = encodeURIComponent(language_ref?.current?.value!);
         const dateOfCreationGte_value = dateOfCreationGte_ref?.current?.value!.toString();
         const dateOfCreationLte_value = dateOfCreationLte_ref?.current?.value!.toString();
-
-        console.log("Date of creation gte: ", dateOfCreationGte_value);
-        console.log("Date of creation lte: ", dateOfCreationLte_value);
 
         // if the query is empty
         if (url === "") {
@@ -321,7 +313,6 @@ export const Pastes = () => {
             // add first
         }
         console.log(url);
-        setIsFilter(true);
         setSearchParams(url);
     }
 
@@ -331,7 +322,6 @@ export const Pastes = () => {
         filterInput.dateOfCreationGte = "";
         filterInput.dateOfCreationLte = "";
 
-        setIsFilter(false);
         let url = searchParams.toString();
         if (URLauthor !== null) {
             let toReplace = `author=${URLauthor}`;
@@ -397,7 +387,7 @@ export const Pastes = () => {
                                     />
                                 </Form.Group>
                             </div>
-                            <div className="col-6">
+                        <div className="col-6">
                                 <Form.Group>
                                     <Form.Label>
                                         Language

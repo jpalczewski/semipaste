@@ -1,5 +1,6 @@
 import {Pagination} from "react-bootstrap";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
+import React from "react";
 
 export const getPaginationURL = (searchParams: URLSearchParams, pageNumber: number) => {
 	let url: string = searchParams.toString();
