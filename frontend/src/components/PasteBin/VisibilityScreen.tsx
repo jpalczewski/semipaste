@@ -1,5 +1,4 @@
 import {useParams} from "react-router-dom";
-import {useEffect} from "react";
 import {PasteScreen} from "./PasteScreen";
 import {useLazyLoadQuery} from "react-relay";
 import {getPasteBinQuery} from "../../Query/PasteBins/__generated__/getPasteBinQuery.graphql";

@@ -47,7 +47,8 @@ class TotalCount(relay.Connection):
 
     total_count = graphene.Int()
 
-    def resolve_total_count(self, info):
-        return PasteBin.objects.filter(
-            date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc)
-        ).count()
+    def resolve_total_count(root, info):
+        # return PasteBin.objects.filter(
+        #     date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc)
+        # ).count()
+        return root.length
