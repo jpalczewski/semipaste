@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<01458b308c618b1c8b6245bbbbde7895>>
+ * @generated SignedSource<<2e6d0d9817d3e88ff866488336ab34b8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,8 +9,10 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-export type allUsersQuery$variables = {};
-export type allUsersQuery$data = {
+export type getUserQuery$variables = {
+  id: string;
+};
+export type getUserQuery$data = {
   readonly allUsers: {
     readonly edges: ReadonlyArray<{
       readonly node: {
@@ -27,16 +29,29 @@ export type allUsersQuery$data = {
     } | null>;
   } | null;
 };
-export type allUsersQuery = {
-  variables: allUsersQuery$variables;
-  response: allUsersQuery$data;
+export type getUserQuery = {
+  variables: getUserQuery$variables;
+  response: getUserQuery$data;
 };
 
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "id"
+  }
+],
+v1 = [
+  {
     "alias": null,
-    "args": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "id",
+        "variableName": "id"
+      }
+    ],
     "concreteType": "UserNodeConnection",
     "kind": "LinkedField",
     "name": "allUsers",
@@ -133,32 +148,32 @@ var v0 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "allUsersQuery",
-    "selections": (v0/*: any*/),
+    "name": "getUserQuery",
+    "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "allUsersQuery",
-    "selections": (v0/*: any*/)
+    "name": "getUserQuery",
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "705bdde444efcae12c2e4e24ba037958",
+    "cacheID": "c7f280abdca904082fc4126e00992212",
     "id": null,
     "metadata": {},
-    "name": "allUsersQuery",
+    "name": "getUserQuery",
     "operationKind": "query",
-    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        isVerified\n        isStaff\n        isSuperuser\n      }\n    }\n  }\n}\n"
+    "text": "query getUserQuery(\n  $id: ID!\n) {\n  allUsers(id: $id) {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        isVerified\n        isStaff\n        isSuperuser\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "32ddeae5e52859a8402b82d84b989662";
+(node as any).hash = "bd3ce248bb4ebc4fabd65684b35fbea2";
 
 export default node;

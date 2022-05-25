@@ -10,6 +10,7 @@ from users.models import User
 
 
 class EditUser(ResultMixin, graphene.Mutation):
+
     class Arguments:
         id = graphene.ID(required=True)
         username = graphene.String()
@@ -31,9 +32,8 @@ class EditUser(ResultMixin, graphene.Mutation):
                 error="User with specified ID not found",
             )
         for attr in kwargs.keys():
-
             value = kwargs.get(attr, getattr(user, attr))
-            if value != '':
+            if value is not None:
                 if attr == 'description':
                     setattr(user, attr, strip_tags(escape(value)))
                 elif attr == 'password':
@@ -41,4 +41,4 @@ class EditUser(ResultMixin, graphene.Mutation):
                 else:
                     setattr(user, attr, value)
         user.save()
-        return EditUser(ok=True, user=info.context.user)
+        return EditUser(ok=True, error="None")

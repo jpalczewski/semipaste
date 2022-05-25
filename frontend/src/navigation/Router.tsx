@@ -8,10 +8,11 @@ import { Popular } from "../components/PopularScreen";
 import { About } from "../components/AboutScreen";
 import { UserScreen } from "../components/user/UserScreen";
 import {Dashboard} from "../components/dashboard/DashboardScreen";
-import {DashboardPastesScreen} from "../components/dashboard/DashboardPastesScreen";
-import {DashboardHomeScreen} from "../components/dashboard/DashboardHomeScreen";
+import {DashboardPastesScreen} from "../components/dashboard/Pastes/PastesScreen";
+import {DashboardHomeScreen} from "../components/dashboard/HomeScreen";
 import React from "react";
-import {DashboardUsersScreen} from "../components/dashboard/DashboardUsersScreen";
+import {DashboardUsersScreen} from "../components/dashboard/Users/UsersScreen";
+import {DashboardUserEditScreen} from "../components/dashboard/Users/UserEditScreen";
 
 export const Routerr = () => {
   return (
@@ -26,9 +27,14 @@ export const Routerr = () => {
                <Route path="*" element={<ErroPage />} />
                <Route path="/user" element={<UserScreen />} />
                <Route path="dashboard" element={<Dashboard />}>
+                   // home
                    <Route index element={<DashboardHomeScreen />} />
+                   // pastes
                    <Route path="pastes" element={<DashboardPastesScreen />} />
+                   <Route path="pastes/:id" element={<DashboardPastesScreen />} />
+                   // users
                    <Route path="users" element={<DashboardUsersScreen />} />
+                   <Route path="users/:id" element={<DashboardUserEditScreen />} />
                </Route>
            </Routes>
     </Router>

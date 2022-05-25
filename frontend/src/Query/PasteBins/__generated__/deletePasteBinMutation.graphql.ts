@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1a092e36e8c7c61486e4710a68a3c9af>>
+ * @generated SignedSource<<20fb43b24a8574ed3a81a30446cdc81f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,18 +9,18 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type deleteUserMutation$variables = {
-  input: string;
+export type deletePasteBinMutation$variables = {
+  id: string;
 };
-export type deleteUserMutation$data = {
-  readonly deleteUser: {
+export type deletePasteBinMutation$data = {
+  readonly deletePasteBin: {
     readonly ok: boolean | null;
     readonly error: string | null;
   } | null;
 };
-export type deleteUserMutation = {
-  variables: deleteUserMutation$variables;
-  response: deleteUserMutation$data;
+export type deletePasteBinMutation = {
+  variables: deletePasteBinMutation$variables;
+  response: deletePasteBinMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -28,7 +28,7 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "input"
+    "name": "id"
   }
 ],
 v1 = [
@@ -38,12 +38,12 @@ v1 = [
       {
         "kind": "Variable",
         "name": "id",
-        "variableName": "input"
+        "variableName": "id"
       }
     ],
-    "concreteType": "DeleteUser",
+    "concreteType": "DeletePasteBin",
     "kind": "LinkedField",
-    "name": "deleteUser",
+    "name": "deletePasteBin",
     "plural": false,
     "selections": [
       {
@@ -69,7 +69,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "deleteUserMutation",
+    "name": "deletePasteBinMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -78,20 +78,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "deleteUserMutation",
+    "name": "deletePasteBinMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "d04ef897956ebf4afe75134542795e01",
+    "cacheID": "61a331a272d8d175a2ce4885ec18d6c8",
     "id": null,
     "metadata": {},
-    "name": "deleteUserMutation",
+    "name": "deletePasteBinMutation",
     "operationKind": "mutation",
-    "text": "mutation deleteUserMutation(\n  $input: ID!\n) {\n  deleteUser(id: $input) {\n    ok\n    error\n  }\n}\n"
+    "text": "mutation deletePasteBinMutation(\n  $id: ID!\n) {\n  deletePasteBin(id: $id) {\n    ok\n    error\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "75d5cdf07c492b74d05e45e60cc63b0a";
+(node as any).hash = "69bef7acfe55c2b551e65efab2c62680";
 
 export default node;

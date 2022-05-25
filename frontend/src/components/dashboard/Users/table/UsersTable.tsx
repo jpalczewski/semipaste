@@ -9,9 +9,10 @@ export const UsersTable = () => {
     const data = useLazyLoadQuery<allUsersQuery>(allUsers, {});
 
     return (
-        <Table striped bordered hover>
+        <Table striped bordered hover responsive>
             <thead>
                 <tr>
+                  <th></th>
                   <th scope="col">ID</th>
                   <th scope="col">Username</th>
                   <th scope="col">First Name</th>

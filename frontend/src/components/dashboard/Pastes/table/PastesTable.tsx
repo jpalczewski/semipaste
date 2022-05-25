@@ -12,6 +12,7 @@ export const PastesTable = () => {
         <Table striped bordered hover>
             <thead>
                 <tr>
+                  <th></th>
                   <th scope="col">ID</th>
                   <th scope="col">Title</th>
                   <th scope="col">Language</th>

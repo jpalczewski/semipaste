@@ -4,6 +4,7 @@ export const deleteUser = graphql`
   mutation deleteUserMutation($input: ID!) {
     deleteUser(id: $input) {
       ok
+      error
     }
   }
 `;
