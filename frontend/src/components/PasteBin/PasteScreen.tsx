@@ -15,6 +15,9 @@ export const PasteScreen = (props: any) => {
     const pk = props.id;
     const paste = useLazyLoadQuery<getPasteBinQuery>(getPasteBin, {id: pk!});
 
+    const [color, setColor] = useState("black");
+    const [cursor, setCursor] = useState("crosshair");
+
     useEffect(() => {
       commitMutation<highlightPasteBinMutation>(RelayEnvironment, {
         mutation: highlightPasteBin,
@@ -48,7 +51,17 @@ export const PasteScreen = (props: any) => {
             </div>
             <div className="row pt-3">
                 <div className="col">
-                    <pre>Author: {paste.allPasteBin?.edges?.[0]?.node?.author?.username}</pre>
+                    <pre
+                    style={{color: color, cursor: cursor}} onClick={() => navigate(`/users/${paste.allPasteBin?.edges?.[0]?.node?.author?.id}`)}
+            onMouseOver={() => {
+                setColor("grey");
+                setCursor("pointer");
+            }}
+            onMouseLeave={() => {
+                setColor("black");
+                setCursor("crosshair");
+            }}
+                    >Author: {paste.allPasteBin?.edges?.[0]?.node?.author?.username}</pre>
                 </div>
             </div>
             <div className="row">

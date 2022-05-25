@@ -113,7 +113,18 @@ export const Row = (props: any) => {
                 setCursor("crosshair");
             }}
             >{props.object?.title}</span></td>
-            <td>{props.object?.author?.username}</td>
+            <td>
+                <span style={{color: color, cursor: cursor}} onClick={() => navigate(`/users/${props.object?.author.id}`)}
+            onMouseOver={() => {
+                setColor("grey");
+                setCursor("pointer");
+            }}
+            onMouseLeave={() => {
+                setColor("black");
+                setCursor("crosshair");
+            }}
+            >{props.object?.author.username}</span>
+            </td>
             <td>
                 {props.object?.dateOfCreation.slice(
                     0,

@@ -5,8 +5,9 @@ import { Home } from "../components/HomeScreen";
 import { Create } from "../components/CreateScreen";
 import {Pastes} from "../components/PastesScreen";
 import { About } from "../components/AboutScreen";
-import { UserScreen } from "../components/user/UserScreen";
+import { UsersScreen } from "../components/user/UsersScreen";
 import {VisibilityScreen} from "../components/PasteBin/VisibilityScreen";
+import {UserScreen} from "../components/user/UserScreen";
 
 export const Routerr = () => {
   return (
@@ -20,7 +21,8 @@ export const Routerr = () => {
         <Route path="/pastes/?*" element={<Pastes />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<ErroPage />} />
-        <Route path="/user" element={<UserScreen />} />
+        <Route path="/users" element={<UsersScreen />} />
+        <Route path="/users/:id" element={<UserScreen />} />
       </Routes>
     </Router>
   );

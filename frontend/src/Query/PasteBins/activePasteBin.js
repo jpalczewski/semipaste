@@ -41,6 +41,7 @@ export const activePasteBin = graphql`
           likes
           dislikes
           author {
+            id
             username
           }
         }
