@@ -27,7 +27,7 @@ django-graphql-jwt = "^0.3.4"
 django-configurations = {extras = ["cache", "database", "email", "search"], version = "^2.3.2"}
 celery = {extras = ["redis"], version = "^5.2.3"}
 redis = "^4.2.1"
-watchfiles = "^0.13"
+watchfiles = "^0.14"
 setuptools = "59.6.0"
 Pillow = "^9.1.0"
 Pygments = "^2.12.0"
