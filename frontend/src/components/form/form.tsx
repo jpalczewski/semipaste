@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FormWrapper } from "../../styles/Components.style";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import {Form, Button, Row, Col, Alert} from "react-bootstrap";
 import RelayEnvironment from "../../RelayEnvironment";
 import { commitMutation, useLazyLoadQuery } from "react-relay";
 import { addPasteBin } from "../../Query/PasteBins/addPasteBin";
@@ -14,7 +14,7 @@ import Select from "react-select";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/theme-dawn";
 
-export const PasteBinForm = () => {
+export const PasteBinForm = (props: any) => {
   const [preview, setPreview] = useState(true);
   const [syntax, setSyntax] = useState<string>("");
   const [inputs, setInputs] = useState({
@@ -60,16 +60,29 @@ export const PasteBinForm = () => {
   };
 
   const handleSubmit = (event: any) => {
-    if (inputs.text === "" || inputs.text === "") return;
+    if (inputs.title === "") {
+      props.setResult("The title of your paste is empty!");
+      return;
+    }
+    if (inputs.text === "") {
+      props.setResult("The text of your paste is empty!");
+      return;
+    }
+
     commitMutation<addPasteBinMutation>(RelayEnvironment, {
       mutation: addPasteBin,
       variables: event,
       onCompleted: (response) => {
-        console.log("ok", response);
-        window.location.reload();
+        if (response.addPasteBin?.ok) {
+          props.setResult("Saved!");
+          window.location.reload();
+        }
+        else {
+          props.setResult("An error occurred!");
+        }
       },
       onError: (error) => {
-        console.error(error);
+        props.setResult("An error occurred!");
       },
     });
   };

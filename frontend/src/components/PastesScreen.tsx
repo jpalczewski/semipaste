@@ -173,6 +173,8 @@ export const Pastes = () => {
         url = handleURL(url, URLdateOfCreationGte, "dateOfCreation_Gte", dateOfCreationGte_value!);
         url = handleURL(url, URLauthor, "dateOfCreation_Lte", dateOfCreationLte_value!);
 
+        url = handleURL(url, searchParams.get("pageNumber"), "pageNumber", "1");
+
         setSearchParams(url);
     }
 

@@ -18,7 +18,7 @@ export const UserReportScreen = (props: any) => {
                 variables: {uid: props.id, reason: reason},
                 onCompleted: response => {
                 if (response.reportUser?.ok!) {
-                    setResult("Paste Reported!");
+                    setResult("User Reported!");
                     const timer = setTimeout(() => {
                         setResult("");
                         setReason("");
