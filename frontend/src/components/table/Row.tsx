@@ -15,8 +15,10 @@ export const Row = (props: any) => {
     const [rate, setRate] = useState<boolean>(false);
     const [likes, setLikes] = useState(props.object?.likes);
     const [dislikes, setDislikes] = useState(props.object?.dislikes);
-    const [color, setColor] = useState("black");
-    const [cursor, setCursor] = useState("crosshair");
+    const [color1, setColor1] = useState("black");
+    const [color2, setColor2] = useState("black");
+    const [cursor1, setCursor1] = useState("crosshair");
+    const [cursor2, setCursor2] = useState("crosshair");
 
     useEffect(() => {
         commitMutation<isPasteBinRatedMutation>(RelayEnvironment, {
@@ -68,62 +70,34 @@ export const Row = (props: any) => {
         }
     };
 
-    // const [variantLike, setVariantLike] = useState("outline-primary");
-    // const [variantDislike, setVariantDislike] = useState("outline-primary");
-    //
-    // useEffect(() => {
-    //     if (rate === true)  setVariantLike("primary");
-    //     else if (rate === false) setVariantDislike("primary");
-    // }, [totalRating])
-    //
-    // const renderRate = () => {
-    //     let rateRender = [];
-    //
-    //     // if (rate === true)  setVariantLike("primary");
-    //     // else if (rate === false) setVariantDislike("primary");
-    //
-    //     rateRender.push(
-    //         <Button variant={variantLike} value="like" onClick={handleRate}>
-    //                     &#128402;
-    //         </Button>
-    //     )
-    //     rateRender.push(
-    //         <div>{totalRating}</div>
-    //     )
-    //     rateRender.push(
-    //         <Button variant={variantDislike} value="dislike" onClick={handleRate}>
-    //                     &#128403;
-    //         </Button>
-    //     )
-    //
-    //     return rateRender;
-    // }
-
     const navigate = useNavigate();
 
     return (
         <tr className="align-middle">
-            <td><span style={{color: color, cursor: cursor}} onClick={() => navigate(`/pastes/${props.object?.id}`)}
-            onMouseOver={() => {
-                setColor("grey");
-                setCursor("pointer");
-            }}
-            onMouseLeave={() => {
-                setColor("black");
-                setCursor("crosshair");
-            }}
-            >{props.object?.title}</span></td>
-            <td>
-                <span style={{color: color, cursor: cursor}} onClick={() => navigate(`/users/${props.object?.author.id}`)}
-            onMouseOver={() => {
-                setColor("grey");
-                setCursor("pointer");
-            }}
-            onMouseLeave={() => {
-                setColor("black");
-                setCursor("crosshair");
-            }}
-            >{props.object?.author.username}</span>
+            <td
+                style={{color: color1, cursor: cursor1}}
+                onClick={() => navigate(`/pastes/${props.object?.id}`)}
+                onMouseOver={() => {
+                    setColor1("grey");
+                    setCursor1("pointer");
+                }}
+                onMouseLeave={() => {
+                    setColor1("black");
+                    setCursor1("crosshair");
+                }}
+            >{props.object?.title}</td>
+            <td
+                    style={{color: color2, cursor: cursor2}}
+                    onClick={() => navigate(`/users/${props.object?.author.id}`)}
+                    onMouseOver={() => {
+                        setColor2("grey");
+                        setCursor2("pointer");
+                    }}
+                    onMouseLeave={() => {
+                        setColor2("black");
+                        setCursor2("crosshair");
+                    }}
+                >{props.object?.author.username}
             </td>
             <td>
                 {props.object?.dateOfCreation.slice(
@@ -135,7 +109,7 @@ export const Row = (props: any) => {
                 {props.object?.dateOfExpiry.slice(0, 10)}
             </td>
             <td>
-                {props.object?.totalRating}
+                {totalRating}
             </td>
             <td>
                 {isRated

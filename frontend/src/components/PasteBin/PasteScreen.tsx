@@ -38,7 +38,7 @@ export const PasteScreen = (props: any) => {
             <div className="p-3">
             <div className="container bg-white p-4">
                 <div className="mt-3 mb-5 d-flex justify-content-between">
-                    <Button onClick={() => navigate("/pastes")}>Go back</Button>
+                    <Button onClick={() => navigate(-1)}>Go back</Button>
                 </div>
                 <div></div>
                 <div>

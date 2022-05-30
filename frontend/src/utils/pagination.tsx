@@ -1,28 +1,11 @@
 import {Pagination} from "react-bootstrap";
 import {useSearchParams} from "react-router-dom";
 import React from "react";
+import {handleURL} from "./url";
 
 export const getPaginationURL = (searchParams: URLSearchParams, pageNumber: number) => {
 	let url: string = searchParams.toString();
-	// if there are no params
-	if (url === "") {
-		// add the first param -> page number
-		url += `?pageNumber=${pageNumber}`;
-	}
-	// if there are params already
-	else {
-		// check if the page number param is already in query
-		const urlPageNumber = searchParams.get("pageNumber");
-		// if there is no page number param
-		if (urlPageNumber == null) {
-			url += `&pageNumber=${pageNumber}`;
-		}
-		// it there is already the page number param
-		else {
-			url = url.replace(`pageNumber=${urlPageNumber}`, `pageNumber=${pageNumber}`)
-		}
-	}
-	return url;
+	return handleURL(url, searchParams.get("pageNumber"), "pageNumber", `${pageNumber}`);
 }
 
 export const PaginationUtils = (props: any) => {
@@ -30,17 +13,10 @@ export const PaginationUtils = (props: any) => {
 	// const navigate = useNavigate();
 	const [searchParams, setSearchParams] = useSearchParams();
 
-	// const getUrl = (pageNumber: number, setOffSet: number) => {
-	// 	let url = `${props.url}?pageNumber=${pageNumber}`;
-	// 	if (props.offSet) url += `&offSet=${setOffSet}`;
-	// 	if (props.filter) url += `&${props.filter}`
-	// 	return url;
-	// }
-
 	const renderRight = () => {
 		let nextButtons = [];
 		for (let pgNum = props.page + 1; pgNum <= props.page + 3 && pgNum <= props.maxPage; pgNum++) {
-			if (pgNum == props.page + 3) {
+			if (pgNum === props.page + 3) {
 				nextButtons.push(<Pagination.Ellipsis disabled/>);
 			}
 			else {
@@ -62,7 +38,7 @@ export const PaginationUtils = (props: any) => {
 	const renderLeft = () => {
 		let prevButtons = [];
 		for (let pgNum = props.page - 1; pgNum >= props.page - 3 && pgNum >= 1; pgNum--) {
-			if (pgNum == props.page - 3) {
+			if (pgNum === props.page - 3) {
 				prevButtons.unshift(<Pagination.Ellipsis disabled/>);
 			}
 			else {
@@ -96,8 +72,8 @@ export const PaginationUtils = (props: any) => {
 			{props.page > 1 && renderFirst()}
 			{props.page > 1 && renderLeft()}
 			<Pagination.Item active>{props.page}</Pagination.Item>
-			{props.page != props.maxPage && renderRight()}
-			{props.page != props.maxPage && renderLast()}
+			{props.page !== props.maxPage && renderRight()}
+			{props.page !== props.maxPage && renderLast()}
 		</Pagination>
 	)
 }

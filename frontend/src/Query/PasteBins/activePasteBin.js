@@ -16,6 +16,7 @@ export const activePasteBin = graphql`
   ) 
   {
     activePasteBin(
+      visible: true,
       mode: $mode,
       time: $time,
       first: $first,

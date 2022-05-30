@@ -11,6 +11,8 @@ import {allLanguagesQuery} from "../Query/SyntaxHighlight/__generated__/allLangu
 import {Languages} from "../Query/SyntaxHighlight/allLanguages";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import {clearURL, handleURL} from "../utils/url";
+import Select from "react-select";
 
 export const Pastes = () => {
 
@@ -31,7 +33,7 @@ export const Pastes = () => {
     if (page !== 1) offSet = first * (page - 1);
     if (urlMode !== null) {
         mode = urlMode;
-        if (mode == "top") {
+        if (mode === "top") {
             let urlTime = searchParams.get("time");
             if (urlTime !== null) {
                 time = urlTime;
@@ -40,17 +42,9 @@ export const Pastes = () => {
     }
 
     // filter
-    let title_Icontains: string | null  = null;
-    const URLtitleContains = searchParams.get("title_contains");
-    if (URLtitleContains !== null) title_Icontains = URLtitleContains;
-
     let title_Istartswith: string | null  = null;
-    const URLtitleStartswith = searchParams.get("title_startswith");
+    const URLtitleStartswith = searchParams.get("title");
     if (URLtitleStartswith !== null) title_Istartswith = URLtitleStartswith;
-
-    let title_Iendswith: string | null  = null;
-    const URLtitleEndswith = searchParams.get("title_endswith");
-    if (URLtitleEndswith !== null) title_Iendswith = URLtitleEndswith;
 
     let dateOfCreation_Gte: string | null  = null;
     const URLdateOfCreationGte = searchParams.get("dateOfCreation_Gte");
@@ -75,9 +69,7 @@ export const Pastes = () => {
           time: time,
           first: first,
           offset: offSet,
-          title_Icontains: title_Icontains,
           title_Istartswith: title_Istartswith,
-          title_Iendswith: title_Iendswith,
           dateOfCreation_Gte: dateOfCreation_Gte,
           dateOfCreation_Lte: dateOfCreation_Lte,
           language: language,
@@ -85,6 +77,7 @@ export const Pastes = () => {
       }
     );
 
+    const titleIStartsWith_ref = useRef<HTMLInputElement>(null);
     const author_ref = useRef<HTMLInputElement>(null);
     const language_ref = useRef<HTMLSelectElement>(null);
     const dateOfCreationGte_ref = useRef<HTMLInputElement>(null);
@@ -168,151 +161,18 @@ export const Pastes = () => {
 
     const handleFilters = () => {
         let url = searchParams.toString();
+        const titleIStartsWith_value = titleIStartsWith_ref?.current?.value;
         const author_value = author_ref?.current?.value;
         const language_value = encodeURIComponent(language_ref?.current?.value!);
         const dateOfCreationGte_value = dateOfCreationGte_ref?.current?.value!.toString();
         const dateOfCreationLte_value = dateOfCreationLte_ref?.current?.value!.toString();
 
-        // if the query is empty
-        if (url === "") {
-            // it's going to add filters
-            if (author_value !== "") {
-                url += `&author=${author_value}`;
-            }
-            if (language_value !== "") {
-                url += `&language=${language_value}`;
-            }
-            if (dateOfCreationGte_value !== "") {
-                url += `&dateOfCreation_Gte=${dateOfCreationGte_value}`;
-            }
-            if (dateOfCreationLte_value !== "") {
-                url += `&dateOfCreation_Lte=${dateOfCreationLte_value}`;
-            }
-        }
-        // not empty, so changing
-        else {
-            // if there is no author param in the query
-            if (URLauthor === null && author_value !== "") {
-                url += `&author=${author_value}`;
-            }
-            // changing
-            else {
-                // different
-                if (URLauthor !== author_value) {
-                    // remove
-                    if (author_value === "") {
-                        let toReplace = `author=${URLauthor}`;
-                        if (url.includes("&author")) {
-                            toReplace = "&" + toReplace;
-                        }
-                        url = url.replace(toReplace, "")
-                    }
-                    // update
-                    else {
-                        let toReplace = `author=${URLauthor}`;
-                        let toSet = `author=${author_value}`;
-                        if (url.includes("&author")) {
-                            toReplace = "&" + toReplace;
-                            toSet = "&" + toSet;
-                        }
-                        url = url.replace(toReplace, toSet);
-                    }
-                }
-            }
+        url = handleURL(url, URLtitleStartswith, "title", titleIStartsWith_value!);
+        url = handleURL(url, URLauthor, "author", author_value!);
+        url = handleURL(url, URLlanguage, "language", language_value!);
+        url = handleURL(url, URLdateOfCreationGte, "dateOfCreation_Gte", dateOfCreationGte_value!);
+        url = handleURL(url, URLauthor, "dateOfCreation_Lte", dateOfCreationLte_value!);
 
-            if (URLlanguage === null && language_value !== "") {
-                url += `&language=${language_value}`;
-            }
-            else {
-                // different
-                if (URLlanguage !== language_value) {
-                    // remove
-                    if (language_value === "") {
-                        if (URLlanguage !== null) {
-                            let toReplace = `language=${encodeURIComponent(URLlanguage)}`;
-                            if (url.includes("&language")) {
-                                toReplace = "&" + toReplace;
-                            }
-                            url = url.replace(toReplace, "")
-                        }
-                    }
-                    // update
-                    else {
-                        if (URLlanguage !== null) {
-                            let toReplace = `language=${encodeURI(URLlanguage)}`;
-                            let toSet = `language=${language_value}`;
-                            if (url.includes("&language")) {
-                                toReplace = "&" + toReplace;
-                                toSet = "&" + toSet;
-                            }
-                            url = url.replace(toReplace, toSet);
-                        }
-                    }
-                }
-            }
-
-            if (URLdateOfCreationGte === null && dateOfCreationGte_value !== "") {
-                url += `&dateOfCreation_Gte=${dateOfCreationGte_value}`;
-            }
-            else {
-                // different
-                if (URLdateOfCreationGte !== dateOfCreationGte_value) {
-                    // remove
-                    if (dateOfCreationGte_value === "") {
-                        let toReplace = `dateOfCreation_Gte=${URLdateOfCreationGte}`;
-                        if (url.includes("&dateOfCreation_Gte")) {
-                            toReplace = "&" + toReplace;
-                        }
-                        url = url.replace(toReplace, "")
-                    }
-                    // update
-                    else {
-                        let toReplace = `dateOfCreation_Gte=${URLdateOfCreationGte}`;
-                        let toSet = `dateOfCreation_Gte=${dateOfCreationGte_value}`;
-                        if (url.includes("&dateOfCreation_Gte")) {
-                            toReplace = "&" + toReplace;
-                            toSet = "&" + toSet;
-                        }
-                        url = url.replace(toReplace, toSet);
-                    }
-                }
-            }
-
-            if (URLdateOfCreationLte === null && dateOfCreationLte_value !== "") {
-                url += `&dateOfCreation_Lte=${dateOfCreationLte_value}`;
-            }
-            else {
-                // different
-                if (URLdateOfCreationLte !== dateOfCreationLte_value) {
-                    // remove
-                    if (dateOfCreationLte_value === "") {
-                        let toReplace = `dateOfCreation_Lte=${URLdateOfCreationLte}`;
-                        if (url.includes("&dateOfCreation_Lte")) {
-                            toReplace = "&" + toReplace;
-                        }
-                        url = url.replace(toReplace, "")
-                    }
-                    // update
-                    else {
-                        let toReplace = `dateOfCreation_Lte=${URLdateOfCreationLte}`;
-                        let toSet = `dateOfCreation_Lte=${dateOfCreationLte_value}`;
-                        if (url.includes("&dateOfCreation_Lte")) {
-                            toReplace = "&" + toReplace;
-                            toSet = "&" + toSet;
-                        }
-                        url = url.replace(toReplace, toSet);
-                    }
-                }
-            }
-        }
-
-        const pgNum = searchParams.get("pageNumber");
-        if (pgNum !== null) {
-            url = url.replace(`pageNumber=${pgNum}`, "pageNumber=1");
-            // add offset
-            // add first
-        }
-        console.log(url);
         setSearchParams(url);
     }
 
@@ -323,36 +183,27 @@ export const Pastes = () => {
         filterInput.dateOfCreationLte = "";
 
         let url = searchParams.toString();
-        if (URLauthor !== null) {
-            let toReplace = `author=${URLauthor}`;
-            if (url.includes("&author")) toReplace = "&" + toReplace;
-            url = url.replace(toReplace, "");
-        }
-        if (URLlanguage !== null) {
-            let toReplace = `language=${encodeURIComponent(URLlanguage)}`;
-            if (url.includes("&language")) toReplace = "&" + toReplace;
-            url = url.replace(toReplace, "");
-        }
-        if (URLdateOfCreationGte !== null) {
-            let toReplace = `dateOfCreation_Gte=${URLdateOfCreationGte}`;
-            if (url.includes("&dateOfCreation_Gte")) toReplace = "&" + toReplace;
-            url = url.replace(toReplace, "");
-        }
-        if (URLdateOfCreationLte !== null) {
-            let toReplace = `dateOfCreation_Lte=${URLdateOfCreationLte}`;
-            if (url.includes("&dateOfCreation_Lte")) toReplace = "&" + toReplace;
-            url = url.replace(toReplace, "");
-        }
+        url = clearURL(url, "title", URLtitleStartswith);
+        url = clearURL(url, "author", URLauthor);
+        url = clearURL(url, "language", URLlanguage);
+        url = clearURL(url, "dateOfCreation_Gte", URLdateOfCreationGte);
+        url = clearURL(url, "dateOfCreation_Lte", URLdateOfCreationLte);
         setSearchParams(url);
     }
 
     const languages = useLazyLoadQuery<allLanguagesQuery>( Languages, {} ).allLanguages;
+      const languages_options = languages?.map(
+      language => {
+        return {value: language, label: language}
+      }
+  );
 
     const [filterInput, setFilterInput] = useState({
         author: author,
         language: language,
         dateOfCreationGte: dateOfCreation_Gte,
-        dateOfCreationLte: dateOfCreation_Lte
+        dateOfCreationLte: dateOfCreation_Lte,
+        titleIStartsWith: title_Istartswith,
     });
 
     const handleChangeFilterInput = (event: any) => {
@@ -393,6 +244,12 @@ export const Pastes = () => {
                                         Language
                                         <FontAwesomeIcon style={{marginLeft: "1vh"}} icon={solid("code")} />
                                     </Form.Label>
+                                    {/*<Select*/}
+                                    {/*  ref={language_ref}*/}
+                                    {/*  defaultValue={languages_options![0]}*/}
+                                    {/*  isClearable={true}*/}
+                                    {/*  options={languages_options}*/}
+                                    {/*/>*/}
                                     <Form.Select
                                         ref={language_ref}
                                         name="language"
@@ -477,11 +334,11 @@ export const Pastes = () => {
                         </Dropdown.Item>
                     </DropdownButton>
                     <>
-                        {mode == "top" &&
+                        {mode === "top" &&
                             <DropdownButton
                                 className="d-inline mx-2"
                                 id="dropdown-basic-button"
-                                title={time == "" ? "all" : time}
+                                title={time === "" ? "all" : time}
                                 onSelect={(event) => {
                                     handleTimeSelect(event);
                                     navigateTime();
@@ -501,8 +358,19 @@ export const Pastes = () => {
                 </div>
                 <div className="input-group m-auto justify-content-center" style={{width: "33vh"}}>
                     <ButtonGroup>
-                        <input type="text" style={{width: "20vh"}}/>
-                        <Button variant="primary">
+                        <input
+                            ref={titleIStartsWith_ref}
+                            name="titleIStartsWith"
+                            type="text"
+                            value={filterInput.titleIStartsWith === null ? "" : filterInput.titleIStartsWith}
+                            onChange={event => {
+                                setFilterInput({...filterInput, titleIStartsWith: event.target.value});
+                                // titleIStartsWith_ref.current?.value = event.target.value;
+                            }}
+                            style={{width: "20vh"}}/>
+                        <Button variant="primary"
+                            onClick={handleFilters}
+                        >
                             <FontAwesomeIcon icon={solid("magnifying-glass")} />
                         </Button>
                         <Button style={{marginLeft: "1vh"}} onClick={() => setOpenFilters(!openFilters)} aria-expanded={openFilters}>
@@ -521,7 +389,7 @@ export const Pastes = () => {
             <div className="d-flex justify-content-between">
                 <div>
                     Rows on one page:
-                    <select className={"form-select"} style={{width: "7vh"}}
+                    <select className={"form-select"} style={{width: "10vh"}}
                         onChange={(e) => {handleFirst(e)}}>
                     <option value="1">1</option>
                     <option value="2">2</option>

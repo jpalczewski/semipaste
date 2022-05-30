@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0a8a4e15191efe8399ae5eb0ca135ba3>>
+ * @generated SignedSource<<03dcd4cdaed0215b428f36f540713f57>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -170,6 +170,11 @@ v12 = [
         "kind": "Variable",
         "name": "title_Istartswith",
         "variableName": "title_Istartswith"
+      },
+      {
+        "kind": "Literal",
+        "name": "visible",
+        "value": true
       }
     ],
     "concreteType": "ActivePasteBinConnection",
@@ -328,16 +333,16 @@ return {
     "selections": (v12/*: any*/)
   },
   "params": {
-    "cacheID": "b09a9220ce453bf4b4048837e388653e",
+    "cacheID": "0790d0000a6ac32fb2364e011ad796bd",
     "id": null,
     "metadata": {},
     "name": "activePasteBinQuery",
     "operationKind": "query",
-    "text": "query activePasteBinQuery(\n  $mode: String\n  $time: String\n  $first: Int\n  $offset: Int\n  $title_Icontains: String\n  $title_Istartswith: String\n  $title_Iendswith: String\n  $dateOfCreation_Gte: Date\n  $dateOfCreation_Lte: Date\n  $language: String\n  $author__Username: String\n) {\n  activePasteBin(mode: $mode, time: $time, first: $first, offset: $offset, title_Icontains: $title_Icontains, title_Istartswith: $title_Istartswith, title_Iendswith: $title_Iendswith, dateOfCreation_Gte: $dateOfCreation_Gte, dateOfCreation_Lte: $dateOfCreation_Lte, language: $language, author_Username: $author__Username) {\n    totalCount\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        dateOfExpiry\n        language\n        totalRating\n        likes\n        dislikes\n        author {\n          id\n          username\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query activePasteBinQuery(\n  $mode: String\n  $time: String\n  $first: Int\n  $offset: Int\n  $title_Icontains: String\n  $title_Istartswith: String\n  $title_Iendswith: String\n  $dateOfCreation_Gte: Date\n  $dateOfCreation_Lte: Date\n  $language: String\n  $author__Username: String\n) {\n  activePasteBin(visible: true, mode: $mode, time: $time, first: $first, offset: $offset, title_Icontains: $title_Icontains, title_Istartswith: $title_Istartswith, title_Iendswith: $title_Iendswith, dateOfCreation_Gte: $dateOfCreation_Gte, dateOfCreation_Lte: $dateOfCreation_Lte, language: $language, author_Username: $author__Username) {\n    totalCount\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        dateOfExpiry\n        language\n        totalRating\n        likes\n        dislikes\n        author {\n          id\n          username\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "204a1bb9ca64961295cdf8361f534c5a";
+(node as any).hash = "998e651dbe5f3a15ad13189ab5f8aaa1";
 
 export default node;
