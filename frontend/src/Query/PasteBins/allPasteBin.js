@@ -12,11 +12,14 @@ export const allPasteBin = graphql`
           visible
           dateOfExpiry
           language
+          totalRating
+          likes
+          dislikes
           author {
             username
           }
         }
+        }
       }
     }
-  }
 `;

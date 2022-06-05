@@ -31,6 +31,7 @@ class PasteBinNode(DjangoObjectType):
         filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
+from .nodes import PasteBinNode
 
 
 class AttachmentNode(DjangoObjectType):

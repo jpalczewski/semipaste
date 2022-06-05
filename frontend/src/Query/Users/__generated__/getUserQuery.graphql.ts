@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e33636196fdd9c284408b529882f9c03>>
+ * @generated SignedSource<<2e6d0d9817d3e88ff866488336ab34b8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,11 +16,15 @@ export type getUserQuery$data = {
   readonly allUsers: {
     readonly edges: ReadonlyArray<{
       readonly node: {
-        readonly id: string;
         readonly username: string;
         readonly firstName: string;
         readonly lastName: string;
+        readonly id: string;
+        readonly email: string;
         readonly dateJoined: any;
+        readonly isVerified: boolean;
+        readonly isStaff: boolean;
+        readonly isSuperuser: boolean;
       } | null;
     } | null>;
   } | null;
@@ -73,13 +77,6 @@ v1 = [
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
                 "name": "username",
                 "storageKey": null
               },
@@ -101,7 +98,42 @@ v1 = [
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "email",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
                 "name": "dateJoined",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isVerified",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isStaff",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isSuperuser",
                 "storageKey": null
               }
             ],
@@ -132,16 +164,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "beabf2b7173f3d3e0d73348352479654",
+    "cacheID": "c7f280abdca904082fc4126e00992212",
     "id": null,
     "metadata": {},
     "name": "getUserQuery",
     "operationKind": "query",
-    "text": "query getUserQuery(\n  $id: ID!\n) {\n  allUsers(id: $id) {\n    edges {\n      node {\n        id\n        username\n        firstName\n        lastName\n        dateJoined\n      }\n    }\n  }\n}\n"
+    "text": "query getUserQuery(\n  $id: ID!\n) {\n  allUsers(id: $id) {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        isVerified\n        isStaff\n        isSuperuser\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "3b8641a754a826e9d9fbe14552259261";
+(node as any).hash = "bd3ce248bb4ebc4fabd65684b35fbea2";
 
 export default node;

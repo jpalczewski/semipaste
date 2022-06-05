@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fa7f0bb4a0801d3a15e9d86b7ac8220d>>
+ * @generated SignedSource<<01458b308c618b1c8b6245bbbbde7895>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,9 @@ export type allUsersQuery$data = {
         readonly id: string;
         readonly email: string;
         readonly dateJoined: any;
+        readonly isVerified: boolean;
+        readonly isStaff: boolean;
+        readonly isSuperuser: boolean;
       } | null;
     } | null>;
   } | null;
@@ -96,6 +99,27 @@ var v0 = [
                 "kind": "ScalarField",
                 "name": "dateJoined",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isVerified",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isStaff",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isSuperuser",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -125,16 +149,16 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "b292245b4c9a14b3c099a0338454a707",
+    "cacheID": "705bdde444efcae12c2e4e24ba037958",
     "id": null,
     "metadata": {},
     "name": "allUsersQuery",
     "operationKind": "query",
-    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n      }\n    }\n  }\n}\n"
+    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        isVerified\n        isStaff\n        isSuperuser\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "91c8e27e175500b80b08336ebb2f5eb2";
+(node as any).hash = "32ddeae5e52859a8402b82d84b989662";
 
 export default node;

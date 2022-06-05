@@ -20,7 +20,7 @@ class EditUser(ResultMixin, graphene.relay.ClientIDMutation):
         password = graphene.String()
 
     @staticmethod
-    def mutate_and_get_payload(root, info, id: graphene.ID, **relay):  # type: ignore
+    def mutate_and_get_payload(root, info, id: graphene.ID, **kwargs):  # type: ignore
         # type: ignore
         try:
             user = User.objects.get(pk=id)
@@ -30,10 +30,9 @@ class EditUser(ResultMixin, graphene.relay.ClientIDMutation):
                 error_code=ErrorCode.USER_NOT_FOUND,
                 error="User with specified ID not found",
             )
-        for attr in relay.keys():
-
-            value = relay.get(attr, getattr(user, attr))
-            if value != '':
+        for attr in kwargs.keys():
+            value = kwargs.get(attr, getattr(user, attr))
+            if value is not None:
                 if attr == 'description':
                     setattr(user, attr, strip_tags(escape(value)))
                 elif attr == 'password':
@@ -41,4 +40,4 @@ class EditUser(ResultMixin, graphene.relay.ClientIDMutation):
                 else:
                     setattr(user, attr, value)
         user.save()
-        return EditUser(ok=True, user=info.context.user)
+        return EditUser(ok=True, error="None")

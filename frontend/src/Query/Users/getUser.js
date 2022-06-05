@@ -5,11 +5,15 @@ export const getUser = graphql`
     allUsers(id: $id) {
       edges {
         node {
-          id
           username
           firstName
           lastName
+          id
+          email
           dateJoined
+          isVerified
+          isStaff
+          isSuperuser
         }
       }
     }

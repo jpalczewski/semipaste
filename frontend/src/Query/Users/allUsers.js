@@ -11,6 +11,9 @@ export const allUsers = graphql`
           id
           email
           dateJoined
+          isVerified
+          isStaff
+          isSuperuser
         }
       }
     }

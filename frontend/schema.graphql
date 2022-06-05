@@ -17,6 +17,7 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): PasteBinNode
+  allPasteTags(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, tagName: String = null, tagName_Icontains: String = null, tagName_Istartswith: String = null, tagName_Iexact: String = null, tagName_Contains: String = null, tagName_Endswith: String = null, tagName_Iendswith: String = null): PasteTagNodeConnection
   user: UserNode
   allUsers(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, username: String = null, username_Icontains: String = null, username_Istartswith: String = null, username_Iexact: String = null, username_Contains: String = null, username_Endswith: String = null, username_Iendswith: String = null, description: String = null, description_Icontains: String = null, description_Istartswith: String = null, description_Iexact: String = null, description_Contains: String = null, description_Endswith: String = null, description_Iendswith: String = null, isSuperuser: Boolean = null, firstName: String = null, firstName_Icontains: String = null, firstName_Istartswith: String = null, firstName_Iexact: String = null, firstName_Contains: String = null, firstName_Endswith: String = null, firstName_Iendswith: String = null, lastName: String = null, lastName_Icontains: String = null, lastName_Istartswith: String = null, lastName_Iexact: String = null, lastName_Contains: String = null, lastName_Endswith: String = null, lastName_Iendswith: String = null): UserNodeConnection
   node(
@@ -290,6 +291,30 @@ type ActivePasteBin implements Node {
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
   attachmentToken: String!
   totalRating: Int
+  tags: [PasteTagNode]
+}
+
+type PasteTagNode implements Node {
+  id: ID!
+  tagName: String!
+  posts: [PasteBinNode]
+}
+
+type PasteTagNodeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [PasteTagNodeEdge]!
+}
+
+"""A Relay edge containing a `PasteTagNode` and its cursor."""
+type PasteTagNodeEdge {
+  """The item at the end of the edge"""
+  node: PasteTagNode
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type UserNodeConnection {
@@ -390,6 +415,16 @@ type Mutation {
 
   """Delete an attachment"""
   deleteAttachment(input: DeleteAttachmentInput!): DeleteAttachmentPayload
+
+  """manually add a new tag"""
+  addTag(
+    """Gets the tag name"""
+    tagName: String = null
+  ): AddTag
+
+  """manually delete a tag"""
+  deleteTag(tagName: String = null): DeleteTag
+  editPaste(exposure: Boolean = null, id: ID!, tags: [String] = null, text: String = null, title: String = null): EditPasteBin
   ratePasteBin(input: RatingPasteBinInput!): RatingPasteBinPayload
   ratePasteBinId(input: RatingPasteBinIDInput!): RatingPasteBinIDPayload
   isPasteBinRated(input: IsPasteBinRatedInput!): IsPasteBinRatedPayload
@@ -405,7 +440,7 @@ type Mutation {
   tokenAuth(input: ObtainJSONWebTokenInput!): ObtainJSONWebTokenPayload
   verifyToken(input: VerifyInput!): VerifyPayload
   refreshToken(input: RefreshInput!): RefreshPayload
-  deleteTokenCookie(input: DeleteJSONWebTokenCookieInput!): DeleteJSONWebTokenCookiePayload
+  deleteTokenCookie: DeleteJSONWebTokenCookie
 }
 
 type ReportUserPayload {
@@ -502,6 +537,7 @@ input AddPasteBinInput {
 
   """Syntax Highlight"""
   language: String
+  tags: [String]
   clientMutationId: String
 }
 
@@ -584,6 +620,33 @@ type DeleteAttachmentPayload {
 input DeleteAttachmentInput {
   id: ID
   clientMutationId: String
+}
+
+type AddTag {
+  ok: Boolean
+  response: String
+}
+
+type DeleteTag {
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
+  response: String
+}
+
+type EditPasteBin {
+  """Mutation result"""
+  ok: Boolean
+
+  """Error string"""
+  error: String
+
+  """Numeric error code"""
+  errorCode: ErrorCode
 }
 
 type RatingPasteBinPayload {
@@ -793,11 +856,6 @@ input RefreshInput {
   clientMutationId: String
 }
 
-type DeleteJSONWebTokenCookiePayload {
+type DeleteJSONWebTokenCookie {
   deleted: Boolean!
-  clientMutationId: String
-}
-
-input DeleteJSONWebTokenCookieInput {
-  clientMutationId: String
 }
