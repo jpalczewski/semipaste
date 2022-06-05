@@ -13,7 +13,7 @@ from pastes.models import MTMTags, PasteBin, PasteTag
 # Local
 from .nodes import PasteTagNode
 from ..models import PasteBin
-from .nodes import TotalRatingNode
+from .nodes import TotalRatingNode, TotalCount
 
 
 class ActivePasteBin(DjangoObjectType, TotalRatingNode):
@@ -24,6 +24,7 @@ class ActivePasteBin(DjangoObjectType, TotalRatingNode):
         model = PasteBin
         filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
+        connection_class = TotalCount
 
     def resolve_tags(self, info):  # type: ignore
         tag_ids = MTMTags.objects.filter(paste_id=self.id)

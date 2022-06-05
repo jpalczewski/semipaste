@@ -29,12 +29,15 @@ const Navigation = () => {
             <NavLink to="" activeStyle>
               Utwórz
             </NavLink>
-            <NavLink to="/current" activeStyle>
-              Aktualne
+            <NavLink to="/pastes" activeStyle>
+              Pastes
             </NavLink>
-            <NavLink to="/popular" activeStyle>
-              Popularne
-            </NavLink>
+            {/*<NavLink to="/current" activeStyle>*/}
+            {/*  Aktualne*/}
+            {/*</NavLink>*/}
+            {/*<NavLink to="/popular" activeStyle>*/}
+            {/*  Popularne*/}
+            {/*</NavLink>*/}
             <NavLink to="/about" activeStyle>
               O Pastebin.pl
             </NavLink>

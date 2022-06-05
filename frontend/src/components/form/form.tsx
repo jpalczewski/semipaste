@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { FormWrapper } from "../../styles/Components.style";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import {Form, Button, Row, Col, Alert} from "react-bootstrap";
 import RelayEnvironment from "../../RelayEnvironment";
 import { commitMutation, useLazyLoadQuery } from "react-relay";
 import { addPasteBin } from "../../Query/PasteBins/addPasteBin";
 import { addPasteBinMutation } from "../../Query/PasteBins/__generated__/addPasteBinMutation.graphql";
-import CodeMirror from 'react-codemirror';
 import { allLanguagesQuery } from "../../Query/SyntaxHighlight/__generated__/allLanguagesQuery.graphql";
 import { Languages } from "../../Query/SyntaxHighlight/allLanguages";
 import { highlightPreview } from "../../Query/SyntaxHighlight/highlightPreview";
 import { highlightPreviewMutation } from "../../Query/SyntaxHighlight/__generated__/highlightPreviewMutation.graphql";
 import '../../styles/PasteHighlight.css'
+import Select from "react-select";
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/theme-dawn";
 
-require("codemirror/lib/codemirror.css");
-
-export const PasteBinForm = () => {
+export const PasteBinForm = (props: any) => {
   const [preview, setPreview] = useState(true);
   const [syntax, setSyntax] = useState<string>("");
   const [inputs, setInputs] = useState({
@@ -45,23 +45,44 @@ export const PasteBinForm = () => {
   };
 
   const handleLanguage = (event: string) => {
-    setInputs({
+    if (event == null || event == undefined) {
+      setInputs({
+      ...inputs,
+      language: "Plain Text",
+    });
+    }
+    else {
+      setInputs({
       ...inputs,
       language: event,
     });
+    }
   };
 
   const handleSubmit = (event: any) => {
-    console.log(event);
+    if (inputs.title === "") {
+      props.setResult("The title of your paste is empty!");
+      return;
+    }
+    if (inputs.text === "") {
+      props.setResult("The text of your paste is empty!");
+      return;
+    }
+
     commitMutation<addPasteBinMutation>(RelayEnvironment, {
       mutation: addPasteBin,
       variables: event,
       onCompleted: (response) => {
-        console.log("ok", response);
-        window.location.reload();
+        if (response.addPasteBin?.ok) {
+          props.setResult("Saved!");
+          window.location.reload();
+        }
+        else {
+          props.setResult("An error occurred!");
+        }
       },
       onError: (error) => {
-        console.error(error);
+        props.setResult("An error occurred!");
       },
     });
   };
@@ -86,7 +107,21 @@ export const PasteBinForm = () => {
     }
   };
 
+  const handleClear = () => {
+    setInputs({
+      text: "",
+      title: "",
+      language: "Plain Text",
+      visible: false,
+    });
+  };
+
   const languages = useLazyLoadQuery<allLanguagesQuery>( Languages, {} ).allLanguages;
+  const languages_options = languages?.map(
+      language => {
+        return {value: language, label: language}
+      }
+  );
 
   return (
     <FormWrapper>
@@ -96,20 +131,29 @@ export const PasteBinForm = () => {
             <Form.Group>
               <Form.Control
                 type="text"
+                value={inputs.title}
                 placeholder="Tytuł"
                 onChange={(event) => handleChange(event.target.value)}
               />
             </Form.Group>
           </Col>
           <Col style={{ textAlign: "right", flex: "25%" }}>
-            <Form.Select aria-label="Default select example" onChange={(event) => handleLanguage(event.target.value)}>
-              {languages?.map((language, i) => {
-                      return <option key={i} value={ language! }>{ language }</option>
-              })}
-            </Form.Select>
+            <Select
+                onChange={(event) => handleLanguage(event?.value!)}
+                defaultValue={languages_options![0]}
+                isClearable={true}
+                options={languages_options}
+            />
+            {/*<Form.Select aria-label="Default select example" onChange={(event) => handleLanguage(event.target.value)}>*/}
+            {/*  {languages?.map((language, i) => {*/}
+            {/*          return <option key={i} value={ language! }>{ language }</option>*/}
+            {/*  })}*/}
+            {/*</Form.Select>*/}
           </Col>
           <Col style={{ textAlign: "right", flex: "15%" }}>
-            <Button variant="primary">WYCZYŚĆ</Button>
+            <Button variant="primary" onClick={handleClear}>
+              CLEAR
+            </Button>
           </Col>
           <Col
             style={{
@@ -126,16 +170,19 @@ export const PasteBinForm = () => {
             }}
           >
             <Button variant="success" onClick={() => handleSubmit(inputs)}>
-              ZAPISZ
+              SAVE
             </Button>
           </Col>
         </Row>
         <Form.Group style={{ marginBottom: 10 }}>
-          <CodeMirror
+          <AceEditor
             name="text"
+            theme="dawn"
+            fontSize={30}
+            value={inputs.text}
+            width={"100%"}
             onChange={handleText}
-            options={{ lineNumbers: true }}
-          />
+            />
         </Form.Group>
 
         <Row className="mb-3">
@@ -151,6 +198,7 @@ export const PasteBinForm = () => {
             <Form.Group>
               <Form.Check
                 type="checkbox"
+                checked={inputs.visible}
                 label="Widoczność"
                 onChange={(event) => handleSwitch(event.target.checked)}
               />

@@ -26,7 +26,7 @@ class IsPasteBinRated(graphene.relay.ClientIDMutation, ResultMixin):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):  # type: ignore
         user = info.context.user
-        paste = input.get('paste')
+        paste = int(input.get('paste'))
         rate = Rating.objects.filter(paste=paste, user=user)
         if rate:
             likes = rate[0].paste.likes
@@ -51,7 +51,7 @@ class IsPasteBinRated(graphene.relay.ClientIDMutation, ResultMixin):
             return IsPasteBinRated(
                 ok=True,
                 is_rated=False,
-                rate=False,
+                rate=None,
                 likes=likes,
                 dislikes=dislikes,
                 total_rating=likes - dislikes,

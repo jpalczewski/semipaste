@@ -10,9 +10,9 @@ type Query {
   ): PasteReportType
   pasteReports(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): PasteReportTypeConnection
   allLanguages: [String]
-  allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: DateTime = null, dateOfCreation_Gte: DateTime = null, dateOfCreation_Lte: DateTime = null, dateOfCreation_Range: [DateTime] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: DateTime = null, dateOfExpiry_Gte: DateTime = null, dateOfExpiry_Lte: DateTime = null, dateOfExpiry_Range: [DateTime] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): PasteBinNodeConnection @deprecated(reason: "It will be soon available only for superusers")
-  activePasteBin(mode: String = null, time: String = null, offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: DateTime = null, dateOfCreation_Gte: DateTime = null, dateOfCreation_Lte: DateTime = null, dateOfCreation_Range: [DateTime] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: DateTime = null, dateOfExpiry_Gte: DateTime = null, dateOfExpiry_Lte: DateTime = null, dateOfExpiry_Range: [DateTime] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): ActivePasteBinConnection
-  expiredPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection
+  allPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: Date = null, dateOfCreation_Gte: Date = null, dateOfCreation_Lte: Date = null, dateOfCreation_Range: [Date] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: Date = null, dateOfExpiry_Gte: Date = null, dateOfExpiry_Lte: Date = null, dateOfExpiry_Range: [Date] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): PasteBinNodeConnection @deprecated(reason: "It will be soon available only for superusers")
+  activePasteBin(mode: String = null, time: String = null, offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null, title: String = null, title_Icontains: String = null, title_Istartswith: String = null, title_Iexact: String = null, title_Contains: String = null, title_Endswith: String = null, title_Iendswith: String = null, text: String = null, text_Icontains: String = null, text_Istartswith: String = null, text_Iexact: String = null, text_Contains: String = null, text_Endswith: String = null, text_Iendswith: String = null, dateOfCreation: Date = null, dateOfCreation_Gte: Date = null, dateOfCreation_Lte: Date = null, dateOfCreation_Range: [Date] = null, visible: Boolean = null, expireAfter: PastesPasteBinExpireAfterChoices = null, dateOfExpiry: Date = null, dateOfExpiry_Gte: Date = null, dateOfExpiry_Lte: Date = null, dateOfExpiry_Range: [Date] = null, author: ID = null, language: String = null, author_Username: String = null, author_Username_Icontains: String = null, author_Username_Istartswith: String = null, author_Username_Iexact: String = null, author_Username_Contains: String = null, author_Username_Endswith: String = null, author_Username_Iendswith: String = null): ActivePasteBinConnection
+  expiredPasteBin(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: Date = null): ExpiredPasteBinConnection
   pasteBin(
     """The ID of the object"""
     id: ID!
@@ -67,7 +67,7 @@ type UserNode implements Node {
   description: String!
   isVerified: Boolean!
   reportSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, id: ID = null): UserReportTypeConnection!
-  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: DateTime = null): ExpiredPasteBinConnection!
+  pastebinSet(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null, title: String = null, id: ID = null, dateOfExpiry: Date = null): ExpiredPasteBinConnection!
 }
 
 """
@@ -132,10 +132,10 @@ type ExpiredPasteBin implements Node {
   id: ID!
   title: String!
   text: String!
-  dateOfCreation: DateTime!
+  dateOfCreation: Date!
   visible: Boolean!
   expireAfter: PastesPasteBinExpireAfterChoices!
-  dateOfExpiry: DateTime
+  dateOfExpiry: Date
   author: UserNode
   language: String!
   likes: Int!
@@ -143,6 +143,13 @@ type ExpiredPasteBin implements Node {
   attachments(offset: Int = null, before: String = null, after: String = null, first: Int = null, last: Int = null): AttachmentNodeConnection!
   attachmentToken: String!
 }
+
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
 
 """An enumeration."""
 enum PastesPasteBinExpireAfterChoices {
@@ -204,10 +211,10 @@ type PasteBinNode implements Node {
   id: ID!
   title: String!
   text: String!
-  dateOfCreation: DateTime!
+  dateOfCreation: Date!
   visible: Boolean!
   expireAfter: PastesPasteBinExpireAfterChoices!
-  dateOfExpiry: DateTime
+  dateOfExpiry: Date
   author: UserNode
   language: String!
   likes: Int!
@@ -256,6 +263,7 @@ type ActivePasteBinConnection {
 
   """Contains the nodes in this connection."""
   edges: [ActivePasteBinEdge]!
+  totalCount: Int
 }
 
 """A Relay edge containing a `ActivePasteBin` and its cursor."""
@@ -271,10 +279,10 @@ type ActivePasteBin implements Node {
   id: ID!
   title: String!
   text: String!
-  dateOfCreation: DateTime!
+  dateOfCreation: Date!
   visible: Boolean!
   expireAfter: PastesPasteBinExpireAfterChoices!
-  dateOfExpiry: DateTime
+  dateOfExpiry: Date
   author: UserNode
   language: String!
   likes: Int!

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  background-color: whitesmoke;
+  background-color: #eceeef;
   font-size: 20px;
   text-align: center;
   height: 150vh !important;

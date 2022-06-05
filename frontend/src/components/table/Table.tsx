@@ -1,13 +1,14 @@
+import "bootstrap/dist/css/bootstrap.css";
+import '../../styles/PasteHighlight.css'
+import {Row} from "./Row";
+
 import React, {useState} from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import {Button, Table} from "react-bootstrap";
 import { useLazyLoadQuery } from "react-relay";
-import { PasteBinScreen } from "../PasteBin/PasteBinScreen";
 import '../../styles/PasteHighlight.css'
 import {activePasteBin} from "../../Query/PasteBins/activePasteBin";
 import {activePasteBinQuery} from "../../Query/PasteBins/__generated__/activePasteBinQuery.graphql";
-import {Row} from "./Row";
-
 
 export const Tables = (props: any) => {
   const data = useLazyLoadQuery<activePasteBinQuery>(activePasteBin, {
@@ -16,26 +17,25 @@ export const Tables = (props: any) => {
   });
 
     return (
-    <Table striped bordered hover>
+    <Table className="my-3" striped bordered hover responsive>
       <thead>
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Tytuł</th>
-          <th scope="col">Autor</th>
-          <th scope="col">Dodano</th>
-          <th scope="col">Data wygaśnięcia</th>
-          <th scope="col">Ocena</th>
-          <th scope="col">Oceń</th>
-          <th scope="col">Akcje</th>
+          <th scope="col">Title</th>
+          <th scope="col">Author</th>
+          <th scope="col">Created</th>
+          <th scope="col">Expires</th>
+          <th scope="col">Rating</th>
+          <th scope="col">Rate</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
-        {data.activePasteBin?.edges == null ?  (
+        {props.pastes.activePasteBin?.edges == null ?  (
           <p>krzew</p>
         ) : (
-          data.activePasteBin.edges.map((element: any, i) => (
+          props.pastes.activePasteBin?.edges.map((element: any, i: number) => (
             <Row
-            object={data.activePasteBin?.edges[i]?.node}
+            object={props.pastes.activePasteBin?.edges[i]?.node}
             />
           ))
         )}
