@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0385c5bcada9482c18f2986810b38ef8>>
+ * @generated SignedSource<<106b3422b1a404114376cb978ba569bc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,17 +9,18 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type deleteUserMutation$variables = {
-  input: string;
+export type passwordRecoveryMutation$variables = {
+  email: string;
 };
-export type deleteUserMutation$data = {
-  readonly deleteUser: {
+export type passwordRecoveryMutation$data = {
+  readonly sendNewPasswordToken: {
     readonly ok: boolean | null;
+    readonly response: string | null;
   } | null;
 };
-export type deleteUserMutation = {
-  variables: deleteUserMutation$variables;
-  response: deleteUserMutation$data;
+export type passwordRecoveryMutation = {
+  variables: passwordRecoveryMutation$variables;
+  response: passwordRecoveryMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
@@ -27,7 +28,7 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "input"
+    "name": "email"
   }
 ],
 v1 = [
@@ -38,17 +39,17 @@ v1 = [
         "fields": [
           {
             "kind": "Variable",
-            "name": "id",
-            "variableName": "input"
+            "name": "email",
+            "variableName": "email"
           }
         ],
         "kind": "ObjectValue",
         "name": "input"
       }
     ],
-    "concreteType": "DeleteUserPayload",
+    "concreteType": "SendNewPasswordTokenPayload",
     "kind": "LinkedField",
-    "name": "deleteUser",
+    "name": "sendNewPasswordToken",
     "plural": false,
     "selections": [
       {
@@ -56,6 +57,13 @@ v1 = [
         "args": null,
         "kind": "ScalarField",
         "name": "ok",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "response",
         "storageKey": null
       }
     ],
@@ -67,7 +75,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "deleteUserMutation",
+    "name": "passwordRecoveryMutation",
     "selections": (v1/*: any*/),
     "type": "Mutation",
     "abstractKey": null
@@ -76,20 +84,20 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "deleteUserMutation",
+    "name": "passwordRecoveryMutation",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "f01b617befa08b39cbb820ae052255ed",
+    "cacheID": "6f396dfa138e3cf745d51916a6f7ad44",
     "id": null,
     "metadata": {},
-    "name": "deleteUserMutation",
+    "name": "passwordRecoveryMutation",
     "operationKind": "mutation",
-    "text": "mutation deleteUserMutation(\n  $input: ID!\n) {\n  deleteUser(input: {id: $input}) {\n    ok\n  }\n}\n"
+    "text": "mutation passwordRecoveryMutation(\n  $email: String!\n) {\n  sendNewPasswordToken(input: {email: $email}) {\n    ok\n    response\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "bf8f7b0889e059b73cb1f04cd74edeea";
+(node as any).hash = "96bcc2cac14a33630f4c032ba5aa73ba";
 
 export default node;

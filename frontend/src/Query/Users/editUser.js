@@ -11,13 +11,15 @@ export const editUser = graphql`
     $description: String = ""
   ) {
     editUser(
-      id: $id
-      username: $username
-      lastName: $lastName
-      firstName: $firstName
-      email: $email
-      password: $password
-      description: $description
+      input: {
+        id: $id
+        username: $username
+        lastName: $lastName
+        firstName: $firstName
+        email: $email
+        password: $password
+        description: $description
+      }
     ) {
       ok
     }

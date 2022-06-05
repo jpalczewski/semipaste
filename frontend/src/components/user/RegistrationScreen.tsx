@@ -1,8 +1,12 @@
-import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import React, {useEffect, useState} from "react";
+import {Form, Button, Alert} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { validPassword } from "../../Regex/Regex";
 import "../../styles/LoginScreen.css";
+import {commitMutation} from "react-relay";
+import {addUserMutation} from "../../Query/Users/__generated__/addUserMutation.graphql";
+import relayEnvironment from "../../RelayEnvironment";
+import {addUser} from "../../Query/Users/addUser";
 
 const validate = (form: any) => {
   if (!form.username) return "login jest wymagany";
@@ -14,15 +18,25 @@ const validate = (form: any) => {
 };
 
 export const RegistrationScreen = () => {
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
     firstName: "",
     lastName: "",
   });
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+
+  useEffect(() => {
+        const timer = setTimeout(() => {
+            setError(false);
+        }, 1500);
+        return () => clearTimeout(timer);
+    }, [error]);
 
   const handleChange = (event: any) => {
     const { name, value } = event.currentTarget;
@@ -32,15 +46,39 @@ export const RegistrationScreen = () => {
     event.preventDefault();
     const errorMsg = validate(inputs);
     if (errorMsg) {
-      setError(errorMsg);
+      setError(true);
+      setErrorMessage(errorMsg);
       return;
     }
-    navigate("/user");
+
+    commitMutation<addUserMutation>(relayEnvironment, {
+      mutation: addUser,
+      variables: inputs,
+      onCompleted: response => {
+        if (response.addUser?.ok!) {
+          navigate('/verify', {state: {id: response.addUser?.id, type: "registration"}})
+        }
+        setError(true);
+        setErrorMessage(response.addUser?.response!);
+      },
+      onError: error => {
+         setError(true);
+         setErrorMessage(error.message);
+      }
+    });
   };
 
   return (
+      <>
+        {error &&
+            <Alert variant="primary" style={{width: "50vh", margin: "auto"}}>
+              <Alert.Heading>
+                {errorMessage}
+              </Alert.Heading>
+            </Alert>
+        }
     <div className="Contener">
-      <p>REJESTRACJA</p>
+      <p>REGISTRATION</p>
       <Form>
         {error && <Form.Text className="text-danger">{error}</Form.Text>}
         <Form.Group className="mb-3">
@@ -52,9 +90,6 @@ export const RegistrationScreen = () => {
             value={inputs.email || ""}
             onChange={handleChange}
           />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -66,10 +101,10 @@ export const RegistrationScreen = () => {
             value={inputs.username || ""}
             onChange={handleChange}
           />
-          <Form.Text className="text-muted">Minimum dwa znaki</Form.Text>
+          {/*<Form.Text className="text-muted">Minimum dwa znaki</Form.Text>*/}
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Imie</Form.Label>
+          <Form.Label>First Name</Form.Label>
           <Form.Control
             type="text"
             name="firstName"
@@ -79,7 +114,7 @@ export const RegistrationScreen = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Nazwisko</Form.Label>
+          <Form.Label>Last Name</Form.Label>
           <Form.Control
             type="text"
             name="lastName"
@@ -88,7 +123,6 @@ export const RegistrationScreen = () => {
             onChange={handleChange}
           />
         </Form.Group>
-
         <Form.Group className="mb-3">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -99,10 +133,21 @@ export const RegistrationScreen = () => {
             onChange={handleChange}
           />
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
-          Zarejestruj
+        <Form.Group className="mb-3">
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            type="password"
+            name="confirmPassword"
+            placeholder="********"
+            value={inputs.confirmPassword || ""}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit" onClick={(e) => handleSubmit(e)}>
+          Sign Up
         </Button>
       </Form>
     </div>
+        </>
   );
 };

@@ -12,9 +12,11 @@ from pastes.models import MTMTags, PasteBin, PasteTag
 
 # Local
 from .nodes import PasteTagNode
+from ..models import PasteBin
+from .nodes import TotalRatingNode
 
 
-class ActivePasteBin(DjangoObjectType):
+class ActivePasteBin(DjangoObjectType, TotalRatingNode):
     id = graphene.ID(source='pk', required=True)
     tags = graphene.List(PasteTagNode)
 

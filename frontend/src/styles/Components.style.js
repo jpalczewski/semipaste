@@ -12,7 +12,7 @@ export const Header = styled.header`
 `;
 
 export const FormWrapper = styled.div`
-  margin: 50px;
+  margin: 50px auto;
   padding: 20px;
   /* background-color: lightgrey; */
   font-size: 20 px;

@@ -5,18 +5,18 @@ import graphene
 from users.models import UserVerification
 
 
-class VerifyNewUser(graphene.Mutation):
+class VerifyNewUser(graphene.relay.ClientIDMutation):
     ok = graphene.Boolean()
     response = graphene.String()
 
-    class Arguments:
+    class Input:
         id = graphene.ID()
         code = graphene.String()
 
     @staticmethod
-    def mutate(root, info, **kwargs):  # type: ignore
-        code = kwargs.get('code')
-        user = int(kwargs.get('id'))
+    def mutate_and_get_payload(root, info, **input):  # type: ignore
+        code = input.get('code')
+        user = int(input.get('id'))
         try:
             ver = UserVerification.objects.get(user=user)
         except Exception as e:

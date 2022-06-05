@@ -11,12 +11,12 @@ from users.models import User
 logger = logging.getLogger(__name__)
 
 
-class DeleteUser(ResultMixin, graphene.Mutation):
-    class Arguments:
+class DeleteUser(ResultMixin, graphene.relay.ClientIDMutation):
+    class Input:
         id = graphene.ID(required=True)
 
     @classmethod
-    def mutate(cls, root, info, id, **kwargs):  # type: ignore
+    def mutate_and_get_payload(cls, root, info, id, **input):  # type: ignore
         logger.debug("Enter deleteUser")
         if not info.context.user.is_superuser:
             return DeleteUser(

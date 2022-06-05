@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<78d9f66264f38dda5503ca698f57eafc>>
+ * @generated SignedSource<<75579258aa48b975261f32e29149343c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,62 +9,58 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type editUserMutation$variables = {
-  id: string;
-  username?: string | null;
-  lastName?: string | null;
+export type addUserMutation$variables = {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
   firstName?: string | null;
-  email?: string | null;
-  password?: string | null;
-  description?: string | null;
+  lastName?: string | null;
 };
-export type editUserMutation$data = {
-  readonly editUser: {
+export type addUserMutation$data = {
+  readonly addUser: {
     readonly ok: boolean | null;
+    readonly response: string | null;
+    readonly id: string | null;
   } | null;
 };
-export type editUserMutation = {
-  variables: editUserMutation$variables;
-  response: editUserMutation$data;
+export type addUserMutation = {
+  variables: addUserMutation$variables;
+  response: addUserMutation$data;
 };
 
 const node: ConcreteRequest = (function(){
 var v0 = {
-  "defaultValue": "",
+  "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "description"
+  "name": "confirmPassword"
 },
 v1 = {
-  "defaultValue": "",
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "email"
 },
 v2 = {
-  "defaultValue": "",
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "firstName"
 },
 v3 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "id"
-},
-v4 = {
-  "defaultValue": "",
-  "kind": "LocalArgument",
   "name": "lastName"
 },
-v5 = {
+v4 = {
   "defaultValue": null,
   "kind": "LocalArgument",
   "name": "password"
 },
-v6 = {
-  "defaultValue": "",
+v5 = {
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "username"
 },
-v7 = [
+v6 = [
   {
     "alias": null,
     "args": [
@@ -72,8 +68,8 @@ v7 = [
         "fields": [
           {
             "kind": "Variable",
-            "name": "description",
-            "variableName": "description"
+            "name": "confirmPassword",
+            "variableName": "confirmPassword"
           },
           {
             "kind": "Variable",
@@ -84,11 +80,6 @@ v7 = [
             "kind": "Variable",
             "name": "firstName",
             "variableName": "firstName"
-          },
-          {
-            "kind": "Variable",
-            "name": "id",
-            "variableName": "id"
           },
           {
             "kind": "Variable",
@@ -110,9 +101,9 @@ v7 = [
         "name": "input"
       }
     ],
-    "concreteType": "EditUserPayload",
+    "concreteType": "AddUserPayload",
     "kind": "LinkedField",
-    "name": "editUser",
+    "name": "addUser",
     "plural": false,
     "selections": [
       {
@@ -120,6 +111,20 @@ v7 = [
         "args": null,
         "kind": "ScalarField",
         "name": "ok",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "response",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "id",
         "storageKey": null
       }
     ],
@@ -134,42 +139,40 @@ return {
       (v2/*: any*/),
       (v3/*: any*/),
       (v4/*: any*/),
-      (v5/*: any*/),
-      (v6/*: any*/)
+      (v5/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "editUserMutation",
-    "selections": (v7/*: any*/),
+    "name": "addUserMutation",
+    "selections": (v6/*: any*/),
     "type": "Mutation",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
-      (v3/*: any*/),
-      (v6/*: any*/),
-      (v4/*: any*/),
-      (v2/*: any*/),
-      (v1/*: any*/),
       (v5/*: any*/),
-      (v0/*: any*/)
+      (v1/*: any*/),
+      (v4/*: any*/),
+      (v0/*: any*/),
+      (v2/*: any*/),
+      (v3/*: any*/)
     ],
     "kind": "Operation",
-    "name": "editUserMutation",
-    "selections": (v7/*: any*/)
+    "name": "addUserMutation",
+    "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "488e4ad831862967af09c3d5b2850ce9",
+    "cacheID": "e6800317fbd5748d1dcbbaebb3d6689c",
     "id": null,
     "metadata": {},
-    "name": "editUserMutation",
+    "name": "addUserMutation",
     "operationKind": "mutation",
-    "text": "mutation editUserMutation(\n  $id: ID!\n  $username: String = \"\"\n  $lastName: String = \"\"\n  $firstName: String = \"\"\n  $email: String = \"\"\n  $password: String\n  $description: String = \"\"\n) {\n  editUser(input: {id: $id, username: $username, lastName: $lastName, firstName: $firstName, email: $email, password: $password, description: $description}) {\n    ok\n  }\n}\n"
+    "text": "mutation addUserMutation(\n  $username: String!\n  $email: String!\n  $password: String!\n  $confirmPassword: String!\n  $firstName: String\n  $lastName: String\n) {\n  addUser(input: {username: $username, email: $email, password: $password, confirmPassword: $confirmPassword, firstName: $firstName, lastName: $lastName}) {\n    ok\n    response\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "52d15dc1aba1b62281b650f94f321193";
+(node as any).hash = "59a1dde411d587e3ec53fb8d551f7b3e";
 
 export default node;

@@ -10,15 +10,18 @@ import graphene
 from users.models import User, UserVerification
 
 
-class AddUser(graphene.Mutation):
+class AddUser(graphene.relay.ClientIDMutation):
     ok = graphene.Boolean()
     response = graphene.String()
+    id = graphene.ID()
 
-    class Arguments:
+    class Input:
         username = graphene.String(required=True)
         password = graphene.String(required=True)
         confirm_password = graphene.String(required=True)
         email = graphene.String(required=True)
+        first_name = graphene.String()
+        last_name = graphene.String()
 
     @staticmethod
     def password_validation(password: str) -> tuple[bool, str]:
@@ -45,11 +48,13 @@ class AddUser(graphene.Mutation):
         return True if re.search(regex, email) else False
 
     @staticmethod
-    def mutate(root, info, **kwargs):  # type: ignore
-        username = kwargs.get('username')
-        password = kwargs.get('password')
-        confirm_password = kwargs.get('confirm_password')
-        email = kwargs.get('email')
+    def mutate_and_get_payload(root, info, **input):  # type: ignore
+        username = input.get('username')
+        password = input.get('password')
+        confirm_password = input.get('confirm_password')
+        email = input.get('email')
+        first_name = input.get('first_name')
+        last_name = input.get('last_name')
 
         val, response = AddUser.password_validation(password)
         if not val:
@@ -63,6 +68,10 @@ class AddUser(graphene.Mutation):
 
         try:
             user = User(username=username, email=email)
+            if first_name:
+                user.first_name = first_name
+            if last_name:
+                user.last_name = last_name
             user.set_password(password)
             user.save()
         except Exception as e:
@@ -96,4 +105,4 @@ class AddUser(graphene.Mutation):
                 ok=False, response=f"Failed to send the verification code: {e}"
             )
 
-        return AddUser(ok=True, response="Account created. Check your mailbox")
+        return AddUser(ok=True, id=user.id, response="Account created. Check your mailbox")

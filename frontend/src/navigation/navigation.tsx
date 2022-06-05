@@ -4,10 +4,8 @@ import {
   Container,
   LeftContainer,
   NavInnerCont,
-  NavExtendedCont,
   NavLinkCont,
   OpenLinksButton,
-  NavbarLinkExt,
   LogoImg,
   NavLink,
   RightContainer,
@@ -28,7 +26,7 @@ const Navigation = () => {
         </LeftContainer>
         <Container>
           <NavLinkCont>
-            <NavLink to="/create" activeStyle>
+            <NavLink to="" activeStyle>
               Utwórz
             </NavLink>
             <NavLink to="/current" activeStyle>
@@ -72,16 +70,9 @@ const Navigation = () => {
                 variant="primary"
                 type="submit"
                 style={{ marginRight: 10 }}
-                onClick={() => navigate("")}
+                onClick={() => navigate("/home")}
               >
-                zaloguj
-              </Button>
-              <Button
-                variant="primary"
-                type="submit"
-                onClick={() => navigate("")}
-              >
-                zarejestruj
+                Join
               </Button>
             </>
           )}
