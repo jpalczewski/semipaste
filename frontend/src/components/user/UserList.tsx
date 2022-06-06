@@ -4,7 +4,7 @@ import { DeleteUser } from "./CRUD/DeleteUser";
 
 import { allUsers } from "../../Query/Users/allUsers";
 import { useLazyLoadQuery } from "react-relay";
-import { allUsersQuery } from "../../Query/__generated__/allUsersQuery.graphql";
+import { allUsersQuery } from "../../Query/Users/__generated__/allUsersQuery.graphql";
 
 export const UserList = (props: any) => {
   const data2 = useLazyLoadQuery<allUsersQuery>(allUsers, {});

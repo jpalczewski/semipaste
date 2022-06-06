@@ -1,10 +1,12 @@
+import React from "react";
 import { Wrapper } from "../../styles/Components.style";
 import { TableUser } from "../table/TableUser";
-export const UserScreen = () => {
+import { UserList } from "./UserList";
+export const AdminScreen = () => {
   return (
     <Wrapper>
-      <p>Strona główna usera</p>
       <TableUser />
+      <UserList />
     </Wrapper>
   );
 };

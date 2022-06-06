@@ -5,6 +5,9 @@ import { Home } from "../components/HomeScreen";
 import { Create } from "../components/CreateScreen";
 import {Pastes} from "../components/PastesScreen";
 import { About } from "../components/AboutScreen";
+import { AdminScreen } from "../components/user/AdminScreen";
+import { Settings } from "../components/user/Settings";
+import { UserScreen } from "../components/user/UserScreen";
 import { AuthorScreen } from "../components/user/AuthorScreen";
 import {VerificationScreen} from "../components/user/VerificationScreen";
 import { UsersScreen } from "../components/user/UsersScreen";
@@ -15,7 +18,6 @@ import {DashboardHomeScreen} from "../components/dashboard/HomeScreen";
 import React from "react";
 import {DashboardUsersScreen} from "../components/dashboard/Users/UsersScreen";
 import {DashboardUserEditScreen} from "../components/dashboard/Users/UserEditScreen";
-
 
 export const Routerr = () => {
   return (
@@ -37,6 +39,9 @@ export const Routerr = () => {
                <Route path="/pastes/?*" element={<Pastes />} />
                // about
                <Route path="/about" element={<About />} />
+               <Route path="/user/admin" element={<AdminScreen />} />
+                <Route path="/user/user" element={<UserScreen />} />
+                <Route path="/user/settings" element={<Settings />} />
                // verify
                <Route path="/verify" element={<VerificationScreen />} />
                // users

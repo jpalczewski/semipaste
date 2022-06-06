@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   NavigationWrapper,
   Container,
@@ -16,7 +16,29 @@ import { Button, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
-  const [extNavbar, setExtNavbar] = useState(false);
+  const [token, setToken] = useState();
+  const [prop, setProp] = useState("");
+  useEffect(() => {
+    const fetch = async () => {
+      setToken(JSON.parse(localStorage.getItem("token")!));
+      setProp(JSON.parse(localStorage.getItem("username")!));
+    };
+    fetch().catch(console.error);
+  }, []);
+
+  const myAccount = () => {
+    if (prop == "a") {
+      navigate("user/admin");
+    } else {
+      navigate("user/user");
+    }
+  };
+
+  const logOut = () => {
+    localStorage.removeItem("token");
+    navigate("/create");
+    window.location.reload();
+  };
   const navigate = useNavigate();
   return (
     <NavigationWrapper>
@@ -35,29 +57,23 @@ const Navigation = () => {
             <NavLink to="/about" activeStyle>
               About
             </NavLink>
-            <OpenLinksButton
-              onClick={() => {
-                setExtNavbar(!extNavbar);
-              }}
-            >
-              {extNavbar ? <>&#10005;</> : <>&#8801;</>}
+            <OpenLinksButton>
+              {token ? <>&#10005;</> : <>&#8801;</>}
             </OpenLinksButton>
           </NavLinkCont>
         </Container>
         <RightContainer>
-          {extNavbar ? (
+          {token ? (
             <>
               <NavDropdown title="USERNAME">
-                <NavDropdown.Item href="#action3">Ustawienia</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">
-                  My Pastes
+                <NavDropdown.Item onClick={() => myAccount()}>
+                  Moje Konto
                 </NavDropdown.Item>
-                <NavDropdown.Item
-                  href="#action5"
-                  onClick={() => setExtNavbar(!extNavbar)}
-                >
-                  Logout
+                <NavDropdown.Item onClick={() => navigate("user/settings")}>
+                  Ustawienia
                 </NavDropdown.Item>
+                <NavDropdown.Item>Moje wklejki</NavDropdown.Item>
+                <NavDropdown.Item onClick={logOut}>Wyloguj</NavDropdown.Item>
               </NavDropdown>
               <img src={Logo2}></img>
             </>
