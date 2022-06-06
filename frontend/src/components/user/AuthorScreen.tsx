@@ -6,7 +6,7 @@ import {Button} from "react-bootstrap";
 import {Wrapper} from "../../styles/Components.style";
 import {UserReportScreen} from "./UserReportScreen";
 
-export const UserScreen = () => {
+export const AuthorScreen = () => {
     const {id} = useParams();
     const user = useLazyLoadQuery<getUserQuery>(getUser, {id: id!});
     const navigate = useNavigate();

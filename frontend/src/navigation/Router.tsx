@@ -5,7 +5,7 @@ import { Home } from "../components/HomeScreen";
 import { Create } from "../components/CreateScreen";
 import {Pastes} from "../components/PastesScreen";
 import { About } from "../components/AboutScreen";
-import { UserScreen } from "../components/user/UserScreen";
+import { AuthorScreen } from "../components/user/AuthorScreen";
 import {VerificationScreen} from "../components/user/VerificationScreen";
 import { UsersScreen } from "../components/user/UsersScreen";
 import {VisibilityScreen} from "../components/PasteBin/VisibilityScreen";
@@ -16,23 +16,34 @@ import React from "react";
 import {DashboardUsersScreen} from "../components/dashboard/Users/UsersScreen";
 import {DashboardUserEditScreen} from "../components/dashboard/Users/UserEditScreen";
 
+
 export const Routerr = () => {
   return (
     <Router>
       <Navigation />
            <Routes>
+               // home - create
                <Route path="" element={<Create />} />
                 <Route path="/home" element={<Home />} />
+               // error screen
+               <Route path="*" element={<ErroPage />} />
+               // create
                 <Route path="/create" element={<Create />} />
-                <Route path="" element={<Home />} />
-                <Route path="/pastes" element={<Pastes />} />
-                <Route path='/pastes/:id' element={<VisibilityScreen />} />
-                <Route path="/pastes/?*" element={<Pastes />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/verify" element={<VerificationScreen />} />
-                <Route path="*" element={<ErroPage />} />
-                <Route path="/users" element={<UsersScreen />} />
-                <Route path="/users/:id" element={<UserScreen />} />
+               // pastes
+               <Route path="/pastes" element={<Pastes />} />
+               // paste screen - visible
+               <Route path='/pastes/:id' element={<VisibilityScreen />} />
+               // pastes with queryset
+               <Route path="/pastes/?*" element={<Pastes />} />
+               // about
+               <Route path="/about" element={<About />} />
+               // verify
+               <Route path="/verify" element={<VerificationScreen />} />
+               // users
+               <Route path="/users" element={<UsersScreen />} />
+               // user
+               <Route path="/users/:id" element={<AuthorScreen />} />
+               // dashboard
                <Route path="dashboard" element={<Dashboard />}>
                    // home
                    <Route index element={<DashboardHomeScreen />} />

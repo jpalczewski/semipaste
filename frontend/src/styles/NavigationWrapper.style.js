@@ -6,19 +6,18 @@ export const NavigationWrapper = styled.nav`
   width: 100%;
   background-color: white;
   flex-direction: column;
-  text-align: center;
+  text-align: right;
+  color: white;
 `;
 
 export const Container = styled.div`
   display: flex;
-  flex: 55%;
   align-items: center;
-  padding-left: 5%;
 `;
 
 export const LeftContainer = styled.div`
   display: flex;
-  flex: 30%;
+  flex: 100%;
 `;
 
 export const RightContainer = styled.div`

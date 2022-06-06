@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1e0e3019bcb6a881cb2ae519c3281810>>
+ * @generated SignedSource<<45595829ba15210286be66c85c0bfde0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,6 +21,9 @@ export type allPasteBinQuery$data = {
         readonly visible: boolean;
         readonly dateOfExpiry: any | null;
         readonly language: string;
+        readonly totalRating: number | null;
+        readonly likes: number;
+        readonly dislikes: number;
         readonly author: {
           readonly username: string;
         } | null;
@@ -87,6 +90,27 @@ v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "totalRating",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "likes",
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "dislikes",
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "username",
   "storageKey": null
 };
@@ -128,6 +152,9 @@ return {
                   (v4/*: any*/),
                   (v5/*: any*/),
                   (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v8/*: any*/),
+                  (v9/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -136,7 +163,7 @@ return {
                     "name": "author",
                     "plural": false,
                     "selections": [
-                      (v7/*: any*/)
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -190,6 +217,9 @@ return {
                   (v4/*: any*/),
                   (v5/*: any*/),
                   (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v8/*: any*/),
+                  (v9/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -198,7 +228,7 @@ return {
                     "name": "author",
                     "plural": false,
                     "selections": [
-                      (v7/*: any*/),
+                      (v10/*: any*/),
                       (v3/*: any*/)
                     ],
                     "storageKey": null
@@ -215,16 +245,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ec6ea090cdb5555e73b551d35c25761d",
+    "cacheID": "40d08f67f2336e2b070eb198ef8fd07a",
     "id": null,
     "metadata": {},
     "name": "allPasteBinQuery",
     "operationKind": "query",
-    "text": "query allPasteBinQuery {\n  allPasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n        author {\n          username\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query allPasteBinQuery {\n  allPasteBin {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n        totalRating\n        likes\n        dislikes\n        author {\n          username\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "7f6b5b2a4dae17b5c641189f1d671a48";
+(node as any).hash = "afe30cf3eaa9763168681009065d1897";
 
 export default node;

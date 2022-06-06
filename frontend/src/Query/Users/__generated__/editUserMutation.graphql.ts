@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<78d9f66264f38dda5503ca698f57eafc>>
+ * @generated SignedSource<<c53f54d633f38d919c005f14a4df2f93>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -30,17 +30,17 @@ export type editUserMutation = {
 
 const node: ConcreteRequest = (function(){
 var v0 = {
-  "defaultValue": "",
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "description"
 },
 v1 = {
-  "defaultValue": "",
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "email"
 },
 v2 = {
-  "defaultValue": "",
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "firstName"
 },
@@ -50,7 +50,7 @@ v3 = {
   "name": "id"
 },
 v4 = {
-  "defaultValue": "",
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "lastName"
 },
@@ -60,7 +60,7 @@ v5 = {
   "name": "password"
 },
 v6 = {
-  "defaultValue": "",
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "username"
 },
@@ -160,16 +160,16 @@ return {
     "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "488e4ad831862967af09c3d5b2850ce9",
+    "cacheID": "06a8bd3f3cfc6cfec1d061141da5d60f",
     "id": null,
     "metadata": {},
     "name": "editUserMutation",
     "operationKind": "mutation",
-    "text": "mutation editUserMutation(\n  $id: ID!\n  $username: String = \"\"\n  $lastName: String = \"\"\n  $firstName: String = \"\"\n  $email: String = \"\"\n  $password: String\n  $description: String = \"\"\n) {\n  editUser(input: {id: $id, username: $username, lastName: $lastName, firstName: $firstName, email: $email, password: $password, description: $description}) {\n    ok\n  }\n}\n"
+    "text": "mutation editUserMutation(\n  $id: ID!\n  $username: String = null\n  $lastName: String = null\n  $firstName: String = null\n  $email: String = null\n  $password: String\n  $description: String = null\n) {\n  editUser(input: {id: $id, username: $username, lastName: $lastName, firstName: $firstName, email: $email, password: $password, description: $description}) {\n    ok\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "52d15dc1aba1b62281b650f94f321193";
+(node as any).hash = "ad2148720cb552e2f548a6d2ef792974";
 
 export default node;

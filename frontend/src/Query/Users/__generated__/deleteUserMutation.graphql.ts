@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0385c5bcada9482c18f2986810b38ef8>>
+ * @generated SignedSource<<664cf57df4b1c8ec941e453c57b9d5c3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,7 @@ export type deleteUserMutation$variables = {
 export type deleteUserMutation$data = {
   readonly deleteUser: {
     readonly ok: boolean | null;
+    readonly error: string | null;
   } | null;
 };
 export type deleteUserMutation = {
@@ -57,6 +58,13 @@ v1 = [
         "kind": "ScalarField",
         "name": "ok",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "error",
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -80,16 +88,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "f01b617befa08b39cbb820ae052255ed",
+    "cacheID": "8b807695b3941cd8166148ca9d6b111b",
     "id": null,
     "metadata": {},
     "name": "deleteUserMutation",
     "operationKind": "mutation",
-    "text": "mutation deleteUserMutation(\n  $input: ID!\n) {\n  deleteUser(input: {id: $input}) {\n    ok\n  }\n}\n"
+    "text": "mutation deleteUserMutation(\n  $input: ID!\n) {\n  deleteUser(input: {id: $input}) {\n    ok\n    error\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "bf8f7b0889e059b73cb1f04cd74edeea";
+(node as any).hash = "a2d244c833b9bfd4e109fa8644a00e9c";
 
 export default node;

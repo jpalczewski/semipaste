@@ -27,19 +27,13 @@ const Navigation = () => {
         <Container>
           <NavLinkCont>
             <NavLink to="" activeStyle>
-              Utwórz
+              Create
             </NavLink>
             <NavLink to="/pastes" activeStyle>
               Pastes
             </NavLink>
-            {/*<NavLink to="/current" activeStyle>*/}
-            {/*  Aktualne*/}
-            {/*</NavLink>*/}
-            {/*<NavLink to="/popular" activeStyle>*/}
-            {/*  Popularne*/}
-            {/*</NavLink>*/}
             <NavLink to="/about" activeStyle>
-              O Pastebin.pl
+              About
             </NavLink>
             <OpenLinksButton
               onClick={() => {
@@ -56,13 +50,13 @@ const Navigation = () => {
               <NavDropdown title="USERNAME">
                 <NavDropdown.Item href="#action3">Ustawienia</NavDropdown.Item>
                 <NavDropdown.Item href="#action4">
-                  Moje wklejki
+                  My Pastes
                 </NavDropdown.Item>
                 <NavDropdown.Item
                   href="#action5"
                   onClick={() => setExtNavbar(!extNavbar)}
                 >
-                  Wyloguj
+                  Logout
                 </NavDropdown.Item>
               </NavDropdown>
               <img src={Logo2}></img>
@@ -75,7 +69,7 @@ const Navigation = () => {
                 style={{ marginRight: 10 }}
                 onClick={() => navigate("/home")}
               >
-                Join
+                Sing In
               </Button>
             </>
           )}
