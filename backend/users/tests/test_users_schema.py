@@ -115,7 +115,7 @@ class TestSchema(TestCase):
             "Account created. Check your mailbox",
         )
         self.assertEqual(
-            query_result["data"]["allUsers"]["edges"][1]["node"]["id"], '38'
+            query_result["data"]["allUsers"]["edges"][1]["node"]["id"], '52'
         )
 
     def test_04_showUser_id_2(self) -> None:
@@ -123,7 +123,7 @@ class TestSchema(TestCase):
 
         query = """query{
                     allUsers(
-                        id: 40
+                        id: 54
                     ){
                         edges{
                             node{
@@ -162,7 +162,7 @@ class TestSchema(TestCase):
             "Account created. Check your mailbox",
         )
         self.assertEqual(
-            query_result["data"]["allUsers"]["edges"][0]["node"]["id"], '40'
+            query_result["data"]["allUsers"]["edges"][0]["node"]["id"], '54'
         )
 
     def test_05_showUser_lastLogin(self) -> None:

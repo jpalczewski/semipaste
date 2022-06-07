@@ -74,7 +74,7 @@ class TestSchema(GraphQLTestCase):
                     }"""
 
         variables = {
-            "pid": 35,
+            "pid": 39,
             "reason": "Reason test 02"
         }
 
@@ -183,7 +183,7 @@ class TestSchema(GraphQLTestCase):
                     }"""
 
         variables = {
-            "pid": 38,
+            "pid": 42,
             "reason": "Reason test 05"
         }
 
@@ -191,7 +191,7 @@ class TestSchema(GraphQLTestCase):
         query_result = self.client.execute(query, context=self.user)
 
         self.assertEqual(query_result["data"]["pasteReports"]["edges"][0]["node"]["reason"], "Reason test 05")
-        self.assertEqual(query_result["data"]["pasteReports"]["edges"][0]["node"]["paste"]["id"], "38")
+        self.assertEqual(query_result["data"]["pasteReports"]["edges"][0]["node"]["paste"]["id"], "42")
         self.assertEqual(query_result["data"]["pasteReports"]["edges"][0]["node"]["paste"]["title"],
                          self.pasteBin.title)
         self.assertEqual(query_result["data"]["pasteReports"]["edges"][0]["node"]["paste"]["text"],
@@ -204,7 +204,7 @@ class TestSchema(GraphQLTestCase):
                          self.pasteBin.author)
         self.assertEqual(query_result["data"]["pasteReports"]["edges"][0]["node"]["paste"]["language"],
                          self.pasteBin.language)
-        self.assertEqual(query_result["data"]["pasteReports"]["edges"][0]["node"]["author"]["id"], "27")
+        self.assertEqual(query_result["data"]["pasteReports"]["edges"][0]["node"]["author"]["id"], "41")
 
     def test_06_isNotSuperuser(self) -> None:
         query = """query{

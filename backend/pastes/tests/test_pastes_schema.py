@@ -12,6 +12,7 @@ from graphene_django.utils.testing import GraphQLTestCase
 # Project
 from schema import Mutation, Query
 from users.factories import UserFactory
+from users.models import User
 
 # Local
 from ..factories import PasteBinFactory
@@ -22,35 +23,8 @@ class TestSchema(GraphQLTestCase):
         class User:
             user = UserFactory()
 
-        self.user = User
+        self.user = User()
         self.client = Client(graphene.Schema(query=Query, mutation=Mutation))
-
-    def tearDown(self) -> None:
-        id_query = """query{
-                        allUsers {
-                            edges {
-                                node {
-                                    id
-                                }
-                            }
-                        }
-                    }"""
-        mutation = """mutation(
-                        $id: ID!){
-                    deleteUser(
-                        id: $id) {
-                            ok
-                        }
-                    }"""
-
-        query_result = self.client.execute(id_query)
-        pasteBinID = query_result["data"]["allUsers"]["edges"][0]["node"]["id"]
-        variables = {"id": pasteBinID}
-        delete_mutation_result = self.client.execute(
-            mutation, variable_values=variables, context=self.user
-        )
-
-        self.assertEqual(delete_mutation_result["data"]["deleteUser"]["ok"], True)
 
     # add_paste_bin
     def test_01_showAllPasteBins_beforeAddMutation(self) -> None:
@@ -1205,7 +1179,7 @@ class TestSchema(GraphQLTestCase):
         mutation_result = self.client.execute(
             mutation, variable_values=variables, context=self.user
         )
-        query_result = self.client.execute(query)
+        query_result = self.client.execute(query, context=self.user)
 
         self.assertEqual(mutation_result["data"]["addPasteBin"]["ok"], True)
         self.assertEqual(mutation_result["data"]["addPasteBin"]["error"], None)
@@ -1213,10 +1187,10 @@ class TestSchema(GraphQLTestCase):
             mutation_result["data"]["addPasteBin"]["errorCode"], "POSSIBLE_FAILURE"
         )
         self.assertEqual(
-            query_result["data"]["activePasteBin"]["edges"][1]["node"]["id"], '31'
+            query_result["data"]["activePasteBin"]["edges"][0]["node"]["id"], '31'
         )
         self.assertEqual(
-            query_result["data"]["activePasteBin"]["edges"][1]["node"]["author"]["id"],
+            query_result["data"]["activePasteBin"]["edges"][0]["node"]["author"]["id"],
             '21',
         )
 
@@ -1290,3 +1264,454 @@ class TestSchema(GraphQLTestCase):
             query_result["data"]["expiredPasteBin"]["edges"][0]["node"]["author"]["id"],
             '22',
         )
+
+    def test_23_allPasteTags(self) -> None:
+
+        query = """query{
+                            allPasteTags {
+                                edges {
+                                    node {
+                                        id
+                                        tagName
+                                        posts{
+                                            id
+                                            title
+                                            text
+                                            expireAfter
+                                            author{
+                                                id
+                                                username
+                                                firstName
+                                                lastName
+                                                email
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } """
+
+        query_result = self.client.execute(query)
+
+        self.assertEqual(query_result["data"]["allPasteTags"]["edges"], [])
+
+    def test_24_addPasteTags_1(self) -> None:
+
+        mutation = """mutation($tagName: String){
+                        addTag(tagName: $tagName){
+                            ok
+                            response
+                        }
+                    }"""
+        variables = {
+            "tagName": "TEST",
+        }
+
+        mutation_result = self.client.execute(
+            mutation, variable_values=variables, context=self.user
+        )
+
+        self.assertEqual(mutation_result["data"]["addTag"]["ok"], True)
+        self.assertEqual(mutation_result["data"]["addTag"]["response"], "tag saved")
+
+    def test_25_addPasteTags_2(self) -> None:
+
+        mutation = """mutation($tagName: String){
+                        addTag(tagName: $tagName){
+                            ok
+                            response
+                        }
+                    }"""
+        variables = {
+            "tagName": "TEST",
+        }
+
+        mutation_result = self.client.execute(
+            mutation, variable_values=variables, context=self.user
+        )
+        mutation_result = self.client.execute(
+            mutation, variable_values=variables, context=self.user
+        )
+
+        self.assertEqual(mutation_result["data"]["addTag"]["ok"], False)
+        self.assertEqual(mutation_result["data"]["addTag"]["response"], "name already exist")
+
+    def test_26_addPasteTags_3(self) -> None:
+
+        mutation = """mutation($tagName: String){
+                        addTag(tagName: $tagName){
+                            ok
+                            response
+                        }
+                    }"""
+        variables = {
+            "tagName": "",
+        }
+
+        mutation_result = self.client.execute(
+            mutation, variable_values=variables, context=self.user
+        )
+
+        self.assertEqual(mutation_result["data"]["addTag"]["ok"], False)
+        self.assertEqual(mutation_result["data"]["addTag"]["response"], "no name given")
+
+    def test_27_deletePasteTags_1(self) -> None:
+
+        mutation_add = """mutation($tagName: String){
+                                addTag(tagName: $tagName){
+                                    ok
+                                    response
+                                }
+                            }"""
+
+        mutation_delete = """mutation($tagName: String){
+                        deleteTag(tagName: $tagName){
+                            ok
+                            error
+                            errorCode
+                            response
+                        }
+                    }"""
+        variables = {
+            "tagName": "TEST"
+        }
+
+        mutation_add_result = self.client.execute(
+            mutation_add, variable_values=variables, context=self.user
+        )
+        mutation_delete_result = self.client.execute(
+            mutation_delete, variable_values=variables, context=self.user
+        )
+
+        self.assertEqual(mutation_add_result["data"]["addTag"]["ok"], True)
+        self.assertEqual(mutation_add_result["data"]["addTag"]["response"], "tag saved")
+        self.assertEqual(mutation_delete_result["data"]["deleteTag"]["ok"], True)
+        self.assertEqual(mutation_delete_result["data"]["deleteTag"]["error"], None)
+        self.assertEqual(mutation_delete_result["data"]["deleteTag"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(mutation_delete_result["data"]["deleteTag"]["response"], "All done")
+
+    def test_28_deletePasteTags_2(self) -> None:
+
+        mutation_add = """mutation($tagName: String){
+                                addTag(tagName: $tagName){
+                                    ok
+                                    response
+                                }
+                            }"""
+
+        mutation_delete = """mutation($tagName: String){
+                        deleteTag(tagName: $tagName){
+                            ok
+                            error
+                            errorCode
+                            response
+                        }
+                    }"""
+        variables = {
+            "tagName": "TEST"
+        }
+
+        mutation_add_result = self.client.execute(
+            mutation_add, variable_values=variables, context=self.user
+        )
+        self.client.execute(
+            mutation_delete, variable_values=variables, context=self.user
+        )
+        mutation_delete_result = self.client.execute(
+            mutation_delete, variable_values=variables, context=self.user
+        )
+
+        self.assertEqual(mutation_add_result["data"]["addTag"]["ok"], True)
+        self.assertEqual(mutation_add_result["data"]["addTag"]["response"], "tag saved")
+        self.assertEqual(mutation_delete_result["data"]["deleteTag"]["ok"], False)
+        self.assertEqual(mutation_delete_result["data"]["deleteTag"]["error"], None)
+        self.assertEqual(mutation_delete_result["data"]["deleteTag"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(mutation_delete_result["data"]["deleteTag"]["response"], "No such tag")
+
+    def test_29_editPasteBin_1(self) -> None:
+        pasteBin = PasteBinFactory()
+
+        query = """query{
+                            allPasteBin {
+                                edges {
+                                    node {
+                                        id
+                                        title
+                                        text                                        
+                                        visible
+                                        expireAfter
+                                        author{
+                                            id                                                                                                                                                                                                                
+                                        }
+                                    }
+                                }
+                            }
+                        } """
+        mutation_add = """mutation(
+                                $title: String!
+                                $text: String!
+                                $visible: Boolean!
+                                $expireAfter: ExpireChoices!){
+                            addPasteBin(
+                                input: {
+                                    title: $title ,
+                                    text: $text ,
+                                    visible: $visible ,
+                                    expireAfter: $expireAfter}) {
+                                        ok
+                                        error
+                                        errorCode
+                                    }
+                                } """
+        mutation_edit = """mutation(
+                                        $id: ID!
+                                        $title: String!
+                                        $text: String!
+                                        $exposure: Boolean){
+                                    editPaste(   
+                                            id: $id,                                     
+                                            title: $title ,
+                                            text: $text ,
+                                            exposure: $exposure) {
+                                                ok
+                                                error
+                                                errorCode
+                                            }
+                                        } """
+        variables_add = {
+            "title": pasteBin.title,
+            "text": pasteBin.text,
+            "visible": pasteBin.visible,
+            "expireAfter": pasteBin.expire_after,
+        }
+        variables_edit = {
+            "id": "35",
+            "title": "pasteBin.title",
+            "text": "pasteBin.text",
+            "exposure": False
+        }
+
+        mutation_add_result = self.client.execute(
+            mutation_add, variable_values=variables_add, context=self.user
+        )
+        query_afterAdd_result = self.client.execute(query, context=self.user)
+        mutation_edit_result = self.client.execute(
+            mutation_edit, variable_values=variables_edit, context=self.user
+        )
+        query_afterEdit_result = self.client.execute(query, context=self.user)
+
+        self.assertEqual(mutation_add_result["data"]["addPasteBin"]["ok"], True)
+        self.assertEqual(mutation_add_result["data"]["addPasteBin"]["error"], None)
+        self.assertEqual(
+            mutation_add_result["data"]["addPasteBin"]["errorCode"], "POSSIBLE_FAILURE"
+        )
+        self.assertEqual(mutation_edit_result["data"]["editPaste"]["ok"], True)
+        self.assertEqual(mutation_edit_result["data"]["editPaste"]["error"], "Paste changed")
+        self.assertEqual(
+            mutation_edit_result["data"]["editPaste"]["errorCode"], "POSSIBLE_FAILURE"
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["id"], '35'
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["title"],
+            pasteBin.title,
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["text"],
+            pasteBin.text,
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["visible"],
+            pasteBin.visible,
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["expireAfter"],
+            pasteBin.expire_after,
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"],
+            "29",
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["id"], '35'
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["title"],
+            "pasteBin.title",
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["text"],
+            "pasteBin.text",
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["visible"],
+            pasteBin.visible,
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["expireAfter"],
+            pasteBin.expire_after,
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"],
+            "29",
+        )
+
+    def test_30_editPasteBin_2(self) -> None:
+        pasteBin = PasteBinFactory()
+
+        query = """query{
+                            allPasteBin {
+                                edges {
+                                    node {
+                                        id
+                                        title
+                                        text                                        
+                                        visible
+                                        expireAfter
+                                        author{
+                                            id                                                                                          
+                                        }
+                                    }
+                                }
+                            }
+                        } """
+        mutation_add = """mutation(
+                                $title: String!
+                                $text: String!
+                                $visible: Boolean!
+                                $expireAfter: ExpireChoices!){
+                            addPasteBin(
+                                input: {
+                                    title: $title ,
+                                    text: $text ,
+                                    visible: $visible ,
+                                    expireAfter: $expireAfter}) {
+                                        ok
+                                        error
+                                        errorCode
+                                    }
+                                } """
+        mutation_edit = """mutation(
+                                        $id: ID!
+                                        $title: String!
+                                        $text: String!
+                                        $exposure: Boolean){
+                                    editPaste(   
+                                            id: $id,                                     
+                                            title: $title ,
+                                            text: $text ,
+                                            exposure: $exposure) {
+                                                ok
+                                                error
+                                                errorCode
+                                            }
+                                        } """
+        mutation_addUser = """mutation(
+                                $confirmPassword: String!
+                                $email: String!
+                                $password: String!
+                                $username: String!){
+                            addUser(
+                                confirmPassword: $confirmPassword,
+                                email: $email,
+                                password: $password,
+                                username: $username){
+                                    ok
+                                    response
+                                }
+                            } """
+        variables_addUser = {
+            "confirmPassword": self.user.user.password,
+            "email": self.user.user.email,
+            "password": self.user.user.password,
+            "username": "Test02",
+        }
+
+        variables_add = {
+            "title": pasteBin.title,
+            "text": pasteBin.text,
+            "visible": pasteBin.visible,
+            "expireAfter": pasteBin.expire_after
+        }
+        variables_edit = {
+            "id": "37",
+            "title": "pasteBin.title",
+            "text": "pasteBin.text",
+            "exposure": False
+        }
+
+        mutation_addUser_result = self.client.execute(mutation_addUser, variable_values=variables_addUser)
+        mutation_add_result = self.client.execute(
+            mutation_add, variable_values=variables_add, context=self.user
+        )
+        query_afterAdd_result = self.client.execute(query, context=self.user)
+
+        class User2:
+            user=User.objects.get(pk=31)
+        user2=User2()
+
+        mutation_edit_result = self.client.execute(
+            mutation_edit, variable_values=variables_edit, context=user2
+        )
+        query_afterEdit_result = self.client.execute(query, context=self.user)
+
+        self.assertEqual(mutation_addUser_result["data"]["addUser"]["ok"], True)
+        self.assertEqual(mutation_add_result["data"]["addPasteBin"]["ok"], True)
+        self.assertEqual(mutation_add_result["data"]["addPasteBin"]["error"], None)
+        self.assertEqual(
+            mutation_add_result["data"]["addPasteBin"]["errorCode"], "POSSIBLE_FAILURE"
+        )
+        self.assertEqual(mutation_edit_result["data"]["editPaste"]["ok"], False)
+        self.assertEqual(mutation_edit_result["data"]["editPaste"]["error"], "Not your paste")
+        self.assertEqual(
+            mutation_edit_result["data"]["editPaste"]["errorCode"], "POSSIBLE_FAILURE"
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["id"], '37'
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["title"],
+            pasteBin.title,
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["text"],
+            pasteBin.text,
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["visible"],
+            pasteBin.visible,
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["expireAfter"],
+            pasteBin.expire_after,
+        )
+        self.assertEqual(
+            query_afterAdd_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"],
+            "30",
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["id"], '37'
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["title"],
+            pasteBin.title,
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["text"],
+            pasteBin.text,
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["visible"],
+            pasteBin.visible,
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["expireAfter"],
+            pasteBin.expire_after,
+        )
+        self.assertEqual(
+            query_afterEdit_result["data"]["allPasteBin"]["edges"][1]["node"]["author"]["id"],
+            "30",
+        )
+
+

@@ -50,7 +50,7 @@ class TestReportUsers(GraphQLTestCase):
 
         self.assertEqual(query_result["data"]["userReports"]["edges"], [])
 
-    def test_02_reportPaste_mutation(self) -> None:
+    def test_02_reportUser_mutation(self) -> None:
         mutation = """mutation(
                       $uid: ID!
                       $reason: String!){
@@ -67,7 +67,7 @@ class TestReportUsers(GraphQLTestCase):
                     }"""
 
         variables = {
-            "uid": 30,
+            "uid": 44,
             "reason": "Reason test 02"
         }
 
@@ -78,7 +78,7 @@ class TestReportUsers(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["reportUser"]["errorCode"], "POSSIBLE_FAILURE")
         self.assertEqual(mutation_result["data"]["reportUser"]["clientMutationId"], None)
 
-    def test_03_reportPaste_mutation_userNotLogged(self) -> None:
+    def test_03_reportUser_mutation_userNotLogged(self) -> None:
         mutation = """mutation(
                               $uid: ID!
                               $reason: String!){
@@ -106,7 +106,7 @@ class TestReportUsers(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["reportUser"]["errorCode"], "POSSIBLE_FAILURE")
         self.assertEqual(mutation_result["data"]["reportUser"]["clientMutationId"], None)
 
-    def test_04_reportPaste_mutation_pasteNotFound(self) -> None:
+    def test_04_reportUser_mutation_pasteNotFound(self) -> None:
         mutation = """mutation(
                               $uid: ID!
                               $reason: String!){
@@ -134,7 +134,7 @@ class TestReportUsers(GraphQLTestCase):
         self.assertEqual(mutation_result["data"]["reportUser"]["errorCode"], "POSSIBLE_FAILURE")
         self.assertEqual(mutation_result["data"]["reportUser"]["clientMutationId"], None)
 
-    def test_05_reportPaste_correctData(self) -> None:
+    def test_05_reportUser_correctData(self) -> None:
         query = """query{
                         userReports {
                             edges {
@@ -172,7 +172,7 @@ class TestReportUsers(GraphQLTestCase):
                             }"""
 
         variables = {
-            "uid": 33,
+            "uid": 47,
             "reason": "Reason test 05"
         }
 
@@ -180,7 +180,7 @@ class TestReportUsers(GraphQLTestCase):
         query_result = self.client.execute(query, context=self.user)
 
         self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["reason"], "Reason test 05")
-        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["id"], "33")
+        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["id"], "47")
         self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["username"],
                          self.user.user.username)
         self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["firstName"],
