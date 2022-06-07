@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<50e05dc2026ccfd489ff18ffc4ea56f5>>
+ * @generated SignedSource<<78e129a44f87892a97fd8243f4736ca9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,6 +22,7 @@ export type getPasteBinQuery$data = {
         readonly id: string;
         readonly visible: boolean;
         readonly dateOfExpiry: any | null;
+        readonly totalRating: number | null;
         readonly language: string;
         readonly author: {
           readonly id: string;
@@ -122,6 +123,13 @@ v2 = [
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
+                "name": "totalRating",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
                 "name": "language",
                 "storageKey": null
               },
@@ -172,16 +180,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "1a57b0a9f0a3e4eb775895383639cbe3",
+    "cacheID": "60a4acb7ca0a99707ebeba8fc87b0e7d",
     "id": null,
     "metadata": {},
     "name": "getPasteBinQuery",
     "operationKind": "query",
-    "text": "query getPasteBinQuery(\n  $id: ID!\n) {\n  allPasteBin(id: $id) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        language\n        author {\n          id\n          username\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query getPasteBinQuery(\n  $id: ID!\n) {\n  allPasteBin(id: $id) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        totalRating\n        language\n        author {\n          id\n          username\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "e9f25e0eeed092c80d7cc0783df7f04a";
+(node as any).hash = "445060e33d706a19765dfab1a4f4472e";
 
 export default node;

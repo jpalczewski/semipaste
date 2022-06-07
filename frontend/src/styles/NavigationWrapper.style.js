@@ -4,7 +4,7 @@ import { NavLink as Link } from "react-router-dom";
 export const NavigationWrapper = styled.nav`
   display: flex;
   width: 100%;
-  background-color: white;
+  background-color: #efefef;
   flex-direction: column;
   text-align: right;
   color: white;
@@ -30,7 +30,6 @@ export const RightContainer = styled.div`
 export const NavInnerCont = styled.div`
   width: 100%;
   display: flex;
-  box-shadow: 0 4px 2px -2px lightgrey;
 `;
 
 export const NavExtendedCont = styled.div`
@@ -49,7 +48,7 @@ export const NavLinkCont = styled.div`
 `;
 
 export const NavLink = styled(Link)`
-  color: black;
+  color: white;
   text-decoration: none;
   margin: 10px;
 
@@ -74,6 +73,7 @@ export const NavbarLinkExt = styled(Link)`
 export const LogoImg = styled.img`
   padding: 10px;
   margin-left: 20px;
+  width: 25%;
 `;
 
 export const OpenLinksButton = styled.button`

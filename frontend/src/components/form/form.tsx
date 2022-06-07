@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FormWrapper } from "../../styles/Components.style";
-import {Form, Button, Row, Col, Alert} from "react-bootstrap";
+import {Form, Button, Row, Col, Alert, ButtonGroup} from "react-bootstrap";
 import RelayEnvironment from "../../RelayEnvironment";
 import { commitMutation, useLazyLoadQuery } from "react-relay";
 import { addPasteBin } from "../../Query/PasteBins/addPasteBin";
@@ -14,6 +14,18 @@ import Select from "react-select";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/theme-dawn";
 
+import {
+  ButtonGroup as ChakraButtonGroup,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
+  Button as ChakraButton, Box,
+  Switch, FormControl, FormLabel,
+    SimpleGrid,
+} from "@chakra-ui/react";
+
 export const PasteBinForm = (props: any) => {
   const [preview, setPreview] = useState(true);
   const [syntax, setSyntax] = useState<string>("");
@@ -21,7 +33,7 @@ export const PasteBinForm = (props: any) => {
     text: "",
     title: "",
     language: "Plain Text",
-    visible: false,
+    visible: true,
   });
 
   const handleText = (event: any) => {
@@ -68,6 +80,7 @@ export const PasteBinForm = (props: any) => {
       props.setResult("The text of your paste is empty!");
       return;
     }
+    // console.log(inputs);
 
     commitMutation<addPasteBinMutation>(RelayEnvironment, {
       mutation: addPasteBin,
@@ -125,11 +138,14 @@ export const PasteBinForm = (props: any) => {
 
   return (
     <FormWrapper>
-      <Form>
+      <Row>
+        <Col lg={9}>
+            <Form>
         <Row className="mb-3">
           <Col style={{ textAlign: "right", flex: "25%" }}>
-            <Form.Group>
+            <Form.Group className="h-100">
               <Form.Control
+                  className="h-100"
                 type="text"
                 value={inputs.title}
                 placeholder="Tytuł"
@@ -150,35 +166,12 @@ export const PasteBinForm = (props: any) => {
             {/*  })}*/}
             {/*</Form.Select>*/}
           </Col>
-          <Col style={{ textAlign: "right", flex: "15%" }}>
-            <Button variant="primary" onClick={handleClear}>
-              CLEAR
-            </Button>
-          </Col>
-          <Col
-            style={{
-              textAlign: "right",
-            }}
-          >
-            <Button variant="info" onClick={()=>handlePreview()}>
-              PREVIEW
-            </Button>
-          </Col>
-          <Col
-            style={{
-              textAlign: "right",
-            }}
-          >
-            <Button variant="success" onClick={() => handleSubmit(inputs)}>
-              SAVE
-            </Button>
-          </Col>
         </Row>
         <Form.Group style={{ marginBottom: 10 }}>
           <AceEditor
             name="text"
             theme="dawn"
-            fontSize={30}
+            fontSize={16}
             value={inputs.text}
             width={"100%"}
             onChange={handleText}
@@ -186,25 +179,32 @@ export const PasteBinForm = (props: any) => {
         </Form.Group>
 
         <Row className="mb-3">
-          <Col>
+          <div className="d-flex justify-content-between">
+            <div>
             <Form.Group
-              className="mb-3"
+              className="mb-3 w-100"
               style={{ marginBottom: 10, width: "50%" }}
             >
               <Form.Control type="file" size="sm" />
             </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group>
-              <Form.Check
-                type="checkbox"
-                checked={inputs.visible}
-                label="Widoczność"
-                onChange={(event) => handleSwitch(event.target.checked)}
-              />
-            </Form.Group>
-          </Col>
+          </div>
+
+          <div>
+            <ChakraButtonGroup spacing={10}>
+              <ChakraButton colorScheme="twitter" onClick={handleClear}>
+              CLEAR
+            </ChakraButton>
+            <ChakraButton colorScheme="linkedin" onClick={()=>handlePreview()}>
+              HIGHLIGHT
+            </ChakraButton>
+            <ChakraButton colorScheme="teal" onClick={() => handleSubmit(inputs)}>
+              SAVE
+            </ChakraButton>
+            </ChakraButtonGroup>
+          </div>
+          </div>
         </Row>
+
         <Row className="mb-3">
           { (!preview && inputs.language != "Plain Text")
               ? <><pre dangerouslySetInnerHTML={{__html: syntax}}></pre></>
@@ -212,6 +212,59 @@ export const PasteBinForm = (props: any) => {
           }
         </Row>
       </Form>
+        </Col>
+
+        {/*// second part*/}
+        <Col>
+          <Accordion allowMultiple allowToggle>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex='1' textAlign="left">
+                    <span style={{fontSize: 24}}>Settings</span>
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                <FormControl className="py-3">
+                  <FormLabel htmlFor="visible" >Public</FormLabel>
+                  <Switch id="visible" defaultChecked={true} onChange={e => {
+                    handleSwitch(e.target.checked);
+                    console.log(inputs.visible)
+                  }} />
+                </FormControl>
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex='1' textAlign="left">
+                    <span style={{fontSize: 24}}>Photos</span>
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                <p>Images</p>
+              </AccordionPanel>
+            </AccordionItem>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex='1' textAlign="left">
+                    <span style={{fontSize: 24}}>Tags</span>
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                <p>Tags</p>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </Col>
+      </Row>
     </FormWrapper>
   );
 };

@@ -71,7 +71,7 @@ export const PaginationUtils = (props: any) => {
 		<Pagination className="m-0">
 			{props.page > 1 && renderFirst()}
 			{props.page > 1 && renderLeft()}
-			<Pagination.Item active>{props.page}</Pagination.Item>
+			{props.maxPage !== 1 && <Pagination.Item active>{props.page}</Pagination.Item>}
 			{props.page !== props.maxPage && renderRight()}
 			{props.page !== props.maxPage && renderLast()}
 		</Pagination>

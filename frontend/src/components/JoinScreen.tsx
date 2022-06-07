@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import {Button, Container} from "react-bootstrap";
 import { Wrapper, Footer, AllFooter } from "../styles/Components.style";
 import { LoginScreen } from "./user/LoginScreen";
 import { RegistrationScreen } from "./user/RegistrationScreen";
 import {PasswordRecovery} from "./user/PasswordRecovery";
 
-export const Home = () => {
+export const Join = () => {
   const [vis, setVis] = useState(0);
 
   const component = () => {
@@ -25,7 +25,8 @@ export const Home = () => {
   return (
     <>
       <Wrapper>
-          {component()}
+          <Container className="bg-white py-5">
+              {component()}
           { vis <= 1 && <>
               {vis === 0 && <>
                   <Button variant="primary" onClick={() => setVis(2)}>
@@ -47,19 +48,8 @@ export const Home = () => {
                     Go Back
                   </Button>
               </>}
+          </Container>
       </Wrapper>
-      <AllFooter>
-        <p
-          style={{
-            color: "white",
-            fontSize: 10,
-            textAlign: "left",
-            padding: 10,
-          }}
-        >
-          @2022 Średnik - all rights reserved
-        </p>
-      </AllFooter>
     </>
   );
 };

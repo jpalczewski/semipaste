@@ -68,8 +68,7 @@ export const LoginScreen = () => {
   };
 
   return (
-    <div className="Contener">
-      <p>Logowanie</p>
+    <div>
       {error && (
         <Alert variant="danger" onClose={() => setError(!error)} dismissible>
           <img src={imag} style={{ borderRadius: 20 }} />

@@ -7,6 +7,7 @@ import {commitMutation} from "react-relay";
 import {addUserMutation} from "../../Query/Users/__generated__/addUserMutation.graphql";
 import relayEnvironment from "../../RelayEnvironment";
 import {addUser} from "../../Query/Users/addUser";
+import {Flex} from "@chakra-ui/react";
 
 const validate = (form: any) => {
   if (!form.username) return "login jest wymagany";
@@ -77,8 +78,7 @@ export const RegistrationScreen = () => {
               </Alert.Heading>
             </Alert>
         }
-    <div className="Contener">
-      <p>REGISTRATION</p>
+    <Flex justify="center">
       <Form>
         {error && <Form.Text className="text-danger">{error}</Form.Text>}
         <Form.Group className="mb-3">
@@ -147,7 +147,7 @@ export const RegistrationScreen = () => {
           Sign Up
         </Button>
       </Form>
-    </div>
+    </Flex>
         </>
   );
 };

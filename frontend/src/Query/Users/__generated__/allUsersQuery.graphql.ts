@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<01458b308c618b1c8b6245bbbbde7895>>
+ * @generated SignedSource<<79e69a866a5648397e7de9837b5db887>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,6 +23,8 @@ export type allUsersQuery$data = {
         readonly isVerified: boolean;
         readonly isStaff: boolean;
         readonly isSuperuser: boolean;
+        readonly description: string;
+        readonly lastLogin: any | null;
       } | null;
     } | null>;
   } | null;
@@ -120,6 +122,20 @@ var v0 = [
                 "kind": "ScalarField",
                 "name": "isSuperuser",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "description",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "lastLogin",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -149,16 +165,16 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "705bdde444efcae12c2e4e24ba037958",
+    "cacheID": "61c6742a000c9e051f18d77a34aade16",
     "id": null,
     "metadata": {},
     "name": "allUsersQuery",
     "operationKind": "query",
-    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        isVerified\n        isStaff\n        isSuperuser\n      }\n    }\n  }\n}\n"
+    "text": "query allUsersQuery {\n  allUsers {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        isVerified\n        isStaff\n        isSuperuser\n        description\n        lastLogin\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "32ddeae5e52859a8402b82d84b989662";
+(node as any).hash = "69ed6680b29c3024319ff63f62ef918b";
 
 export default node;

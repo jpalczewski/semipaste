@@ -10,12 +10,26 @@ import {
   NavLink,
   RightContainer,
 } from "../styles/NavigationWrapper.style";
-import Logo from "../assets/semipaste_logo.png";
-import Logo2 from "../assets/photo.png";
-import { Button, NavDropdown } from "react-bootstrap";
+import SemiPaste from "../assets/semipaste.png";
+import {NavDropdown, Container as BC } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import {
+  Img,
+  Button,
+  Box,
+  Flex,
+  Spacer,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  MenuDivider,
+} from "@chakra-ui/react";
+import {useMediaQuery} from "@chakra-ui/react";
+import {MobileBar} from "./mobile/MobileBar";
 
 const Navigation = () => {
+  const [isMobile] = useMediaQuery('(min-width: 992px)');
   const [token, setToken] = useState();
   const [prop, setProp] = useState("");
   useEffect(() => {
@@ -39,59 +53,94 @@ const Navigation = () => {
     navigate("/create");
     window.location.reload();
   };
+
   const navigate = useNavigate();
   return (
-    <NavigationWrapper>
-      <NavInnerCont>
-        <LeftContainer>
-          <LogoImg src={Logo} />
-        </LeftContainer>
-        <Container>
-          <NavLinkCont>
-            <NavLink to="" activeStyle>
-              Create
-            </NavLink>
-            <NavLink to="/pastes" activeStyle>
-              Pastes
-            </NavLink>
-            <NavLink to="/about" activeStyle>
-              About
-            </NavLink>
-            <OpenLinksButton>
-              {token ? <>&#10005;</> : <>&#8801;</>}
-            </OpenLinksButton>
-          </NavLinkCont>
-        </Container>
-        <RightContainer>
-          {token ? (
-            <>
-              <NavDropdown title="USERNAME">
-                <NavDropdown.Item onClick={() => myAccount()}>
-                  Moje Konto
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={() => navigate("user/settings")}>
-                  Ustawienia
-                </NavDropdown.Item>
-                <NavDropdown.Item>Moje wklejki</NavDropdown.Item>
-                <NavDropdown.Item onClick={logOut}>Wyloguj</NavDropdown.Item>
-              </NavDropdown>
-              <img src={Logo2}></img>
-            </>
-          ) : (
-            <>
-              <Button
-                variant="primary"
-                type="submit"
-                style={{ marginRight: 10 }}
-                onClick={() => navigate("/home")}
-              >
-                Sing In
-              </Button>
-            </>
-          )}
-        </RightContainer>
-      </NavInnerCont>
-    </NavigationWrapper>
+      <>
+        {!isMobile ?
+            <MobileBar
+                token={token}
+                username={prop}
+                logout={logOut}
+                account={myAccount}/>
+            : <Container className="shadow-sm p-3" style={{backgroundColor: "#313C40"}}>
+              <BC>
+                <Flex align="center">
+                  <Img
+                      _hover={{
+                        cursor: "pointer"
+                      }}
+                      boxSize={35}
+                      src={SemiPaste}
+                      alt="Semi Paste logo"
+                      onClick={() => navigate("")}
+                  />
+                  <Box
+                      _hover={{
+                        cursor: "pointer"
+                      }}
+                      className="text-white"
+                      style={{fontSize: 30, marginLeft: 30}}
+                      onClick={() => navigate("")}
+                  >SemiPaste</Box>
+                  <Spacer/>
+                  <Box>
+                    <NavLink to="" activeStyle>
+                      Create
+                    </NavLink>
+                    <NavLink to="/pastes" activeStyle>
+                      Pastes
+                    </NavLink>
+                    <NavLink to="/about" activeStyle>
+                      About
+                    </NavLink>
+
+                    {/*<OpenLinksButton>*/}
+                    {/*  {token ? <>&#10005;</> : <>&#8801;</>}*/}
+                    {/*</OpenLinksButton>*/}
+                  </Box>
+                  <Box style={{marginLeft: 50}}>
+                    {token ? (
+                        <>
+                          <Menu>
+                            <MenuButton as={Button} bg="teal" color="white">
+                              {prop}
+                            </MenuButton>
+                            <MenuList>
+                              <MenuItem onClick={() => myAccount()}>Account</MenuItem>
+                              <MenuDivider/>
+                              <MenuItem onClick={() => navigate("user/settings")}>Settings</MenuItem>
+                              <MenuItem>My Pastes</MenuItem>
+                              <MenuItem onClick={logOut}>Logout</MenuItem>
+                            </MenuList>
+                          </Menu>
+                          {/*<NavDropdown title="USERNAME">*/}
+                          {/*  <NavDropdown.Item onClick={() => myAccount()}>*/}
+                          {/*    Account*/}
+                          {/*  </NavDropdown.Item>*/}
+                          {/*  <NavDropdown.Item onClick={() => navigate("user/settings")}>*/}
+                          {/*    Settings*/}
+                          {/*  </NavDropdown.Item>*/}
+                          {/*  <NavDropdown.Item>My Pastes</NavDropdown.Item>*/}
+                          {/*  <NavDropdown.Item onClick={logOut}>Logout</NavDropdown.Item>*/}
+                          {/*</NavDropdown>*/}
+                        </>
+                    ) : (
+                        <>
+                          <Button colorScheme='teal'
+                                  type="submit"
+                                  style={{marginRight: 10}}
+                                  onClick={() => navigate("/join")}
+                          >
+                            Sing In
+                          </Button>
+                        </>
+                    )}
+                  </Box>
+                </Flex>
+              </BC>
+            </Container>}
+      </>
   );
 };
 

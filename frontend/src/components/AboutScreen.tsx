@@ -1,41 +1,102 @@
 import React from "react";
-import { AllFooter, Wrapper } from "../styles/Components.style";
+import { Wrapper } from "../styles/Components.style";
+import {Container} from "react-bootstrap";
+
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+} from '@chakra-ui/react'
 
 export const About = () => {
   return (
     <>
       <Wrapper>
-        <div style={{ padding: 50 }}>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eu ex
-            rutrum, consectetur justo id, dictum elit. Sed justo libero, commodo
-            sit amet laoreet a, congue et augue. Mauris purus ipsum, maximus
-            quis dapibus ut, iaculis vel magna. Sed cursus ornare arcu at
-            sodales. Mauris facilisis purus sed elit venenatis, ac efficitur sem
-            tempor. Mauris at diam quis arcu tristique dapibus quis sed massa.
-            Phasellus sollicitudin quam sit amet magna euismod, non cursus elit
-            maximus. Fusce a leo a metus euismod eleifend eget vitae justo.
-            Donec tortor orci, mollis ut tincidunt a, ullamcorper a nunc. Proin
-            nec massa purus. Praesent eget sodales magna. Suspendisse potenti.
-            Nulla lorem ipsum, accumsan vitae sagittis quis, lobortis non odio.
-            Aliquam eu urna sed nibh lacinia lobortis. Morbi aliquet massa id
-            pellentesque gravida. Nullam in tortor cursus urna egestas rutrum
-            sit amet eget metus.
-          </p>
+        <Container className="bg-white">
+          <h1 className="my-3">Creators</h1>
+          <div style={{paddingTop: 50, paddingBottom: 50}}>
+          <Accordion allowMultiple colorScheme="teal">
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  Jacek Palczewski - Team Leader | DevOps
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat.
+              </AccordionPanel>
+            </AccordionItem>
+
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  Michał Sulikowski - Frontend
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat.
+              </AccordionPanel>
+            </AccordionItem>
+
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  Feliks Olszewski - Backend
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat.
+              </AccordionPanel>
+            </AccordionItem>
+
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  Zalewski Adam - Tester
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat.
+              </AccordionPanel>
+            </AccordionItem>
+
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  Marek Stefański - Backend | Frontend
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat.
+              </AccordionPanel>
+            </AccordionItem>
+
+        </Accordion>
         </div>
+        </Container>
       </Wrapper>
-      <AllFooter>
-        <p
-          style={{
-            color: "white",
-            fontSize: 10,
-            textAlign: "left",
-            padding: 10,
-          }}
-        >
-          @2022 Średnik - all rights reserved
-        </p>{" "}
-      </AllFooter>
     </>
   );
 };

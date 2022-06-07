@@ -4,6 +4,7 @@ import pygments
 from graphene import relay
 from pygments import lexers
 from pygments.formatters import HtmlFormatter
+from pygments.styles import get_style_by_name
 
 # Project
 from pastes.models import PasteBin
@@ -23,7 +24,10 @@ def convert_to_html(code: str, lang: str) -> str:
         code = code.replace('\\n', '\n')
         lex = lexers.get_lexer_by_name(lang)
         code = (
-            pygments.highlight(code, lex, HtmlFormatter(lineseparator='<br>'))
+            pygments.highlight(code, lex, HtmlFormatter(
+                lineseparator='<br>',
+                style="sas",
+            ))
             .strip()
             .replace(escape_chars, '&#92;')
             .replace("class=\"", "class=\'")

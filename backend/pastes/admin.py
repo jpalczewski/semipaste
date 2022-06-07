@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 # Local
-from .models import Attachment, PasteBin, Rating
+from .models import Attachment, PasteBin, Rating, PasteTag, MTMTags
 
 
 @admin.register(PasteBin)
@@ -18,3 +18,12 @@ class AttachmentAdmin(admin.ModelAdmin):
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(PasteTag)
+class PasteTagAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(MTMTags)
+class MTMTagsAdmin(admin.ModelAdmin):
+    pass
+

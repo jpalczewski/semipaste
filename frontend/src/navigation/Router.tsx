@@ -1,14 +1,14 @@
 import {Route, BrowserRouter as Router, Routes, BrowserRouter} from "react-router-dom";
 import Navigation from "../navigation/navigation";
 import ErroPage from "../components/ErrorScreen";
-import { Home } from "../components/HomeScreen";
+import { Join } from "../components/JoinScreen";
 import { Create } from "../components/CreateScreen";
 import {Pastes} from "../components/PastesScreen";
 import { About } from "../components/AboutScreen";
 import { AdminScreen } from "../components/user/AdminScreen";
 import { Settings } from "../components/user/Settings";
 import { UserScreen } from "../components/user/UserScreen";
-import { AuthorScreen } from "../components/user/AuthorScreen";
+import { AuthorScreen } from "../components/user/author/AuthorScreen";
 import {VerificationScreen} from "../components/user/VerificationScreen";
 import { UsersScreen } from "../components/user/UsersScreen";
 import {VisibilityScreen} from "../components/PasteBin/VisibilityScreen";
@@ -18,15 +18,18 @@ import {DashboardHomeScreen} from "../components/dashboard/HomeScreen";
 import React from "react";
 import {DashboardUsersScreen} from "../components/dashboard/Users/UsersScreen";
 import {DashboardUserEditScreen} from "../components/dashboard/Users/UserEditScreen";
+import {AllFooter} from "../styles/Components.style";
+import Footer from "../Footer";
 
 export const Routerr = () => {
   return (
+      <>
     <Router>
       <Navigation />
            <Routes>
                // home - create
                <Route path="" element={<Create />} />
-                <Route path="/home" element={<Home />} />
+                <Route path="/join" element={<Join />} />
                // error screen
                <Route path="*" element={<ErroPage />} />
                // create
@@ -61,5 +64,8 @@ export const Routerr = () => {
                </Route>
            </Routes>
     </Router>
+          <Footer/>
+      </>
+
   );
 };

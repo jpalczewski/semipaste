@@ -2,9 +2,8 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   background-color: #efefef;
-  font-size: 20px;
   text-align: center;
-  height: 150vh !important;
+  height: 100vh;
 `;
 
 export const Header = styled.header`
@@ -12,7 +11,6 @@ export const Header = styled.header`
 `;
 
 export const FormWrapper = styled.div`
-  margin: 50px auto;
   padding: 20px;
   /* background-color: lightgrey; */
   font-size: 20 px;
@@ -21,10 +19,8 @@ export const FormWrapper = styled.div`
 `;
 
 export const TableWrapper = styled.div`
-  margin: 50px;
   padding: 20px;
   font-size: 20 px;
-  width: 90%;
 `;
 
 export const Footer = styled.div`
@@ -32,6 +28,5 @@ export const Footer = styled.div`
 `;
 export const AllFooter = styled.div`
   width: 100%;
-  height: 40px;
   background-color: black;
 `;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Wrapper } from "../../styles/Components.style";
-import { useLocalStorage } from "../../useLocalStorage";
+import { useLocalStorage } from "../../utils/useLocalStorage";
 
 export const Settings = () => {
   const [isDarkTheme, setDarkTheme] = useLocalStorage("darkTheme", true);
