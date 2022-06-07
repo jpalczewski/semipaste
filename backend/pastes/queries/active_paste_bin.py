@@ -15,6 +15,7 @@ from .nodes import PasteTagNode
 from ..models import PasteBin
 from .nodes import TotalRatingNode, TotalCount
 from .nodes import PasteTagNode, TotalRatingNode
+from .nodes import PasteTagNode
 
 
 class ActivePasteBin(DjangoObjectType, TotalRatingNode):

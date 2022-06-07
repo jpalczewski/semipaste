@@ -17,11 +17,6 @@ from pastes.models import Attachment, PasteBin
 from pastes.queries.active_paste_bin import ActivePasteBin, PasteTagNode
 from pastes.queries.expired_paste_bin import ExpiredPasteBin
 
-# Local
-from ..models import PasteBin
-from .active_paste_bin import ActivePasteBin
-from .expired_paste_bin import ExpiredPasteBin
-from .nodes import PasteBinNode
 
 class PasteBinNode(DjangoObjectType):
     id = graphene.ID(source='pk', required=True)
@@ -31,7 +26,6 @@ class PasteBinNode(DjangoObjectType):
         filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
-from .nodes import PasteBinNode
 
 
 class AttachmentNode(DjangoObjectType):
@@ -102,6 +96,7 @@ class PasteBinQuery(graphene.ObjectType):
                     + timedelta(days=360)
                 )
         return pastes
+    all_paste_tags = DjangoFilterConnectionField(PasteTagNode)
 
     def resolve_active_paste_bin(self, info, **kwargs):  # type: ignore
         mode = kwargs.get('mode')

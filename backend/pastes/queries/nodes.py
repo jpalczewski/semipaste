@@ -1,7 +1,6 @@
 # Standard Library
 from datetime import datetime, timezone
 
-
 # 3rd-Party
 import graphene
 from graphene import relay
@@ -60,8 +59,6 @@ class PasteTagNode(DjangoObjectType):
             paste_bin_ids = PasteBin.objects.filter(id=ids.paste_id).last()
             pastes.append(paste_bin_ids)
         return pastes
-
-
 class TotalCount(relay.Connection):
     class Meta:
         abstract = True
@@ -69,7 +66,4 @@ class TotalCount(relay.Connection):
     total_count = graphene.Int()
 
     def resolve_total_count(root, info):
-        # return PasteBin.objects.filter(
-        #     date_of_expiry__gte=datetime.now().replace(tzinfo=timezone.utc)
-        # ).count()
         return root.length
