@@ -1,4 +1,4 @@
-import {Alert, Button, Form} from "react-bootstrap";
+import {Alert, Container, Form} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import {commitMutation} from "react-relay";
@@ -9,6 +9,7 @@ import {useNavigate} from "react-router-dom";
 import {Wrapper} from "../../styles/Components.style";
 import {verifyNewUserMutation} from "../../Query/Users/__generated__/verifyNewUserMutation.graphql";
 import {verifyNewUser} from "../../Query/Users/verifyNewUser";
+import {Flex, Box, Button} from "@chakra-ui/react";
 
 interface Props {
     email: string,
@@ -42,41 +43,49 @@ export const VerificationScreen: React.FC = () => {
     const generateInputs = () => {
         switch(type) {
             case "recovery": {
-                return (<><Form.Group className="mb-3">
-                <Form.Label className="my-5">Verification Code</Form.Label>
-                <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder="code"
-                    value={code || ""}
-                    onChange={(e) => {setCode(e.target.value)}}
-                />
-            </Form.Group>
-            <Form.Group className="mb-3">
-                    <Form.Label className="my-5">Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        name="password"
-                        placeholder="*****"
-                        value={password || ""}
-                        onChange={(e) => {setPassword(e.target.value)}}
-                    />
-                </Form.Group>
+                return (
 
-                <Form.Group className="mb-3">
-                    <Form.Label className="my-5">Confirm Password</Form.Label>
-                    <Form.Control
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="*****"
-                        value={confirmPassword || ""}
-                        onChange={(e) => {setConfirmPassword(e.target.value)}}
-                    />
-                </Form.Group>
+                    <><Form.Group className="mb-3">
+                        <Form.Label className="my-5">Verification Code</Form.Label>
+                        <Form.Control
+                            type="email"
+                            name="email"
+                            placeholder="code"
+                            value={code || ""}
+                            onChange={(e) => {
+                                setCode(e.target.value)
+                            }}
+                        />
+                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label className="my-5">Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                name="password"
+                                placeholder="*****"
+                                value={password || ""}
+                                onChange={(e) => {
+                                    setPassword(e.target.value)
+                                }}
+                            />
+                        </Form.Group>
 
-            <Button className="my-5" onClick={() => handleRecover()}>
-                Change Password
-            </Button></>)
+                        <Form.Group className="mb-3">
+                            <Form.Label className="my-5">Confirm Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                name="confirmPassword"
+                                placeholder="*****"
+                                value={confirmPassword || ""}
+                                onChange={(e) => {
+                                    setConfirmPassword(e.target.value)
+                                }}
+                            />
+                        </Form.Group>
+
+                        <Button colorScheme="blue" className="my-5" onClick={() => handleRecover()}>
+                            Change Password
+                        </Button></>);
             }
             case "registration": {
                 return (<>
@@ -90,7 +99,7 @@ export const VerificationScreen: React.FC = () => {
                         onChange={(e) => {setCode(e.target.value)}}
                     />
                 </Form.Group>
-                <Button className="my-5" onClick={() => handleRegister()}>
+                <Button colorScheme="blue" className="my-5" onClick={() => handleRegister()}>
                     Verify
                 </Button></>)
             }
@@ -142,29 +151,33 @@ export const VerificationScreen: React.FC = () => {
 
     return (
         <Wrapper>
-            {error &&
-                <Alert variant="primary" style={{width: "50vh", margin: "auto"}}>
-                    <Alert.Heading>
-                        {errorMessage}
-                    </Alert.Heading>
-                </Alert>
-            }
-            <div className="Container">
-            {(email === undefined && id === undefined) ? <><p>Nope</p></> :
-            <>
-            {!status ? <>
-                    {generateInputs()}
-                </>
-                :
-                <>
-                    <p>It works!</p>
-                    <Button onClick={() => navigate('/home')}>
-                        Go Back
-                    </Button>
-                </>
-            }
-            </>}
-          </div>
+            <Box className="py-4">
+                <Container className="bg-white py-5">
+                    {error &&
+                        <Alert variant="primary" style={{width: "50vh", margin: "auto"}}>
+                            <Alert.Heading>
+                                {errorMessage}
+                            </Alert.Heading>
+                        </Alert>
+                    }
+                    <Flex align="center" justify="center" direction="column">
+                        {(email === undefined && id === undefined) ? <><p>Nope</p></> :
+                            <>
+                                {!status ? <>
+                                        {generateInputs()}
+                                    </>
+                                    :
+                                    <>
+                                        <p>It worked!</p>
+                                        <Button colorScheme="blue" onClick={() => navigate('/join')}>
+                                            Go Back
+                                        </Button>
+                                    </>
+                                }
+                            </>}
+                    </Flex>
+                </Container>
+            </Box>
         </Wrapper>
     );
 }

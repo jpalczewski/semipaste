@@ -5,7 +5,7 @@ import {getUser} from "../../../Query/Users/getUser";
 import {Col, Container as BC, Row} from "react-bootstrap";
 import {Wrapper} from "../../../styles/Components.style";
 import {UserReportScreen} from "../UserReportScreen";
-import {Box, Button, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
+import {Box, Button, Center, Flex, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
 import React from "react";
 import {OverviewScreen} from "./OverviewScreen";
 import {AuthorPasteScreen} from "./AuthorPasteScreen";
@@ -27,37 +27,42 @@ export const AuthorScreen = () => {
                     <hr/>
                     <Row>
                         <Col lg={4} style={{borderRight: "1px solid #eee", height: "100vh"}}>
-                            <Box
-                                width={"100%"}
-                                height={"30vh"}
-                                className="border-1"
-                            >
-                                AVATAR
-                            </Box>
-                            <Box className="px-5 py-3">
-                                <Box>{user.allUsers?.edges[0]?.node?.username}</Box>
-                                <UserReportScreen
-                                    id={user.allUsers?.edges?.[0]?.node?.id}
-                                    username={user.allUsers?.edges?.[0]?.node?.username}
-                                />
-                            </Box>
+                            <Flex direction="column" align="center">
+                                <Box
+                                    width={"100%"}
+                                    height={"30vh"}
+                                    className="border-1"
+                                >
+                                    AVATAR
+                                </Box>
+                                <Box className="px-5 py-3">
+                                    <Box>{user.allUsers?.edges[0]?.node?.username}</Box>
+                                </Box>
+                                <Box>
+                                    <UserReportScreen
+                                        id={user.allUsers?.edges?.[0]?.node?.id}
+                                        username={user.allUsers?.edges?.[0]?.node?.username}
+                                    />
+                                </Box>
+                            </Flex>
                         </Col>
                         <Col>
                             <Tabs className="pt-4">
                                 <TabList>
                                     <Tab>Overview</Tab>
-                                    <Tab>Pastes</Tab>
+                                    <Tab onClick={() => navigate(`/pastes/?author=${user.allUsers?.edges?.[0]?.node?.username}`)}>Pastes</Tab>
                                 </TabList>
                                 <TabPanels>
                                     <TabPanel>
                                         <OverviewScreen
+                                            username={user.allUsers?.edges[0]?.node?.username}
                                             firstName={user.allUsers?.edges[0]?.node?.firstName}
                                             lastName={user.allUsers?.edges[0]?.node?.lastName}
-
+                                            description={user.allUsers?.edges[0]?.node?.description}
                                         />
                                     </TabPanel>
                                     <TabPanel>
-                                        <AuthorPasteScreen />
+                                        {/*<AuthorPasteScreen/>*/}
                                     </TabPanel>
                                 </TabPanels>
                             </Tabs>

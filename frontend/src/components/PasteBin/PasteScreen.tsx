@@ -33,7 +33,7 @@ export const PasteScreen = (props: any) => {
     const [syntax, setSyntax] = useState<string>("");
     const pk = props.id;
     const paste = useLazyLoadQuery<getPasteBinQuery>(getPasteBin, {id: pk!});
-    const [totalRating, setTotalRating] = useState(paste.allPasteBin?.edges[0]?.node?.totalRating);
+    const [totalRating, setTotalRating] = useState(paste.activePasteBin?.edges[0]?.node?.totalRating);
 
     const [color, setColor] = useState("black");
     const [cursor, setCursor] = useState("crosshair");
@@ -140,10 +140,10 @@ export const PasteScreen = (props: any) => {
                     <hr/>
                     <Row>
                         <Col md={4} className="px-5 py-3" style={{borderRight: "1px solid #eee", height: "100vh"}}>
-                            <p style={{fontSize: 32}}>{paste.allPasteBin?.edges?.[0]?.node?.title}</p>
+                            <p style={{fontSize: 32}}>{paste.activePasteBin?.edges?.[0]?.node?.title}</p>
                             <pre
                                 style={{color: color, cursor: cursor}}
-                                onClick={() => navigate(`/users/${paste.allPasteBin?.edges?.[0]?.node?.author?.id}`)}
+                                onClick={() => navigate(`/users/${paste.activePasteBin?.edges?.[0]?.node?.author?.id}`)}
                                 onMouseOver={() => {
                                     setColor("grey");
                                     setCursor("pointer");
@@ -152,18 +152,18 @@ export const PasteScreen = (props: any) => {
                                     setColor("black");
                                     setCursor("crosshair");
                                 }}
-                            >Author: {paste.allPasteBin?.edges?.[0]?.node?.author?.username}</pre>
-                            <pre>Lanuage: {paste.allPasteBin?.edges?.[0]?.node?.language}</pre>
+                            >Author: {paste.activePasteBin?.edges?.[0]?.node?.author?.username}</pre>
+                            <pre>Lanuage: {paste.activePasteBin?.edges?.[0]?.node?.language}</pre>
                             <PasteReportScreen
-                                pid={paste.allPasteBin?.edges?.[0]?.node?.id}
-                                title={paste.allPasteBin?.edges?.[0]?.node?.title}/>
+                                pid={paste.activePasteBin?.edges?.[0]?.node?.id}
+                                title={paste.activePasteBin?.edges?.[0]?.node?.title}/>
                         </Col>
                         <Col style={{height: "100vh"}}>
                             <Tabs className="my-5">
                                 <TabList>
                                     <Tab>Code</Tab>
                                     {
-                                        paste.allPasteBin?.edges?.[0]?.node?.language !== "Plain Text"
+                                        paste.activePasteBin?.edges?.[0]?.node?.language !== "Plain Text"
                                         &&
                                         <Tab>Highlight</Tab>
                                     }
@@ -174,7 +174,7 @@ export const PasteScreen = (props: any) => {
                                             size="lg"
                                             rows={10}
                                             isReadOnly={true}
-                                            value={paste.allPasteBin?.edges?.[0]?.node?.text}
+                                            value={paste.activePasteBin?.edges?.[0]?.node?.text}
                                         />
                                         {/*<textarea rows={10} disabled>{paste.allPasteBin?.edges?.[0]?.node?.text}</textarea>*/}
                                     </TabPanel>

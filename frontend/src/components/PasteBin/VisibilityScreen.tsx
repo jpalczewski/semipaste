@@ -10,7 +10,7 @@ export const VisibilityScreen = () => {
     let visible = false;
 
     const paste = useLazyLoadQuery<getPasteBinQuery>(getPasteBin, {id: id!});
-    if (paste.allPasteBin?.edges?.[0]?.node?.visible) {
+    if (paste.activePasteBin?.edges?.[0]?.node?.visible) {
         visible = true;
     }
 

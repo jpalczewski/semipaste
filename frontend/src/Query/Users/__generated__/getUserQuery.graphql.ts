@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2e6d0d9817d3e88ff866488336ab34b8>>
+ * @generated SignedSource<<eb87ee6dcceda5daace50a244be85c9f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -25,6 +25,7 @@ export type getUserQuery$data = {
         readonly isVerified: boolean;
         readonly isStaff: boolean;
         readonly isSuperuser: boolean;
+        readonly description: string;
       } | null;
     } | null>;
   } | null;
@@ -135,6 +136,13 @@ v1 = [
                 "kind": "ScalarField",
                 "name": "isSuperuser",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "description",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -164,16 +172,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "c7f280abdca904082fc4126e00992212",
+    "cacheID": "0ee440e42f892513bcc7eb860032500a",
     "id": null,
     "metadata": {},
     "name": "getUserQuery",
     "operationKind": "query",
-    "text": "query getUserQuery(\n  $id: ID!\n) {\n  allUsers(id: $id) {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        isVerified\n        isStaff\n        isSuperuser\n      }\n    }\n  }\n}\n"
+    "text": "query getUserQuery(\n  $id: ID!\n) {\n  allUsers(id: $id) {\n    edges {\n      node {\n        username\n        firstName\n        lastName\n        id\n        email\n        dateJoined\n        isVerified\n        isStaff\n        isSuperuser\n        description\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "bd3ce248bb4ebc4fabd65684b35fbea2";
+(node as any).hash = "27c62f0f83bd96066c54b7a30d15ff47";
 
 export default node;

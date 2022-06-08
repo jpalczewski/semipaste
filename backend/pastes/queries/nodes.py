@@ -59,6 +59,7 @@ class PasteTagNode(DjangoObjectType):
             paste_bin_ids = PasteBin.objects.filter(id=ids.paste_id).last()
             pastes.append(paste_bin_ids)
         return pastes
+
 class TotalCount(relay.Connection):
     class Meta:
         abstract = True

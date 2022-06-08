@@ -1,8 +1,8 @@
 import graphql from "babel-plugin-relay/macro";
 
-export const getPasteBin = graphql`
-  query getPasteBinQuery($id: ID!) {
-    activePasteBin(id: $id) {
+export const threeRecentPasteBin = graphql`
+  query threeRecentPasteBinQuery($author__Username: String!) {
+    activePasteBin(author_Username: $author__Username, visible: true, first: 3) {
       edges {
         node {
           title
@@ -11,14 +11,15 @@ export const getPasteBin = graphql`
           id
           visible
           dateOfExpiry
-          totalRating
           language
+          totalRating
+          likes
+          dislikes
           author {
-            id
             username
           }
         }
+        }
       }
     }
-  }
 `;

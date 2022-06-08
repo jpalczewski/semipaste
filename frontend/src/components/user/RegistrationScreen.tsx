@@ -7,7 +7,7 @@ import {commitMutation} from "react-relay";
 import {addUserMutation} from "../../Query/Users/__generated__/addUserMutation.graphql";
 import relayEnvironment from "../../RelayEnvironment";
 import {addUser} from "../../Query/Users/addUser";
-import {Flex} from "@chakra-ui/react";
+import {Box, Flex} from "@chakra-ui/react";
 
 const validate = (form: any) => {
   if (!form.username) return "login jest wymagany";
@@ -70,7 +70,7 @@ export const RegistrationScreen = () => {
   };
 
   return (
-      <>
+      <Box>
         {error &&
             <Alert variant="primary" style={{width: "50vh", margin: "auto"}}>
               <Alert.Heading>
@@ -78,76 +78,76 @@ export const RegistrationScreen = () => {
               </Alert.Heading>
             </Alert>
         }
-    <Flex justify="center">
-      <Form>
-        {error && <Form.Text className="text-danger">{error}</Form.Text>}
-        <Form.Group className="mb-3">
-          <Form.Label>E-mail</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            placeholder="test@test.pl"
-            value={inputs.email || ""}
-            onChange={handleChange}
-          />
-        </Form.Group>
+        <Flex justify="center" align="center">
+          <Form>
+            {error && <Form.Text className="text-danger">{error}</Form.Text>}
+            <Form.Group className="mb-3">
+              <Form.Label>E-mail</Form.Label>
+              <Form.Control
+                  type="email"
+                  name="email"
+                  placeholder="test@test.pl"
+                  value={inputs.email || ""}
+                  onChange={handleChange}
+              />
+            </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Login</Form.Label>
-          <Form.Control
-            type="text"
-            name="username"
-            placeholder="test"
-            value={inputs.username || ""}
-            onChange={handleChange}
-          />
-          {/*<Form.Text className="text-muted">Minimum dwa znaki</Form.Text>*/}
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control
-            type="text"
-            name="firstName"
-            placeholder="firstName"
-            value={inputs.firstName || ""}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control
-            type="text"
-            name="lastName"
-            placeholder="lastName"
-            value={inputs.lastName || ""}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            name="password"
-            placeholder="********"
-            value={inputs.password || ""}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>Confirm Password</Form.Label>
-          <Form.Control
-            type="password"
-            name="confirmPassword"
-            placeholder="********"
-            value={inputs.confirmPassword || ""}
-            onChange={handleChange}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit" onClick={(e) => handleSubmit(e)}>
-          Sign Up
-        </Button>
-      </Form>
-    </Flex>
-        </>
+            <Form.Group className="mb-3">
+              <Form.Label>Login</Form.Label>
+              <Form.Control
+                  type="text"
+                  name="username"
+                  placeholder="test"
+                  value={inputs.username || ""}
+                  onChange={handleChange}
+              />
+              {/*<Form.Text className="text-muted">Minimum dwa znaki</Form.Text>*/}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                  type="text"
+                  name="firstName"
+                  placeholder="firstName"
+                  value={inputs.firstName || ""}
+                  onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                  type="text"
+                  name="lastName"
+                  placeholder="lastName"
+                  value={inputs.lastName || ""}
+                  onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                  type="password"
+                  name="password"
+                  placeholder="********"
+                  value={inputs.password || ""}
+                  onChange={handleChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="********"
+                  value={inputs.confirmPassword || ""}
+                  onChange={handleChange}
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit" onClick={(e) => handleSubmit(e)}>
+              Sign Up
+            </Button>
+          </Form>
+        </Flex>
+      </Box>
   );
 };

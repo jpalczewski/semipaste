@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { commitMutation } from "relay-runtime";
 import { login } from "../../Query/Login/login";
@@ -8,6 +8,7 @@ import { validPassword } from "../../Regex/Regex";
 import RelayEnvironment from "../../RelayEnvironment";
 import "../../styles/LoginScreen.css";
 import imag from "../../assets/alert_login.jpeg";
+import {Box, Flex, Button} from "@chakra-ui/react";
 
 // const validate = (form: any) => {
 //   if (!form.username) return "login jest wymagany";
@@ -68,7 +69,7 @@ export const LoginScreen = () => {
   };
 
   return (
-    <div>
+    <Box className="py-4">
       {error && (
         <Alert variant="danger" onClose={() => setError(!error)} dismissible>
           <img src={imag} style={{ borderRadius: 20 }} />
@@ -77,7 +78,8 @@ export const LoginScreen = () => {
           do logowania jeszcze raz
         </Alert>
       )}
-      <Form onSubmit={() => handleSubmit(inputs)}>
+      <Flex justify="center" align="center">
+        <Form onSubmit={() => handleSubmit(inputs)}>
         {error && <Form.Text className="text-danger">{error}</Form.Text>}
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Login</Form.Label>
@@ -104,15 +106,16 @@ export const LoginScreen = () => {
           />
         </Form.Group>
         <Button
-          variant="primary"
+          colorScheme="teal"
           type="submit"
           onClick={(inputs) => {
             handleSubmit(inputs);
           }}
         >
-          Zaloguj
+          Login
         </Button>
       </Form>
-    </div>
+      </Flex>
+    </Box>
   );
 };

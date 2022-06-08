@@ -27,11 +27,16 @@ import {
 } from "@chakra-ui/react";
 import {useMediaQuery} from "@chakra-ui/react";
 import {MobileBar} from "./mobile/MobileBar";
+import {commitMutation, useLazyLoadQuery} from "react-relay";
+import RelayEnvironment from "../RelayEnvironment";
+import {isSuperUserQuery} from "../Query/Users/__generated__/isSuperUserQuery.graphql";
+import {isSuperUser} from "../Query/Users/isSuperUser";
 
 const Navigation = () => {
   const [isMobile] = useMediaQuery('(min-width: 992px)');
   const [token, setToken] = useState();
   const [prop, setProp] = useState("");
+
   useEffect(() => {
     const fetch = async () => {
       setToken(JSON.parse(localStorage.getItem("token")!));
@@ -39,6 +44,10 @@ const Navigation = () => {
     };
     fetch().catch(console.error);
   }, []);
+
+  let isSuper = false;
+  const result = useLazyLoadQuery<isSuperUserQuery>(isSuperUser, {username: prop});
+  isSuper = result.allUsers?.edges[0]?.node?.isSuperuser!;
 
   const myAccount = () => {
     if (prop == "a") {
@@ -110,20 +119,13 @@ const Navigation = () => {
                               <MenuItem onClick={() => myAccount()}>Account</MenuItem>
                               <MenuDivider/>
                               <MenuItem onClick={() => navigate("user/settings")}>Settings</MenuItem>
+                              {isSuper &&
+                              <MenuItem onClick={() => navigate("/dashboard")}>Dashboard</MenuItem>
+                              }
                               <MenuItem>My Pastes</MenuItem>
                               <MenuItem onClick={logOut}>Logout</MenuItem>
                             </MenuList>
                           </Menu>
-                          {/*<NavDropdown title="USERNAME">*/}
-                          {/*  <NavDropdown.Item onClick={() => myAccount()}>*/}
-                          {/*    Account*/}
-                          {/*  </NavDropdown.Item>*/}
-                          {/*  <NavDropdown.Item onClick={() => navigate("user/settings")}>*/}
-                          {/*    Settings*/}
-                          {/*  </NavDropdown.Item>*/}
-                          {/*  <NavDropdown.Item>My Pastes</NavDropdown.Item>*/}
-                          {/*  <NavDropdown.Item onClick={logOut}>Logout</NavDropdown.Item>*/}
-                          {/*</NavDropdown>*/}
                         </>
                     ) : (
                         <>

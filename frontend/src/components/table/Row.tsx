@@ -84,7 +84,8 @@ export const Row = (props: any) => {
                     setCursor1("crosshair");
                 }}
             >{props.object?.title}</td>
-            <td
+            {props.object?.author === null ? <td>Anonymous</td>
+            : <td
                     style={{color: color2, cursor: cursor2}}
                     onClick={() => navigate(`/users/${props.object?.author.id}`)}
                     onMouseOver={() => {
@@ -97,6 +98,7 @@ export const Row = (props: any) => {
                     }}
                 >{props.object?.author.username}
             </td>
+            }
             <td>
                 {props.object?.dateOfCreation.slice(
                     0,

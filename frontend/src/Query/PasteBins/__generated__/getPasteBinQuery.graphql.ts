@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<78e129a44f87892a97fd8243f4736ca9>>
+ * @generated SignedSource<<9e10110c2c0d42d11df83f0fce003b96>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,7 +13,7 @@ export type getPasteBinQuery$variables = {
   id: string;
 };
 export type getPasteBinQuery$data = {
-  readonly allPasteBin: {
+  readonly activePasteBin: {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly title: string;
@@ -62,15 +62,15 @@ v2 = [
         "variableName": "id"
       }
     ],
-    "concreteType": "PasteBinNodeConnection",
+    "concreteType": "ActivePasteBinConnection",
     "kind": "LinkedField",
-    "name": "allPasteBin",
+    "name": "activePasteBin",
     "plural": false,
     "selections": [
       {
         "alias": null,
         "args": null,
-        "concreteType": "PasteBinNodeEdge",
+        "concreteType": "ActivePasteBinEdge",
         "kind": "LinkedField",
         "name": "edges",
         "plural": true,
@@ -78,7 +78,7 @@ v2 = [
           {
             "alias": null,
             "args": null,
-            "concreteType": "PasteBinNode",
+            "concreteType": "ActivePasteBin",
             "kind": "LinkedField",
             "name": "node",
             "plural": false,
@@ -180,16 +180,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "60a4acb7ca0a99707ebeba8fc87b0e7d",
+    "cacheID": "a3a264f0f5a009fdf0fc1ff759f0681f",
     "id": null,
     "metadata": {},
     "name": "getPasteBinQuery",
     "operationKind": "query",
-    "text": "query getPasteBinQuery(\n  $id: ID!\n) {\n  allPasteBin(id: $id) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        totalRating\n        language\n        author {\n          id\n          username\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query getPasteBinQuery(\n  $id: ID!\n) {\n  activePasteBin(id: $id) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        totalRating\n        language\n        author {\n          id\n          username\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "445060e33d706a19765dfab1a4f4472e";
+(node as any).hash = "a00eb5408cc5583747605024144388c2";
 
 export default node;

@@ -14,6 +14,7 @@ export const getUser = graphql`
           isVerified
           isStaff
           isSuperuser
+          description
         }
       }
     }
