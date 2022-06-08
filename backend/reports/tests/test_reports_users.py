@@ -67,7 +67,7 @@ class TestReportUsers(GraphQLTestCase):
                     }"""
 
         variables = {
-            "uid": 44,
+            "uid": self.user.user.id,
             "reason": "Reason test 02"
         }
 
@@ -95,7 +95,7 @@ class TestReportUsers(GraphQLTestCase):
                             }"""
 
         variables = {
-            "uid": 31,
+            "uid": self.user.user.id,
             "reason": "Reason test 03"
         }
 
@@ -172,7 +172,7 @@ class TestReportUsers(GraphQLTestCase):
                             }"""
 
         variables = {
-            "uid": 47,
+            "uid": self.user.user.id,
             "reason": "Reason test 05"
         }
 
@@ -180,7 +180,7 @@ class TestReportUsers(GraphQLTestCase):
         query_result = self.client.execute(query, context=self.user)
 
         self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["reason"], "Reason test 05")
-        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["id"], "47")
+        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["id"], f"{self.user.user.id}")
         self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["username"],
                          self.user.user.username)
         self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["firstName"],
@@ -228,7 +228,7 @@ class TestReportUsers(GraphQLTestCase):
                             }"""
 
         variables = {
-            "uid": 35,
+            "uid": self.user.user.id,
             "reason": "Reason test 02"
         }
 
