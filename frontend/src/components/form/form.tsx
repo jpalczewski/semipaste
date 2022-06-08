@@ -25,6 +25,9 @@ import {
   Switch, FormControl, FormLabel,
     SimpleGrid,
 } from "@chakra-ui/react";
+import RelayFileEnv from "../../RelayFileEnv";
+import {addAttachmentMutation} from "../../Query/Attachment/__generated__/addAttachmentMutation.graphql";
+import {addAttachment} from "../../Query/Attachment/addAttachment";
 
 export const PasteBinForm = (props: any) => {
   const [preview, setPreview] = useState(true);
@@ -136,6 +139,22 @@ export const PasteBinForm = (props: any) => {
       }
   );
 
+  const handleSendFile = (e: any) => {
+      const uploadables = { file: e.target.files[0] as File }
+      const token = "83e284067dbfc49cdfd288e614bf4dca";
+      commitMutation<addAttachmentMutation>(RelayEnvironment, {
+        mutation: addAttachment,
+        variables: {token: token},
+        uploadables: uploadables,
+        onCompleted: response => {
+          console.log("Response: ", response);
+        },
+        onError: error => {
+          console.log("Error: ", error);
+        }
+      });
+  }
+
   return (
     <FormWrapper>
       <Row>
@@ -181,12 +200,14 @@ export const PasteBinForm = (props: any) => {
         <Row className="mb-3">
           <div className="d-flex justify-content-between">
             <div>
+
+            {/*  FILE  */}
             <Form.Group
               className="mb-3 w-100"
-              style={{ marginBottom: 10, width: "50%" }}
-            >
-              <Form.Control type="file" size="sm" />
+              style={{ marginBottom: 10, width: "50%" }}>
+              <Form.Control type="file" size="sm" onChange={handleSendFile} />
             </Form.Group>
+
           </div>
 
           <div>
@@ -231,7 +252,6 @@ export const PasteBinForm = (props: any) => {
                   <FormLabel htmlFor="visible" >Public</FormLabel>
                   <Switch id="visible" defaultChecked={true} onChange={e => {
                     handleSwitch(e.target.checked);
-                    console.log(inputs.visible)
                   }} />
                 </FormControl>
               </AccordionPanel>

@@ -15,6 +15,7 @@ import {clearURL, handleURL} from "../utils/url";
 import {
     Flex,
     Button,
+    Box,
     Menu,
     MenuButton,
     Spacer,
@@ -228,227 +229,229 @@ export const Pastes = () => {
     return (
         <>
             <Wrapper>
-                <Container className="bg-white">
-                    <TableWrapper>
-                        <Collapse in={openFilters}>
-                            <div className="container-fluid" style={{textAlign: "left"}}>
-                                <div className="row">
-                                    <div className="col-6">
-                                        <Form.Group>
-                                            <Form.Label>
-                                                Author
-                                                <FontAwesomeIcon style={{marginLeft: "1vh"}} icon={solid("pen")}/>
-                                            </Form.Label>
-                                            <Form.Control
-                                                ref={author_ref}
-                                                type="text"
-                                                name="author"
-                                                placeholder="author's username"
-                                                value={filterInput.author === null ? "" : filterInput.author}
-                                                onChange={handleChangeFilterInput}
-                                            />
-                                        </Form.Group>
+                <Box className="py-4">
+                    <Container className="bg-white">
+                        <TableWrapper>
+                            <Collapse in={openFilters}>
+                                <div className="container-fluid" style={{textAlign: "left"}}>
+                                    <div className="row">
+                                        <div className="col-6">
+                                            <Form.Group>
+                                                <Form.Label>
+                                                    Author
+                                                    <FontAwesomeIcon style={{marginLeft: "1vh"}} icon={solid("pen")}/>
+                                                </Form.Label>
+                                                <Form.Control
+                                                    ref={author_ref}
+                                                    type="text"
+                                                    name="author"
+                                                    placeholder="author's username"
+                                                    value={filterInput.author === null ? "" : filterInput.author}
+                                                    onChange={handleChangeFilterInput}
+                                                />
+                                            </Form.Group>
+                                        </div>
+                                        <div className="col-6">
+                                            <Form.Group>
+                                                <Form.Label>
+                                                    Language
+                                                    <FontAwesomeIcon style={{marginLeft: "1vh"}} icon={solid("code")}/>
+                                                </Form.Label>
+                                                {/*<Select*/}
+                                                {/*  ref={language_ref}*/}
+                                                {/*  defaultValue={languages_options![0]}*/}
+                                                {/*  isClearable={true}*/}
+                                                {/*  options={languages_options}*/}
+                                                {/*/>*/}
+                                                <Form.Select
+                                                    ref={language_ref}
+                                                    name="language"
+                                                    onChange={handleChangeFilterInput}
+                                                    value={filterInput.language === null ? "" : filterInput.language}
+                                                    aria-label="Default select example">
+                                                    <option key={0} value={""} selected></option>
+                                                    {languages?.map((language, i) => {
+                                                        return <option key={i} value={language!}>{language}</option>
+                                                    })}
+                                                </Form.Select>
+                                            </Form.Group>
+                                        </div>
                                     </div>
-                                    <div className="col-6">
-                                        <Form.Group>
-                                            <Form.Label>
-                                                Language
-                                                <FontAwesomeIcon style={{marginLeft: "1vh"}} icon={solid("code")}/>
-                                            </Form.Label>
-                                            {/*<Select*/}
-                                            {/*  ref={language_ref}*/}
-                                            {/*  defaultValue={languages_options![0]}*/}
-                                            {/*  isClearable={true}*/}
-                                            {/*  options={languages_options}*/}
-                                            {/*/>*/}
-                                            <Form.Select
-                                                ref={language_ref}
-                                                name="language"
-                                                onChange={handleChangeFilterInput}
-                                                value={filterInput.language === null ? "" : filterInput.language}
-                                                aria-label="Default select example">
-                                                <option key={0} value={""} selected></option>
-                                                {languages?.map((language, i) => {
-                                                    return <option key={i} value={language!}>{language}</option>
-                                                })}
-                                            </Form.Select>
-                                        </Form.Group>
+                                    <div className="row mt-4">
+                                        <div className="col-3">
+                                            <Form.Group controlId="dateOfCreationGte">
+                                                <Form.Label>From</Form.Label>
+                                                <Form.Control
+                                                    ref={dateOfCreationGte_ref}
+                                                    type="date"
+                                                    placeholder="Date of Birth"
+                                                    name="dateOfCreationGte"
+                                                    onChange={handleChangeFilterInput}
+                                                    value={filterInput.dateOfCreationGte === null ? "" : filterInput.dateOfCreationGte}
+                                                />
+                                            </Form.Group>
+                                        </div>
+                                        <div className="col-3">
+                                            <Form.Group controlId="dateOfCreationLte">
+                                                <Form.Label>To</Form.Label>
+                                                <Form.Control
+                                                    ref={dateOfCreationLte_ref}
+                                                    type="date"
+                                                    placeholder="Date of Birth"
+                                                    name="dateOfCreationLte"
+                                                    value={filterInput.dateOfCreationLte === null ? "" : filterInput.dateOfCreationLte}
+                                                    onChange={handleChangeFilterInput}
+                                                />
+                                            </Form.Group>
+                                        </div>
                                     </div>
+                                    <ButtonGroup
+                                        className="mt-5 mb-4">
+                                        <Button
+                                            onClick={handleFilters}
+                                            style={{marginRight: "3vh"}}>Apply</Button>
+                                        <Button
+                                            onClick={handleFiltersClear}
+                                            variant="danger">Clear</Button>
+                                    </ButtonGroup>
+                                    <hr className="mb-5"/>
                                 </div>
-                                <div className="row mt-4">
-                                    <div className="col-3">
-                                        <Form.Group controlId="dateOfCreationGte">
-                                            <Form.Label>From</Form.Label>
-                                            <Form.Control
-                                                ref={dateOfCreationGte_ref}
-                                                type="date"
-                                                placeholder="Date of Birth"
-                                                name="dateOfCreationGte"
-                                                onChange={handleChangeFilterInput}
-                                                value={filterInput.dateOfCreationGte === null ? "" : filterInput.dateOfCreationGte}
-                                            />
-                                        </Form.Group>
-                                    </div>
-                                    <div className="col-3">
-                                        <Form.Group controlId="dateOfCreationLte">
-                                            <Form.Label>To</Form.Label>
-                                            <Form.Control
-                                                ref={dateOfCreationLte_ref}
-                                                type="date"
-                                                placeholder="Date of Birth"
-                                                name="dateOfCreationLte"
-                                                value={filterInput.dateOfCreationLte === null ? "" : filterInput.dateOfCreationLte}
-                                                onChange={handleChangeFilterInput}
-                                            />
-                                        </Form.Group>
-                                    </div>
+                            </Collapse>
+
+                            <Flex minWidth="max-content" alignItems="center" gap="2" justify="between">
+                                <div>
+                                    {PaginationUtils({page: page, maxPage: maxPage,})}
                                 </div>
-                                <ButtonGroup
-                                    className="mt-5 mb-4">
-                                    <Button
-                                        onClick={handleFilters}
-                                        style={{marginRight: "3vh"}}>Apply</Button>
-                                    <Button
-                                        onClick={handleFiltersClear}
-                                        variant="danger">Clear</Button>
-                                </ButtonGroup>
-                                <hr className="mb-5"/>
-                            </div>
-                        </Collapse>
+                                <Spacer/>
+                                <div>
+                                    {/*<Menu>*/}
+                                    {/*    <MenuButton as={Button} rightIcon={<ChevronDownIcon/>}>*/}
+                                    {/*        {mode === "" ? "new" : mode}*/}
+                                    {/*    </MenuButton>*/}
+                                    {/*    <MenuList>*/}
+                                    {/*        <MenuGroup>*/}
+                                    {/*            <MenuItem*/}
+                                    {/*                icon={<FontAwesomeIcon style={{marginRight: "1vh"}}*/}
+                                    {/*                                       icon={solid("clock")}/>}*/}
+                                    {/*                onClick={(e) => console.log(e.target)}>*/}
+                                    {/*                New*/}
+                                    {/*            </MenuItem>*/}
+                                    {/*            <MenuItem*/}
+                                    {/*                icon={<FontAwesomeIcon style={{marginRight: "1vh"}}*/}
+                                    {/*                                       icon={solid("signal")}/>}>*/}
+                                    {/*                top*/}
+                                    {/*            </MenuItem>*/}
+                                    {/*            <MenuItem*/}
+                                    {/*                icon={<FontAwesomeIcon style={{marginRight: "1vh"}}*/}
+                                    {/*                                       icon={solid("fire")}/>}>*/}
+                                    {/*                hot*/}
+                                    {/*            </MenuItem>*/}
+                                    {/*        </MenuGroup>*/}
+                                    {/*    </MenuList>*/}
+                                    {/*</Menu>*/}
+                                    <DropdownButton
+                                        className="d-inline mx-2"
+                                        id="dropdown-basic-button"
+                                        title={mode === "" ? "new" : mode}
+                                        onSelect={(event) => {
+                                            // mode before
+                                            const before = searchParams.get("mode");
+                                            // set mode
+                                            handleModeSelect(event);
+                                            navigateMode(before);
+                                        }}>
+                                        <Dropdown.Item eventKey="">
+                                            <FontAwesomeIcon style={{marginRight: "1vh"}} icon={solid("clock")}/>
+                                            New
+                                        </Dropdown.Item>
+                                        <Dropdown.Item eventKey="top">
+                                            <FontAwesomeIcon style={{marginRight: "1vh"}} icon={solid("signal")}/>
+                                            top
+                                        </Dropdown.Item>
+                                        <Dropdown.Item eventKey="hot">
+                                            <FontAwesomeIcon style={{marginRight: "1vh"}} icon={solid("fire")}/>
+                                            hot
+                                        </Dropdown.Item>
+                                    </DropdownButton>
+                                    <>
+                                        {mode === "top" &&
+                                            <DropdownButton
+                                                className="d-inline mx-2"
+                                                id="dropdown-basic-button"
+                                                title={time === "" ? "all" : time}
+                                                onSelect={(event) => {
+                                                    handleTimeSelect(event);
+                                                    navigateTime();
+                                                }}
+                                            >
+                                                <Dropdown.Item eventKey="today">today</Dropdown.Item>
+                                                <Dropdown.Item eventKey="week">week</Dropdown.Item>
+                                                <Dropdown.Item eventKey="month">month</Dropdown.Item>
+                                                <Dropdown.Item eventKey="year">year</Dropdown.Item>
+                                                <Dropdown.Item eventKey="">all</Dropdown.Item>
+                                            </DropdownButton>
+                                        }</>
 
-                        <Flex minWidth="max-content" alignItems="center" gap="2" justify="between">
-                            <div>
-                                {PaginationUtils({page: page, maxPage: maxPage,})}
-                            </div>
-                            <Spacer/>
-                            <div>
-                                {/*<Menu>*/}
-                                {/*    <MenuButton as={Button} rightIcon={<ChevronDownIcon/>}>*/}
-                                {/*        {mode === "" ? "new" : mode}*/}
-                                {/*    </MenuButton>*/}
-                                {/*    <MenuList>*/}
-                                {/*        <MenuGroup>*/}
-                                {/*            <MenuItem*/}
-                                {/*                icon={<FontAwesomeIcon style={{marginRight: "1vh"}}*/}
-                                {/*                                       icon={solid("clock")}/>}*/}
-                                {/*                onClick={(e) => console.log(e.target)}>*/}
-                                {/*                New*/}
-                                {/*            </MenuItem>*/}
-                                {/*            <MenuItem*/}
-                                {/*                icon={<FontAwesomeIcon style={{marginRight: "1vh"}}*/}
-                                {/*                                       icon={solid("signal")}/>}>*/}
-                                {/*                top*/}
-                                {/*            </MenuItem>*/}
-                                {/*            <MenuItem*/}
-                                {/*                icon={<FontAwesomeIcon style={{marginRight: "1vh"}}*/}
-                                {/*                                       icon={solid("fire")}/>}>*/}
-                                {/*                hot*/}
-                                {/*            </MenuItem>*/}
-                                {/*        </MenuGroup>*/}
-                                {/*    </MenuList>*/}
-                                {/*</Menu>*/}
-                                <DropdownButton
-                                    className="d-inline mx-2"
-                                    id="dropdown-basic-button"
-                                    title={mode === "" ? "new" : mode}
-                                    onSelect={(event) => {
-                                        // mode before
-                                        const before = searchParams.get("mode");
-                                        // set mode
-                                        handleModeSelect(event);
-                                        navigateMode(before);
-                                    }}>
-                                    <Dropdown.Item eventKey="">
-                                        <FontAwesomeIcon style={{marginRight: "1vh"}} icon={solid("clock")}/>
-                                        New
-                                    </Dropdown.Item>
-                                    <Dropdown.Item eventKey="top">
-                                        <FontAwesomeIcon style={{marginRight: "1vh"}} icon={solid("signal")}/>
-                                        top
-                                    </Dropdown.Item>
-                                    <Dropdown.Item eventKey="hot">
-                                        <FontAwesomeIcon style={{marginRight: "1vh"}} icon={solid("fire")}/>
-                                        hot
-                                    </Dropdown.Item>
-                                </DropdownButton>
-                                <>
-                                    {mode === "top" &&
-                                        <DropdownButton
-                                            className="d-inline mx-2"
-                                            id="dropdown-basic-button"
-                                            title={time === "" ? "all" : time}
-                                            onSelect={(event) => {
-                                                handleTimeSelect(event);
-                                                navigateTime();
-                                            }}
-                                        >
-                                            <Dropdown.Item eventKey="today">today</Dropdown.Item>
-                                            <Dropdown.Item eventKey="week">week</Dropdown.Item>
-                                            <Dropdown.Item eventKey="month">month</Dropdown.Item>
-                                            <Dropdown.Item eventKey="year">year</Dropdown.Item>
-                                            <Dropdown.Item eventKey="">all</Dropdown.Item>
-                                        </DropdownButton>
-                                    }</>
-
-                            </div>
-                            <ButtonGroup>
-                                <input
-                                    className="border-1"
-                                    ref={titleIStartsWith_ref}
-                                    name="titleIStartsWith"
-                                    type="text"
-                                    value={filterInput.titleIStartsWith === null || filterInput.titleIStartsWith === undefined ? "" : filterInput.titleIStartsWith}
-                                    onChange={event => {
-                                        setFilterInput({...filterInput, titleIStartsWith: event.target.value});
-                                        // titleIStartsWith_ref.current?.value = event.target.value;
-                                    }}
-                                    style={{width: "20vh"}}/>
-                                {filterInput.titleIStartsWith &&
-                                    <Button
-                                        onClick={() => {
-                                            const url = clearURL(searchParams.toString(), "title", URLtitleStartswith);
-                                            setSearchParams(url);
+                                </div>
+                                <ButtonGroup>
+                                    <input
+                                        className="border-1"
+                                        ref={titleIStartsWith_ref}
+                                        name="titleIStartsWith"
+                                        type="text"
+                                        value={filterInput.titleIStartsWith === null || filterInput.titleIStartsWith === undefined ? "" : filterInput.titleIStartsWith}
+                                        onChange={event => {
+                                            setFilterInput({...filterInput, titleIStartsWith: event.target.value});
+                                            // titleIStartsWith_ref.current?.value = event.target.value;
                                         }}
-                                        colorScheme={"blue"}>
-                                        X</Button>
-                                }
-                                <Button colorScheme={"blue"}
-                                        onClick={handleFilters}
-                                >
-                                    <FontAwesomeIcon icon={solid("magnifying-glass")}/>
-                                </Button>
-                                <Button
-                                    colorScheme={"twitter"}
-                                    style={{marginLeft: "1vh"}} onClick={() => setOpenFilters(!openFilters)}>
-                                    <FontAwesomeIcon icon={solid("filter")}/>
-                                </Button>
-                            </ButtonGroup>
-                        </Flex>
-                        <Tables pastes={pastes} page={page}/>
-                        <Flex minWidth="max-content" alignItems="center" gap="2" justify="between">
-                            <div>
-                                {PaginationUtils({
-                                    page: page,
-                                    maxPage: maxPage,
-                                })}
-                            </div>
-                            <Spacer/>
-                            Rows on one page:
-                            <select className={"form-select"} style={{width: "10vh"}}
-                                    onChange={(e) => {
-                                        handleFirst(e)
-                                    }}>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="5">5</option>
-                                <option value="15" selected>15</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                        </Flex>
-                    </TableWrapper>
-                </Container>
+                                        style={{width: "20vh"}}/>
+                                    {filterInput.titleIStartsWith &&
+                                        <Button
+                                            onClick={() => {
+                                                const url = clearURL(searchParams.toString(), "title", URLtitleStartswith);
+                                                setSearchParams(url);
+                                            }}
+                                            colorScheme={"blue"}>
+                                            X</Button>
+                                    }
+                                    <Button colorScheme={"blue"}
+                                            onClick={handleFilters}
+                                    >
+                                        <FontAwesomeIcon icon={solid("magnifying-glass")}/>
+                                    </Button>
+                                    <Button
+                                        colorScheme={"twitter"}
+                                        style={{marginLeft: "1vh"}} onClick={() => setOpenFilters(!openFilters)}>
+                                        <FontAwesomeIcon icon={solid("filter")}/>
+                                    </Button>
+                                </ButtonGroup>
+                            </Flex>
+                            <Tables pastes={pastes} page={page}/>
+                            <Flex minWidth="max-content" alignItems="center" gap="2" justify="between">
+                                <div>
+                                    {PaginationUtils({
+                                        page: page,
+                                        maxPage: maxPage,
+                                    })}
+                                </div>
+                                <Spacer/>
+                                Rows on one page:
+                                <select className={"form-select"} style={{width: "10vh"}}
+                                        onChange={(e) => {
+                                            handleFirst(e)
+                                        }}>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="5">5</option>
+                                    <option value="15" selected>15</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </Flex>
+                        </TableWrapper>
+                    </Container>
+                </Box>
             </Wrapper>
         </>
     );

@@ -64,7 +64,7 @@ export const Routerr = () => {
                </Route>
            </Routes>
     </Router>
-          <Footer/>
+          {/*<Footer/>*/}
       </>
 
   );

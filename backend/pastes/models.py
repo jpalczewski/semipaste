@@ -124,15 +124,15 @@ class PasteBin(models.Model):
     def get_attachments(self):  # type: ignore
         return Attachment.objects.filter(paste=self.pk)
 
-    def is_uploading_attachments_allowed(self) -> bool:
-        """Checks if uploading of a new file is allowed.
-        I.e: if time between paste creation and  now is less than `Timespan`.
-
-        """
-        upload_time_limit = self.date_of_creation + timedelta(
-            seconds=ATTACHMENT_TIMESPAN
-        )
-        return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
+    # def is_uploading_attachments_allowed(self) -> bool:
+    #     """Checks if uploading of a new file is allowed.
+    #     I.e: if time between paste creation and  now is less than `Timespan`.
+    #
+    #     """
+    #     upload_time_limit = self.date_of_creation + timedelta(
+    #         seconds=ATTACHMENT_TIMESPAN
+    #     )
+    #     return datetime.now().replace(tzinfo=timezone.utc) < upload_time_limit
 
     # Special Methods
     def __str__(self) -> str:

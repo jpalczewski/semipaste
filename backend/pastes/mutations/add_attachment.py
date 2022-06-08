@@ -19,21 +19,19 @@ class AddAttachment(ResultMixin, graphene.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, root, info, **input):  # type: ignore
         token = input.get('token')
-        logger.debug(f"Received add attachment request with token {token}")
-        file = info.context.FILES['image']
+        logger.debug(f"\nReceived add attachment request with token {token}")
+        logger.debug(f"\nFiles: {info.context.FILES}")
+        file = info.context.FILES['file']
         if len(info.context.FILES) != 0:
             logger.debug(f"Received files {file}")
         else:
             return AddAttachment(ok=False, error="No files provided")
-
         try:
             paste = PasteBin.objects.get(attachment_token=token)
-
-            if not paste.is_uploading_attachments_allowed():
-                return AddAttachment(
-                    ok=False, error="Too late to upload attachment to that paste"
-                )
-
+            # if not paste.is_uploading_attachments_allowed():
+            #     return AddAttachment(
+            #         ok=False, error="Too late to upload attachment to that paste"
+            #     )
             attachment = Attachment.objects.create(paste=paste, image=file)
             attachment.save()
             print(vars(attachment))
