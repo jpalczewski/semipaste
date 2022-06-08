@@ -297,7 +297,7 @@ class TestSchema(GraphQLTestCase):
         self.assertEqual(mutation_result_2["data"]["isPasteBinRated"]["dislikes"], 0)
         self.assertEqual(mutation_result_2["data"]["isPasteBinRated"]["totalRating"], 1)
 
-    def test_08(self) -> None:
+    def test_09(self) -> None:
         mutation = """mutation(
                             $paste: ID){
                         isPasteBinRated(input:{
