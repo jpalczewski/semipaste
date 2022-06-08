@@ -16,21 +16,13 @@ import {
     Flex,
     Button,
     Box,
-    Menu,
-    MenuButton,
     Spacer,
-    MenuList,
-    MenuItem, MenuGroup,
-    useDisclosure,
 } from "@chakra-ui/react";
-import {ChevronDownIcon} from "@chakra-ui/icons";
 
 export const Pastes = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-    const [first, setFirst] = useState(15);
+    const [first, setFirst] = useState(7);
     const [openFilters, setOpenFilters] = useState(false);
 
     let offSet = 0;
@@ -206,11 +198,7 @@ export const Pastes = () => {
     }
 
     const languages = useLazyLoadQuery<allLanguagesQuery>( Languages, {} ).allLanguages;
-  //     const languages_options = languages?.map(
-  //     language => {
-  //       return {value: language, label: language}
-  //     }
-  // );
+
 
     const [filterInput, setFilterInput] = useState({
         author: author,
@@ -257,12 +245,6 @@ export const Pastes = () => {
                                                     Language
                                                     <FontAwesomeIcon style={{marginLeft: "1vh"}} icon={solid("code")}/>
                                                 </Form.Label>
-                                                {/*<Select*/}
-                                                {/*  ref={language_ref}*/}
-                                                {/*  defaultValue={languages_options![0]}*/}
-                                                {/*  isClearable={true}*/}
-                                                {/*  options={languages_options}*/}
-                                                {/*/>*/}
                                                 <Form.Select
                                                     ref={language_ref}
                                                     name="language"
@@ -324,31 +306,6 @@ export const Pastes = () => {
                                 </div>
                                 <Spacer/>
                                 <div>
-                                    {/*<Menu>*/}
-                                    {/*    <MenuButton as={Button} rightIcon={<ChevronDownIcon/>}>*/}
-                                    {/*        {mode === "" ? "new" : mode}*/}
-                                    {/*    </MenuButton>*/}
-                                    {/*    <MenuList>*/}
-                                    {/*        <MenuGroup>*/}
-                                    {/*            <MenuItem*/}
-                                    {/*                icon={<FontAwesomeIcon style={{marginRight: "1vh"}}*/}
-                                    {/*                                       icon={solid("clock")}/>}*/}
-                                    {/*                onClick={(e) => console.log(e.target)}>*/}
-                                    {/*                New*/}
-                                    {/*            </MenuItem>*/}
-                                    {/*            <MenuItem*/}
-                                    {/*                icon={<FontAwesomeIcon style={{marginRight: "1vh"}}*/}
-                                    {/*                                       icon={solid("signal")}/>}>*/}
-                                    {/*                top*/}
-                                    {/*            </MenuItem>*/}
-                                    {/*            <MenuItem*/}
-                                    {/*                icon={<FontAwesomeIcon style={{marginRight: "1vh"}}*/}
-                                    {/*                                       icon={solid("fire")}/>}>*/}
-                                    {/*                hot*/}
-                                    {/*            </MenuItem>*/}
-                                    {/*        </MenuGroup>*/}
-                                    {/*    </MenuList>*/}
-                                    {/*</Menu>*/}
                                     <DropdownButton
                                         className="d-inline mx-2"
                                         id="dropdown-basic-button"
@@ -443,7 +400,8 @@ export const Pastes = () => {
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="5">5</option>
-                                    <option value="15" selected>15</option>
+                                    <option value="7">7</option>
+                                    <option value="15">15</option>
                                     <option value="25">25</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>

@@ -10,63 +10,12 @@ import {ratePasteBin} from "../../Query/Rating/ratePasteBin";
 import {useNavigate} from "react-router-dom";
 
 export const Row = (props: any) => {
-    // const [isRated, setIsRated] = useState<boolean>(false);
-    // const [rate, setRate] = useState<boolean>(false);
     const [likes, setLikes] = useState(props.object?.likes);
     const [dislikes, setDislikes] = useState(props.object?.dislikes);
     const [color1, setColor1] = useState("black");
     const [color2, setColor2] = useState("black");
     const [cursor1, setCursor1] = useState("crosshair");
     const [cursor2, setCursor2] = useState("crosshair");
-
-    // useEffect(() => {
-    //     commitMutation<isPasteBinRatedMutation>(RelayEnvironment, {
-    //         mutation: isPasteBinRated,
-    //         variables: {paste: props.object?.id},
-    //         onCompleted: (response) => {
-    //             setIsRated(response.isPasteBinRated?.isRated!);
-    //             setRate(response.isPasteBinRated?.rate!);
-    //         },
-    //     });
-    // }, []);
-
-    // const refreshRated = () => {
-    //     commitMutation<isPasteBinRatedMutation>(RelayEnvironment, {
-    //         mutation: isPasteBinRated,
-    //         variables: {paste: props.object?.id},
-    //         onCompleted: (response) => {
-    //             setIsRated(response.isPasteBinRated?.isRated!);
-    //             setRate(response.isPasteBinRated?.rate!);
-    //             setLikes(response.isPasteBinRated?.likes);
-    //             setDislikes(response.isPasteBinRated?.dislikes);
-    //         },
-    //     });
-    // };
-
-    // const ratePaste = (value: any) => {
-    //     commitMutation<ratePasteBinMutation>(RelayEnvironment, {
-    //         mutation: ratePasteBin,
-    //         variables: {paste: props.object?.id, liked: value},
-    //         onCompleted: (response) => {
-    //             if (response.ratePasteBin?.ok!) {
-    //                 refreshRated()
-    //             }
-    //         }
-    //     });
-    // }
-
-    // const handleRate = (event: any) => {
-    //     let value = event.target.value === "like";
-    //     if (isRated) {
-    //         if (value === rate) {
-    //             ratePaste(null);
-    //         } else {
-    //             ratePaste(value);
-    //         }
-    //     } else {
-    //         ratePaste(value);
-    //     }
-    // };
 
     const navigate = useNavigate();
 
@@ -108,34 +57,6 @@ export const Row = (props: any) => {
             <td>
                 {props.object?.totalRating}
             </td>
-            {/*<td>*/}
-            {/*    {isRated*/}
-            {/*        ? rate &&*/}
-            {/*        <><Button variant="primary" value="like" onClick={handleRate}>*/}
-            {/*            &#128402;*/}
-            {/*        </Button>*/}
-            {/*            <Button variant="outline-primary" value="dislike" onClick={handleRate}>*/}
-            {/*                &#128403;*/}
-            {/*            </Button></>*/}
-            {/*        :*/}
-            {/*        <Button variant="outline-primary" value="like" onClick={handleRate}>*/}
-            {/*            &#128402;*/}
-            {/*        </Button>*/}
-            {/*    }*/}
-            {/*    {isRated*/}
-            {/*        ? !rate &&*/}
-            {/*        <><Button variant="outline-primary" value="like" onClick={handleRate}>*/}
-            {/*            &#128402;*/}
-            {/*        </Button>*/}
-            {/*            <Button variant="primary" value="dislike" onClick={handleRate}>*/}
-            {/*                &#128403;*/}
-            {/*            </Button></>*/}
-            {/*        :*/}
-            {/*        <Button variant="outline-primary" value="dislike" onClick={handleRate}>*/}
-            {/*            &#128403;*/}
-            {/*        </Button>*/}
-            {/*    }*/}
-            {/*</td>*/}
             <td style={{width: 200}}>
                 <PasteBinPreviewScreen
                     title={props.object?.title}

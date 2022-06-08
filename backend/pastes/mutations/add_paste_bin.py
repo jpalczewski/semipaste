@@ -21,11 +21,12 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
     class Input:
         title = graphene.String(required=True, description="Title of new paste")
         text = graphene.String(required=True, description="Content of a new paste")
-        expire_after = graphene.Field(
-            graphene.types.Enum.from_enum(PasteBin.ExpireChoices),
-            required=True,
-            description="Expiration time",
-        )
+        # expire_after = graphene.Field(
+        #     graphene.types.Enum.from_enum(PasteBin.ExpireChoices),
+        #     required=True,
+        #     description="Expiration time",
+        # )
+        expire_after = graphene.String(required=True, description="Expiration time")
         visible = graphene.Boolean(required="True", description="Is it private or not?")
         language = graphene.String(description="Syntax Highlight")
         tags = graphene.List(graphene.String)
@@ -49,7 +50,6 @@ class AddPasteBin(ResultMixin, relay.ClientIDMutation):
         elif not info.context.user.is_authenticated:
             valued = None
             setattr(paste, 'author_id', valued)
-            setattr(paste, "visible", True)
         paste.save()
         tag_values = kwargs.get('tags')
         if tag_values:

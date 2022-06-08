@@ -12,10 +12,10 @@ export const Dashboard: React.FC = () => {
          className="mx-0 px-0"
         >
             <Row>
-                <Col md={2} className="mx-0 px-0">
+                <Col md={1} className="mx-0 px-0">
                     <DashboardNav />
                 </Col>
-                <Col md={10} className="mx-0 px-0">
+                <Col className="mx-0 px-0">
                     <Outlet />
                 </Col>
             </Row>

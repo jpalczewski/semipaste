@@ -10,7 +10,9 @@ class CustomUserAdmin(UserAdmin):
     # fieldsets = tuple([field for field in UserAdmin.fieldsets] + ['description'])
     pass
 
+
 admin.site.register(User, CustomUserAdmin)
+
 
 @admin.register(UserVerification)
 class UserVerificationAdmin(admin.ModelAdmin):

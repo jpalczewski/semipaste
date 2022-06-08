@@ -52,6 +52,26 @@ export const RightMenu = (props: any) => {
                                     size="sm"
                                 />
                             </Box>
+
+                            {props.isSuper &&
+                                <Box h='40px' onClick={() => {
+                                    onClose();
+                                    navigate("/dashboard")
+                                }}
+                                     _hover={{
+                                         color: "#777",
+                                         cursor: "pointer"
+                                     }}>
+                                    Dashboard
+                                    <FontAwesomeIcon
+                                        className="mx-3"
+                                        icon={solid("table")}
+                                        onClick={onOpen}
+                                        size="sm"
+                                    />
+                                </Box>
+                            }
+
                             <Box h='40px' onClick={() => {
                                 onClose();
                                 navigate("/pastes")
@@ -69,22 +89,22 @@ export const RightMenu = (props: any) => {
                                 />
                             </Box>
 
-                            <Box h='40px' onClick={() => {
-                                onClose();
-                                navigate("user/settings")
-                            }}
-                                 _hover={{
-                                     color: "#777",
-                                     cursor: "pointer"
-                                 }}>
-                                Settings
-                                <FontAwesomeIcon
-                                    className="mx-3"
-                                    icon={solid("gear")}
-                                    onClick={onOpen}
-                                    size="sm"
-                                />
-                            </Box>
+                            {/*<Box h='40px' onClick={() => {*/}
+                            {/*    onClose();*/}
+                            {/*    navigate("user/settings")*/}
+                            {/*}}*/}
+                            {/*     _hover={{*/}
+                            {/*         color: "#777",*/}
+                            {/*         cursor: "pointer"*/}
+                            {/*     }}>*/}
+                            {/*    Settings*/}
+                            {/*    <FontAwesomeIcon*/}
+                            {/*        className="mx-3"*/}
+                            {/*        icon={solid("gear")}*/}
+                            {/*        onClick={onOpen}*/}
+                            {/*        size="sm"*/}
+                            {/*    />*/}
+                            {/*</Box>*/}
                             <Box h='40px' onClick={() => {
                                 onClose();
                                 props.logout();

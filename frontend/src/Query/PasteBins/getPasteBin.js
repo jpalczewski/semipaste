@@ -17,6 +17,13 @@ export const getPasteBin = graphql`
             id
             username
           }
+          attachments {
+            edges {
+              node {
+                url
+              }
+            }
+          }
         }
       }
     }

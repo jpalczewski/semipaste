@@ -105,4 +105,6 @@ class AddUser(graphene.relay.ClientIDMutation):
                 ok=False, response=f"Failed to send the verification code: {e}"
             )
 
-        return AddUser(ok=True, id=user.id, response="Account created. Check your mailbox")
+        return AddUser(
+            ok=True, id=user.id, response="Account created. Check your mailbox"
+        )

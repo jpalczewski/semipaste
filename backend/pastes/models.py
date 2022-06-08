@@ -96,6 +96,7 @@ class PasteBin(models.Model):
     def save(self, *args, **kwargs):  # type: ignore
         if self.author is None:
             self.expire_after = 'WEEK'
+            self.visible = True
         if not self.date_of_creation:
             self.date_of_creation = datetime.now().replace(tzinfo=timezone.utc)
         if not self.date_of_expiry:

@@ -248,6 +248,7 @@ type PasteBinNodeConnection {
 
   """Contains the nodes in this connection."""
   edges: [PasteBinNodeEdge]!
+  totalCount: Int
 }
 
 """A Relay edge containing a `PasteBinNode` and its cursor."""
@@ -531,7 +532,7 @@ input AddPasteBinInput {
   text: String!
 
   """Expiration time"""
-  expireAfter: ExpireChoices!
+  expireAfter: String!
 
   """Is it private or not?"""
   visible: Boolean!
@@ -540,17 +541,6 @@ input AddPasteBinInput {
   language: String
   tags: [String]
   clientMutationId: String
-}
-
-"""An enumeration."""
-enum ExpireChoices {
-  NEVER
-  MIN
-  HOUR
-  DAY
-  WEEK
-  MONTH
-  YEAR
 }
 
 type DeletePasteBin {

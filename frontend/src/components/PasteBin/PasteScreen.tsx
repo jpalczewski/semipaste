@@ -11,6 +11,7 @@ import {Wrapper} from "../../styles/Components.style";
 import {PasteReportScreen} from "./PasteReportScreen";
 
 import {
+    Accordion,
     Box,
     Button,
     Flex,
@@ -20,7 +21,12 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
-    Textarea
+    Textarea,
+    AccordionItem,
+    AccordionPanel,
+    AccordionButton,
+    AccordionIcon, Img,
+    HStack
 } from "@chakra-ui/react";
 import {ratePasteBinMutation} from "../../Query/Rating/__generated__/ratePasteBinMutation.graphql";
 import {ratePasteBin} from "../../Query/Rating/ratePasteBin";
@@ -115,24 +121,30 @@ export const PasteScreen = (props: any) => {
                                                 ?
 
                                                 <>
-                                                    <Button colorScheme="blue" value="like" onClick={handleRate}>&#128402;</Button>
+                                                    <Button colorScheme="blue" value="like"
+                                                            onClick={handleRate}>&#128402;</Button>
                                                     <Box className="px-3">{totalRating}</Box>
-                                                    <Button colorScheme="blue" variant="outline" value="dislike" onClick={handleRate}>&#128403;</Button>
+                                                    <Button colorScheme="blue" variant="outline" value="dislike"
+                                                            onClick={handleRate}>&#128403;</Button>
                                                 </>
 
                                                 :
                                                 <>
-                                                    <Button colorScheme="blue" variant="outline" value="like" onClick={handleRate}>&#128402;</Button>
+                                                    <Button colorScheme="blue" variant="outline" value="like"
+                                                            onClick={handleRate}>&#128402;</Button>
                                                     <Box className="px-3">{totalRating}</Box>
-                                                    <Button colorScheme="blue" value="dislike" onClick={handleRate}>&#128403;</Button>
+                                                    <Button colorScheme="blue" value="dislike"
+                                                            onClick={handleRate}>&#128403;</Button>
                                                 </>
                                         }
                                     </>
                                     :
                                     <>
-                                        <Button colorScheme="blue" variant="outline" value="like" onClick={handleRate}>&#128402;</Button>
+                                        <Button colorScheme="blue" variant="outline" value="like"
+                                                onClick={handleRate}>&#128402;</Button>
                                         <Box className="px-3">{totalRating}</Box>
-                                        <Button colorScheme="blue" variant="outline" value="dislike" onClick={handleRate}>&#128403;</Button>
+                                        <Button colorScheme="blue" variant="outline" value="dislike"
+                                                onClick={handleRate}>&#128403;</Button>
                                     </>
                             }
                         </Flex>
@@ -141,19 +153,49 @@ export const PasteScreen = (props: any) => {
                     <Row>
                         <Col md={4} className="px-5 py-3" style={{borderRight: "1px solid #eee", height: "100vh"}}>
                             <p style={{fontSize: 32}}>{paste.activePasteBin?.edges?.[0]?.node?.title}</p>
-                            <pre
-                                style={{color: color, cursor: cursor}}
-                                onClick={() => navigate(`/users/${paste.activePasteBin?.edges?.[0]?.node?.author?.id}`)}
-                                onMouseOver={() => {
-                                    setColor("grey");
-                                    setCursor("pointer");
-                                }}
-                                onMouseLeave={() => {
-                                    setColor("black");
-                                    setCursor("crosshair");
-                                }}
-                            >Author: {paste.activePasteBin?.edges?.[0]?.node?.author?.username}</pre>
+                            {paste.activePasteBin?.edges?.[0]?.node?.author !== null &&
+                                <pre
+                                    style={{color: color, cursor: cursor}}
+                                    onClick={() => navigate(`/users/${paste.activePasteBin?.edges?.[0]?.node?.author?.id}`)}
+                                    onMouseOver={() => {
+                                        setColor("grey");
+                                        setCursor("pointer");
+                                    }}
+                                    onMouseLeave={() => {
+                                        setColor("black");
+                                        setCursor("crosshair");
+                                    }}
+                                >Author: {paste.activePasteBin?.edges?.[0]?.node?.author?.username}</pre>
+                            }
                             <pre>Lanuage: {paste.activePasteBin?.edges?.[0]?.node?.language}</pre>
+
+                            <Box className="my-5">
+                                <Accordion allowToggle>
+                                    <AccordionItem>
+                                        <h2>
+                                            <AccordionButton>
+                                                <Box flex='1' textAlign='left'>
+                                                    Photos
+                                                </Box>
+                                                <AccordionIcon/>
+                                            </AccordionButton>
+                                        </h2>
+                                        <AccordionPanel>
+                                            <HStack>
+                                                {paste.activePasteBin?.edges[0]?.node?.attachments.edges.map(image => {
+                                                    return (
+                                                        <a href={`${image?.node?.url!}`}>
+                                                            <Img boxSize="100px" objectFit="cover"
+                                                             src={image?.node?.url!} alt={image?.node?.url!}/>
+                                                        </a>
+                                                    )
+                                                })}
+                                            </HStack>
+                                        </AccordionPanel>
+                                    </AccordionItem>
+                                </Accordion>
+                            </Box>
+
                             <PasteReportScreen
                                 pid={paste.activePasteBin?.edges?.[0]?.node?.id}
                                 title={paste.activePasteBin?.edges?.[0]?.node?.title}/>

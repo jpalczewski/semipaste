@@ -5,8 +5,7 @@ import {Table} from "react-bootstrap";
 import React from "react";
 import {PastesRow} from "./PastesRow";
 
-export const PastesTable = () => {
-    const data = useLazyLoadQuery<allPasteBinQuery>(allPasteBin, {});
+export const PastesTable = (props: any) => {
 
     return (
         <Table striped bordered hover>
@@ -24,9 +23,9 @@ export const PastesTable = () => {
                 </tr>
             </thead>
             <tbody>
-            {data.allPasteBin?.edges === null
+            {props.pastes === null
                 ? (<div><p>Empty</p></div>)
-                : (data.allPasteBin?.edges.map((element: any, i) => {
+                : (props.pastes.map((element: any, i: number) => {
                     return <PastesRow object={element} />
                 }))}
             </tbody>

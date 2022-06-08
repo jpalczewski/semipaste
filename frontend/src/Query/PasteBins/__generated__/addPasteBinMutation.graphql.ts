@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e35608262fc3c04ea8eb4e5144d1cac1>>
+ * @generated SignedSource<<92d3620cb2191b10aa6477a329613a53>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,11 +9,10 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Mutation } from 'relay-runtime';
-export type ExpireChoices = "NEVER" | "MIN" | "HOUR" | "DAY" | "WEEK" | "MONTH" | "YEAR" | "%future added value";
 export type addPasteBinMutation$variables = {
   text: string;
   title: string;
-  expireAfter?: ExpireChoices | null;
+  expireAfter: string;
   visible: boolean;
   language?: string | null;
 };
@@ -21,6 +20,7 @@ export type addPasteBinMutation$data = {
   readonly addPasteBin: {
     readonly ok: boolean | null;
     readonly addedPasteId: number | null;
+    readonly attachmentToken: string | null;
   } | null;
 };
 export type addPasteBinMutation = {
@@ -30,7 +30,7 @@ export type addPasteBinMutation = {
 
 const node: ConcreteRequest = (function(){
 var v0 = {
-  "defaultValue": "DAY",
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "expireAfter"
 },
@@ -108,6 +108,13 @@ v5 = [
         "kind": "ScalarField",
         "name": "addedPasteId",
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "attachmentToken",
+        "storageKey": null
       }
     ],
     "storageKey": null
@@ -143,16 +150,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "f92c77fa9cdbf4b71fdfe31d4dc5cd55",
+    "cacheID": "a669909c763f17bb2f6396b84dffcb2b",
     "id": null,
     "metadata": {},
     "name": "addPasteBinMutation",
     "operationKind": "mutation",
-    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $expireAfter: ExpireChoices = DAY\n  $visible: Boolean!\n  $language: String\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, visible: $visible, language: $language}) {\n    ok\n    addedPasteId\n  }\n}\n"
+    "text": "mutation addPasteBinMutation(\n  $text: String!\n  $title: String!\n  $expireAfter: String!\n  $visible: Boolean!\n  $language: String\n) {\n  addPasteBin(input: {text: $text, title: $title, expireAfter: $expireAfter, visible: $visible, language: $language}) {\n    ok\n    addedPasteId\n    attachmentToken\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "829fe6f1870757c51b661cbcaf0c8d43";
+(node as any).hash = "f6844ac1f6e56cd74143ffb2ceabccf6";
 
 export default node;

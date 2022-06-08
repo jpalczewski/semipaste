@@ -1,5 +1,4 @@
 # Standard Library
-from datetime import datetime, timezone
 
 # 3rd-Party
 import graphene
@@ -9,6 +8,16 @@ from graphene_django import DjangoObjectType
 # Project
 from backend.filters import DefaultFilterClasses, PasteBinFilterFields
 from pastes.models import Attachment, MTMTags, PasteBin, PasteTag
+
+
+class TotalCount(relay.Connection):
+    class Meta:
+        abstract = True
+
+    total_count = graphene.Int()
+
+    def resolve_total_count(root, info):  # type: ignore
+        return root.length
 
 
 class TotalRatingNode(graphene.ObjectType):
@@ -26,6 +35,7 @@ class PasteBinNode(DjangoObjectType, TotalRatingNode):
         filter_fields = PasteBinFilterFields
         interfaces = (relay.Node,)
         exclude = ("attachment_token",)
+        connection_class = TotalCount
 
 
 class AttachmentNode(DjangoObjectType):
@@ -59,12 +69,3 @@ class PasteTagNode(DjangoObjectType):
             paste_bin_ids = PasteBin.objects.filter(id=ids.paste_id).last()
             pastes.append(paste_bin_ids)
         return pastes
-
-class TotalCount(relay.Connection):
-    class Meta:
-        abstract = True
-
-    total_count = graphene.Int()
-
-    def resolve_total_count(root, info):
-        return root.length

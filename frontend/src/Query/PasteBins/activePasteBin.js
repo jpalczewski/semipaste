@@ -13,7 +13,7 @@ export const activePasteBin = graphql`
     $dateOfCreation_Lte: Date,
     $language: String,
     $author__Username: String,
-  ) 
+  )
   {
     activePasteBin(
       visible: true,
@@ -44,6 +44,13 @@ export const activePasteBin = graphql`
           author {
             id
             username
+          }
+          attachments {
+            edges {
+              node {
+                url
+              }
+            }
           }
         }
       }

@@ -9,6 +9,9 @@ import RelayEnvironment from "../../RelayEnvironment";
 import "../../styles/LoginScreen.css";
 import imag from "../../assets/alert_login.jpeg";
 import {Box, Flex, Button} from "@chakra-ui/react";
+import {useLazyLoadQuery} from "react-relay";
+import {isSuperUserQuery} from "../../Query/Users/__generated__/isSuperUserQuery.graphql";
+import {isSuperUser} from "../../Query/Users/isSuperUser";
 
 // const validate = (form: any) => {
 //   if (!form.username) return "login jest wymagany";
@@ -30,14 +33,6 @@ export const LoginScreen = () => {
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
-  const myAccount = (prop: any) => {
-    if (prop == "a") {
-      navigate("user/admin");
-    } else {
-      navigate("user/user");
-    }
-  };
-
   const handleSubmit = async (event: any) => {
     const name = inputs.username;
     localStorage.setItem("username", JSON.stringify(inputs.username));
@@ -52,10 +47,7 @@ export const LoginScreen = () => {
             JSON.stringify(response.tokenAuth?.token)
           );
           setError(false);
-          myAccount(inputs.username);
-          // navigate("/user/user");
-          console.log("name", name);
-
+          navigate("/")
           window.location.reload();
         } else {
           setError(true);

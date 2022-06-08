@@ -7,15 +7,15 @@ from django.db.models import F
 # 3rd-Party
 import graphene
 from graphene import relay
-from graphene_django import DjangoObjectType
-from graphene_django.filter import DjangoFilterConnectionField
+from graphene_django.filter import DjangoFilterConnectionField  # noqa: F401
 from pygments import lexers
 
 # Project
-from backend.filters import PasteBinFilterFields
-from pastes.models import Attachment, PasteBin
-from pastes.queries.active_paste_bin import ActivePasteBin, PasteTagNode
-from pastes.queries.expired_paste_bin import ExpiredPasteBin
+from pastes.models import Attachment, PasteBin  # noqa: F401
+from pastes.queries.active_paste_bin import ActivePasteBin, PasteTagNode  # noqa: F401
+from pastes.queries.expired_paste_bin import ExpiredPasteBin  # noqa: F401
+
+# Local
 from .nodes import PasteBinNode
 
 
@@ -25,7 +25,10 @@ class PasteBinQuery(graphene.ObjectType):
         deprecation_reason="It will be soon available only for " "superusers",
     )
     active_paste_bin = DjangoFilterConnectionField(
-        ActivePasteBin, mode=graphene.String(), time=graphene.String(), order=graphene.List(graphene.String)
+        ActivePasteBin,
+        mode=graphene.String(),
+        time=graphene.String(),
+        order=graphene.List(graphene.String),
     )
     expired_paste_bin = DjangoFilterConnectionField(ExpiredPasteBin)
     paste_bin = relay.Node.Field(PasteBinNode)

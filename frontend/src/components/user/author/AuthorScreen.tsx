@@ -8,7 +8,6 @@ import {UserReportScreen} from "../UserReportScreen";
 import {Box, Button, Center, Flex, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
 import React from "react";
 import {OverviewScreen} from "./OverviewScreen";
-import {AuthorPasteScreen} from "./AuthorPasteScreen";
 
 export const AuthorScreen = () => {
     const {id} = useParams();

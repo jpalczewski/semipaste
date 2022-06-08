@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {
   NavigationWrapper,
   Container,
@@ -27,20 +27,21 @@ import {
 } from "@chakra-ui/react";
 import {useMediaQuery} from "@chakra-ui/react";
 import {MobileBar} from "./mobile/MobileBar";
-import {commitMutation, useLazyLoadQuery} from "react-relay";
-import RelayEnvironment from "../RelayEnvironment";
+import {useLazyLoadQuery} from "react-relay";
 import {isSuperUserQuery} from "../Query/Users/__generated__/isSuperUserQuery.graphql";
 import {isSuperUser} from "../Query/Users/isSuperUser";
+import {UserContext} from "../App";
 
 const Navigation = () => {
   const [isMobile] = useMediaQuery('(min-width: 992px)');
   const [token, setToken] = useState();
   const [prop, setProp] = useState("");
+  const user = useContext(UserContext);
 
   useEffect(() => {
     const fetch = async () => {
-      setToken(JSON.parse(localStorage.getItem("token")!));
-      setProp(JSON.parse(localStorage.getItem("username")!));
+      setToken(user.token!);
+      setProp(user.username!);
     };
     fetch().catch(console.error);
   }, []);
@@ -50,7 +51,7 @@ const Navigation = () => {
   isSuper = result.allUsers?.edges[0]?.node?.isSuperuser!;
 
   const myAccount = () => {
-    if (prop == "a") {
+    if (isSuper) {
       navigate("user/admin");
     } else {
       navigate("user/user");
@@ -71,7 +72,9 @@ const Navigation = () => {
                 token={token}
                 username={prop}
                 logout={logOut}
-                account={myAccount}/>
+                account={myAccount}
+                isSuper={isSuper}
+            />
             : <Container className="shadow-sm p-3" style={{backgroundColor: "#313C40"}}>
               <BC>
                 <Flex align="center">
@@ -118,7 +121,7 @@ const Navigation = () => {
                             <MenuList>
                               <MenuItem onClick={() => myAccount()}>Account</MenuItem>
                               <MenuDivider/>
-                              <MenuItem onClick={() => navigate("user/settings")}>Settings</MenuItem>
+                              {/*<MenuItem onClick={() => navigate("user/settings")}>Settings</MenuItem>*/}
                               {isSuper &&
                               <MenuItem onClick={() => navigate("/dashboard")}>Dashboard</MenuItem>
                               }

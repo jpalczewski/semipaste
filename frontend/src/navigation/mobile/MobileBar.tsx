@@ -15,7 +15,7 @@ export const MobileBar = (props: any) => {
                     <LeftMenu token={props.token}/>
                     <Spacer/>
                     {props.token &&
-                        <RightMenu username={props.username} logout={props.logout} account={props.account}/>}
+                        <RightMenu isSuper={props.isSuper} username={props.username} logout={props.logout} account={props.account}/>}
                 </Flex>
             </Container>
         </>

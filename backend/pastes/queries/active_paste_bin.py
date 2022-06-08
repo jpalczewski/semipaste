@@ -11,11 +11,8 @@ from backend.filters import PasteBinFilterFields
 from pastes.models import MTMTags, PasteBin, PasteTag
 
 # Local
-from .nodes import PasteTagNode
-from ..models import PasteBin
-from .nodes import TotalRatingNode, TotalCount
-from .nodes import PasteTagNode, TotalRatingNode
-from .nodes import PasteTagNode
+from ..models import PasteBin  # noqa: F811
+from .nodes import PasteTagNode, TotalCount, TotalRatingNode
 
 
 class ActivePasteBin(DjangoObjectType, TotalRatingNode):

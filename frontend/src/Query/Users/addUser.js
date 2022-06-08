@@ -10,9 +10,9 @@ export const addUser = graphql`
     $lastName: String
   ) {
     addUser(input: {
-      username: $username, 
-      email: $email, 
-      password: $password, 
+      username: $username,
+      email: $email,
+      password: $password,
       confirmPassword: $confirmPassword
       firstName: $firstName,
       lastName: $lastName

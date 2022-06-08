@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from "react";
-import { AllFooter, Wrapper } from "../styles/Components.style";
+import React, {useContext, useEffect, useState} from "react";
+import { Wrapper } from "../styles/Components.style";
 import { PasteBinForm } from "./form/form";
-import {Alert, Col, Container, Row} from "react-bootstrap";
+import {Alert, Container} from "react-bootstrap";
 import {Box} from "@chakra-ui/react";
+
+import {UserContext} from "../App";
 
 export const Create = () => {
     const [result, setResult] = useState("");
