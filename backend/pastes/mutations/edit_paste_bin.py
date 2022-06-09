@@ -21,7 +21,7 @@ class EditPasteBin(ResultMixin, graphene.Mutation):
         user = info.context.user
         try:
             paste = PasteBin.objects.get(pk=id)
-        except paste.DoesNotExist:
+        except PasteBin.DoesNotExist:
             return EditPasteBin(ok=False, error="No such paste")
         if not user.is_superuser:
             if user.id != paste.author_id:

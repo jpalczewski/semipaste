@@ -55,7 +55,7 @@ class IsPasteBinRated(graphene.relay.ClientIDMutation, ResultMixin):
                 likes=likes,
                 dislikes=dislikes,
                 total_rating=likes - dislikes,
-                error="Rate doesn't eist",
+                error="Rate doesn't exist",
             )
 
 
