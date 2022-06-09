@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fa542a158abb3a27afc0a8f9131b1755>>
+ * @generated SignedSource<<56b0dd7f8c39416339117c759e119c68>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
+export type PastesPasteBinExpireAfterChoices = "NEVER" | "MIN" | "HOUR" | "DAY" | "WEEK" | "MONTH" | "YEAR" | "%future added value";
 export type getPasteBinQuery$variables = {
   id: string;
 };
@@ -22,6 +23,7 @@ export type getPasteBinQuery$data = {
         readonly id: string;
         readonly visible: boolean;
         readonly dateOfExpiry: any | null;
+        readonly expireAfter: PastesPasteBinExpireAfterChoices;
         readonly totalRating: number | null;
         readonly language: string;
         readonly author: {
@@ -105,17 +107,24 @@ v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "totalRating",
+  "name": "expireAfter",
   "storageKey": null
 },
 v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "language",
+  "name": "totalRating",
   "storageKey": null
 },
 v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "language",
+  "storageKey": null
+},
+v11 = {
   "alias": null,
   "args": null,
   "concreteType": "UserNode",
@@ -134,7 +143,7 @@ v10 = {
   ],
   "storageKey": null
 },
-v11 = {
+v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -181,6 +190,7 @@ return {
                   (v8/*: any*/),
                   (v9/*: any*/),
                   (v10/*: any*/),
+                  (v11/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -205,7 +215,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v11/*: any*/)
+                              (v12/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -267,6 +277,7 @@ return {
                   (v8/*: any*/),
                   (v9/*: any*/),
                   (v10/*: any*/),
+                  (v11/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -291,7 +302,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v11/*: any*/),
+                              (v12/*: any*/),
                               (v5/*: any*/)
                             ],
                             "storageKey": null
@@ -314,16 +325,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ea09debe42c08d816cd3e65c6141d9dd",
+    "cacheID": "6fb43fd7eb43cf7d4cb5e4b5d3e9e2cc",
     "id": null,
     "metadata": {},
     "name": "getPasteBinQuery",
     "operationKind": "query",
-    "text": "query getPasteBinQuery(\n  $id: ID!\n) {\n  activePasteBin(id: $id) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        totalRating\n        language\n        author {\n          id\n          username\n        }\n        attachments {\n          edges {\n            node {\n              url\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query getPasteBinQuery(\n  $id: ID!\n) {\n  activePasteBin(id: $id) {\n    edges {\n      node {\n        title\n        text\n        dateOfCreation\n        id\n        visible\n        dateOfExpiry\n        expireAfter\n        totalRating\n        language\n        author {\n          id\n          username\n        }\n        attachments {\n          edges {\n            node {\n              url\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "87ac3b5ab65bcd9782366c7f3279b095";
+(node as any).hash = "17a867f24fe1fc25d6b645aaac7e837f";
 
 export default node;

@@ -125,7 +125,7 @@ const Navigation = () => {
                               {isSuper &&
                               <MenuItem onClick={() => navigate("/dashboard")}>Dashboard</MenuItem>
                               }
-                              <MenuItem>My Pastes</MenuItem>
+                              <MenuItem onClick={() => navigate("/user/pastes")}>My Pastes</MenuItem>
                               <MenuItem onClick={logOut}>Logout</MenuItem>
                             </MenuList>
                           </Menu>

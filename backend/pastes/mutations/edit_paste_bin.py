@@ -13,7 +13,8 @@ class EditPasteBin(ResultMixin, graphene.Mutation):
         id = graphene.ID(required=True)
         title = graphene.String()
         text = graphene.String()
-        exposure = graphene.Boolean()
+        visible = graphene.Boolean()
+        expire_after = graphene.String()
         tags = graphene.List(graphene.String)
 
     @staticmethod

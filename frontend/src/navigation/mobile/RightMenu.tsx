@@ -74,7 +74,7 @@ export const RightMenu = (props: any) => {
 
                             <Box h='40px' onClick={() => {
                                 onClose();
-                                navigate("/pastes")
+                                navigate("/user/pastes")
                             }}
                                  _hover={{
                                      color: "#777",

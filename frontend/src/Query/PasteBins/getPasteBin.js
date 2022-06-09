@@ -11,6 +11,7 @@ export const getPasteBin = graphql`
           id
           visible
           dateOfExpiry
+          expireAfter
           totalRating
           language
           author {

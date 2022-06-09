@@ -17,6 +17,8 @@ import {DashboardHomeScreen} from "../components/dashboard/HomeScreen";
 import React from "react";
 import {DashboardUsersScreen} from "../components/dashboard/Users/UsersScreen";
 import {DashboardUserEditScreen} from "../components/dashboard/Users/UserEditScreen";
+import {UserPasteScreen} from "../components/user/pastes/UserPasteScreen";
+import {UserEditPasteScreen} from "../components/user/pastes/UserEditPasteScreen";
 
 export const Routerr = () => {
     return (
@@ -41,6 +43,8 @@ export const Routerr = () => {
                     <Route path="/about" element={<About/>}/>
                     <Route path="/user/admin" element={<AdminScreen/>}/>
                     <Route path="/user/user" element={<UserScreen/>}/>
+                    <Route path="/user/pastes" element={<UserPasteScreen/>}/>
+                    <Route path="/user/pastes/:id" element={<UserEditPasteScreen/>}/>
                     {/*<Route path="/user/settings" element={<Settings/>}/>*/}
                     // verify
                     <Route path="/verify" element={<VerificationScreen/>}/>

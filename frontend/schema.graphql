@@ -426,7 +426,7 @@ type Mutation {
 
   """manually delete a tag"""
   deleteTag(tagName: String = null): DeleteTag
-  editPaste(exposure: Boolean = null, id: ID!, tags: [String] = null, text: String = null, title: String = null): EditPasteBin
+  editPaste(expireAfter: String = null, id: ID!, tags: [String] = null, text: String = null, title: String = null, visible: Boolean = null): EditPasteBin
   ratePasteBin(input: RatingPasteBinInput!): RatingPasteBinPayload
   ratePasteBinId(input: RatingPasteBinIDInput!): RatingPasteBinIDPayload
   isPasteBinRated(input: IsPasteBinRatedInput!): IsPasteBinRatedPayload

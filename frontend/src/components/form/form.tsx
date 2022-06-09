@@ -1,6 +1,6 @@
 import React, {useRef, useState} from "react";
 import { FormWrapper } from "../../styles/Components.style";
-import {Form, Button, Row, Col, Alert, ButtonGroup} from "react-bootstrap";
+import {Form, Row, Col, Alert, ButtonGroup} from "react-bootstrap";
 import RelayEnvironment from "../../RelayEnvironment";
 import { commitMutation, useLazyLoadQuery } from "react-relay";
 import { addPasteBin } from "../../Query/PasteBins/addPasteBin";
@@ -14,6 +14,7 @@ import Select from "react-select";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/theme-dawn";
 import {AddIcon} from "@chakra-ui/icons";
+import {Button} from "@chakra-ui/react";
 
 import {
   ButtonGroup as ChakraButtonGroup,
@@ -60,6 +61,20 @@ export const PasteBinForm = (props: any) => {
       text: event,
     });
   };
+
+  const getFileContent = (e: any) => {
+    var file = e.target.files[0];
+    if (file) {
+      var reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = function (evt) {
+        handleText(evt.target?.result);
+    }
+    reader.onerror = function (evt) {
+        handleText("error reading file");
+    }
+    }
+  }
 
   const handleChange = (event: string) => {
     setInputs({
@@ -215,6 +230,13 @@ export const PasteBinForm = (props: any) => {
               <Row className="mb-3">
                 <div className="d-flex justify-content-between">
                   <div>
+                    {/*  FILE  */}
+                    <Form.Group
+                        className="mb-3 w-100"
+                        style={{marginBottom: 10, width: "50%"}}>
+                      <Button onClick={() => inputFile.current?.click()}>Upload</Button>
+                      <Form.Control ref={inputFile} type="file" size="sm" style={{display: "none"}} onChange={getFileContent}/>
+                    </Form.Group>
                   </div>
 
                   <div>
