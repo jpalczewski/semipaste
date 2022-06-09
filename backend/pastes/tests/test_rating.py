@@ -1,5 +1,4 @@
 # Standard Library
-import time
 
 # Django
 from django.contrib.auth.models import AnonymousUser
@@ -30,139 +29,136 @@ class TestSchema(GraphQLTestCase):
         self.anonymousUser = User2
         self.client = Client(graphene.Schema(query=Query, mutation=Mutation))
 
-    def test_01(self)->None:
-        mutation="""mutation(
-                        $paste: ID                        
+    def test_01(self) -> None:
+        mutation = """mutation(
+                        $paste: ID
                         $liked: Boolean){
                     ratePasteBin(input:{
-                            paste: $paste,                      			                            
-                            liked: $liked                        
+                            paste: $paste,
+                            liked: $liked
                         }){
                         ok
                         error
-                        errorCode    
+                        errorCode
                         }
                     }"""
-        variables={
-            "paste": self.pasteBin.id,
-            "liked": True
-        }
+        variables = {"paste": self.pasteBin.id, "liked": True}
 
         mutation_result = self.client.execute(
             mutation, variable_values=variables, context=self.anonymousUser
         )
 
         self.assertEqual(mutation_result["data"]["ratePasteBin"]["ok"], False)
-        self.assertEqual(mutation_result["data"]["ratePasteBin"]["error"], "User not authenticated")
-        self.assertEqual(mutation_result["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBin"]["error"], "User not authenticated"
+        )
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE"
+        )
 
-    def test_02(self)->None:
-        mutation="""mutation(
-                        $paste: ID                        
+    def test_02(self) -> None:
+        mutation = """mutation(
+                        $paste: ID
                         $liked: Boolean){
                     ratePasteBin(input:{
-                            paste: $paste,                      			                            
-                            liked: $liked                        
+                            paste: $paste,
+                            liked: $liked
                         }){
                         ok
                         error
-                        errorCode    
+                        errorCode
                         }
                     }"""
-        variables={
-            "paste": self.pasteBin.id,
-            "liked": True
-        }
+        variables = {"paste": self.pasteBin.id, "liked": True}
 
         mutation_result = self.client.execute(
             mutation, variable_values=variables, context=self.user
         )
 
         self.assertEqual(mutation_result["data"]["ratePasteBin"]["ok"], True)
-        self.assertEqual(mutation_result["data"]["ratePasteBin"]["error"], "Rating created")
-        self.assertEqual(mutation_result["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBin"]["error"], "Rating created"
+        )
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE"
+        )
 
-    def test_03(self)->None:
-        mutation="""mutation(
-                        $paste: ID                        
+    def test_03(self) -> None:
+        mutation = """mutation(
+                        $paste: ID
                         $liked: Boolean){
                     ratePasteBin(input:{
-                            paste: $paste,                      			                            
-                            liked: $liked                        
+                            paste: $paste,
+                            liked: $liked
                         }){
                         ok
                         error
-                        errorCode    
+                        errorCode
                         }
                     }"""
-        variables={
-            "paste": self.pasteBin.id,
-            "liked": True
-        }
+        variables = {"paste": self.pasteBin.id, "liked": True}
 
-        self.client.execute(
-            mutation, variable_values=variables, context=self.user
-        )
+        self.client.execute(mutation, variable_values=variables, context=self.user)
         mutation_result = self.client.execute(
             mutation, variable_values=variables, context=self.user
         )
 
         self.assertEqual(mutation_result["data"]["ratePasteBin"]["ok"], False)
-        self.assertEqual(mutation_result["data"]["ratePasteBin"]["error"], "Rating already exists")
-        self.assertEqual(mutation_result["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBin"]["error"], "Rating already exists"
+        )
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE"
+        )
 
-    def test_04(self)->None:
-        mutation="""mutation(
-                        $paste: ID                        
+    def test_04(self) -> None:
+        mutation = """mutation(
+                        $paste: ID
                         $liked: Boolean){
                     ratePasteBin(input:{
-                            paste: $paste,                      			                            
-                            liked: $liked                        
+                            paste: $paste,
+                            liked: $liked
                         }){
                         ok
                         error
-                        errorCode    
+                        errorCode
                         }
                     }"""
-        variables_1={
-            "paste": self.pasteBin.id,
-            "liked": True
-        }
-        variables_2 = {
-            "paste": self.pasteBin.id,
-            "liked": False
-        }
+        variables_1 = {"paste": self.pasteBin.id, "liked": True}
+        variables_2 = {"paste": self.pasteBin.id, "liked": False}
 
-        self.client.execute(
-            mutation, variable_values=variables_1, context=self.user
-        )
+        self.client.execute(mutation, variable_values=variables_1, context=self.user)
         mutation_result = self.client.execute(
             mutation, variable_values=variables_2, context=self.user
         )
 
         self.assertEqual(mutation_result["data"]["ratePasteBin"]["ok"], True)
-        self.assertEqual(mutation_result["data"]["ratePasteBin"]["error"], "Rating changed")
-        self.assertEqual(mutation_result["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBin"]["error"], "Rating changed"
+        )
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE"
+        )
 
-    def test_05(self)->None:
-        mutation="""mutation(
-                        $paste: ID       
-                        $user: ID                 
+    def test_05(self) -> None:
+        mutation = """mutation(
+                        $paste: ID
+                        $user: ID
                         $liked: Boolean){
                     ratePasteBinId(input:{
-                            paste: $paste,   
-                            user: $user                   			                            
-                            liked: $liked                        
+                            paste: $paste,
+                            user: $user
+                            liked: $liked
                         }){
                         ok
                         error
-                        errorCode    
+                        errorCode
                         }
                     }"""
-        variables={
+        variables = {
             "paste": self.pasteBin.id,
             "user": self.user.user.id,
-            "liked": True
+            "liked": True,
         }
 
         mutation_result = self.client.execute(
@@ -170,89 +166,97 @@ class TestSchema(GraphQLTestCase):
         )
 
         self.assertEqual(mutation_result["data"]["ratePasteBinId"]["ok"], True)
-        self.assertEqual(mutation_result["data"]["ratePasteBinId"]["error"], "Rating created")
-        self.assertEqual(mutation_result["data"]["ratePasteBinId"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBinId"]["error"], "Rating created"
+        )
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBinId"]["errorCode"], "POSSIBLE_FAILURE"
+        )
 
-    def test_06(self)->None:
-        mutation="""mutation(
-                        $paste: ID    
-                        $user: ID                    
+    def test_06(self) -> None:
+        mutation = """mutation(
+                        $paste: ID
+                        $user: ID
                         $liked: Boolean){
                     ratePasteBinId(input:{
-                            paste: $paste,  
-                            user: $user,                    			                            
-                            liked: $liked                        
+                            paste: $paste,
+                            user: $user,
+                            liked: $liked
                         }){
                         ok
                         error
-                        errorCode    
+                        errorCode
                         }
                     }"""
-        variables={
+        variables = {
             "paste": self.pasteBin.id,
             "user": self.user.user.id,
-            "liked": True
+            "liked": True,
         }
 
-        self.client.execute(
-            mutation, variable_values=variables, context=self.user
-        )
+        self.client.execute(mutation, variable_values=variables, context=self.user)
         mutation_result = self.client.execute(
             mutation, variable_values=variables, context=self.user
         )
 
         self.assertEqual(mutation_result["data"]["ratePasteBinId"]["ok"], False)
-        self.assertEqual(mutation_result["data"]["ratePasteBinId"]["error"], "Rating already exists")
-        self.assertEqual(mutation_result["data"]["ratePasteBinId"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBinId"]["error"], "Rating already exists"
+        )
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBinId"]["errorCode"], "POSSIBLE_FAILURE"
+        )
 
-    def test_07(self)->None:
+    def test_07(self) -> None:
         mutation = """mutation(
-                            $paste: ID    
-                            $user: ID                    
+                            $paste: ID
+                            $user: ID
                             $liked: Boolean){
                         ratePasteBinId(input:{
-                                paste: $paste,  
-                                user: $user,                    			                            
-                                liked: $liked                        
+                                paste: $paste,
+                                user: $user,
+                                liked: $liked
                             }){
                             ok
                             error
-                            errorCode    
+                            errorCode
                             }
                         }"""
         variables_1 = {
             "paste": self.pasteBin.id,
             "user": self.user.user.id,
-            "liked": True
+            "liked": True,
         }
         variables_2 = {
             "paste": self.pasteBin.id,
             "user": self.user.user.id,
-            "liked": False
+            "liked": False,
         }
 
-        self.client.execute(
-            mutation, variable_values=variables_1, context=self.user
-        )
+        self.client.execute(mutation, variable_values=variables_1, context=self.user)
         mutation_result = self.client.execute(
             mutation, variable_values=variables_2, context=self.user
         )
 
         self.assertEqual(mutation_result["data"]["ratePasteBinId"]["ok"], True)
-        self.assertEqual(mutation_result["data"]["ratePasteBinId"]["error"], "Rating changed")
-        self.assertEqual(mutation_result["data"]["ratePasteBinId"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBinId"]["error"], "Rating changed"
+        )
+        self.assertEqual(
+            mutation_result["data"]["ratePasteBinId"]["errorCode"], "POSSIBLE_FAILURE"
+        )
 
-    def test_08(self)->None:
+    def test_08(self) -> None:
         mutation_1 = """mutation(
-                        $paste: ID                                  
+                        $paste: ID
                         $liked: Boolean){
                     ratePasteBin(input:{
-                            paste: $paste,                                               			                            
-                            liked: $liked                        
+                            paste: $paste,
+                            liked: $liked
                         }){
                         ok
                         error
-                        errorCode    
+                        errorCode
                         }
                     }"""
         mutation_2 = """mutation(
@@ -266,18 +270,13 @@ class TestSchema(GraphQLTestCase):
                             rate
                             likes
                             dislikes
-                            totalRating                                
+                            totalRating
                             }
                         }"""
-        variables_1 = {
-            "paste": self.pasteBin.id,
-            "liked": True
-        }
-        variables_2 = {
-            "paste": self.pasteBin.id
-        }
+        variables_1 = {"paste": self.pasteBin.id, "liked": True}
+        variables_2 = {"paste": self.pasteBin.id}
 
-        mutation_result_1= self.client.execute(
+        mutation_result_1 = self.client.execute(
             mutation_1, variable_values=variables_1, context=self.user
         )
         mutation_result_2 = self.client.execute(
@@ -285,12 +284,21 @@ class TestSchema(GraphQLTestCase):
         )
 
         self.assertEqual(mutation_result_1["data"]["ratePasteBin"]["ok"], True)
-        self.assertEqual(mutation_result_1["data"]["ratePasteBin"]["error"], "Rating created")
-        self.assertEqual(mutation_result_1["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result_1["data"]["ratePasteBin"]["error"], "Rating created"
+        )
+        self.assertEqual(
+            mutation_result_1["data"]["ratePasteBin"]["errorCode"], "POSSIBLE_FAILURE"
+        )
 
         self.assertEqual(mutation_result_2["data"]["isPasteBinRated"]["ok"], True)
-        self.assertEqual(mutation_result_2["data"]["isPasteBinRated"]["error"], "Rate exists")
-        self.assertEqual(mutation_result_2["data"]["isPasteBinRated"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result_2["data"]["isPasteBinRated"]["error"], "Rate exists"
+        )
+        self.assertEqual(
+            mutation_result_2["data"]["isPasteBinRated"]["errorCode"],
+            "POSSIBLE_FAILURE",
+        )
         self.assertEqual(mutation_result_2["data"]["isPasteBinRated"]["isRated"], True)
         self.assertEqual(mutation_result_2["data"]["isPasteBinRated"]["rate"], True)
         self.assertEqual(mutation_result_2["data"]["isPasteBinRated"]["likes"], 1)
@@ -309,21 +317,23 @@ class TestSchema(GraphQLTestCase):
                             rate
                             likes
                             dislikes
-                            totalRating                                
+                            totalRating
                             }
                         }"""
 
-        variables = {
-            "paste": self.pasteBin.id
-        }
+        variables = {"paste": self.pasteBin.id}
 
         mutation_result = self.client.execute(
             mutation, variable_values=variables, context=self.user
         )
 
         self.assertEqual(mutation_result["data"]["isPasteBinRated"]["ok"], True)
-        self.assertEqual(mutation_result["data"]["isPasteBinRated"]["error"], "Rate doesn't exist")
-        self.assertEqual(mutation_result["data"]["isPasteBinRated"]["errorCode"], "POSSIBLE_FAILURE")
+        self.assertEqual(
+            mutation_result["data"]["isPasteBinRated"]["error"], "Rate doesn't exist"
+        )
+        self.assertEqual(
+            mutation_result["data"]["isPasteBinRated"]["errorCode"], "POSSIBLE_FAILURE"
+        )
         self.assertEqual(mutation_result["data"]["isPasteBinRated"]["isRated"], False)
         self.assertEqual(mutation_result["data"]["isPasteBinRated"]["rate"], False)
         self.assertEqual(mutation_result["data"]["isPasteBinRated"]["likes"], 0)

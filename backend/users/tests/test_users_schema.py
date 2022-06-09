@@ -121,9 +121,12 @@ class TestSchema(TestCase):
     def test_04_showUser_id_2(self) -> None:
         user = UserFactory()
 
-        query = """query{
+        query = (
+            """query{
                     allUsers(
-                        id: """+f"{user.id}"+"""
+                        id: """
+            + f"{user.id}"
+            + """
                     ){
                         edges{
                             node{
@@ -132,6 +135,7 @@ class TestSchema(TestCase):
                         }
                     }
                 } """
+        )
         mutation = """mutation(
                         $confirmPassword: String!
                         $email: String!
@@ -740,7 +744,8 @@ class TestSchema(TestCase):
 
         self.assertEqual(mutation_result["data"]["addUser"]["ok"], False)
         self.assertEqual(
-            mutation_result["data"]["addUser"]["response"][:22], "Failed to create user:"
+            mutation_result["data"]["addUser"]["response"][:22],
+            "Failed to create user:",
         )
 
     def test_19_email_validation(self) -> None:

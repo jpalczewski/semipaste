@@ -19,7 +19,7 @@ class TestReportUsers(GraphQLTestCase):
         class User2:
             user = AnonymousUser()
 
-        self.user=User
+        self.user = User
         self.contextUser = User
         self.contextAnonymousUser = User2
         self.client = Client(graphene.Schema(query=Query, mutation=Mutation))
@@ -36,8 +36,8 @@ class TestReportUsers(GraphQLTestCase):
                                         username
                                         firstName
                                         lastName
-                                        email                                                                                                                        
-                                      }                                    
+                                        email
+                                      }
                                     author{
                                         id
                                     }
@@ -66,17 +66,20 @@ class TestReportUsers(GraphQLTestCase):
                         }
                     }"""
 
-        variables = {
-            "uid": self.user.user.id,
-            "reason": "Reason test 02"
-        }
+        variables = {"uid": self.user.user.id, "reason": "Reason test 02"}
 
-        mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
+        mutation_result = self.client.execute(
+            mutation, variable_values=variables, context=self.user
+        )
 
         self.assertEqual(mutation_result["data"]["reportUser"]["ok"], True)
         self.assertEqual(mutation_result["data"]["reportUser"]["error"], None)
-        self.assertEqual(mutation_result["data"]["reportUser"]["errorCode"], "POSSIBLE_FAILURE")
-        self.assertEqual(mutation_result["data"]["reportUser"]["clientMutationId"], None)
+        self.assertEqual(
+            mutation_result["data"]["reportUser"]["errorCode"], "POSSIBLE_FAILURE"
+        )
+        self.assertEqual(
+            mutation_result["data"]["reportUser"]["clientMutationId"], None
+        )
 
     def test_03_reportUser_mutation_userNotLogged(self) -> None:
         mutation = """mutation(
@@ -94,17 +97,22 @@ class TestReportUsers(GraphQLTestCase):
                                 }
                             }"""
 
-        variables = {
-            "uid": self.user.user.id,
-            "reason": "Reason test 03"
-        }
+        variables = {"uid": self.user.user.id, "reason": "Reason test 03"}
 
-        mutation_result = self.client.execute(mutation, variable_values=variables, context=self.contextAnonymousUser)
+        mutation_result = self.client.execute(
+            mutation, variable_values=variables, context=self.contextAnonymousUser
+        )
 
         self.assertEqual(mutation_result["data"]["reportUser"]["ok"], False)
-        self.assertEqual(mutation_result["data"]["reportUser"]["error"], "You need to be logged in")
-        self.assertEqual(mutation_result["data"]["reportUser"]["errorCode"], "POSSIBLE_FAILURE")
-        self.assertEqual(mutation_result["data"]["reportUser"]["clientMutationId"], None)
+        self.assertEqual(
+            mutation_result["data"]["reportUser"]["error"], "You need to be logged in"
+        )
+        self.assertEqual(
+            mutation_result["data"]["reportUser"]["errorCode"], "POSSIBLE_FAILURE"
+        )
+        self.assertEqual(
+            mutation_result["data"]["reportUser"]["clientMutationId"], None
+        )
 
     def test_04_reportUser_mutation_pasteNotFound(self) -> None:
         mutation = """mutation(
@@ -122,17 +130,22 @@ class TestReportUsers(GraphQLTestCase):
                                 }
                             }"""
 
-        variables = {
-            "uid": 999,
-            "reason": "Reason test 04"
-        }
+        variables = {"uid": 999, "reason": "Reason test 04"}
 
-        mutation_result = self.client.execute(mutation, variable_values=variables, context=self.user)
+        mutation_result = self.client.execute(
+            mutation, variable_values=variables, context=self.user
+        )
 
         self.assertEqual(mutation_result["data"]["reportUser"]["ok"], False)
-        self.assertEqual(mutation_result["data"]["reportUser"]["error"], "Reported user not found")
-        self.assertEqual(mutation_result["data"]["reportUser"]["errorCode"], "POSSIBLE_FAILURE")
-        self.assertEqual(mutation_result["data"]["reportUser"]["clientMutationId"], None)
+        self.assertEqual(
+            mutation_result["data"]["reportUser"]["error"], "Reported user not found"
+        )
+        self.assertEqual(
+            mutation_result["data"]["reportUser"]["errorCode"], "POSSIBLE_FAILURE"
+        )
+        self.assertEqual(
+            mutation_result["data"]["reportUser"]["clientMutationId"], None
+        )
 
     def test_05_reportUser_correctData(self) -> None:
         query = """query{
@@ -146,8 +159,8 @@ class TestReportUsers(GraphQLTestCase):
                                         username
                                         firstName
                                         lastName
-                                        email                                                                                                                        
-                                      }                                    
+                                        email
+                                      }
                                     author{
                                         id
                                     }
@@ -171,24 +184,37 @@ class TestReportUsers(GraphQLTestCase):
                                 }
                             }"""
 
-        variables = {
-            "uid": self.user.user.id,
-            "reason": "Reason test 05"
-        }
+        variables = {"uid": self.user.user.id, "reason": "Reason test 05"}
 
         self.client.execute(mutation, variable_values=variables, context=self.user)
         query_result = self.client.execute(query, context=self.user)
 
-        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["reason"], "Reason test 05")
-        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["id"], f"{self.user.user.id}")
-        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["username"],
-                         self.user.user.username)
-        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["firstName"],
-                         self.user.user.first_name)
-        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["lastName"],
-                         self.user.user.last_name)
-        self.assertEqual(query_result["data"]["userReports"]["edges"][0]["node"]["user"]["email"],
-                         self.user.user.email)
+        self.assertEqual(
+            query_result["data"]["userReports"]["edges"][0]["node"]["reason"],
+            "Reason test 05",
+        )
+        self.assertEqual(
+            query_result["data"]["userReports"]["edges"][0]["node"]["user"]["id"],
+            f"{self.user.user.id}",
+        )
+        self.assertEqual(
+            query_result["data"]["userReports"]["edges"][0]["node"]["user"]["username"],
+            self.user.user.username,
+        )
+        self.assertEqual(
+            query_result["data"]["userReports"]["edges"][0]["node"]["user"][
+                "firstName"
+            ],
+            self.user.user.first_name,
+        )
+        self.assertEqual(
+            query_result["data"]["userReports"]["edges"][0]["node"]["user"]["lastName"],
+            self.user.user.last_name,
+        )
+        self.assertEqual(
+            query_result["data"]["userReports"]["edges"][0]["node"]["user"]["email"],
+            self.user.user.email,
+        )
 
     def test_06_isNotSuperuser(self) -> None:
         query = """query{
@@ -202,8 +228,8 @@ class TestReportUsers(GraphQLTestCase):
                                         username
                                         firstName
                                         lastName
-                                        email                                                                                                                        
-                                      }                                    
+                                        email
+                                      }
                                     author{
                                         id
                                     }
@@ -227,10 +253,7 @@ class TestReportUsers(GraphQLTestCase):
                                 }
                             }"""
 
-        variables = {
-            "uid": self.user.user.id,
-            "reason": "Reason test 02"
-        }
+        variables = {"uid": self.user.user.id, "reason": "Reason test 02"}
 
         self.client.execute(mutation, variable_values=variables, context=self.user)
         self.user.user.is_superuser = False
